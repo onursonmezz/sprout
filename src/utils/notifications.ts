@@ -1,3 +1,4 @@
+import Constants, { AppOwnership } from 'expo-constants';
 import { Platform } from 'react-native';
 import type * as NotificationsType from 'expo-notifications';
 
@@ -8,15 +9,20 @@ let notificationsModule: typeof NotificationsType | null = null;
 let loadPromise: Promise<typeof NotificationsType | null> | null = null;
 
 /**
- * expo-notifications throws as soon as it's loaded when running inside Expo Go
- * on SDK 53+ (push support was removed there). A dynamic import lets us catch
- * that failure instead of crashing the whole app at startup; every export
- * below degrades to a no-op when the module couldn't be loaded.
+ * Merely importing expo-notifications registers a push-token listener at
+ * module scope, which throws on Android as soon as it runs inside Expo Go
+ * (push support was removed there in SDK 53). Catching the import isn't
+ * enough — the module must never be loaded at all in Expo Go, so check that
+ * first via expo-constants (safe to import anywhere) and skip it entirely.
  */
+function isExpoGo() {
+  return Constants.appOwnership === AppOwnership.Expo;
+}
+
 function loadNotifications(): Promise<typeof NotificationsType | null> {
   if (!loadPromise) {
     loadPromise =
-      Platform.OS === 'web'
+      Platform.OS === 'web' || isExpoGo()
         ? Promise.resolve(null)
         : import('expo-notifications')
             .then((mod) => {
