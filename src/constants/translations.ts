@@ -17,6 +17,7 @@ export const translations = {
       dueToday: 'Due today',
       tomorrow: 'Tomorrow',
       inDays: (n: number) => `${n}d`,
+      water: 'Water',
       watered: 'Watered ✓',
       snooze: 'Snooze 1d',
       dateLocale: 'en-US',
@@ -30,6 +31,7 @@ export const translations = {
       dueToday: 'Due today',
       tomorrow: 'Tomorrow',
       inDays: (n: number) => `In ${n} days`,
+      water: 'Water',
       watered: 'Watered ✓',
     },
     calendar: {
@@ -203,6 +205,7 @@ export const translations = {
       dueToday: 'Bugün sırası',
       tomorrow: 'Yarın',
       inDays: (n: number) => `${n} gün sonra`,
+      water: 'Sula',
       watered: 'Sulandı ✓',
       snooze: 'Ertele 1g',
       dateLocale: 'tr-TR',
@@ -216,6 +219,7 @@ export const translations = {
       dueToday: 'Bugün sırası',
       tomorrow: 'Yarın',
       inDays: (n: number) => `${n} gün sonra`,
+      water: 'Sula',
       watered: 'Sulandı ✓',
     },
     calendar: {

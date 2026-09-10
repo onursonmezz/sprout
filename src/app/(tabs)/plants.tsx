@@ -101,7 +101,9 @@ export default function PlantsScreen() {
                       styles.wateredButton,
                       { backgroundColor: plant.status === 'overdue' ? colors.accent : colors.tint },
                     ]}>
-                    <Text style={styles.wateredButtonText}>{t.plants.watered}</Text>
+                    <Text style={styles.wateredButtonText}>
+                      {plant.status === 'upcoming' ? t.plants.watered : t.plants.water}
+                    </Text>
                   </View>
                 </View>
               </Pressable>

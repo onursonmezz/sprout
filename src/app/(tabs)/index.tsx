@@ -98,7 +98,7 @@ export default function TodayScreen() {
                       styles.wateredButton,
                       { backgroundColor: isWatered ? colors.tint : isOverdue ? colors.accent : colors.tint },
                     ]}>
-                    <Text style={styles.wateredButtonText}>{t.today.watered}</Text>
+                    <Text style={styles.wateredButtonText}>{isWatered ? t.today.watered : t.today.water}</Text>
                   </Pressable>
                   <Pressable style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
                     <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.today.snooze}</Text>
