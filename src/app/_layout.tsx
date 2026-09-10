@@ -6,6 +6,7 @@ import { LanguageProvider, useLanguage } from '@/context/language-context';
 import { PlantsProvider, usePlants } from '@/context/plants-context';
 import { SettingsProvider, useSettings } from '@/context/settings-context';
 import { ThemeModeProvider, useThemeMode } from '@/context/theme-context';
+import { useNotificationScheduler } from '@/hooks/use-notification-scheduler';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -15,6 +16,8 @@ function Navigation() {
   const { loaded: plantsLoaded } = usePlants();
   const { loaded: settingsLoaded } = useSettings();
   const ready = themeLoaded && langLoaded && plantsLoaded && settingsLoaded;
+
+  useNotificationScheduler();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();

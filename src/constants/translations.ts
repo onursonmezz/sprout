@@ -87,6 +87,11 @@ export const translations = {
       resetCancel: 'Cancel',
       resetConfirmYes: 'Reset everything',
     },
+    notifications: {
+      title: 'Sprout',
+      bodyGeneric: 'Time to check on your plants 🌱',
+      bodyWithCount: (n: number) => (n === 1 ? '1 plant needs water today 💧' : `${n} plants need water today 💧`),
+    },
     plantDetail: {
       notFound: 'Plant not found',
       nextWatering: 'NEXT WATERING',
@@ -340,6 +345,11 @@ export const translations = {
       resetConfirm: 'Bu işlem tüm bitkileri, bakım görevlerini ve günlük kayıtlarını siler. Geri alınamaz.',
       resetCancel: 'Vazgeç',
       resetConfirmYes: 'Her şeyi sıfırla',
+    },
+    notifications: {
+      title: 'Sprout',
+      bodyGeneric: 'Bitkilerine göz atma vakti 🌱',
+      bodyWithCount: (n: number) => (n === 1 ? '1 bitkinin bugün suya ihtiyacı var 💧' : `${n} bitkinin bugün suya ihtiyacı var 💧`),
     },
     plantDetail: {
       notFound: 'Bitki bulunamadı',

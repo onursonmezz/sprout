@@ -11,6 +11,7 @@ import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { exportPlantsData } from '@/utils/export';
+import { requestNotificationPermission } from '@/utils/notifications';
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
@@ -86,6 +87,14 @@ export default function SettingsScreen() {
     exportPlantsData(plants);
   };
 
+  const handleToggleNotifications = async (value: boolean) => {
+    if (value) {
+      const granted = await requestNotificationPermission();
+      if (!granted) return;
+    }
+    setNotificationsEnabled(value);
+  };
+
   const handleResetConfirmed = () => {
     resetPlants();
     resetSettings();
@@ -107,7 +116,7 @@ export default function SettingsScreen() {
             right={
               <Switch
                 value={notificationsEnabled}
-                onValueChange={setNotificationsEnabled}
+                onValueChange={handleToggleNotifications}
                 trackColor={{ false: colors.backgroundSelected, true: colors.tint }}
                 thumbColor="#fff"
               />
