@@ -2,10 +2,23 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { DateField } from '@/components/date-field';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
+
+function pad(n: number) {
+  return String(n).padStart(2, '0');
+}
+
+function formatTime(date: Date) {
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function formatDate(date: Date) {
+  return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
+}
 
 function SectionCard({ children, colors }: { children: React.ReactNode; colors: ReturnType<typeof useTheme> }) {
   return <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>{children}</View>;
@@ -35,12 +48,10 @@ function Row({
   );
 }
 
-function TimePill({ value, colors }: { value: string; colors: ReturnType<typeof useTheme> }) {
-  return (
-    <Pressable style={[styles.pill, { backgroundColor: colors.backgroundSelected }]}>
-      <Text style={[styles.pillText, { color: colors.text }]}>{value}</Text>
-    </Pressable>
-  );
+function timeAt(hours: number, minutes: number) {
+  const d = new Date();
+  d.setHours(hours, minutes, 0, 0);
+  return d;
 }
 
 export default function SettingsScreen() {
@@ -49,8 +60,13 @@ export default function SettingsScreen() {
   const { lang, setLang, t } = useLanguage();
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [reminderTime, setReminderTime] = useState(() => timeAt(8, 0));
+  const [quietStart, setQuietStart] = useState(() => timeAt(22, 0));
+  const [quietEnd, setQuietEnd] = useState(() => timeAt(7, 0));
   const [seasonalAdjustment, setSeasonalAdjustment] = useState(true);
   const [vacationMode, setVacationMode] = useState(false);
+  const [vacationStart, setVacationStart] = useState<Date | null>(null);
+  const [vacationEnd, setVacationEnd] = useState<Date | null>(null);
   const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
 
   return (
@@ -77,7 +93,16 @@ export default function SettingsScreen() {
             title={t.settings.reminderTime}
             subtitle={t.settings.reminderTimeSub}
             colors={colors}
-            right={<TimePill value="08:00" colors={colors} />}
+            right={
+              <DateField
+                value={reminderTime}
+                mode="time"
+                onChange={setReminderTime}
+                displayText={formatTime(reminderTime)}
+                textColor={colors.text}
+                backgroundColor={colors.backgroundSelected}
+              />
+            }
           />
           <Row
             title={t.settings.quietHours}
@@ -86,8 +111,22 @@ export default function SettingsScreen() {
             divider={false}
             right={
               <View style={{ flexDirection: 'row', gap: 6 }}>
-                <TimePill value="22:00" colors={colors} />
-                <TimePill value="07:00" colors={colors} />
+                <DateField
+                  value={quietStart}
+                  mode="time"
+                  onChange={setQuietStart}
+                  displayText={formatTime(quietStart)}
+                  textColor={colors.text}
+                  backgroundColor={colors.backgroundSelected}
+                />
+                <DateField
+                  value={quietEnd}
+                  mode="time"
+                  onChange={setQuietEnd}
+                  displayText={formatTime(quietEnd)}
+                  textColor={colors.text}
+                  backgroundColor={colors.backgroundSelected}
+                />
               </View>
             }
           />
@@ -112,7 +151,7 @@ export default function SettingsScreen() {
             title={t.settings.vacationMode}
             subtitle={t.settings.vacationModeSub}
             colors={colors}
-            divider={false}
+            divider={vacationMode}
             right={
               <Switch
                 value={vacationMode}
@@ -122,6 +161,35 @@ export default function SettingsScreen() {
               />
             }
           />
+          {vacationMode && (
+            <View style={styles.vacationBlock}>
+              <Text style={[styles.vacationNote, { color: colors.textSecondary }]}>{t.settings.vacationNote}</Text>
+              <View style={styles.vacationDatesRow}>
+                <View style={{ flex: 1, gap: 4 }}>
+                  <Text style={[styles.vacationLabel, { color: colors.text }]}>{t.settings.vacationDepart}</Text>
+                  <DateField
+                    value={vacationStart}
+                    mode="date"
+                    onChange={setVacationStart}
+                    displayText={vacationStart ? formatDate(vacationStart) : 'dd.mm.yyyy'}
+                    textColor={colors.text}
+                    backgroundColor={colors.background}
+                  />
+                </View>
+                <View style={{ flex: 1, gap: 4 }}>
+                  <Text style={[styles.vacationLabel, { color: colors.text }]}>{t.settings.vacationReturn}</Text>
+                  <DateField
+                    value={vacationEnd}
+                    mode="date"
+                    onChange={setVacationEnd}
+                    displayText={vacationEnd ? formatDate(vacationEnd) : 'dd.mm.yyyy'}
+                    textColor={colors.text}
+                    backgroundColor={colors.background}
+                  />
+                </View>
+              </View>
+            </View>
+          )}
         </SectionCard>
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.settings.appearance}</Text>
@@ -218,9 +286,11 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', paddingVertical: Spacing.three },
   rowTitle: { fontSize: 14, fontWeight: '700' },
   rowSubtitle: { fontSize: 12 },
-  pill: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
-  pillText: { fontSize: 13, fontWeight: '600' },
   segment: { flexDirection: 'row', borderRadius: 12, padding: 3, gap: 3 },
   segmentBtn: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 9 },
   segmentText: { fontSize: 11, fontWeight: '700' },
+  vacationBlock: { paddingBottom: Spacing.three, gap: Spacing.two },
+  vacationNote: { fontSize: 12, lineHeight: 17 },
+  vacationDatesRow: { flexDirection: 'row', gap: Spacing.two },
+  vacationLabel: { fontSize: 12, fontWeight: '700' },
 });
