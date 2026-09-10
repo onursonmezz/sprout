@@ -112,6 +112,8 @@ export default function AddPlantScreen() {
         soil: form.soilMix.trim() || t.addPlant.soilMixPlaceholder,
       },
       acquiredDate: form.dateAcquired,
+      care: [],
+      journalNotes: [],
     };
     addPlant(newPlant);
     router.replace(`/plant/${id}`);
