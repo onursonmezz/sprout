@@ -60,6 +60,7 @@ type SettingsContextValue = {
   setVacationEnd: (d: Date | null) => void;
   units: Units;
   setUnits: (u: Units) => void;
+  resetSettings: () => void;
 };
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
@@ -107,6 +108,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setVacationEnd: (d) => update('vacationEnd', d ? d.toISOString() : null),
         units: settings.units,
         setUnits: (u) => update('units', u),
+        resetSettings: () => setSettings(defaults),
       }}>
       {children}
     </SettingsContext.Provider>

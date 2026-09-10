@@ -1,13 +1,14 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Fonts, Spacing } from '@/constants/theme';
+import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
-import { Plant } from '@/data/plants';
+import { Plant, WateringStatus } from '@/data/plants';
 
 const WINDOW_DIRECTIONS = ['N', 'E', 'S', 'W'] as const;
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
@@ -59,13 +60,59 @@ const initialForm: FormState = {
   lastWatered: todayFormatted(),
 };
 
+function plantToForm(plant: Plant, t: Translations): FormState {
+  const lightIdx = t.addPlant.lightLevels.findIndex((l) => l.label === plant.environment.light);
+  const materialIdx = t.addPlant.potMaterials.findIndex((m) => m === plant.pot.material);
+  const windowRaw = plant.environment.window.split('-')[0];
+  const windowDirection = (WINDOW_DIRECTIONS as readonly string[]).includes(windowRaw)
+    ? (windowRaw as (typeof WINDOW_DIRECTIONS)[number])
+    : 'E';
+  const hasPotSize = plant.pot.size !== '—';
+  const [potDiameter, potDepthRaw] = hasPotSize ? plant.pot.size.split('x') : ['', ''];
+  const interval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
+
+  return {
+    nickname: plant.name,
+    species: plant.species === '—' ? '' : plant.species,
+    latinName: plant.latinName,
+    dateAcquired: plant.acquiredDate,
+    room: plant.room === '—' ? '' : plant.room,
+    windowDirection,
+    lightLevelIndex: lightIdx >= 0 ? lightIdx : 1,
+    hoursLight: plant.environment.hoursLight === '—' ? '' : plant.environment.hoursLight.replace('h Light', ''),
+    tempC: plant.environment.tempC === '—' ? '' : plant.environment.tempC.replace('°C', ''),
+    potDiameter,
+    potDepth: hasPotSize ? potDepthRaw.replace('cm', '') : '',
+    potMaterialIndex: materialIdx >= 0 ? materialIdx : 2,
+    drainage: plant.pot.drainage === t.addPlant.no ? 'no' : 'yes',
+    soilMix: plant.pot.soil,
+    lastRepotted: '',
+    waterEveryDays: interval,
+    waterAmountMl: String(plant.wateringAmountMl),
+    lastWatered: '',
+  };
+}
+
 export default function AddPlantScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, addPlant } = usePlants();
+  const { id } = useLocalSearchParams<{ id?: string }>();
+  const { plants, addPlant, updatePlant, deletePlant, getPlant } = usePlants();
+  const editingPlant = id ? getPlant(String(id)) : undefined;
+  const isEditing = Boolean(id);
+
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormState>(initialForm);
+  const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant, t) : initialForm));
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+  if (isEditing && !editingPlant) {
+    return (
+      <View style={[styles.safe, { backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }]}>
+        <Text style={{ color: colors.text }}>{t.plantDetail.notFound}</Text>
+      </View>
+    );
+  }
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -77,6 +124,12 @@ export default function AddPlantScreen() {
     else setStep((s) => s - 1);
   };
 
+  const handleDelete = () => {
+    if (!editingPlant) return;
+    deletePlant(editingPlant.id);
+    router.replace('/plants');
+  };
+
   const handleContinue = () => {
     if (step < 4) {
       setStep((s) => s + 1);
@@ -85,24 +138,18 @@ export default function AddPlantScreen() {
     const lightLabel = t.addPlant.lightLevels[form.lightLevelIndex].label;
     const materialLabel = t.addPlant.potMaterials[form.potMaterialIndex];
     const drainageLabel = form.drainage === 'yes' ? t.addPlant.yes : t.addPlant.no;
-    const id = `${form.nickname.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString(36)}`;
-    const newPlant: Plant = {
-      id,
+
+    const sharedFields = {
       name: form.nickname.trim(),
       species: form.species.trim() || '—',
       latinName: form.latinName.trim(),
       room: form.room.trim() || '—',
-      emoji: '🌱',
-      avatarColor: AVATAR_COLORS[plants.length % AVATAR_COLORS.length],
       wateringAmountMl: Number(form.waterAmountMl) || 200,
-      status: form.waterEveryDays <= 0 ? 'dueToday' : 'upcoming',
-      daysUntilWatering: form.waterEveryDays,
-      lastWateredDaysAgo: 0,
       environment: {
         light: lightLabel,
         window: `${form.windowDirection}-Facing`,
         hoursLight: form.hoursLight ? `${form.hoursLight}h Light` : '—',
-        humidity: 'Medium',
+        humidity: editingPlant?.environment.humidity ?? 'Medium',
         tempC: form.tempC ? `${form.tempC}°C` : '—',
       },
       pot: {
@@ -112,6 +159,25 @@ export default function AddPlantScreen() {
         soil: form.soilMix.trim() || t.addPlant.soilMixPlaceholder,
       },
       acquiredDate: form.dateAcquired,
+    };
+
+    if (editingPlant) {
+      const daysUntilWatering = form.waterEveryDays - editingPlant.lastWateredDaysAgo;
+      const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
+      updatePlant(editingPlant.id, { ...sharedFields, daysUntilWatering, status });
+      router.replace(`/plant/${editingPlant.id}`);
+      return;
+    }
+
+    const id = `${form.nickname.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString(36)}`;
+    const newPlant: Plant = {
+      id,
+      ...sharedFields,
+      emoji: '🌱',
+      avatarColor: AVATAR_COLORS[plants.length % AVATAR_COLORS.length],
+      status: form.waterEveryDays <= 0 ? 'dueToday' : 'upcoming',
+      daysUntilWatering: form.waterEveryDays,
+      lastWateredDaysAgo: 0,
       care: [],
       journalNotes: [],
     };
@@ -131,7 +197,9 @@ export default function AddPlantScreen() {
           <Text style={[styles.stepCount, { color: colors.textSecondary }]}>{t.addPlant.stepOf(step)}</Text>
         </View>
 
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{t.addPlant.title}</Text>
+        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>
+          {isEditing ? t.addPlant.editTitle : t.addPlant.title}
+        </Text>
         <Text style={[styles.stepTitle, { color: colors.tint }]}>{t.addPlant.stepTitles[step - 1]}</Text>
 
         <View style={styles.progressRow}>
@@ -325,10 +393,12 @@ export default function AddPlantScreen() {
 
         {step === 4 && (
           <View style={styles.fieldGroup}>
-            <View style={[styles.suggestionBanner, { backgroundColor: colors.tintMuted }]}>
-              <Text style={[styles.suggestionTitle, { color: colors.text }]}>{t.addPlant.suggestionTitle}</Text>
-              <Text style={[styles.suggestionHint, { color: colors.textSecondary }]}>{t.addPlant.suggestionHint}</Text>
-            </View>
+            {!isEditing && (
+              <View style={[styles.suggestionBanner, { backgroundColor: colors.tintMuted }]}>
+                <Text style={[styles.suggestionTitle, { color: colors.text }]}>{t.addPlant.suggestionTitle}</Text>
+                <Text style={[styles.suggestionHint, { color: colors.textSecondary }]}>{t.addPlant.suggestionHint}</Text>
+              </View>
+            )}
 
             <Field label={t.addPlant.waterEveryDays} colors={colors}>
               <View style={styles.stepperRow}>
@@ -357,15 +427,17 @@ export default function AddPlantScreen() {
               />
             </Field>
 
-            <Field label={t.addPlant.lastWatered} colors={colors}>
-              <TextInput
-                value={form.lastWatered}
-                onChangeText={(v) => set('lastWatered', v)}
-                placeholder={t.addPlant.datePlaceholder}
-                placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
-              />
-            </Field>
+            {!isEditing && (
+              <Field label={t.addPlant.lastWatered} colors={colors}>
+                <TextInput
+                  value={form.lastWatered}
+                  onChangeText={(v) => set('lastWatered', v)}
+                  placeholder={t.addPlant.datePlaceholder}
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                />
+              </Field>
+            )}
 
             <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <Text style={[styles.summaryHeading, { color: colors.text }]}>{t.addPlant.summary}</Text>
@@ -384,6 +456,30 @@ export default function AddPlantScreen() {
                 <SummaryItem label={t.addPlant.summarySoil} value={form.soilMix || t.addPlant.soilMixPlaceholder} colors={colors} />
               </View>
             </View>
+
+            {isEditing && (
+              <View style={styles.deleteSection}>
+                {!deleteConfirm ? (
+                  <Pressable onPress={() => setDeleteConfirm(true)} style={styles.deleteLink}>
+                    <Text style={[styles.deleteLinkText, { color: colors.accent }]}>{t.addPlant.deletePlant}</Text>
+                  </Pressable>
+                ) : (
+                  <View style={[styles.deleteConfirmBox, { backgroundColor: colors.accentMuted, borderColor: colors.accent }]}>
+                    <Text style={[styles.deleteConfirmText, { color: colors.text }]}>{t.addPlant.deleteConfirm}</Text>
+                    <View style={styles.deleteConfirmActions}>
+                      <Pressable
+                        onPress={() => setDeleteConfirm(false)}
+                        style={[styles.deleteCancelButton, { backgroundColor: colors.backgroundSelected }]}>
+                        <Text style={{ color: colors.text, fontWeight: '700', fontSize: 13 }}>{t.addPlant.deleteCancel}</Text>
+                      </Pressable>
+                      <Pressable onPress={handleDelete} style={[styles.deleteConfirmButton, { backgroundColor: colors.accent }]}>
+                        <Text style={{ color: '#fff', fontWeight: '700', fontSize: 13 }}>{t.addPlant.deleteConfirmYes}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
         )}
       </ScrollView>
@@ -396,7 +492,9 @@ export default function AddPlantScreen() {
           onPress={handleContinue}
           disabled={!canContinue}
           style={[styles.footerContinue, { backgroundColor: colors.tint, opacity: canContinue ? 1 : 0.5 }]}>
-          <Text style={styles.footerContinueText}>{step === 4 ? t.addPlant.addPlant : t.addPlant.continue}</Text>
+          <Text style={styles.footerContinueText}>
+            {step === 4 ? (isEditing ? t.addPlant.saveChanges : t.addPlant.addPlant) : t.addPlant.continue}
+          </Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -520,6 +618,14 @@ const styles = StyleSheet.create({
   summaryItem: { width: '47%', gap: 2 },
   summaryLabel: { fontSize: 11 },
   summaryValue: { fontSize: 13, fontWeight: '700' },
+  deleteSection: { alignItems: 'center', marginTop: Spacing.two },
+  deleteLink: { paddingVertical: 8 },
+  deleteLinkText: { fontSize: 13, fontWeight: '700' },
+  deleteConfirmBox: { borderRadius: 14, borderWidth: 1, padding: Spacing.three, gap: Spacing.two, width: '100%' },
+  deleteConfirmText: { fontSize: 13, lineHeight: 19 },
+  deleteConfirmActions: { flexDirection: 'row', gap: Spacing.two },
+  deleteCancelButton: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },
+  deleteConfirmButton: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },
   footer: {
     flexDirection: 'row',
     gap: Spacing.two,

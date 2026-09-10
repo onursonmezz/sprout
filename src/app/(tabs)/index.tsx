@@ -20,7 +20,7 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants } = usePlants();
+  const { plants, snoozePlant } = usePlants();
   const [watered, setWatered] = useState<Record<string, boolean>>({});
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
@@ -100,7 +100,9 @@ export default function TodayScreen() {
                     ]}>
                     <Text style={styles.wateredButtonText}>{isWatered ? t.today.watered : t.today.water}</Text>
                   </Pressable>
-                  <Pressable style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
+                  <Pressable
+                    onPress={() => snoozePlant(plant.id)}
+                    style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
                     <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.today.snooze}</Text>
                   </Pressable>
                 </View>

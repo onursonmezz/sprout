@@ -9,11 +9,15 @@ const SAVED_AT_KEY = 'sprout:plants-saved-at';
 type PlantsContextValue = {
   plants: Plant[];
   addPlant: (plant: Plant) => void;
+  updatePlant: (plantId: string, updates: Partial<Plant>) => void;
+  deletePlant: (plantId: string) => void;
   getPlant: (id: string) => Plant | undefined;
   addCareTask: (plantId: string, task: CareTask) => void;
   completeCareTask: (plantId: string, taskIndex: number) => void;
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
   waterPlant: (plantId: string) => void;
+  snoozePlant: (plantId: string) => void;
+  resetPlants: () => void;
   loaded: boolean;
 };
 
@@ -72,6 +76,13 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const addPlant = (plant: Plant) => setPlants((prev) => [plant, ...prev]);
   const getPlant = (id: string) => plants.find((p) => p.id === id);
 
+  const updatePlant = (plantId: string, updates: Partial<Plant>) =>
+    setPlants((prev) => prev.map((p) => (p.id === plantId ? { ...p, ...updates } : p)));
+
+  const deletePlant = (plantId: string) => setPlants((prev) => prev.filter((p) => p.id !== plantId));
+
+  const resetPlants = () => setPlants([]);
+
   const addCareTask = (plantId: string, task: CareTask) =>
     setPlants((prev) => prev.map((p) => (p.id === plantId ? { ...p, care: [...p.care, task] } : p)));
 
@@ -98,9 +109,32 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       })
     );
 
+  const snoozePlant = (plantId: string) =>
+    setPlants((prev) =>
+      prev.map((p) => {
+        if (p.id !== plantId) return p;
+        const daysUntilWatering = p.daysUntilWatering + 1;
+        const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
+        return { ...p, daysUntilWatering, status };
+      })
+    );
+
   return (
     <PlantsContext.Provider
-      value={{ plants, addPlant, getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, loaded }}>
+      value={{
+        plants,
+        addPlant,
+        updatePlant,
+        deletePlant,
+        getPlant,
+        addCareTask,
+        completeCareTask,
+        addJournalEntry,
+        waterPlant,
+        snoozePlant,
+        resetPlants,
+        loaded,
+      }}>
       {children}
     </PlantsContext.Provider>
   );

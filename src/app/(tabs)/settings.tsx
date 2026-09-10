@@ -1,3 +1,5 @@
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -6,7 +8,9 @@ import { Fonts, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
+import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
+import { exportPlantsData } from '@/utils/export';
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
@@ -71,7 +75,23 @@ export default function SettingsScreen() {
     setVacationEnd,
     units,
     setUnits,
+    resetSettings,
   } = useSettings();
+  const { plants, resetPlants } = usePlants();
+  const router = useRouter();
+  const [resetConfirm, setResetConfirm] = useState(false);
+
+  const handleExport = () => {
+    if (plants.length === 0) return;
+    exportPlantsData(plants);
+  };
+
+  const handleResetConfirmed = () => {
+    resetPlants();
+    resetSettings();
+    setResetConfirm(false);
+    router.replace('/onboarding');
+  };
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
@@ -266,15 +286,43 @@ export default function SettingsScreen() {
             title={t.settings.exportData}
             subtitle={t.settings.exportDataSub}
             colors={colors}
-            right={<Text style={{ color: colors.textSecondary }}>›</Text>}
+            right={
+              <Pressable
+                onPress={handleExport}
+                disabled={plants.length === 0}
+                style={[styles.exportButton, { backgroundColor: colors.backgroundSelected, opacity: plants.length === 0 ? 0.5 : 1 }]}>
+                <Text style={[styles.exportButtonText, { color: colors.text }]}>{t.settings.exportButton}</Text>
+              </Pressable>
+            }
           />
           <Row
             title={t.settings.resetData}
             subtitle={t.settings.resetDataSub}
             colors={colors}
-            divider={false}
-            right={<Text style={{ color: colors.accent }}>›</Text>}
+            divider={resetConfirm}
+            right={
+              <Pressable onPress={() => setResetConfirm((v) => !v)}>
+                <Text style={{ color: colors.accent, fontSize: 18 }}>›</Text>
+              </Pressable>
+            }
           />
+          {resetConfirm && (
+            <View style={styles.resetConfirmBlock}>
+              <Text style={[styles.resetConfirmText, { color: colors.textSecondary }]}>{t.settings.resetConfirm}</Text>
+              <View style={styles.resetConfirmActions}>
+                <Pressable
+                  onPress={() => setResetConfirm(false)}
+                  style={[styles.resetCancelButton, { backgroundColor: colors.backgroundSelected }]}>
+                  <Text style={{ color: colors.text, fontWeight: '700', fontSize: 13 }}>{t.settings.resetCancel}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={handleResetConfirmed}
+                  style={[styles.resetConfirmButton, { backgroundColor: colors.accent }]}>
+                  <Text style={{ color: '#fff', fontWeight: '700', fontSize: 13 }}>{t.settings.resetConfirmYes}</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
         </SectionCard>
       </ScrollView>
     </SafeAreaView>
@@ -297,4 +345,11 @@ const styles = StyleSheet.create({
   vacationNote: { fontSize: 12, lineHeight: 17 },
   vacationDatesRow: { flexDirection: 'row', gap: Spacing.two },
   vacationLabel: { fontSize: 12, fontWeight: '700' },
+  exportButton: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12 },
+  exportButtonText: { fontSize: 13, fontWeight: '700' },
+  resetConfirmBlock: { paddingBottom: Spacing.three, gap: Spacing.two },
+  resetConfirmText: { fontSize: 12, lineHeight: 17 },
+  resetConfirmActions: { flexDirection: 'row', gap: Spacing.two },
+  resetCancelButton: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },
+  resetConfirmButton: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },
 });

@@ -38,7 +38,7 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t } = useLanguage();
-  const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant } = usePlants();
+  const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, snoozePlant } = usePlants();
   const plant = getPlant(String(id));
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
   const [toastVisible, setToastVisible] = useState(false);
@@ -84,7 +84,7 @@ export default function PlantDetailScreen() {
             <Pressable onPress={() => router.back()} style={styles.heroButton}>
               <Ionicons name="arrow-back" size={20} color="#1E2A22" />
             </Pressable>
-            <Pressable style={styles.heroButton}>
+            <Pressable onPress={() => router.push(`/add-plant?id=${plant.id}`)} style={styles.heroButton}>
               <Text style={styles.heroButtonText}>{t.plantDetail.edit}</Text>
             </Pressable>
           </View>
@@ -124,7 +124,9 @@ export default function PlantDetailScreen() {
             <Pressable onPress={handleWaterNow} style={[styles.waterButton, { backgroundColor: statusColor }]}>
               <Text style={styles.waterButtonText}>{t.plantDetail.waterNow}</Text>
             </Pressable>
-            <Pressable style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
+            <Pressable
+              onPress={() => snoozePlant(plant.id)}
+              style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
               <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.plantDetail.snooze}</Text>
             </Pressable>
           </View>
