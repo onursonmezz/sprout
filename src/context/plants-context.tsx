@@ -8,6 +8,7 @@ type PlantsContextValue = {
   getPlant: (id: string) => Plant | undefined;
   addCareTask: (plantId: string, task: CareTask) => void;
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
+  waterPlant: (plantId: string) => void;
 };
 
 const PlantsContext = createContext<PlantsContextValue | null>(null);
@@ -26,8 +27,17 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       prev.map((p) => (p.id === plantId ? { ...p, journalNotes: [entry, ...p.journalNotes] } : p))
     );
 
+  const waterPlant = (plantId: string) =>
+    setPlants((prev) =>
+      prev.map((p) => {
+        if (p.id !== plantId) return p;
+        const intervalDays = Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
+        return { ...p, lastWateredDaysAgo: 0, daysUntilWatering: intervalDays, status: 'upcoming' };
+      })
+    );
+
   return (
-    <PlantsContext.Provider value={{ plants, addPlant, getPlant, addCareTask, addJournalEntry }}>
+    <PlantsContext.Provider value={{ plants, addPlant, getPlant, addCareTask, addJournalEntry, waterPlant }}>
       {children}
     </PlantsContext.Provider>
   );

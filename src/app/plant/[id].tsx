@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Animated, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { CircularProgress } from '@/components/circular-progress';
 import { Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
@@ -37,9 +38,12 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t } = useLanguage();
-  const { getPlant, addCareTask, addJournalEntry } = usePlants();
+  const { getPlant, addCareTask, addJournalEntry, waterPlant } = usePlants();
   const plant = getPlant(String(id));
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
+  const [toastVisible, setToastVisible] = useState(false);
+  const toastOpacity = useRef(new Animated.Value(0)).current;
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tabLabels: Record<(typeof TAB_KEYS)[number], string> = {
     overview: t.plantDetail.tabOverview,
@@ -59,6 +63,18 @@ export default function PlantDetailScreen() {
   const isOverdue = plant.status === 'overdue';
   const isDueToday = plant.status === 'dueToday';
   const statusColor = isOverdue || isDueToday ? colors.accent : colors.tint;
+  const wateringInterval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
+  const wateringProgress = plant.lastWateredDaysAgo / wateringInterval;
+
+  const handleWaterNow = () => {
+    waterPlant(plant.id);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToastVisible(true);
+    Animated.timing(toastOpacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
+    toastTimer.current = setTimeout(() => {
+      Animated.timing(toastOpacity, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => setToastVisible(false));
+    }, 2000);
+  };
 
   return (
     <View style={[styles.safe, { backgroundColor: colors.background }]}>
@@ -86,7 +102,13 @@ export default function PlantDetailScreen() {
               styles.nextWateringCard,
               { backgroundColor: isOverdue || isDueToday ? colors.accentMuted : colors.tintMuted, borderColor: statusColor },
             ]}>
-            <View style={[styles.ring, { borderColor: statusColor }]} />
+            <CircularProgress
+              size={44}
+              strokeWidth={4}
+              progress={wateringProgress}
+              color={statusColor}
+              trackColor={colors.backgroundSelected}
+            />
             <View style={{ flex: 1 }}>
               <Text style={[styles.nextWateringLabel, { color: colors.textSecondary }]}>{t.plantDetail.nextWatering}</Text>
               <Text style={[styles.nextWateringValue, { color: statusColor }]}>
@@ -99,7 +121,7 @@ export default function PlantDetailScreen() {
           </View>
 
           <View style={styles.actionsRow}>
-            <Pressable style={[styles.waterButton, { backgroundColor: colors.accent }]}>
+            <Pressable onPress={handleWaterNow} style={[styles.waterButton, { backgroundColor: statusColor }]}>
               <Text style={styles.waterButtonText}>{t.plantDetail.waterNow}</Text>
             </Pressable>
             <Pressable style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
@@ -156,6 +178,12 @@ export default function PlantDetailScreen() {
           {tab === 'history' && <HistoryTab plant={plant} colors={colors} t={t} />}
         </View>
       </ScrollView>
+
+      {toastVisible && (
+        <Animated.View pointerEvents="none" style={[styles.toast, { backgroundColor: colors.tint, opacity: toastOpacity }]}>
+          <Text style={styles.toastText}>{t.plantDetail.wateredToast(plant.name)}</Text>
+        </Animated.View>
+      )}
     </View>
   );
 }
@@ -541,7 +569,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     padding: Spacing.three,
   },
-  ring: { width: 44, height: 44, borderRadius: 22, borderWidth: 4 },
   nextWateringLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
   nextWateringValue: { fontSize: 18, fontWeight: '700' },
   nextWateringMeta: { fontSize: 12, marginTop: 2 },
@@ -559,6 +586,22 @@ const styles = StyleSheet.create({
   chipWide: { width: '48%' },
   chipLabel: { fontSize: 10, fontWeight: '600' },
   chipValue: { fontSize: 13, fontWeight: '700' },
+
+  toast: {
+    position: 'absolute',
+    bottom: Spacing.five,
+    left: Spacing.four,
+    right: Spacing.four,
+    borderRadius: 16,
+    paddingVertical: 14,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+  },
+  toastText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 
   addButton: { borderRadius: 14, borderWidth: 1, paddingVertical: 12, alignItems: 'center' },
   addButtonText: { fontWeight: '700', fontSize: 13 },
