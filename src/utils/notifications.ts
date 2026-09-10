@@ -1,23 +1,44 @@
-import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
+import type * as NotificationsType from 'expo-notifications';
 
 const DAILY_REMINDER_ID = 'sprout-daily-reminder';
 const CHANNEL_ID = 'plant-reminders';
 
-if (Platform.OS !== 'web') {
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowBanner: true,
-      shouldShowList: true,
-      shouldPlaySound: true,
-      shouldSetBadge: false,
-    }),
-  });
+let notificationsModule: typeof NotificationsType | null = null;
+let loadPromise: Promise<typeof NotificationsType | null> | null = null;
+
+/**
+ * expo-notifications throws as soon as it's loaded when running inside Expo Go
+ * on SDK 53+ (push support was removed there). A dynamic import lets us catch
+ * that failure instead of crashing the whole app at startup; every export
+ * below degrades to a no-op when the module couldn't be loaded.
+ */
+function loadNotifications(): Promise<typeof NotificationsType | null> {
+  if (!loadPromise) {
+    loadPromise =
+      Platform.OS === 'web'
+        ? Promise.resolve(null)
+        : import('expo-notifications')
+            .then((mod) => {
+              mod.setNotificationHandler({
+                handleNotification: async () => ({
+                  shouldShowBanner: true,
+                  shouldShowList: true,
+                  shouldPlaySound: true,
+                  shouldSetBadge: false,
+                }),
+              });
+              notificationsModule = mod;
+              return mod;
+            })
+            .catch(() => null);
+  }
+  return loadPromise;
 }
 
 let channelReady = false;
 
-async function ensureAndroidChannel() {
+async function ensureAndroidChannel(Notifications: typeof NotificationsType) {
   if (Platform.OS !== 'android' || channelReady) return;
   await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
     name: 'Plant reminders',
@@ -27,17 +48,21 @@ async function ensureAndroidChannel() {
   channelReady = true;
 }
 
-/** Local scheduled notifications aren't available on web; every export below is a no-op there. */
 export async function requestNotificationPermission(): Promise<boolean> {
-  if (Platform.OS === 'web') return false;
-  const existing = await Notifications.getPermissionsAsync();
-  if (existing.granted) {
-    await ensureAndroidChannel();
-    return true;
+  const Notifications = await loadNotifications();
+  if (!Notifications) return false;
+  try {
+    const existing = await Notifications.getPermissionsAsync();
+    if (existing.granted) {
+      await ensureAndroidChannel(Notifications);
+      return true;
+    }
+    const requested = await Notifications.requestPermissionsAsync();
+    if (requested.granted) await ensureAndroidChannel(Notifications);
+    return requested.granted;
+  } catch {
+    return false;
   }
-  const requested = await Notifications.requestPermissionsAsync();
-  if (requested.granted) await ensureAndroidChannel();
-  return requested.granted;
 }
 
 export async function scheduleDailyReminder({
@@ -51,24 +76,30 @@ export async function scheduleDailyReminder({
   title: string;
   body: string;
 }) {
-  if (Platform.OS === 'web') return;
-  const { granted } = await Notifications.getPermissionsAsync();
-  if (!granted) return;
-  await ensureAndroidChannel();
-  await Notifications.cancelScheduledNotificationAsync(DAILY_REMINDER_ID).catch(() => {});
-  await Notifications.scheduleNotificationAsync({
-    identifier: DAILY_REMINDER_ID,
-    content: { title, body, sound: true },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour,
-      minute,
-      channelId: CHANNEL_ID,
-    },
-  });
+  const Notifications = await loadNotifications();
+  if (!Notifications) return;
+  try {
+    const { granted } = await Notifications.getPermissionsAsync();
+    if (!granted) return;
+    await ensureAndroidChannel(Notifications);
+    await Notifications.cancelScheduledNotificationAsync(DAILY_REMINDER_ID).catch(() => {});
+    await Notifications.scheduleNotificationAsync({
+      identifier: DAILY_REMINDER_ID,
+      content: { title, body, sound: true },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DAILY,
+        hour,
+        minute,
+        channelId: CHANNEL_ID,
+      },
+    });
+  } catch {
+    // Local scheduling isn't available in this environment (e.g. Expo Go); ignore.
+  }
 }
 
 export async function cancelDailyReminder() {
-  if (Platform.OS === 'web') return;
+  const Notifications = notificationsModule ?? (await loadNotifications());
+  if (!Notifications) return;
   await Notifications.cancelScheduledNotificationAsync(DAILY_REMINDER_ID).catch(() => {});
 }
