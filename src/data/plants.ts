@@ -16,7 +16,7 @@ export type JournalEntry = {
   title: string;
   description: string;
   daysAgo: number;
-  hasPhoto?: boolean;
+  photoUri?: string | null;
 };
 
 export type Plant = {
@@ -27,6 +27,7 @@ export type Plant = {
   room: string;
   emoji: string;
   avatarColor: string;
+  photoUri: string | null;
   wateringAmountMl: number;
   status: WateringStatus;
   daysUntilWatering: number;
@@ -58,6 +59,7 @@ export const samplePlants: Plant[] = [
     room: 'Bathroom',
     emoji: '🌿',
     avatarColor: '#DDE7D2',
+    photoUri: null,
     wateringAmountMl: 200,
     status: 'overdue',
     daysUntilWatering: -1,
@@ -87,6 +89,7 @@ export const samplePlants: Plant[] = [
     room: 'Living Room',
     emoji: '🌳',
     avatarColor: '#E4E9DA',
+    photoUri: null,
     wateringAmountMl: 500,
     status: 'overdue',
     daysUntilWatering: -1,
@@ -105,7 +108,6 @@ export const samplePlants: Plant[] = [
         title: 'New leaf',
         description: 'Third new leaf this year! Growing fast with the summer sun.',
         daysAgo: 30,
-        hasPhoto: true,
       },
     ],
   },
@@ -117,6 +119,7 @@ export const samplePlants: Plant[] = [
     room: 'Bedroom',
     emoji: '🍃',
     avatarColor: '#DCE9D9',
+    photoUri: null,
     wateringAmountMl: 250,
     status: 'dueToday',
     daysUntilWatering: 0,
@@ -146,6 +149,7 @@ export const samplePlants: Plant[] = [
     room: 'Bedroom',
     emoji: '🌸',
     avatarColor: '#E8F0E2',
+    photoUri: null,
     wateringAmountMl: 300,
     status: 'upcoming',
     daysUntilWatering: 1,
@@ -175,6 +179,7 @@ export const samplePlants: Plant[] = [
     room: 'Living Room',
     emoji: '🌱',
     avatarColor: '#DFE9D6',
+    photoUri: null,
     wateringAmountMl: 400,
     status: 'upcoming',
     daysUntilWatering: 2,
@@ -204,6 +209,7 @@ export const samplePlants: Plant[] = [
     room: 'Office',
     emoji: '🪴',
     avatarColor: '#E6E2D2',
+    photoUri: null,
     wateringAmountMl: 250,
     status: 'upcoming',
     daysUntilWatering: 2,
@@ -233,6 +239,7 @@ export const samplePlants: Plant[] = [
     room: 'Kitchen',
     emoji: '🌵',
     avatarColor: '#DEE7D8',
+    photoUri: null,
     wateringAmountMl: 150,
     status: 'upcoming',
     daysUntilWatering: 6,
@@ -262,6 +269,7 @@ export const samplePlants: Plant[] = [
     room: 'Balcony',
     emoji: '🌻',
     avatarColor: '#EDE6D6',
+    photoUri: null,
     wateringAmountMl: 100,
     status: 'upcoming',
     daysUntilWatering: 4,

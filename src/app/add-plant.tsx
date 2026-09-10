@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { PhotoPicker } from '@/components/photo-picker';
 import { Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
@@ -19,6 +20,7 @@ function todayFormatted() {
 }
 
 type FormState = {
+  photoUri: string | null;
   nickname: string;
   species: string;
   latinName: string;
@@ -40,6 +42,7 @@ type FormState = {
 };
 
 const initialForm: FormState = {
+  photoUri: null,
   nickname: '',
   species: '',
   latinName: '',
@@ -72,6 +75,7 @@ function plantToForm(plant: Plant, t: Translations): FormState {
   const interval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
 
   return {
+    photoUri: plant.photoUri,
     nickname: plant.name,
     species: plant.species === '—' ? '' : plant.species,
     latinName: plant.latinName,
@@ -140,6 +144,7 @@ export default function AddPlantScreen() {
     const drainageLabel = form.drainage === 'yes' ? t.addPlant.yes : t.addPlant.no;
 
     const sharedFields = {
+      photoUri: form.photoUri,
       name: form.nickname.trim(),
       species: form.species.trim() || '—',
       latinName: form.latinName.trim(),
@@ -216,6 +221,9 @@ export default function AddPlantScreen() {
 
         {step === 1 && (
           <View style={styles.fieldGroup}>
+            <Field label={t.addPlant.photo} colors={colors}>
+              <PhotoPicker uri={form.photoUri} onChange={(uri) => set('photoUri', uri)} colors={colors} t={t} />
+            </Field>
             <Field label={t.addPlant.nickname} colors={colors}>
               <TextInput
                 value={form.nickname}

@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 import { useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { CircularProgress } from '@/components/circular-progress';
+import { PhotoPicker } from '@/components/photo-picker';
 import { Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
@@ -80,6 +82,7 @@ export default function PlantDetailScreen() {
     <View style={[styles.safe, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.hero, { backgroundColor: plant.avatarColor }]}>
+          {plant.photoUri && <Image source={{ uri: plant.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" />}
           <View style={styles.heroTopRow}>
             <Pressable onPress={() => router.back()} style={styles.heroButton}>
               <Ionicons name="arrow-back" size={20} color="#1E2A22" />
@@ -88,7 +91,7 @@ export default function PlantDetailScreen() {
               <Text style={styles.heroButtonText}>{t.plantDetail.edit}</Text>
             </Pressable>
           </View>
-          <Text style={styles.heroEmoji}>{plant.emoji}</Text>
+          {!plant.photoUri && <Text style={styles.heroEmoji}>{plant.emoji}</Text>}
           <View style={styles.heroTextWrap}>
             <Text style={[styles.heroName, { fontFamily: Fonts.serif }]}>{plant.name}</Text>
             <Text style={styles.heroSpecies}>{plant.species}</Text>
@@ -359,6 +362,7 @@ function JournalTab({
   const [type, setType] = useState<JournalEntryType>('note');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   const fertilizeTask = plant.care.find((c) => c.type === 'fertilize');
   const autoEntries: JournalEntry[] = [
@@ -386,10 +390,18 @@ function JournalTab({
 
   const handleSave = () => {
     if (!title.trim()) return;
-    onAddEntry({ id: `entry-${Date.now()}`, type, title: title.trim(), description: description.trim(), daysAgo: 0 });
+    onAddEntry({
+      id: `entry-${Date.now()}`,
+      type,
+      title: title.trim(),
+      description: description.trim(),
+      daysAgo: 0,
+      photoUri,
+    });
     setTitle('');
     setDescription('');
     setType('note');
+    setPhotoUri(null);
     setFormOpen(false);
   };
 
@@ -436,6 +448,7 @@ function JournalTab({
               { color: colors.text, backgroundColor: colors.background, borderColor: colors.border },
             ]}
           />
+          <PhotoPicker uri={photoUri} onChange={setPhotoUri} colors={colors} t={t} height={120} />
           <View style={styles.formActions}>
             <Pressable onPress={() => setFormOpen(false)} style={[styles.formCancelButton, { backgroundColor: colors.backgroundSelected }]}>
               <Text style={{ color: colors.text, fontWeight: '700', fontSize: 13 }}>{t.plantDetail.journal.cancel}</Text>
@@ -469,7 +482,9 @@ function JournalTab({
               {!!entry.description && (
                 <Text style={[styles.timelineDescription, { color: colors.textSecondary }]}>{entry.description}</Text>
               )}
-              {entry.hasPhoto && <View style={[styles.timelinePhoto, { backgroundColor: colors.tintMuted }]} />}
+              {!!entry.photoUri && (
+                <Image source={{ uri: entry.photoUri }} style={styles.timelinePhoto} contentFit="cover" />
+              )}
             </View>
           </View>
         ))
@@ -656,7 +671,7 @@ const styles = StyleSheet.create({
   timelineTitle: { fontSize: 13, fontWeight: '700' },
   timelineTime: { fontSize: 11 },
   timelineDescription: { fontSize: 12, lineHeight: 17 },
-  timelinePhoto: { height: 90, borderRadius: 10, marginTop: 4 },
+  timelinePhoto: { width: '100%', height: 140, borderRadius: 10, marginTop: 4 },
 
   historyCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.two, gap: Spacing.one },
   historyCaption: { fontSize: 12 },

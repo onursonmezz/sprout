@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { PlantAvatar } from '@/components/plant-avatar';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -74,9 +75,7 @@ export default function TodayScreen() {
                     borderColor: isOverdue ? colors.accent : colors.border,
                   },
                 ]}>
-                <View style={[styles.avatar, { backgroundColor: plant.avatarColor }]}>
-                  <Text style={styles.avatarEmoji}>{plant.emoji}</Text>
-                </View>
+                <PlantAvatar plant={plant} size={52} />
                 <View style={styles.attentionInfo}>
                   <View style={styles.attentionNameRow}>
                     <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
@@ -120,9 +119,7 @@ export default function TodayScreen() {
               key={plant.id}
               onPress={() => router.push(`/plant/${plant.id}`)}
               style={[styles.upcomingCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-              <View style={[styles.upcomingAvatar, { backgroundColor: plant.avatarColor }]}>
-                <Text style={styles.avatarEmoji}>{plant.emoji}</Text>
-              </View>
+              <PlantAvatar plant={plant} size={48} />
               <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
               <Text style={[styles.upcomingDays, { color: colors.tint }]}>
                 {plant.daysUntilWatering === 1 ? t.today.tomorrow : t.today.inDays(plant.daysUntilWatering)}

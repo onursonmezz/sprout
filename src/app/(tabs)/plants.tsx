@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { PlantAvatar } from '@/components/plant-avatar';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -84,7 +86,11 @@ export default function PlantsScreen() {
                 onPress={() => router.push(`/plant/${plant.id}`)}
                 style={[styles.gridCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
                 <View style={[styles.gridPhoto, { backgroundColor: plant.avatarColor }]}>
-                  <Text style={{ fontSize: 40 }}>{plant.emoji}</Text>
+                  {plant.photoUri ? (
+                    <Image source={{ uri: plant.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" />
+                  ) : (
+                    <Text style={{ fontSize: 40 }}>{plant.emoji}</Text>
+                  )}
                 </View>
                 <View style={styles.gridInfo}>
                   <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
@@ -116,9 +122,7 @@ export default function PlantsScreen() {
                 key={plant.id}
                 onPress={() => router.push(`/plant/${plant.id}`)}
                 style={[styles.listRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
-                <View style={[styles.listAvatar, { backgroundColor: plant.avatarColor }]}>
-                  <Text style={{ fontSize: 22 }}>{plant.emoji}</Text>
-                </View>
+                <PlantAvatar plant={plant} size={48} emojiSize={22} />
                 <View style={styles.listInfo}>
                   <View style={styles.listNameRow}>
                     <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
