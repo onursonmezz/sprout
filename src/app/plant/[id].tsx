@@ -38,7 +38,7 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t } = useLanguage();
-  const { getPlant, addCareTask, addJournalEntry, waterPlant } = usePlants();
+  const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant } = usePlants();
   const plant = getPlant(String(id));
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
   const [toastVisible, setToastVisible] = useState(false);
@@ -168,7 +168,13 @@ export default function PlantDetailScreen() {
           )}
 
           {tab === 'care' && (
-            <CareTab plant={plant} colors={colors} t={t} onAddTask={(task) => addCareTask(plant.id, task)} />
+            <CareTab
+              plant={plant}
+              colors={colors}
+              t={t}
+              onAddTask={(task) => addCareTask(plant.id, task)}
+              onCompleteTask={(index) => completeCareTask(plant.id, index)}
+            />
           )}
 
           {tab === 'journal' && (
@@ -212,11 +218,13 @@ function CareTab({
   colors,
   t,
   onAddTask,
+  onCompleteTask,
 }: {
   plant: Plant;
   colors: ReturnType<typeof useTheme>;
   t: Translations;
   onAddTask: (task: CareTask) => void;
+  onCompleteTask: (index: number) => void;
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const existingTypes = plant.care.map((c) => c.type);
@@ -277,9 +285,10 @@ function CareTab({
             nextText={
               daysLeft <= 0 ? t.plantDetail.care.nextDueNow : t.plantDetail.care.nextOn(formatDateFromDaysOffset(daysLeft, t))
             }
-            overdue={daysLeft < 0}
+            overdue={daysLeft <= 0}
             colors={colors}
             t={t}
+            onComplete={() => onCompleteTask(i)}
           />
         );
       })}
@@ -295,6 +304,7 @@ function CareRow({
   overdue,
   colors,
   t,
+  onComplete,
 }: {
   emoji: string;
   title: string;
@@ -303,6 +313,7 @@ function CareRow({
   overdue: boolean;
   colors: ReturnType<typeof useTheme>;
   t: Translations;
+  onComplete?: () => void;
 }) {
   return (
     <View style={[styles.careRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -314,10 +325,18 @@ function CareRow({
         <Text style={[styles.careSubtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
         <Text style={[styles.careSubtitle, { color: colors.textSecondary }]}>{nextText}</Text>
       </View>
-      {overdue && (
-        <View style={[styles.overdueBadge, { backgroundColor: colors.accentMuted }]}>
-          <Text style={[styles.overdueBadgeText, { color: colors.accent }]}>{t.plantDetail.care.overdue}</Text>
-        </View>
+      {onComplete ? (
+        <Pressable
+          onPress={onComplete}
+          style={[styles.completeButton, { backgroundColor: overdue ? colors.accent : colors.tint }]}>
+          <Ionicons name="add" size={18} color="#fff" />
+        </Pressable>
+      ) : (
+        overdue && (
+          <View style={[styles.overdueBadge, { backgroundColor: colors.accentMuted }]}>
+            <Text style={[styles.overdueBadgeText, { color: colors.accent }]}>{t.plantDetail.care.overdue}</Text>
+          </View>
+        )
       )}
     </View>
   );
@@ -459,7 +478,6 @@ function JournalTab({
 
 function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typeof useTheme>; t: Translations }) {
   const wateringInterval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
-  const fertilizeTask = plant.care.find((c) => c.type === 'fertilize');
 
   return (
     <View style={{ gap: Spacing.four }}>
@@ -471,16 +489,17 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
         colors={colors}
         t={t}
       />
-      {fertilizeTask && (
+      {plant.care.map((task, i) => (
         <HistorySection
-          title={t.plantDetail.history.fertilizingHistory}
-          recentLabel={t.plantDetail.history.recentFertilizing}
-          intervalDays={fertilizeTask.intervalDays}
-          lastDoneDaysAgo={fertilizeTask.lastDoneDaysAgo}
+          key={i}
+          title={t.plantDetail.history.taskHistoryTitle[task.type]}
+          recentLabel={t.plantDetail.history.taskRecentLabel[task.type]}
+          intervalDays={task.intervalDays}
+          lastDoneDaysAgo={task.lastDoneDaysAgo}
           colors={colors}
           t={t}
         />
-      )}
+      ))}
     </View>
   );
 }
@@ -615,6 +634,7 @@ const styles = StyleSheet.create({
   careSubtitle: { fontSize: 11 },
   overdueBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
   overdueBadgeText: { fontSize: 10, fontWeight: '700' },
+  completeButton: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
 
   journalTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   journalTypeChip: { flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 6 },
