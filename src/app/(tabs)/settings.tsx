@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -7,6 +6,7 @@ import { Fonts, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
+import { useSettings } from '@/context/settings-context';
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
@@ -48,26 +48,30 @@ function Row({
   );
 }
 
-function timeAt(hours: number, minutes: number) {
-  const d = new Date();
-  d.setHours(hours, minutes, 0, 0);
-  return d;
-}
-
 export default function SettingsScreen() {
   const colors = useTheme();
   const { mode, setMode } = useThemeMode();
   const { lang, setLang, t } = useLanguage();
-
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [reminderTime, setReminderTime] = useState(() => timeAt(8, 0));
-  const [quietStart, setQuietStart] = useState(() => timeAt(22, 0));
-  const [quietEnd, setQuietEnd] = useState(() => timeAt(7, 0));
-  const [seasonalAdjustment, setSeasonalAdjustment] = useState(true);
-  const [vacationMode, setVacationMode] = useState(false);
-  const [vacationStart, setVacationStart] = useState<Date | null>(null);
-  const [vacationEnd, setVacationEnd] = useState<Date | null>(null);
-  const [units, setUnits] = useState<'metric' | 'imperial'>('metric');
+  const {
+    notificationsEnabled,
+    setNotificationsEnabled,
+    reminderTime,
+    setReminderTime,
+    quietStart,
+    setQuietStart,
+    quietEnd,
+    setQuietEnd,
+    seasonalAdjustment,
+    setSeasonalAdjustment,
+    vacationMode,
+    setVacationMode,
+    vacationStart,
+    setVacationStart,
+    vacationEnd,
+    setVacationEnd,
+    units,
+    setUnits,
+  } = useSettings();
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>

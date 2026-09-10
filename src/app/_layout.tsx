@@ -2,18 +2,25 @@ import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-import { LanguageProvider } from '@/context/language-context';
-import { PlantsProvider } from '@/context/plants-context';
+import { LanguageProvider, useLanguage } from '@/context/language-context';
+import { PlantsProvider, usePlants } from '@/context/plants-context';
+import { SettingsProvider, useSettings } from '@/context/settings-context';
 import { ThemeModeProvider, useThemeMode } from '@/context/theme-context';
 
 SplashScreen.preventAutoHideAsync();
 
 function Navigation() {
-  const { scheme } = useThemeMode();
+  const { scheme, loaded: themeLoaded } = useThemeMode();
+  const { loaded: langLoaded } = useLanguage();
+  const { loaded: plantsLoaded } = usePlants();
+  const { loaded: settingsLoaded } = useSettings();
+  const ready = themeLoaded && langLoaded && plantsLoaded && settingsLoaded;
 
   useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+    if (ready) SplashScreen.hideAsync();
+  }, [ready]);
+
+  if (!ready) return null;
 
   return (
     <ThemeProvider value={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -32,7 +39,9 @@ export default function RootLayout() {
     <ThemeModeProvider>
       <LanguageProvider>
         <PlantsProvider>
-          <Navigation />
+          <SettingsProvider>
+            <Navigation />
+          </SettingsProvider>
         </PlantsProvider>
       </LanguageProvider>
     </ThemeModeProvider>

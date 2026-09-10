@@ -1,21 +1,29 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
+import { useSettings } from '@/context/settings-context';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function OnboardingScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
+  const { onboarded, setOnboarded } = useSettings();
   const slides = t.onboarding.slides;
   const [index, setIndex] = useState(0);
   const slide = slides[index];
 
+  useEffect(() => {
+    if (onboarded) router.replace('/(tabs)');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const finish = () => {
+    setOnboarded(true);
     router.replace('/(tabs)');
   };
 

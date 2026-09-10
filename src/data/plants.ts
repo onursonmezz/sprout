@@ -49,7 +49,7 @@ export type Plant = {
   journalNotes: JournalEntry[];
 };
 
-export const plants: Plant[] = [
+export const samplePlants: Plant[] = [
   {
     id: 'fern',
     name: 'Fern',
@@ -284,7 +284,3 @@ export const plants: Plant[] = [
     ],
   },
 ];
-
-export function getPlant(id: string) {
-  return plants.find((p) => p.id === id);
-}
