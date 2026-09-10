@@ -99,7 +99,7 @@ export default function PlantsScreen() {
                   <View
                     style={[
                       styles.wateredButton,
-                      { backgroundColor: plant.status === 'overdue' ? colors.accent : colors.tint },
+                      { backgroundColor: plant.status === 'upcoming' ? colors.tint : colors.accent },
                     ]}>
                     <Text style={styles.wateredButtonText}>
                       {plant.status === 'upcoming' ? t.plants.watered : t.plants.water}

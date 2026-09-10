@@ -96,7 +96,7 @@ export default function TodayScreen() {
                     onPress={() => setWatered((prev) => ({ ...prev, [plant.id]: !prev[plant.id] }))}
                     style={[
                       styles.wateredButton,
-                      { backgroundColor: isWatered ? colors.tint : isOverdue ? colors.accent : colors.tint },
+                      { backgroundColor: isWatered ? colors.tint : colors.accent },
                     ]}>
                     <Text style={styles.wateredButtonText}>{isWatered ? t.today.watered : t.today.water}</Text>
                   </Pressable>
