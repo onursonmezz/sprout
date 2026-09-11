@@ -5,6 +5,8 @@
 export type SpeciesGuideEntry = {
   name: string;
   latinName: string;
+  /** Other common names this plant is searched by (nicknames, alt spellings). */
+  aliases?: string[];
   /** Index into addPlant.lightLevels: 0 Low, 1 Medium, 2 Bright indirect, 3 Direct sun. */
   lightLevelIndex: number;
   waterEveryDays: number;
@@ -14,72 +16,110 @@ export type SpeciesGuideEntry = {
 
 export const speciesGuide: SpeciesGuideEntry[] = [
   // Aroids
-  { name: 'Monstera', latinName: 'Monstera deliciosa', lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 400, toxicToPets: true },
-  { name: 'Monstera Adansonii', latinName: 'Monstera adansonii', lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 300, toxicToPets: true },
-  { name: 'Split Leaf Philodendron', latinName: 'Thaumatophyllum bipinnatifidum', lightLevelIndex: 2, waterEveryDays: 9, waterAmountMl: 400, toxicToPets: true },
-  { name: 'Pothos', latinName: 'Epipremnum aureum', lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 250, toxicToPets: true },
-  { name: 'Philodendron', latinName: 'Philodendron hederaceum', lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Monstera', latinName: 'Monstera deliciosa', aliases: ['Swiss Cheese Plant'], lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 400, toxicToPets: true },
+  { name: 'Monstera Adansonii', latinName: 'Monstera adansonii', aliases: ['Monkey Mask'], lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 300, toxicToPets: true },
+  { name: 'Split Leaf Philodendron', latinName: 'Thaumatophyllum bipinnatifidum', aliases: ['Selloum'], lightLevelIndex: 2, waterEveryDays: 9, waterAmountMl: 400, toxicToPets: true },
+  { name: 'Pothos', latinName: 'Epipremnum aureum', aliases: ["Devil's Ivy", 'Golden Pothos'], lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Marble Queen Pothos', latinName: 'Epipremnum aureum', lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Neon Pothos', latinName: 'Epipremnum aureum', lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Philodendron', latinName: 'Philodendron hederaceum', aliases: ['Heartleaf Philodendron'], lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 250, toxicToPets: true },
   { name: 'Philodendron Birkin', latinName: "Philodendron 'Birkin'", lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 250, toxicToPets: true },
-  { name: 'Syngonium', latinName: 'Syngonium podophyllum', lightLevelIndex: 1, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: true },
-  { name: 'Scindapsus', latinName: 'Scindapsus pictus', lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 200, toxicToPets: true },
-  { name: 'Alocasia', latinName: 'Alocasia amazonica', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Philodendron Pink Princess', latinName: "Philodendron erubescens 'Pink Princess'", lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Philodendron Micans', latinName: 'Philodendron hederaceum var. micans', lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Syngonium', latinName: 'Syngonium podophyllum', aliases: ['Arrowhead Plant', 'Arrowhead Vine'], lightLevelIndex: 1, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Scindapsus', latinName: 'Scindapsus pictus', aliases: ['Satin Pothos', 'Silver Pothos'], lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Alocasia', latinName: 'Alocasia amazonica', aliases: ["Elephant's Ear"], lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Alocasia Polly', latinName: "Alocasia 'Polly'", lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: true },
   { name: 'Elephant Ear', latinName: 'Alocasia macrorrhiza', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 300, toxicToPets: true },
-  { name: 'Anthurium', latinName: 'Anthurium andraeanum', lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: true },
-  { name: 'Caladium', latinName: 'Caladium bicolor', lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: true },
-  { name: 'Aglaonema', latinName: 'Aglaonema commutatum', lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 250, toxicToPets: true },
-  { name: 'Dieffenbachia', latinName: 'Dieffenbachia seguine', lightLevelIndex: 1, waterEveryDays: 7, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Anthurium', latinName: 'Anthurium andraeanum', aliases: ['Flamingo Flower'], lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Caladium', latinName: 'Caladium bicolor', aliases: ['Elephant Ear Caladium'], lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Aglaonema', latinName: 'Aglaonema commutatum', aliases: ['Chinese Evergreen'], lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Dieffenbachia', latinName: 'Dieffenbachia seguine', aliases: ['Dumb Cane'], lightLevelIndex: 1, waterEveryDays: 7, waterAmountMl: 250, toxicToPets: true },
 
   // Succulents & cacti
   { name: 'Succulent', latinName: 'Echeveria spp.', lightLevelIndex: 3, waterEveryDays: 14, waterAmountMl: 100, toxicToPets: false },
   { name: 'Aloe Vera', latinName: 'Aloe barbadensis miller', lightLevelIndex: 3, waterEveryDays: 18, waterAmountMl: 150, toxicToPets: true },
-  { name: 'Jade Plant', latinName: 'Crassula ovata', lightLevelIndex: 3, waterEveryDays: 16, waterAmountMl: 100, toxicToPets: true },
-  { name: 'Haworthia', latinName: 'Haworthia fasciata', lightLevelIndex: 2, waterEveryDays: 16, waterAmountMl: 100, toxicToPets: false },
+  { name: 'Jade Plant', latinName: 'Crassula ovata', aliases: ['Money Plant', 'Lucky Plant'], lightLevelIndex: 3, waterEveryDays: 16, waterAmountMl: 100, toxicToPets: true },
+  { name: 'Haworthia', latinName: 'Haworthia fasciata', aliases: ['Zebra Cactus'], lightLevelIndex: 2, waterEveryDays: 16, waterAmountMl: 100, toxicToPets: false },
   { name: 'Kalanchoe', latinName: 'Kalanchoe blossfeldiana', lightLevelIndex: 3, waterEveryDays: 12, waterAmountMl: 150, toxicToPets: true },
   { name: 'Panda Plant', latinName: 'Kalanchoe tomentosa', lightLevelIndex: 3, waterEveryDays: 16, waterAmountMl: 100, toxicToPets: true },
-  { name: "Burro's Tail", latinName: 'Sedum morganianum', lightLevelIndex: 3, waterEveryDays: 14, waterAmountMl: 100, toxicToPets: false },
+  { name: "Burro's Tail", latinName: 'Sedum morganianum', aliases: ["Donkey's Tail"], lightLevelIndex: 3, waterEveryDays: 14, waterAmountMl: 100, toxicToPets: false },
   { name: 'String of Pearls', latinName: 'Senecio rowleyanus', lightLevelIndex: 2, waterEveryDays: 12, waterAmountMl: 100, toxicToPets: true },
   { name: 'String of Bananas', latinName: 'Senecio radicans', lightLevelIndex: 2, waterEveryDays: 12, waterAmountMl: 100, toxicToPets: true },
-  { name: 'String of Hearts', latinName: 'Ceropegia woodii', lightLevelIndex: 2, waterEveryDays: 12, waterAmountMl: 100, toxicToPets: false },
+  { name: 'String of Hearts', latinName: 'Ceropegia woodii', aliases: ['Rosary Vine'], lightLevelIndex: 2, waterEveryDays: 12, waterAmountMl: 100, toxicToPets: false },
+  { name: 'String of Turtles', latinName: 'Peperomia prostrata', lightLevelIndex: 1, waterEveryDays: 10, waterAmountMl: 100, toxicToPets: false },
+  { name: 'String of Dolphins', latinName: 'Senecio peregrinus', lightLevelIndex: 2, waterEveryDays: 12, waterAmountMl: 100, toxicToPets: true },
   { name: 'Barrel Cactus', latinName: 'Echinocactus grusonii', lightLevelIndex: 3, waterEveryDays: 21, waterAmountMl: 100, toxicToPets: false },
   { name: 'Prickly Pear Cactus', latinName: 'Opuntia spp.', lightLevelIndex: 3, waterEveryDays: 21, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Bunny Ear Cactus', latinName: 'Opuntia microdasys', lightLevelIndex: 3, waterEveryDays: 18, waterAmountMl: 100, toxicToPets: false },
   { name: 'Christmas Cactus', latinName: 'Schlumbergera bridgesii', lightLevelIndex: 1, waterEveryDays: 10, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Easter Cactus', latinName: 'Hatiora gaertneri', lightLevelIndex: 1, waterEveryDays: 10, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Living Stones', latinName: 'Lithops spp.', aliases: ['Baby Toes'], lightLevelIndex: 3, waterEveryDays: 21, waterAmountMl: 50, toxicToPets: false },
+  { name: 'Hoya', latinName: 'Hoya carnosa', aliases: ['Wax Plant'], lightLevelIndex: 2, waterEveryDays: 10, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Hoya Kerrii', latinName: 'Hoya kerrii', aliases: ['Sweetheart Hoya', 'Valentine Hoya'], lightLevelIndex: 2, waterEveryDays: 12, waterAmountMl: 100, toxicToPets: false },
   { name: 'Yucca', latinName: 'Yucca elephantipes', lightLevelIndex: 3, waterEveryDays: 14, waterAmountMl: 300, toxicToPets: true },
   { name: 'Ponytail Palm', latinName: 'Beaucarnea recurvata', lightLevelIndex: 3, waterEveryDays: 21, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Sago Palm', latinName: 'Cycas revoluta', lightLevelIndex: 3, waterEveryDays: 10, waterAmountMl: 300, toxicToPets: true },
+  { name: 'Oxalis', latinName: 'Oxalis triangularis', aliases: ['Shamrock Plant', 'Purple Shamrock'], lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 150, toxicToPets: true },
+
+  // Bonsai
+  { name: 'Bonsai', latinName: 'Ficus microcarpa', aliases: ['Ficus Bonsai', 'Ficus Ginseng', 'Ginseng Ficus'], lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Juniper Bonsai', latinName: 'Juniperus spp.', lightLevelIndex: 3, waterEveryDays: 4, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Jade Bonsai', latinName: 'Crassula ovata', lightLevelIndex: 3, waterEveryDays: 14, waterAmountMl: 100, toxicToPets: true },
+  { name: 'Chinese Elm Bonsai', latinName: 'Ulmus parvifolia', lightLevelIndex: 2, waterEveryDays: 4, waterAmountMl: 200, toxicToPets: false },
 
   // Ferns
   { name: 'Boston Fern', latinName: 'Nephrolepis exaltata', lightLevelIndex: 1, waterEveryDays: 4, waterAmountMl: 200, toxicToPets: false },
   { name: 'Maidenhair Fern', latinName: 'Adiantum raddianum', lightLevelIndex: 1, waterEveryDays: 3, waterAmountMl: 200, toxicToPets: false },
   { name: "Bird's Nest Fern", latinName: 'Asplenium nidus', lightLevelIndex: 1, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: false },
-  { name: 'Staghorn Fern', latinName: 'Platycerium bifurcatum', lightLevelIndex: 2, waterEveryDays: 10, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Staghorn Fern', latinName: 'Platycerium bifurcatum', aliases: ['Elkhorn Fern'], lightLevelIndex: 2, waterEveryDays: 10, waterAmountMl: 200, toxicToPets: false },
+  { name: "Rabbit's Foot Fern", latinName: 'Davallia fejeensis', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Button Fern', latinName: 'Pellaea rotundifolia', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Asparagus Fern', latinName: 'Asparagus setaceus', lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Foxtail Fern', latinName: 'Asparagus densiflorus', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: true },
 
   // Palms
-  { name: 'Areca Palm', latinName: 'Dypsis lutescens', lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 400, toxicToPets: false },
+  { name: 'Areca Palm', latinName: 'Dypsis lutescens', aliases: ['Butterfly Palm'], lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 400, toxicToPets: false },
   { name: 'Parlor Palm', latinName: 'Chamaedorea elegans', lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 300, toxicToPets: false },
   { name: 'Majesty Palm', latinName: 'Ravenea rivularis', lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 400, toxicToPets: false },
+  { name: 'Bamboo Palm', latinName: 'Chamaedorea seifrizii', lightLevelIndex: 1, waterEveryDays: 6, waterAmountMl: 350, toxicToPets: false },
+  { name: 'Kentia Palm', latinName: 'Howea forsteriana', lightLevelIndex: 1, waterEveryDays: 8, waterAmountMl: 400, toxicToPets: false },
+  { name: 'Cat Palm', latinName: 'Chamaedorea cataractarum', lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 350, toxicToPets: false },
+  { name: 'Chinese Fan Palm', latinName: 'Livistona chinensis', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 350, toxicToPets: false },
 
   // Trees & large foliage
   { name: 'Fiddle Leaf Fig', latinName: 'Ficus lyrata', lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 500, toxicToPets: true },
-  { name: 'Rubber Plant', latinName: 'Ficus elastica', lightLevelIndex: 2, waterEveryDays: 9, waterAmountMl: 350, toxicToPets: true },
+  { name: 'Rubber Plant', latinName: 'Ficus elastica', aliases: ['Rubber Tree', 'Rubber Fig'], lightLevelIndex: 2, waterEveryDays: 9, waterAmountMl: 350, toxicToPets: true },
   { name: 'Weeping Fig', latinName: 'Ficus benjamina', lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 400, toxicToPets: true },
+  { name: 'Ficus Audrey', latinName: 'Ficus benghalensis', lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 400, toxicToPets: true },
+  { name: 'Creeping Fig', latinName: 'Ficus pumila', lightLevelIndex: 1, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Fig Tree', latinName: 'Ficus carica', aliases: ['Edible Fig'], lightLevelIndex: 3, waterEveryDays: 5, waterAmountMl: 500, toxicToPets: false },
   { name: 'Money Tree', latinName: 'Pachira aquatica', lightLevelIndex: 1, waterEveryDays: 10, waterAmountMl: 300, toxicToPets: false },
   { name: 'Norfolk Island Pine', latinName: 'Araucaria heterophylla', lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 300, toxicToPets: true },
   { name: 'Croton', latinName: 'Codiaeum variegatum', lightLevelIndex: 3, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: true },
   { name: 'Umbrella Tree', latinName: 'Schefflera arboricola', lightLevelIndex: 2, waterEveryDays: 8, waterAmountMl: 300, toxicToPets: true },
   { name: 'Coffee Plant', latinName: 'Coffea arabica', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 300, toxicToPets: true },
   { name: 'Avocado Plant', latinName: 'Persea americana', lightLevelIndex: 2, waterEveryDays: 5, waterAmountMl: 300, toxicToPets: true },
+  { name: 'Olive Tree', latinName: 'Olea europaea', lightLevelIndex: 3, waterEveryDays: 7, waterAmountMl: 400, toxicToPets: false },
+  { name: 'Lemon Tree', latinName: 'Citrus limon', lightLevelIndex: 3, waterEveryDays: 5, waterAmountMl: 400, toxicToPets: true },
   { name: 'Bird of Paradise', latinName: 'Strelitzia reginae', lightLevelIndex: 3, waterEveryDays: 7, waterAmountMl: 500, toxicToPets: true },
-  { name: 'Dracaena', latinName: 'Dracaena fragrans', lightLevelIndex: 1, waterEveryDays: 12, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Dracaena', latinName: 'Dracaena fragrans', aliases: ['Corn Plant'], lightLevelIndex: 1, waterEveryDays: 12, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Dracaena Marginata', latinName: 'Dracaena marginata', aliases: ['Madagascar Dragon Tree'], lightLevelIndex: 1, waterEveryDays: 12, waterAmountMl: 250, toxicToPets: true },
+  { name: 'Dracaena Reflexa', latinName: 'Dracaena reflexa', aliases: ['Song of India'], lightLevelIndex: 1, waterEveryDays: 10, waterAmountMl: 250, toxicToPets: true },
   { name: 'Lucky Bamboo', latinName: 'Dracaena sanderiana', lightLevelIndex: 1, waterEveryDays: 10, waterAmountMl: 200, toxicToPets: true },
   { name: 'Ti Plant', latinName: 'Cordyline fruticosa', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 250, toxicToPets: true },
   { name: 'Cast Iron Plant', latinName: 'Aspidistra elatior', lightLevelIndex: 0, waterEveryDays: 12, waterAmountMl: 250, toxicToPets: false },
   { name: 'ZZ Plant', latinName: 'Zamioculcas zamiifolia', lightLevelIndex: 1, waterEveryDays: 16, waterAmountMl: 200, toxicToPets: true },
-  { name: 'Snake Plant', latinName: 'Sansevieria trifasciata', lightLevelIndex: 1, waterEveryDays: 18, waterAmountMl: 150, toxicToPets: true },
+  { name: 'Snake Plant', latinName: 'Sansevieria trifasciata', aliases: ["Mother-in-Law's Tongue"], lightLevelIndex: 1, waterEveryDays: 18, waterAmountMl: 150, toxicToPets: true },
+  { name: 'Banana Plant', latinName: 'Musa spp.', lightLevelIndex: 3, waterEveryDays: 4, waterAmountMl: 500, toxicToPets: false },
 
   // Trailing & vining
   { name: 'English Ivy', latinName: 'Hedera helix', lightLevelIndex: 1, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: true },
   { name: 'Grape Ivy', latinName: 'Cissus rhombifolia', lightLevelIndex: 1, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: false },
   { name: 'Swedish Ivy', latinName: 'Plectranthus verticillatus', lightLevelIndex: 1, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: false },
   { name: 'Wandering Jew', latinName: 'Tradescantia zebrina', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Purple Heart', latinName: 'Tradescantia pallida', lightLevelIndex: 3, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Moses in the Cradle', latinName: 'Tradescantia spathacea', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: true },
 
   // Flowering
   { name: 'Peace Lily', latinName: 'Spathiphyllum wallisii', lightLevelIndex: 0, waterEveryDays: 7, waterAmountMl: 300, toxicToPets: true },
@@ -90,41 +130,57 @@ export const speciesGuide: SpeciesGuideEntry[] = [
   { name: 'Hibiscus', latinName: 'Hibiscus rosa-sinensis', lightLevelIndex: 3, waterEveryDays: 4, waterAmountMl: 400, toxicToPets: false },
   { name: 'Cyclamen', latinName: 'Cyclamen persicum', lightLevelIndex: 1, waterEveryDays: 6, waterAmountMl: 150, toxicToPets: true },
   { name: 'Amaryllis', latinName: 'Hippeastrum spp.', lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: true },
+  { name: 'Poinsettia', latinName: 'Euphorbia pulcherrima', lightLevelIndex: 2, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: true },
   { name: 'Bromeliad', latinName: 'Guzmania lingulata', lightLevelIndex: 1, waterEveryDays: 14, waterAmountMl: 100, toxicToPets: false },
   { name: 'Air Plant', latinName: 'Tillandsia spp.', lightLevelIndex: 2, waterEveryDays: 10, waterAmountMl: 50, toxicToPets: false },
+  { name: 'Venus Flytrap', latinName: 'Dionaea muscipula', lightLevelIndex: 3, waterEveryDays: 3, waterAmountMl: 100, toxicToPets: false },
+  { name: 'Pitcher Plant', latinName: 'Nepenthes spp.', lightLevelIndex: 2, waterEveryDays: 4, waterAmountMl: 150, toxicToPets: false },
 
   // Patterned foliage
   { name: 'Calathea', latinName: 'Calathea spp.', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
   { name: 'Rattlesnake Plant', latinName: 'Calathea lancifolia', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
+  { name: 'Calathea Orbifolia', latinName: 'Calathea orbifolia', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
+  { name: 'Calathea Medallion', latinName: "Calathea 'Medallion'", lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
   { name: 'Prayer Plant', latinName: 'Maranta leuconeura', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
-  { name: 'Fittonia', latinName: 'Fittonia albivenis', lightLevelIndex: 0, waterEveryDays: 4, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Peacock Plant', latinName: 'Calathea makoyana', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
+  { name: 'Stromanthe', latinName: 'Stromanthe sanguinea', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 250, toxicToPets: false },
+  { name: 'Fittonia', latinName: 'Fittonia albivenis', aliases: ['Nerve Plant'], lightLevelIndex: 0, waterEveryDays: 4, waterAmountMl: 200, toxicToPets: false },
   { name: 'Polka Dot Plant', latinName: 'Hypoestes phyllostachya', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: false },
   { name: 'Chinese Money Plant', latinName: 'Pilea peperomioides', lightLevelIndex: 2, waterEveryDays: 7, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Aluminum Plant', latinName: 'Pilea cadierei', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Friendship Plant', latinName: 'Pilea involucrata', lightLevelIndex: 1, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: false },
   { name: 'Spider Plant', latinName: 'Chlorophytum comosum', lightLevelIndex: 1, waterEveryDays: 7, waterAmountMl: 250, toxicToPets: false },
-  { name: 'Peperomia', latinName: 'Peperomia obtusifolia', lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Peperomia', latinName: 'Peperomia obtusifolia', aliases: ['Baby Rubber Plant'], lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 150, toxicToPets: false },
   { name: 'Watermelon Peperomia', latinName: 'Peperomia argyreia', lightLevelIndex: 1, waterEveryDays: 9, waterAmountMl: 150, toxicToPets: false },
 
-  // Herbs
+  // Edible / herbs
   { name: 'Basil', latinName: 'Ocimum basilicum', lightLevelIndex: 3, waterEveryDays: 3, waterAmountMl: 250, toxicToPets: false },
   { name: 'Mint', latinName: 'Mentha spp.', lightLevelIndex: 2, waterEveryDays: 3, waterAmountMl: 250, toxicToPets: false },
   { name: 'Rosemary', latinName: 'Salvia rosmarinus', lightLevelIndex: 3, waterEveryDays: 5, waterAmountMl: 200, toxicToPets: false },
   { name: 'Lavender', latinName: 'Lavandula spp.', lightLevelIndex: 3, waterEveryDays: 6, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Thyme', latinName: 'Thymus vulgaris', lightLevelIndex: 3, waterEveryDays: 6, waterAmountMl: 150, toxicToPets: false },
+  { name: 'Parsley', latinName: 'Petroselinum crispum', lightLevelIndex: 2, waterEveryDays: 3, waterAmountMl: 200, toxicToPets: false },
+  { name: 'Tomato Plant', latinName: 'Solanum lycopersicum', lightLevelIndex: 3, waterEveryDays: 2, waterAmountMl: 400, toxicToPets: true },
+  { name: 'Chili Pepper Plant', latinName: 'Capsicum annuum', lightLevelIndex: 3, waterEveryDays: 3, waterAmountMl: 300, toxicToPets: false },
+  { name: 'Strawberry Plant', latinName: 'Fragaria spp.', lightLevelIndex: 3, waterEveryDays: 3, waterAmountMl: 250, toxicToPets: false },
 ];
 
 export function findSpeciesMatches(query: string, limit = 5): SpeciesGuideEntry[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
-  return speciesGuide.filter((s) => s.name.toLowerCase().includes(q)).slice(0, limit);
+  return speciesGuide
+    .filter((s) => s.name.toLowerCase().includes(q) || s.aliases?.some((a) => a.toLowerCase().includes(q)))
+    .slice(0, limit);
 }
 
 export function findSpeciesExact(name: string): SpeciesGuideEntry | undefined {
   const q = name.trim().toLowerCase();
-  return speciesGuide.find((s) => s.name.toLowerCase() === q);
+  return speciesGuide.find((s) => s.name.toLowerCase() === q || s.aliases?.some((a) => a.toLowerCase() === q));
 }
 
 /** Looser match for real-world species text ("Monstera Deliciosa", "monstera")
  * that won't hit findSpeciesExact's exact-name requirement — matches either
- * direction as a substring against the common name or the Latin name. */
+ * direction as a substring against the common name, aliases, or the Latin name. */
 export function findSpeciesLoose(name: string): SpeciesGuideEntry | undefined {
   const q = name.trim().toLowerCase();
   if (!q || q === '—') return undefined;
@@ -133,7 +189,11 @@ export function findSpeciesLoose(name: string): SpeciesGuideEntry | undefined {
     speciesGuide.find((s) => {
       const n = s.name.toLowerCase();
       const latin = s.latinName.toLowerCase();
-      return n.includes(q) || q.includes(n) || latin.includes(q) || q.includes(latin);
+      if (n.includes(q) || q.includes(n) || latin.includes(q) || q.includes(latin)) return true;
+      return !!s.aliases?.some((a) => {
+        const al = a.toLowerCase();
+        return al.includes(q) || q.includes(al);
+      });
     })
   );
 }

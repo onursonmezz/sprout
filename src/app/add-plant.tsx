@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useRef, useState } from 'react';
-import { LayoutChangeEvent, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PhotoPicker } from '@/components/photo-picker';
@@ -150,17 +150,7 @@ export default function AddPlantScreen() {
   const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant) : initialForm));
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
-  const scrollRef = useRef<ScrollView>(null);
-  const fieldGroupY = useRef(0);
-  const speciesFieldY = useRef(0);
-
-  const handleSpeciesFocus = () => {
-    // Give the keyboard's open animation a moment to start before scrolling,
-    // so the suggestion panel below the field ends up above the keyboard, not hidden under it.
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({ y: Math.max(0, fieldGroupY.current + speciesFieldY.current - 16), animated: true });
-    }, 250);
-  };
+  const [speciesDropdownDismissed, setSpeciesDropdownDismissed] = useState(false);
 
   if (isEditing && !editingPlant) {
     return (
@@ -173,7 +163,8 @@ export default function AddPlantScreen() {
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
-  const speciesSuggestions = !isEditing && !speciesPickApplied ? findSpeciesMatches(form.species) : [];
+  const speciesSuggestions =
+    !isEditing && !speciesPickApplied && !speciesDropdownDismissed ? findSpeciesMatches(form.species) : [];
 
   const applySpeciesGuide = (entry: SpeciesGuideEntry) => {
     setSpeciesPickApplied(true);
@@ -278,11 +269,7 @@ export default function AddPlantScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.topRow}>
           <Pressable onPress={handleBack}>
             <Text style={[styles.backText, { color: colors.textSecondary }]}>
@@ -310,11 +297,7 @@ export default function AddPlantScreen() {
         </View>
 
         {step === 1 && (
-          <View
-            style={styles.fieldGroup}
-            onLayout={(e) => {
-              fieldGroupY.current = e.nativeEvent.layout.y;
-            }}>
+          <View style={styles.fieldGroup}>
             <Field label={t.addPlant.photo} colors={colors}>
               <PhotoPicker uri={form.photoUri} onChange={(uri) => set('photoUri', uri)} colors={colors} t={t} />
             </Field>
@@ -327,38 +310,18 @@ export default function AddPlantScreen() {
                 style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
               />
             </Field>
-            <Field
-              label={t.addPlant.species}
-              colors={colors}
-              onLayout={(e) => {
-                speciesFieldY.current = e.nativeEvent.layout.y;
-              }}>
+            <Field label={t.addPlant.species} colors={colors}>
               <TextInput
                 value={form.species}
                 onChangeText={(v) => {
                   setSpeciesPickApplied(false);
+                  setSpeciesDropdownDismissed(false);
                   set('species', v);
                 }}
-                onFocus={handleSpeciesFocus}
                 placeholder={t.addPlant.speciesPlaceholder}
                 placeholderTextColor={colors.textSecondary}
                 style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
               />
-              {speciesSuggestions.length > 0 && (
-                <View style={[styles.speciesSuggestionPanel, { backgroundColor: colors.card, borderColor: colors.border }]}>
-                  {speciesSuggestions.map((entry) => (
-                    <Pressable
-                      key={entry.name}
-                      onPress={() => applySpeciesGuide(entry)}
-                      style={styles.speciesSuggestionRow}>
-                      <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{entry.name}</Text>
-                      <Text style={[styles.speciesSuggestionHint, { color: colors.textSecondary }]}>
-                        {t.addPlant.speciesGuideHint(entry.waterEveryDays)}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-              )}
             </Field>
             <Field label={t.addPlant.latinName} colors={colors}>
               <TextInput
@@ -623,23 +586,37 @@ export default function AddPlantScreen() {
           </Text>
         </Pressable>
       </View>
+
+      <Modal
+        visible={speciesSuggestions.length > 0}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setSpeciesDropdownDismissed(true)}>
+        <Pressable style={styles.speciesModalBackdrop} onPress={() => setSpeciesDropdownDismissed(true)}>
+          <View style={[styles.speciesModalCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <ScrollView keyboardShouldPersistTaps="handled">
+              {speciesSuggestions.map((entry) => (
+                <Pressable
+                  key={entry.name}
+                  onPress={() => applySpeciesGuide(entry)}
+                  style={styles.speciesSuggestionRow}>
+                  <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{entry.name}</Text>
+                  <Text style={[styles.speciesSuggestionHint, { color: colors.textSecondary }]}>
+                    {t.addPlant.speciesGuideHint(entry.waterEveryDays)}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
 
-function Field({
-  label,
-  colors,
-  children,
-  onLayout,
-}: {
-  label: string;
-  colors: ReturnType<typeof useTheme>;
-  children: React.ReactNode;
-  onLayout?: (e: LayoutChangeEvent) => void;
-}) {
+function Field({ label, colors, children }: { label: string; colors: ReturnType<typeof useTheme>; children: React.ReactNode }) {
   return (
-    <View style={styles.field} onLayout={onLayout}>
+    <View style={styles.field}>
       <Text style={[styles.fieldLabel, { color: colors.text }]}>{label}</Text>
       {children}
     </View>
@@ -724,8 +701,14 @@ const styles = StyleSheet.create({
   field: { gap: 6 },
   fieldLabel: { fontSize: 13, fontWeight: '700' },
   input: { borderRadius: 14, borderWidth: 1, paddingHorizontal: 14, height: 46, fontSize: 14 },
-  speciesSuggestionPanel: { marginTop: 6, borderRadius: 14, borderWidth: 1, overflow: 'hidden' },
-  speciesSuggestionRow: { paddingHorizontal: 14, paddingVertical: 10, gap: 2 },
+  speciesModalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    paddingTop: 90,
+    paddingHorizontal: Spacing.four,
+  },
+  speciesModalCard: { borderRadius: 14, borderWidth: 1, overflow: 'hidden', maxHeight: 340 },
+  speciesSuggestionRow: { paddingHorizontal: 14, paddingVertical: 12, gap: 2, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: 'rgba(128,128,128,0.2)' },
   speciesSuggestionName: { fontSize: 13, fontWeight: '700' },
   speciesSuggestionHint: { fontSize: 11 },
   rowWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
