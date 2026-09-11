@@ -86,21 +86,32 @@ export async function scheduleDailyReminder({
   if (!Notifications) return;
   try {
     const { granted } = await Notifications.getPermissionsAsync();
-    if (!granted) return;
+    if (!granted) {
+      console.warn('[notifications] scheduleDailyReminder skipped: permission not granted');
+      return;
+    }
     await ensureAndroidChannel(Notifications);
     await Notifications.cancelScheduledNotificationAsync(DAILY_REMINDER_ID).catch(() => {});
+    const trigger: NotificationsType.DailyTriggerInput = {
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      hour,
+      minute,
+      channelId: CHANNEL_ID,
+    };
     await Notifications.scheduleNotificationAsync({
       identifier: DAILY_REMINDER_ID,
       content: { title, body, sound: true },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.DAILY,
-        hour,
-        minute,
-        channelId: CHANNEL_ID,
-      },
+      trigger,
     });
-  } catch {
-    // Local scheduling isn't available in this environment (e.g. Expo Go); ignore.
+    const nextTrigger = await Notifications.getNextTriggerDateAsync(trigger);
+    console.log(
+      '[notifications] scheduled daily reminder for',
+      `${hour}:${String(minute).padStart(2, '0')}`,
+      '- next fire at',
+      nextTrigger ? new Date(nextTrigger).toString() : 'unknown',
+    );
+  } catch (err) {
+    console.warn('[notifications] scheduleDailyReminder failed:', err);
   }
 }
 
