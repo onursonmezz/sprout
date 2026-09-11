@@ -12,7 +12,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useLanguage } from '@/context/language-context';
 import { CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
-import { findSpeciesExact } from '@/data/species-guide';
+import { findSpeciesLoose } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
 import { daysUntilNext, formatDateFromDaysOffset, generateEventDaysAgoList, relativeTime } from '@/utils/care';
 
@@ -64,7 +64,7 @@ export default function PlantDetailScreen() {
     );
   }
 
-  const speciesInfo = findSpeciesExact(plant.species);
+  const speciesInfo = findSpeciesLoose(plant.species) ?? findSpeciesLoose(plant.latinName);
   const isOverdue = plant.status === 'overdue';
   const isDueToday = plant.status === 'dueToday';
   const statusColor = isOverdue || isDueToday ? colors.accent : colors.tint;

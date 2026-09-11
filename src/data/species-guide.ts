@@ -45,3 +45,19 @@ export function findSpeciesExact(name: string): SpeciesGuideEntry | undefined {
   const q = name.trim().toLowerCase();
   return speciesGuide.find((s) => s.name.toLowerCase() === q);
 }
+
+/** Looser match for real-world species text ("Monstera Deliciosa", "monstera")
+ * that won't hit findSpeciesExact's exact-name requirement — matches either
+ * direction as a substring against the common name or the Latin name. */
+export function findSpeciesLoose(name: string): SpeciesGuideEntry | undefined {
+  const q = name.trim().toLowerCase();
+  if (!q || q === '—') return undefined;
+  return (
+    findSpeciesExact(name) ??
+    speciesGuide.find((s) => {
+      const n = s.name.toLowerCase();
+      const latin = s.latinName.toLowerCase();
+      return n.includes(q) || q.includes(n) || latin.includes(q) || q.includes(latin);
+    })
+  );
+}
