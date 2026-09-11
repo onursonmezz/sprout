@@ -19,6 +19,8 @@ type PersistedSettings = {
   vacationStart: string | null;
   vacationEnd: string | null;
   units: Units;
+  backupCode: string | null;
+  lastBackupAt: string | null;
 };
 
 function timeAt(hours: number, minutes: number) {
@@ -40,6 +42,8 @@ const defaults: PersistedSettings = {
   vacationStart: null,
   vacationEnd: null,
   units: 'metric',
+  backupCode: null,
+  lastBackupAt: null,
 };
 
 type SettingsContextValue = {
@@ -67,6 +71,10 @@ type SettingsContextValue = {
   setVacationEnd: (d: Date | null) => void;
   units: Units;
   setUnits: (u: Units) => void;
+  backupCode: string | null;
+  setBackupCode: (code: string) => void;
+  lastBackupAt: Date | null;
+  setLastBackupAt: (d: Date) => void;
   resetSettings: () => void;
 };
 
@@ -123,6 +131,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setVacationEnd: (d) => update('vacationEnd', d ? d.toISOString() : null),
         units: settings.units,
         setUnits: (u) => update('units', u),
+        backupCode: settings.backupCode,
+        setBackupCode: (code) => update('backupCode', code),
+        lastBackupAt: settings.lastBackupAt ? new Date(settings.lastBackupAt) : null,
+        setLastBackupAt: (d) => update('lastBackupAt', d.toISOString()),
         resetSettings: () => setSettings(defaults),
       }}>
       {children}

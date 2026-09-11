@@ -36,6 +36,9 @@ type PlantsContextValue = {
   waterPlant: (plantId: string) => void;
   snoozePlant: (plantId: string) => void;
   resetPlants: () => void;
+  /** Replaces all local plants with a restored backup, fast-forwarding its
+   * relative fields by however long has passed since the backup was made. */
+  restorePlants: (plants: Plant[], savedAt: string) => void;
   loaded: boolean;
 };
 
@@ -115,6 +118,12 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   const resetPlants = () => setPlants([]);
 
+  const restorePlants = (restored: Plant[], savedAt: string) => {
+    const migrated = restored.map(migratePlant);
+    const daysPassed = Math.max(0, daysBetween(new Date(savedAt), new Date()));
+    setPlants(fastForward(migrated, daysPassed));
+  };
+
   const addCareTask = (plantId: string, task: CareTask) =>
     setPlants((prev) => prev.map((p) => (p.id === plantId ? { ...p, care: [...p.care, task] } : p)));
 
@@ -164,6 +173,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         waterPlant,
         snoozePlant,
         resetPlants,
+        restorePlants,
         loaded,
       }}>
       {children}

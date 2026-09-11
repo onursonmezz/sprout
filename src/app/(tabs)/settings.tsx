@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DateField } from '@/components/date-field';
@@ -10,6 +10,7 @@ import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
+import { downloadBackup, firebaseConfigured, generateBackupCode, uploadBackup } from '@/utils/backup';
 import { exportPlantsData } from '@/utils/export';
 import { requestNotificationPermission } from '@/utils/notifications';
 import { fetchCurrentTemperatureC, requestLocationPermission, seasonalFactorFromTemp } from '@/utils/weather';
@@ -80,13 +81,25 @@ export default function SettingsScreen() {
     setVacationEnd,
     units,
     setUnits,
+    backupCode,
+    setBackupCode,
+    lastBackupAt,
+    setLastBackupAt,
     resetSettings,
   } = useSettings();
-  const { plants, resetPlants } = usePlants();
+  const { plants, resetPlants, restorePlants } = usePlants();
   const router = useRouter();
   const [resetConfirm, setResetConfirm] = useState(false);
 
   const [exportError, setExportError] = useState(false);
+
+  const [backupBusy, setBackupBusy] = useState(false);
+  const [backupError, setBackupError] = useState(false);
+  const [restorePanelOpen, setRestorePanelOpen] = useState(false);
+  const [restoreCode, setRestoreCode] = useState('');
+  const [restoreBusy, setRestoreBusy] = useState(false);
+  const [restoreError, setRestoreError] = useState(false);
+  const [restoreConfirm, setRestoreConfirm] = useState(false);
 
   const handleExport = () => {
     if (plants.length === 0) return;
@@ -109,6 +122,35 @@ export default function SettingsScreen() {
     if (!granted) return;
     const tempC = await fetchCurrentTemperatureC();
     if (tempC !== null) setSeasonalWeather(tempC, seasonalFactorFromTemp(tempC));
+  };
+
+  const handleBackupNow = async () => {
+    setBackupBusy(true);
+    setBackupError(false);
+    const code = backupCode ?? generateBackupCode();
+    const ok = await uploadBackup(code, plants);
+    setBackupBusy(false);
+    if (!ok) {
+      setBackupError(true);
+      return;
+    }
+    if (!backupCode) setBackupCode(code);
+    setLastBackupAt(new Date());
+  };
+
+  const handleRestoreConfirmed = async () => {
+    setRestoreBusy(true);
+    setRestoreError(false);
+    const result = await downloadBackup(restoreCode);
+    setRestoreBusy(false);
+    if (!result) {
+      setRestoreError(true);
+      return;
+    }
+    restorePlants(result.plants, result.savedAt);
+    setRestoreConfirm(false);
+    setRestorePanelOpen(false);
+    setRestoreCode('');
   };
 
   const handleVacationStartChange = (date: Date) => {
@@ -362,6 +404,108 @@ export default function SettingsScreen() {
             </View>
           )}
         </SectionCard>
+
+        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.settings.cloudBackup}</Text>
+        <SectionCard colors={colors}>
+          {!firebaseConfigured ? (
+            <Row title={t.settings.cloudBackupNotConfigured} colors={colors} divider={false} right={<View />} />
+          ) : (
+            <>
+              <Row
+                title={t.settings.backupNow}
+                subtitle={
+                  backupError
+                    ? t.settings.backupError
+                    : lastBackupAt
+                      ? t.settings.lastBackedUp(`${formatDate(lastBackupAt)} ${formatTime(lastBackupAt)}`)
+                      : t.settings.neverBackedUp
+                }
+                colors={colors}
+                divider={!!backupCode}
+                right={
+                  <Pressable
+                    onPress={handleBackupNow}
+                    disabled={backupBusy}
+                    style={[styles.exportButton, { backgroundColor: colors.backgroundSelected, opacity: backupBusy ? 0.5 : 1 }]}>
+                    <Text style={[styles.exportButtonText, { color: colors.text }]}>
+                      {backupBusy ? t.settings.backupNowBusy : t.settings.backupNow}
+                    </Text>
+                  </Pressable>
+                }
+              />
+              {backupCode && (
+                <View style={styles.resetConfirmBlock}>
+                  <Text style={[styles.rowSubtitle, { color: colors.textSecondary }]}>{t.settings.backupCodeLabel}</Text>
+                  <Text selectable style={[styles.backupCodeText, { color: colors.text }]}>
+                    {backupCode}
+                  </Text>
+                  <Text style={[styles.resetConfirmText, { color: colors.textSecondary }]}>{t.settings.backupCodeHint}</Text>
+                </View>
+              )}
+
+              <Row
+                title={t.settings.restoreTitle}
+                subtitle={t.settings.restoreSub}
+                colors={colors}
+                divider={restorePanelOpen}
+                right={
+                  <Pressable onPress={() => setRestorePanelOpen((v) => !v)}>
+                    <Text style={{ color: colors.accent, fontSize: 18 }}>›</Text>
+                  </Pressable>
+                }
+              />
+              {restorePanelOpen && (
+                <View style={styles.resetConfirmBlock}>
+                  <TextInput
+                    value={restoreCode}
+                    onChangeText={setRestoreCode}
+                    placeholder={t.settings.restoreCodePlaceholder}
+                    placeholderTextColor={colors.textSecondary}
+                    autoCapitalize="characters"
+                    style={[styles.restoreInput, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                  />
+                  {restoreError && (
+                    <Text style={[styles.resetConfirmText, { color: colors.accent }]}>{t.settings.restoreError}</Text>
+                  )}
+                  {!restoreConfirm ? (
+                    <Pressable
+                      onPress={() => setRestoreConfirm(true)}
+                      disabled={!restoreCode.trim()}
+                      style={[
+                        styles.restoreButtonSolo,
+                        { backgroundColor: colors.accent, opacity: restoreCode.trim() ? 1 : 0.5, alignSelf: 'flex-start' },
+                      ]}>
+                      <Text style={{ color: '#fff', fontWeight: '700', fontSize: 13 }}>{t.settings.restoreButton}</Text>
+                    </Pressable>
+                  ) : (
+                    <>
+                      <Text style={[styles.resetConfirmText, { color: colors.textSecondary }]}>
+                        {t.settings.restoreConfirmText}
+                      </Text>
+                      <View style={styles.resetConfirmActions}>
+                        <Pressable
+                          onPress={() => setRestoreConfirm(false)}
+                          style={[styles.resetCancelButton, { backgroundColor: colors.backgroundSelected }]}>
+                          <Text style={{ color: colors.text, fontWeight: '700', fontSize: 13 }}>
+                            {t.settings.restoreConfirmCancel}
+                          </Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={handleRestoreConfirmed}
+                          disabled={restoreBusy}
+                          style={[styles.resetConfirmButton, { backgroundColor: colors.accent, opacity: restoreBusy ? 0.5 : 1 }]}>
+                          <Text style={{ color: '#fff', fontWeight: '700', fontSize: 13 }}>
+                            {restoreBusy ? t.settings.restoreButtonBusy : t.settings.restoreConfirmYes}
+                          </Text>
+                        </Pressable>
+                      </View>
+                    </>
+                  )}
+                </View>
+              )}
+            </>
+          )}
+        </SectionCard>
       </ScrollView>
     </SafeAreaView>
   );
@@ -390,4 +534,7 @@ const styles = StyleSheet.create({
   resetConfirmActions: { flexDirection: 'row', gap: Spacing.two },
   resetCancelButton: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },
   resetConfirmButton: { flex: 1, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },
+  backupCodeText: { fontSize: 16, fontWeight: '700', letterSpacing: 1 },
+  restoreInput: { borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, height: 44, fontSize: 14 },
+  restoreButtonSolo: { paddingHorizontal: 18, paddingVertical: 10, borderRadius: 12 },
 });
