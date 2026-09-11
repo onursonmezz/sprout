@@ -9,6 +9,7 @@ import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
+import { computeCareStats } from '@/utils/stats';
 
 function greeting(t: ReturnType<typeof useLanguage>['t']) {
   const hour = new Date().getHours();
@@ -21,13 +22,26 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, waterPlant, snoozePlant } = usePlants();
+  const { plants, waterPlant, addJournalEntry, snoozePlant } = usePlants();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
   });
+
+  const { streak, thisMonth } = useMemo(() => computeCareStats(plants), [plants]);
+
+  const handleWater = (plant: (typeof plants)[number]) => {
+    waterPlant(plant.id);
+    addJournalEntry(plant.id, {
+      id: `watered-${Date.now()}`,
+      type: 'watered',
+      title: t.plantDetail.journal.wateredTitle,
+      description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
+      daysAgo: 0,
+    });
+  };
 
   const needsAttention = useMemo(
     () =>
@@ -53,9 +67,9 @@ export default function TodayScreen() {
         <View style={[styles.statsRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Stat value={String(plants.length)} label={t.today.plantsAlive} colors={colors} />
           <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
-          <Stat value="12" label={t.today.dayStreak} colors={colors} />
+          <Stat value={String(streak)} label={t.today.dayStreak} colors={colors} />
           <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
-          <Stat value="4" label={t.today.thisMonth} colors={colors} />
+          <Stat value={String(thisMonth)} label={t.today.thisMonth} colors={colors} />
         </View>
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.today.needsAttention}</Text>
@@ -90,7 +104,7 @@ export default function TodayScreen() {
                 </View>
                 <View style={styles.attentionActions}>
                   <Pressable
-                    onPress={() => waterPlant(plant.id)}
+                    onPress={() => handleWater(plant)}
                     style={[styles.wateredButton, { backgroundColor: colors.accent }]}>
                     <Text style={styles.wateredButtonText}>{t.today.water}</Text>
                   </Pressable>

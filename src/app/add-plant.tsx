@@ -9,7 +9,10 @@ import { translations, Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
-import { Plant, WateringStatus } from '@/data/plants';
+import { CareTask, Plant, WateringStatus } from '@/data/plants';
+import { findSpeciesMatches, SpeciesGuideEntry } from '@/data/species-guide';
+
+const DEFAULT_REPOT_INTERVAL_DAYS = 365;
 
 const WINDOW_DIRECTIONS = ['N', 'E', 'S', 'W'] as const;
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
@@ -146,6 +149,7 @@ export default function AddPlantScreen() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant) : initialForm));
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
 
   if (isEditing && !editingPlant) {
     return (
@@ -157,6 +161,20 @@ export default function AddPlantScreen() {
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
+
+  const speciesSuggestions = !isEditing && !speciesPickApplied ? findSpeciesMatches(form.species) : [];
+
+  const applySpeciesGuide = (entry: SpeciesGuideEntry) => {
+    setSpeciesPickApplied(true);
+    setForm((prev) => ({
+      ...prev,
+      species: entry.name,
+      latinName: entry.latinName,
+      lightLevelIndex: entry.lightLevelIndex,
+      waterEveryDays: entry.waterEveryDays,
+      waterAmountMl: String(entry.waterAmountMl),
+    }));
+  };
 
   const canContinue = step === 1 ? form.nickname.trim().length > 0 : true;
 
@@ -203,14 +221,24 @@ export default function AddPlantScreen() {
       acquiredDate: form.dateAcquired,
     };
 
+    const repotDaysAgo = form.lastRepotted ? daysAgoFrom(form.lastRepotted) : null;
+
     if (editingPlant) {
       const daysUntilWatering = form.waterEveryDays - editingPlant.lastWateredDaysAgo;
       const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
+      let care = editingPlant.care;
+      if (repotDaysAgo !== null) {
+        const existing = care.find((c) => c.type === 'repot');
+        care = existing
+          ? care.map((c) => (c.type === 'repot' ? { ...c, lastDoneDaysAgo: repotDaysAgo } : c))
+          : [...care, { type: 'repot', intervalDays: DEFAULT_REPOT_INTERVAL_DAYS, lastDoneDaysAgo: repotDaysAgo }];
+      }
       updatePlant(editingPlant.id, {
         ...sharedFields,
         wateringIntervalDays: form.waterEveryDays,
         daysUntilWatering,
         status,
+        care,
       });
       router.replace(`/plant/${editingPlant.id}`);
       return;
@@ -219,6 +247,8 @@ export default function AddPlantScreen() {
     const id = `${form.nickname.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString(36)}`;
     const lastWateredDaysAgo = daysAgoFrom(form.lastWatered);
     const daysUntilWatering = form.waterEveryDays - lastWateredDaysAgo;
+    const care: CareTask[] =
+      repotDaysAgo !== null ? [{ type: 'repot', intervalDays: DEFAULT_REPOT_INTERVAL_DAYS, lastDoneDaysAgo: repotDaysAgo }] : [];
     const newPlant: Plant = {
       id,
       ...sharedFields,
@@ -228,7 +258,7 @@ export default function AddPlantScreen() {
       wateringIntervalDays: form.waterEveryDays,
       daysUntilWatering,
       lastWateredDaysAgo,
-      care: [],
+      care,
       journalNotes: [],
     };
     addPlant(newPlant);
@@ -281,11 +311,29 @@ export default function AddPlantScreen() {
             <Field label={t.addPlant.species} colors={colors}>
               <TextInput
                 value={form.species}
-                onChangeText={(v) => set('species', v)}
+                onChangeText={(v) => {
+                  setSpeciesPickApplied(false);
+                  set('species', v);
+                }}
                 placeholder={t.addPlant.speciesPlaceholder}
                 placeholderTextColor={colors.textSecondary}
                 style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
               />
+              {speciesSuggestions.length > 0 && (
+                <View style={[styles.speciesSuggestionPanel, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                  {speciesSuggestions.map((entry) => (
+                    <Pressable
+                      key={entry.name}
+                      onPress={() => applySpeciesGuide(entry)}
+                      style={styles.speciesSuggestionRow}>
+                      <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{entry.name}</Text>
+                      <Text style={[styles.speciesSuggestionHint, { color: colors.textSecondary }]}>
+                        {t.addPlant.speciesGuideHint(entry.waterEveryDays)}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              )}
             </Field>
             <Field label={t.addPlant.latinName} colors={colors}>
               <TextInput
@@ -641,6 +689,10 @@ const styles = StyleSheet.create({
   field: { gap: 6 },
   fieldLabel: { fontSize: 13, fontWeight: '700' },
   input: { borderRadius: 14, borderWidth: 1, paddingHorizontal: 14, height: 46, fontSize: 14 },
+  speciesSuggestionPanel: { marginTop: 6, borderRadius: 14, borderWidth: 1, overflow: 'hidden' },
+  speciesSuggestionRow: { paddingHorizontal: 14, paddingVertical: 10, gap: 2 },
+  speciesSuggestionName: { fontSize: 13, fontWeight: '700' },
+  speciesSuggestionHint: { fontSize: 11 },
   rowWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   pillOption: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 14, borderWidth: 1, alignItems: 'center' },
   pillWide: { flexBasis: '48%' },

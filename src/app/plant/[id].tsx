@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
-import { useRef, useState } from 'react';
-import { Animated, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useMemo, useRef, useState } from 'react';
+import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { CircularProgress } from '@/components/circular-progress';
 import { PhotoPicker } from '@/components/photo-picker';
@@ -12,13 +12,15 @@ import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useLanguage } from '@/context/language-context';
 import { CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
+import { findSpeciesExact } from '@/data/species-guide';
+import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
 import { daysUntilNext, formatDateFromDaysOffset, generateEventDaysAgoList, relativeTime } from '@/utils/care';
 
 const TAB_KEYS = ['overview', 'care', 'journal', 'history'] as const;
 
-const CARE_TYPES: CareTaskType[] = ['fertilize', 'rotate', 'mist', 'prune'];
-const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️' };
-const CARE_DEFAULT_INTERVAL: Record<CareTaskType, number> = { fertilize: 21, rotate: 14, mist: 3, prune: 30 };
+const CARE_TYPES: CareTaskType[] = ['fertilize', 'rotate', 'mist', 'prune', 'repot'];
+const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
+const CARE_DEFAULT_INTERVAL: Record<CareTaskType, number> = { fertilize: 21, rotate: 14, mist: 3, prune: 30, repot: 365 };
 
 const JOURNAL_TYPES: JournalEntryType[] = ['watered', 'newLeaf', 'fertilized', 'repotted', 'note'];
 const JOURNAL_EMOJI: Record<JournalEntryType, string> = {
@@ -62,14 +64,22 @@ export default function PlantDetailScreen() {
     );
   }
 
+  const speciesInfo = findSpeciesExact(plant.species);
   const isOverdue = plant.status === 'overdue';
   const isDueToday = plant.status === 'dueToday';
   const statusColor = isOverdue || isDueToday ? colors.accent : colors.tint;
-  const wateringInterval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
+  const wateringInterval = plant.wateringIntervalDays;
   const wateringProgress = plant.lastWateredDaysAgo / wateringInterval;
 
   const handleWaterNow = () => {
     waterPlant(plant.id);
+    addJournalEntry(plant.id, {
+      id: `watered-${Date.now()}`,
+      type: 'watered',
+      title: t.plantDetail.journal.wateredTitle,
+      description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
+      daysAgo: 0,
+    });
     if (toastTimer.current) clearTimeout(toastTimer.current);
     setToastVisible(true);
     Animated.timing(toastOpacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
@@ -149,6 +159,22 @@ export default function PlantDetailScreen() {
 
           {tab === 'overview' && (
             <>
+              {speciesInfo && (
+                <View style={[styles.speciesCard, { backgroundColor: colors.tintMuted }]}>
+                  <Text style={[styles.speciesCardTitle, { color: colors.text }]}>{t.plantDetail.speciesGuideTitle}</Text>
+                  <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
+                    {t.plantDetail.speciesGuideCare(speciesInfo.waterEveryDays)}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.speciesCardText,
+                      { color: speciesInfo.toxicToPets ? colors.accent : colors.textSecondary, fontWeight: '700' },
+                    ]}>
+                    {speciesInfo.toxicToPets ? t.plantDetail.toxicToPets : t.plantDetail.nonToxicToPets}
+                  </Text>
+                </View>
+              )}
+
               <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.plantDetail.environment}</Text>
               <View style={styles.chipGrid}>
                 <InfoChip label={t.plantDetail.room} value={plant.room} colors={colors} />
@@ -169,6 +195,8 @@ export default function PlantDetailScreen() {
                 <InfoChip label={t.plantDetail.soil} value={plant.pot.soil} colors={colors} wide />
                 <InfoChip label={t.plantDetail.acquired} value={plant.acquiredDate} colors={colors} wide />
               </View>
+
+              <TroubleshootingSection colors={colors} t={t} />
             </>
           )}
 
@@ -218,6 +246,41 @@ function InfoChip({
   );
 }
 
+function TroubleshootingSection({ colors, t }: { colors: ReturnType<typeof useTheme>; t: Translations }) {
+  const [expanded, setExpanded] = useState<SymptomKey | null>(null);
+
+  return (
+    <View style={{ gap: Spacing.two, marginTop: Spacing.three }}>
+      <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.troubleshooting.sectionTitle}</Text>
+      <Text style={[styles.symptomIntro, { color: colors.textSecondary }]}>{t.troubleshooting.intro}</Text>
+      <View style={{ gap: 6 }}>
+        {symptomKeys.map((key) => {
+          const symptom = t.troubleshooting.symptoms[key];
+          const isOpen = expanded === key;
+          return (
+            <View key={key} style={[styles.symptomCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <Pressable onPress={() => setExpanded(isOpen ? null : key)} style={styles.symptomRow}>
+                <Text style={{ fontSize: 16 }}>{symptomEmoji[key]}</Text>
+                <Text style={[styles.symptomLabel, { color: colors.text }]}>{symptom.label}</Text>
+                <Ionicons name={isOpen ? 'chevron-up' : 'chevron-down'} size={16} color={colors.textSecondary} />
+              </Pressable>
+              {isOpen && (
+                <View style={styles.symptomCauses}>
+                  {symptom.causes.map((cause, i) => (
+                    <Text key={i} style={[styles.symptomCauseText, { color: colors.textSecondary }]}>
+                      • {cause}
+                    </Text>
+                  ))}
+                </View>
+              )}
+            </View>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
 function CareTab({
   plant,
   colors,
@@ -234,7 +297,7 @@ function CareTab({
   const [pickerOpen, setPickerOpen] = useState(false);
   const existingTypes = plant.care.map((c) => c.type);
   const availableTypes = CARE_TYPES.filter((ty) => !existingTypes.includes(ty));
-  const wateringInterval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
+  const wateringInterval = plant.wateringIntervalDays;
 
   return (
     <View style={{ gap: Spacing.two }}>
@@ -365,14 +428,21 @@ function JournalTab({
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
   const fertilizeTask = plant.care.find((c) => c.type === 'fertilize');
+  const hasLoggedWatering = plant.journalNotes.some((e) => e.type === 'watered');
   const autoEntries: JournalEntry[] = [
-    {
-      id: 'auto-watered',
-      type: 'watered',
-      title: t.plantDetail.journal.wateredTitle,
-      description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
-      daysAgo: plant.lastWateredDaysAgo,
-    },
+    // Real "watered" entries are logged from handleWaterNow going forward; this
+    // synthetic fallback only covers plants watered before that logging existed.
+    ...(hasLoggedWatering
+      ? []
+      : [
+          {
+            id: 'auto-watered',
+            type: 'watered' as JournalEntryType,
+            title: t.plantDetail.journal.wateredTitle,
+            description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
+            daysAgo: plant.lastWateredDaysAgo,
+          },
+        ]),
     ...(fertilizeTask
       ? [
           {
@@ -493,11 +563,46 @@ function JournalTab({
   );
 }
 
+function PhotoTimeline({ plant, colors, t }: { plant: Plant; colors: ReturnType<typeof useTheme>; t: Translations }) {
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const photos = useMemo(
+    () =>
+      plant.journalNotes
+        .filter((e): e is JournalEntry & { photoUri: string } => !!e.photoUri)
+        .map((e) => ({ uri: e.photoUri, daysAgo: e.daysAgo }))
+        .sort((a, b) => b.daysAgo - a.daysAgo),
+    [plant.journalNotes]
+  );
+
+  if (photos.length === 0) return null;
+
+  return (
+    <View style={{ gap: Spacing.two }}>
+      <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.plantDetail.history.photoTimeline}</Text>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: Spacing.two }}>
+        {photos.map((p, i) => (
+          <Pressable key={i} onPress={() => setSelected(p.uri)} style={{ alignItems: 'center', gap: 4 }}>
+            <Image source={{ uri: p.uri }} style={[styles.timelineThumb, { borderColor: colors.border }]} contentFit="cover" />
+            <Text style={[styles.timelineThumbLabel, { color: colors.textSecondary }]}>{relativeTime(p.daysAgo, t)}</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+      <Modal visible={!!selected} transparent animationType="fade" onRequestClose={() => setSelected(null)}>
+        <Pressable style={styles.photoModalBackdrop} onPress={() => setSelected(null)}>
+          {!!selected && <Image source={{ uri: selected }} style={styles.photoModalImage} contentFit="contain" />}
+        </Pressable>
+      </Modal>
+    </View>
+  );
+}
+
 function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typeof useTheme>; t: Translations }) {
-  const wateringInterval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
+  const wateringInterval = plant.wateringIntervalDays;
 
   return (
     <View style={{ gap: Spacing.four }}>
+      <PhotoTimeline plant={plant} colors={colors} t={t} />
       <HistorySection
         title={t.plantDetail.history.wateringHistory}
         recentLabel={t.plantDetail.history.recentWaterings}
@@ -617,6 +722,17 @@ const styles = StyleSheet.create({
   tabButton: { flex: 1, paddingVertical: 8, borderRadius: 12, alignItems: 'center' },
   tabText: { fontSize: 12, fontWeight: '700' },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5 },
+  speciesCard: { borderRadius: 16, padding: Spacing.three, gap: 3, marginBottom: Spacing.three },
+  speciesCardTitle: { fontSize: 12, fontWeight: '700' },
+  speciesCardText: { fontSize: 12 },
+
+  symptomIntro: { fontSize: 12 },
+  symptomCard: { borderRadius: 14, borderWidth: 1, overflow: 'hidden' },
+  symptomRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 12 },
+  symptomLabel: { flex: 1, fontSize: 13, fontWeight: '700' },
+  symptomCauses: { paddingHorizontal: 14, paddingBottom: 12, gap: 4 },
+  symptomCauseText: { fontSize: 12, lineHeight: 17 },
+
   chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
   chip: { width: '31%', borderRadius: 14, padding: Spacing.two, gap: 2 },
   chipWide: { width: '48%' },
@@ -672,6 +788,16 @@ const styles = StyleSheet.create({
   timelineTime: { fontSize: 11 },
   timelineDescription: { fontSize: 12, lineHeight: 17 },
   timelinePhoto: { width: '100%', height: 140, borderRadius: 10, marginTop: 4 },
+
+  timelineThumb: { width: 84, height: 84, borderRadius: 12, borderWidth: 1 },
+  timelineThumbLabel: { fontSize: 10, fontWeight: '600' },
+  photoModalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoModalImage: { width: '100%', height: '80%' },
 
   historyCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.two, gap: Spacing.one },
   historyCaption: { fontSize: 12 },

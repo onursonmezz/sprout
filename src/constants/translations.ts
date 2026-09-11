@@ -108,6 +108,10 @@ export const translations = {
       tabCare: 'Care',
       tabJournal: 'Journal',
       tabHistory: 'History',
+      speciesGuideTitle: '🌿 Species guide',
+      speciesGuideCare: (days: number) => `Typically watered every ${days} days.`,
+      toxicToPets: '⚠️ Toxic to pets',
+      nonToxicToPets: '✓ Non-toxic to pets',
       environment: 'ENVIRONMENT',
       potSoil: 'POT & SOIL',
       room: 'Room',
@@ -125,7 +129,7 @@ export const translations = {
         addTask: '+ Add care task',
         allAdded: 'All care tasks added',
         watering: 'Watering',
-        taskNames: { fertilize: 'Fertilize', rotate: 'Rotate', mist: 'Mist', prune: 'Prune' },
+        taskNames: { fertilize: 'Fertilize', rotate: 'Rotate', mist: 'Mist', prune: 'Prune', repot: 'Repot' },
         everyDays: (n: number) => `Every ${n} days`,
         nextDueNow: 'Next: Due now',
         nextOn: (date: string) => `Next: ${date}`,
@@ -145,6 +149,7 @@ export const translations = {
         fertilizedDesc: 'Regular liquid feed.',
       },
       history: {
+        photoTimeline: 'Photo timeline',
         wateringHistory: 'Watering history',
         recentWaterings: 'Recent waterings',
         taskHistoryTitle: {
@@ -152,12 +157,14 @@ export const translations = {
           rotate: 'Rotation history',
           mist: 'Misting history',
           prune: 'Pruning history',
+          repot: 'Repotting history',
         },
         taskRecentLabel: {
           fertilize: 'Recent fertilizing',
           rotate: 'Recent rotations',
           mist: 'Recent misting',
           prune: 'Recent pruning',
+          repot: 'Recent repottings',
         },
         last12Weeks: 'Last 12 weeks',
         noHistory: 'No history yet.',
@@ -187,6 +194,7 @@ export const translations = {
       nicknamePlaceholder: 'e.g. Bella',
       species: 'Species',
       speciesPlaceholder: 'e.g. Monstera deliciosa',
+      speciesGuideHint: (days: number) => `Suggested care · water every ${days} days`,
       latinName: 'Latin name',
       latinNamePlaceholder: 'e.g. Monstera deliciosa',
       dateAcquired: 'Date acquired',
@@ -235,6 +243,80 @@ export const translations = {
       deleteConfirm: 'Delete this plant and all of its care history? This can’t be undone.',
       deleteCancel: 'Cancel',
       deleteConfirmYes: 'Delete',
+    },
+    troubleshooting: {
+      sectionTitle: 'Diagnose an issue',
+      intro: 'Tap a symptom to see likely causes and fixes.',
+      symptoms: {
+        yellowLeaves: {
+          label: 'Yellowing leaves',
+          causes: [
+            'Overwatering — let the soil dry out more between waterings.',
+            'Too little light — move to a brighter spot.',
+            'Natural aging — an occasional yellow lower leaf is normal.',
+          ],
+        },
+        brownTips: {
+          label: 'Brown leaf tips',
+          causes: [
+            'Low humidity — mist regularly or use a pebble tray.',
+            'Tap water minerals — try filtered or rested water.',
+            'Underwatering — check soil moisture more often.',
+          ],
+        },
+        droopingWilting: {
+          label: 'Drooping or wilting',
+          causes: [
+            'Underwatering — soil is likely bone dry, water thoroughly.',
+            'Overwatering — check for soggy soil and root rot.',
+            'Heat stress — move away from heaters or direct sun.',
+          ],
+        },
+        leafDrop: {
+          label: 'Sudden leaf drop',
+          causes: [
+            'Environment change — plants often sulk after being moved.',
+            'Cold draft — keep away from doors and windows in winter.',
+            'Underwatering — check soil moisture.',
+          ],
+        },
+        blackSpots: {
+          label: 'Black spots on leaves',
+          causes: [
+            'Fungal or bacterial infection — remove affected leaves, improve airflow.',
+            'Water sitting on leaves — avoid wetting foliage when watering.',
+          ],
+        },
+        whitePowder: {
+          label: 'White powdery spots',
+          causes: [
+            'Powdery mildew — increase airflow, avoid wetting leaves.',
+            'Treat with a fungicide if it spreads.',
+          ],
+        },
+        slowGrowth: {
+          label: 'Slow or no growth',
+          causes: [
+            'Not enough light — most houseplants want bright, indirect light.',
+            'Nutrient deficiency — try a balanced liquid fertilizer.',
+            'Root-bound — may be time to repot into a larger pot.',
+          ],
+        },
+        curlingLeaves: {
+          label: 'Curling leaves',
+          causes: ['Underwatering or low humidity.', 'Too much direct sun — move out of harsh afternoon light.'],
+        },
+        leggyGrowth: {
+          label: 'Leggy, stretched growth',
+          causes: ['Insufficient light — the plant is stretching toward a light source; move it closer to a window.'],
+        },
+        mushyStem: {
+          label: 'Mushy stem or rotten smell',
+          causes: [
+            'Overwatering or poor drainage — remove from the pot, trim rotted roots, repot in fresh, well-draining soil.',
+          ],
+        },
+      },
     },
     onboarding: {
       slides: [
@@ -369,6 +451,10 @@ export const translations = {
       tabCare: 'Bakım',
       tabJournal: 'Günlük',
       tabHistory: 'Geçmiş',
+      speciesGuideTitle: '🌿 Tür rehberi',
+      speciesGuideCare: (days: number) => `Genellikle ${days} günde bir sulanır.`,
+      toxicToPets: '⚠️ Evcil hayvanlara zararlı',
+      nonToxicToPets: '✓ Evcil hayvanlara zararsız',
       environment: 'ORTAM',
       potSoil: 'SAKSI & TOPRAK',
       room: 'Oda',
@@ -386,7 +472,7 @@ export const translations = {
         addTask: '+ Bakım görevi ekle',
         allAdded: 'Tüm bakım görevleri eklendi',
         watering: 'Sulama',
-        taskNames: { fertilize: 'Gübreleme', rotate: 'Çevirme', mist: 'Nemlendirme', prune: 'Budama' },
+        taskNames: { fertilize: 'Gübreleme', rotate: 'Çevirme', mist: 'Nemlendirme', prune: 'Budama', repot: 'Saksı değiştirme' },
         everyDays: (n: number) => `${n} günde bir`,
         nextDueNow: 'Sıradaki: Şimdi',
         nextOn: (date: string) => `Sıradaki: ${date}`,
@@ -406,6 +492,7 @@ export const translations = {
         fertilizedDesc: 'Düzenli sıvı gübre uygulandı.',
       },
       history: {
+        photoTimeline: 'Fotoğraf zaman çizelgesi',
         wateringHistory: 'Sulama geçmişi',
         recentWaterings: 'Son sulamalar',
         taskHistoryTitle: {
@@ -413,12 +500,14 @@ export const translations = {
           rotate: 'Çevirme geçmişi',
           mist: 'Nemlendirme geçmişi',
           prune: 'Budama geçmişi',
+          repot: 'Saksı değiştirme geçmişi',
         },
         taskRecentLabel: {
           fertilize: 'Son gübrelemeler',
           rotate: 'Son çevirmeler',
           mist: 'Son nemlendirmeler',
           prune: 'Son budamalar',
+          repot: 'Son saksı değişimleri',
         },
         last12Weeks: 'Son 12 hafta',
         noHistory: 'Henüz geçmiş yok.',
@@ -448,6 +537,7 @@ export const translations = {
       nicknamePlaceholder: 'örn. Bella',
       species: 'Tür',
       speciesPlaceholder: 'örn. Monstera deliciosa',
+      speciesGuideHint: (days: number) => `Önerilen bakım · ${days} günde bir sulama`,
       latinName: 'Latince adı',
       latinNamePlaceholder: 'örn. Monstera deliciosa',
       dateAcquired: 'Edinme tarihi',
@@ -496,6 +586,80 @@ export const translations = {
       deleteConfirm: 'Bu bitki ve tüm bakım geçmişi silinsin mi? Bu işlem geri alınamaz.',
       deleteCancel: 'Vazgeç',
       deleteConfirmYes: 'Sil',
+    },
+    troubleshooting: {
+      sectionTitle: 'Sorun teşhisi',
+      intro: 'Olası nedenleri ve çözümleri görmek için bir belirtiye dokunun.',
+      symptoms: {
+        yellowLeaves: {
+          label: 'Yapraklar sararıyor',
+          causes: [
+            'Fazla sulama — sulamalar arasında toprağın daha fazla kurumasına izin verin.',
+            'Yetersiz ışık — daha aydınlık bir yere taşıyın.',
+            'Doğal yaşlanma — alttaki yaprakların ara sıra sararması normaldir.',
+          ],
+        },
+        brownTips: {
+          label: 'Yaprak uçları kahverengileşiyor',
+          causes: [
+            'Düşük nem — düzenli olarak sisleyin veya nem tepsisi kullanın.',
+            'Musluk suyundaki mineraller — filtrelenmiş veya dinlendirilmiş su deneyin.',
+            'Az sulama — toprak nemini daha sık kontrol edin.',
+          ],
+        },
+        droopingWilting: {
+          label: 'Solma veya sarkma',
+          causes: [
+            'Az sulama — toprak muhtemelen tamamen kurumuş, iyice sulayın.',
+            'Fazla sulama — toprağın ıslak kalıp kalmadığını ve kök çürümesini kontrol edin.',
+            'Isı stresi — kaloriferlerden veya doğrudan güneşten uzaklaştırın.',
+          ],
+        },
+        leafDrop: {
+          label: 'Ani yaprak dökülmesi',
+          causes: [
+            'Ortam değişikliği — bitkiler taşındıktan sonra genellikle küser.',
+            'Soğuk hava akımı — kışın kapı ve pencerelerden uzak tutun.',
+            'Az sulama — toprak nemini kontrol edin.',
+          ],
+        },
+        blackSpots: {
+          label: 'Yapraklarda siyah lekeler',
+          causes: [
+            'Mantar veya bakteri enfeksiyonu — etkilenen yaprakları çıkarın, hava sirkülasyonunu artırın.',
+            'Yapraklarda su birikmesi — sulama yaparken yaprakları ıslatmaktan kaçının.',
+          ],
+        },
+        whitePowder: {
+          label: 'Beyaz pudra lekeleri',
+          causes: [
+            'Külleme (pudra küfü) — hava sirkülasyonunu artırın, yaprakları ıslatmaktan kaçının.',
+            'Yayılırsa fungisitle tedavi edin.',
+          ],
+        },
+        slowGrowth: {
+          label: 'Yavaş veya durmuş büyüme',
+          causes: [
+            'Yetersiz ışık — çoğu iç mekan bitkisi parlak, dolaylı ışık ister.',
+            'Besin eksikliği — dengeli bir sıvı gübre deneyin.',
+            'Kök sıkışması — daha büyük bir saksıya alma zamanı gelmiş olabilir.',
+          ],
+        },
+        curlingLeaves: {
+          label: 'Yapraklar kıvrılıyor',
+          causes: ['Az sulama veya düşük nem.', 'Fazla doğrudan güneş — sert öğleden sonra güneşinden uzaklaştırın.'],
+        },
+        leggyGrowth: {
+          label: 'Uzayan, seyrek büyüme',
+          causes: ['Yetersiz ışık — bitki ışık kaynağına doğru uzuyor; pencereye daha yakın taşıyın.'],
+        },
+        mushyStem: {
+          label: 'Yumuşamış gövde veya çürük kokusu',
+          causes: [
+            'Fazla sulama veya kötü drenaj — saksıdan çıkarın, çürük kökleri budayın, taze ve iyi drene olan toprakla yeniden saksılayın.',
+          ],
+        },
+      },
     },
     onboarding: {
       slides: [

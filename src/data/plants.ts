@@ -1,6 +1,6 @@
 export type WateringStatus = 'overdue' | 'dueToday' | 'upcoming';
 
-export type CareTaskType = 'fertilize' | 'rotate' | 'mist' | 'prune';
+export type CareTaskType = 'fertilize' | 'rotate' | 'mist' | 'prune' | 'repot';
 
 export type CareTask = {
   type: CareTaskType;
