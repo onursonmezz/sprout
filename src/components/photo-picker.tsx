@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
-import { pickFromCamera, pickFromLibrary } from '@/utils/photos';
+import { deletePhoto, pickFromCamera, pickFromLibrary } from '@/utils/photos';
 
 export function PhotoPicker({
   uri,
@@ -21,18 +21,24 @@ export function PhotoPicker({
   height?: number;
 }) {
   const [panelOpen, setPanelOpen] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleCamera = async () => {
+  const applyNewPhoto = async (pick: () => Promise<string | null>) => {
     setPanelOpen(false);
-    const result = await pickFromCamera();
-    if (result) onChange(result);
+    setError(false);
+    try {
+      const result = await pick();
+      if (result) {
+        deletePhoto(uri);
+        onChange(result);
+      }
+    } catch {
+      setError(true);
+    }
   };
 
-  const handleLibrary = async () => {
-    setPanelOpen(false);
-    const result = await pickFromLibrary();
-    if (result) onChange(result);
-  };
+  const handleCamera = () => applyNewPhoto(pickFromCamera);
+  const handleLibrary = () => applyNewPhoto(pickFromLibrary);
 
   return (
     <View>
@@ -65,6 +71,7 @@ export function PhotoPicker({
             <Pressable
               onPress={() => {
                 setPanelOpen(false);
+                deletePhoto(uri);
                 onChange(null);
               }}
               style={styles.panelOption}>
@@ -74,6 +81,7 @@ export function PhotoPicker({
           )}
         </View>
       )}
+      {error && <Text style={[styles.errorText, { color: colors.accent }]}>{t.addPlant.photoError}</Text>}
     </View>
   );
 }
@@ -86,4 +94,5 @@ const styles = StyleSheet.create({
   panel: { marginTop: 8, borderRadius: 14, borderWidth: 1, padding: 6, gap: 2 },
   panelOption: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 9, paddingHorizontal: 6 },
   panelOptionText: { fontSize: 13, fontWeight: '600' },
+  errorText: { fontSize: 12, fontWeight: '600', marginTop: 6 },
 });

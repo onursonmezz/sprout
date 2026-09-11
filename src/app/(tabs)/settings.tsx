@@ -82,9 +82,12 @@ export default function SettingsScreen() {
   const router = useRouter();
   const [resetConfirm, setResetConfirm] = useState(false);
 
+  const [exportError, setExportError] = useState(false);
+
   const handleExport = () => {
     if (plants.length === 0) return;
-    exportPlantsData(plants);
+    setExportError(false);
+    exportPlantsData(plants).catch(() => setExportError(true));
   };
 
   const handleToggleNotifications = async (value: boolean) => {
@@ -93,6 +96,15 @@ export default function SettingsScreen() {
       if (!granted) return;
     }
     setNotificationsEnabled(value);
+  };
+
+  const handleVacationStartChange = (date: Date) => {
+    setVacationStart(date);
+    if (vacationEnd && date > vacationEnd) setVacationEnd(date);
+  };
+
+  const handleVacationEndChange = (date: Date) => {
+    setVacationEnd(vacationStart && date < vacationStart ? vacationStart : date);
   };
 
   const handleResetConfirmed = () => {
@@ -203,7 +215,7 @@ export default function SettingsScreen() {
                   <DateField
                     value={vacationStart}
                     mode="date"
-                    onChange={setVacationStart}
+                    onChange={handleVacationStartChange}
                     displayText={vacationStart ? formatDate(vacationStart) : 'dd.mm.yyyy'}
                     textColor={colors.text}
                     backgroundColor={colors.background}
@@ -214,7 +226,7 @@ export default function SettingsScreen() {
                   <DateField
                     value={vacationEnd}
                     mode="date"
-                    onChange={setVacationEnd}
+                    onChange={handleVacationEndChange}
                     displayText={vacationEnd ? formatDate(vacationEnd) : 'dd.mm.yyyy'}
                     textColor={colors.text}
                     backgroundColor={colors.background}
@@ -293,7 +305,7 @@ export default function SettingsScreen() {
         <SectionCard colors={colors}>
           <Row
             title={t.settings.exportData}
-            subtitle={t.settings.exportDataSub}
+            subtitle={exportError ? t.settings.exportError : t.settings.exportDataSub}
             colors={colors}
             right={
               <Pressable

@@ -24,6 +24,15 @@ export function useNotificationScheduler() {
   } = useSettings();
   const { t } = useLanguage();
 
+  // settings-context.tsx constructs a fresh Date object for reminderTime/
+  // vacationStart/vacationEnd on every render, so depending on those objects
+  // directly would re-fire this effect (and redundantly cancel+reschedule
+  // the native reminder) on any unrelated settings change. Depend on the
+  // underlying primitive values instead.
+  const reminderTimeMs = reminderTime.getTime();
+  const vacationStartMs = vacationStart ? vacationStart.getTime() : null;
+  const vacationEndMs = vacationEnd ? vacationEnd.getTime() : null;
+
   useEffect(() => {
     if (!plantsLoaded || !settingsLoaded) return;
 
@@ -48,10 +57,10 @@ export function useNotificationScheduler() {
     plantsLoaded,
     settingsLoaded,
     notificationsEnabled,
-    reminderTime,
+    reminderTimeMs,
     vacationMode,
-    vacationStart,
-    vacationEnd,
+    vacationStartMs,
+    vacationEndMs,
     plants,
     t,
   ]);

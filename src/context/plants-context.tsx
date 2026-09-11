@@ -3,8 +3,21 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 import { CareTask, JournalEntry, Plant, WateringStatus } from '@/data/plants';
 import { loadJSON, saveJSON } from '@/utils/storage';
 
-const PLANTS_KEY = 'sprout:plants';
-const SAVED_AT_KEY = 'sprout:plants-saved-at';
+const STATE_KEY = 'sprout:plants-state';
+// Pre-migration keys: plants and the fastForward anchor used to be saved as two
+// separate, unawaited AsyncStorage writes, which could desync if the app was
+// killed between them. Read once for existing installs, then never written again.
+const LEGACY_PLANTS_KEY = 'sprout:plants';
+const LEGACY_SAVED_AT_KEY = 'sprout:plants-saved-at';
+
+type PersistedState = { plants: Plant[]; savedAt: string };
+
+/** Plants persisted before wateringIntervalDays existed don't have it —
+ * fall back to what the field replaced (lastWateredDaysAgo + daysUntilWatering). */
+function migratePlant(p: Plant): Plant {
+  if (typeof p.wateringIntervalDays === 'number') return p;
+  return { ...p, wateringIntervalDays: Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering) };
+}
 
 type PlantsContextValue = {
   plants: Plant[];
@@ -23,11 +36,11 @@ type PlantsContextValue = {
 
 const PlantsContext = createContext<PlantsContextValue | null>(null);
 
-/** Whole calendar days between two dates (ignores time of day). */
+/** Whole days of real elapsed time between two timestamps. Using elapsed
+ * milliseconds (rather than diffing local-calendar dates) keeps this correct
+ * even if the device's timezone changes between saves, e.g. after a flight. */
 function daysBetween(a: Date, b: Date) {
-  const utcA = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-  const utcB = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-  return Math.round((utcB - utcA) / 86400000);
+  return Math.floor((b.getTime() - a.getTime()) / 86400000);
 }
 
 /**
@@ -57,20 +70,24 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const [savedPlants, savedAt] = await Promise.all([
-        loadJSON<Plant[]>(PLANTS_KEY, []),
-        loadJSON<string | null>(SAVED_AT_KEY, null),
-      ]);
-      const daysPassed = savedAt ? Math.max(0, daysBetween(new Date(savedAt), new Date())) : 0;
-      setPlants(fastForward(savedPlants, daysPassed));
+      let state = await loadJSON<PersistedState | null>(STATE_KEY, null);
+      if (!state) {
+        const [legacyPlants, legacySavedAt] = await Promise.all([
+          loadJSON<Plant[]>(LEGACY_PLANTS_KEY, []),
+          loadJSON<string | null>(LEGACY_SAVED_AT_KEY, null),
+        ]);
+        state = { plants: legacyPlants, savedAt: legacySavedAt ?? new Date().toISOString() };
+      }
+      const migrated = state.plants.map(migratePlant);
+      const daysPassed = Math.max(0, daysBetween(new Date(state.savedAt), new Date()));
+      setPlants(fastForward(migrated, daysPassed));
       setLoaded(true);
     })();
   }, []);
 
   useEffect(() => {
     if (!loaded) return;
-    saveJSON(PLANTS_KEY, plants);
-    saveJSON(SAVED_AT_KEY, new Date().toISOString());
+    saveJSON(STATE_KEY, { plants, savedAt: new Date().toISOString() } satisfies PersistedState);
   }, [plants, loaded]);
 
   const addPlant = (plant: Plant) => setPlants((prev) => [plant, ...prev]);
@@ -104,8 +121,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
     setPlants((prev) =>
       prev.map((p) => {
         if (p.id !== plantId) return p;
-        const intervalDays = Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
-        return { ...p, lastWateredDaysAgo: 0, daysUntilWatering: intervalDays, status: 'upcoming' };
+        return { ...p, lastWateredDaysAgo: 0, daysUntilWatering: p.wateringIntervalDays, status: 'upcoming' };
       })
     );
 

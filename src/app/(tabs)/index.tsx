@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -21,8 +21,7 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, snoozePlant } = usePlants();
-  const [watered, setWatered] = useState<Record<string, boolean>>({});
+  const { plants, waterPlant, snoozePlant } = usePlants();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
     weekday: 'long',
@@ -63,7 +62,6 @@ export default function TodayScreen() {
         <View style={{ gap: Spacing.two }}>
           {needsAttention.map((plant) => {
             const isOverdue = plant.status === 'overdue';
-            const isWatered = watered[plant.id];
             return (
               <Pressable
                 key={plant.id}
@@ -92,12 +90,9 @@ export default function TodayScreen() {
                 </View>
                 <View style={styles.attentionActions}>
                   <Pressable
-                    onPress={() => setWatered((prev) => ({ ...prev, [plant.id]: !prev[plant.id] }))}
-                    style={[
-                      styles.wateredButton,
-                      { backgroundColor: isWatered ? colors.tint : colors.accent },
-                    ]}>
-                    <Text style={styles.wateredButtonText}>{isWatered ? t.today.watered : t.today.water}</Text>
+                    onPress={() => waterPlant(plant.id)}
+                    style={[styles.wateredButton, { backgroundColor: colors.accent }]}>
+                    <Text style={styles.wateredButtonText}>{t.today.water}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => snoozePlant(plant.id)}

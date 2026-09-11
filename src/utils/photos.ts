@@ -37,3 +37,16 @@ async function launch(kind: 'camera' | 'library'): Promise<string | null> {
 
 export const pickFromCamera = () => launch('camera');
 export const pickFromLibrary = () => launch('library');
+
+/** Best-effort cleanup of a photo previously persisted by `persist()`. Only
+ * ever touches files we copied into Paths.document on native — never web
+ * data: URIs, which aren't real filesystem entries. */
+export function deletePhoto(uri: string | null) {
+  if (!uri || Platform.OS === 'web') return;
+  try {
+    const file = new File(uri);
+    if (file.exists) file.delete();
+  } catch {
+    // best-effort cleanup; a leftover orphaned file isn't worth surfacing an error for
+  }
+}

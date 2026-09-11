@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PhotoPicker } from '@/components/photo-picker';
 import { Fonts, Spacing } from '@/constants/theme';
-import { Translations } from '@/constants/translations';
+import { translations, Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
@@ -13,10 +13,45 @@ import { Plant, WateringStatus } from '@/data/plants';
 
 const WINDOW_DIRECTIONS = ['N', 'E', 'S', 'W'] as const;
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
+const ALL_LANGUAGES = Object.values(translations) as Translations[];
 
 function todayFormatted() {
   const d = new Date();
   return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+}
+
+/** A plant stores the *displayed* label for these fields, so a plant saved
+ * in one language must still resolve to the right option after the app
+ * language changes — search every language's label set, not just the
+ * current one. */
+function findLabelIndex(value: string, pick: (t: Translations) => string[]) {
+  for (const lang of ALL_LANGUAGES) {
+    const idx = pick(lang).indexOf(value);
+    if (idx >= 0) return idx;
+  }
+  return -1;
+}
+
+function matchesAnyLanguage(value: string, pick: (t: Translations) => string) {
+  return ALL_LANGUAGES.some((lang) => pick(lang) === value);
+}
+
+function parseFormattedDate(value: string): Date | null {
+  const match = value.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (!match) return null;
+  const [, day, month, year] = match;
+  const d = new Date(Number(year), Number(month) - 1, Number(day));
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/** Whole calendar days between a formatted "DD.MM.YYYY" date and today. */
+function daysAgoFrom(value: string): number {
+  const parsed = parseFormattedDate(value);
+  if (!parsed) return 0;
+  const today = new Date();
+  const utcToday = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  const utcParsed = Date.UTC(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+  return Math.max(0, Math.round((utcToday - utcParsed) / 86400000));
 }
 
 type FormState = {
@@ -63,16 +98,18 @@ const initialForm: FormState = {
   lastWatered: todayFormatted(),
 };
 
-function plantToForm(plant: Plant, t: Translations): FormState {
-  const lightIdx = t.addPlant.lightLevels.findIndex((l) => l.label === plant.environment.light);
-  const materialIdx = t.addPlant.potMaterials.findIndex((m) => m === plant.pot.material);
+function plantToForm(plant: Plant): FormState {
+  const lightIdx = findLabelIndex(
+    plant.environment.light,
+    (tt) => tt.addPlant.lightLevels.map((l) => l.label)
+  );
+  const materialIdx = findLabelIndex(plant.pot.material, (tt) => tt.addPlant.potMaterials);
   const windowRaw = plant.environment.window.split('-')[0];
   const windowDirection = (WINDOW_DIRECTIONS as readonly string[]).includes(windowRaw)
     ? (windowRaw as (typeof WINDOW_DIRECTIONS)[number])
     : 'E';
   const hasPotSize = plant.pot.size !== '—';
   const [potDiameter, potDepthRaw] = hasPotSize ? plant.pot.size.split('x') : ['', ''];
-  const interval = Math.max(1, plant.lastWateredDaysAgo + plant.daysUntilWatering);
 
   return {
     photoUri: plant.photoUri,
@@ -88,10 +125,10 @@ function plantToForm(plant: Plant, t: Translations): FormState {
     potDiameter,
     potDepth: hasPotSize ? potDepthRaw.replace('cm', '') : '',
     potMaterialIndex: materialIdx >= 0 ? materialIdx : 2,
-    drainage: plant.pot.drainage === t.addPlant.no ? 'no' : 'yes',
+    drainage: matchesAnyLanguage(plant.pot.drainage, (tt) => tt.addPlant.no) ? 'no' : 'yes',
     soilMix: plant.pot.soil,
     lastRepotted: '',
-    waterEveryDays: interval,
+    waterEveryDays: plant.wateringIntervalDays,
     waterAmountMl: String(plant.wateringAmountMl),
     lastWatered: '',
   };
@@ -107,7 +144,7 @@ export default function AddPlantScreen() {
   const isEditing = Boolean(id);
 
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant, t) : initialForm));
+  const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant) : initialForm));
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   if (isEditing && !editingPlant) {
@@ -169,20 +206,28 @@ export default function AddPlantScreen() {
     if (editingPlant) {
       const daysUntilWatering = form.waterEveryDays - editingPlant.lastWateredDaysAgo;
       const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
-      updatePlant(editingPlant.id, { ...sharedFields, daysUntilWatering, status });
+      updatePlant(editingPlant.id, {
+        ...sharedFields,
+        wateringIntervalDays: form.waterEveryDays,
+        daysUntilWatering,
+        status,
+      });
       router.replace(`/plant/${editingPlant.id}`);
       return;
     }
 
     const id = `${form.nickname.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString(36)}`;
+    const lastWateredDaysAgo = daysAgoFrom(form.lastWatered);
+    const daysUntilWatering = form.waterEveryDays - lastWateredDaysAgo;
     const newPlant: Plant = {
       id,
       ...sharedFields,
       emoji: '🌱',
       avatarColor: AVATAR_COLORS[plants.length % AVATAR_COLORS.length],
-      status: form.waterEveryDays <= 0 ? 'dueToday' : 'upcoming',
-      daysUntilWatering: form.waterEveryDays,
-      lastWateredDaysAgo: 0,
+      status: daysUntilWatering <= 0 ? (daysUntilWatering < 0 ? 'overdue' : 'dueToday') : 'upcoming',
+      wateringIntervalDays: form.waterEveryDays,
+      daysUntilWatering,
+      lastWateredDaysAgo,
       care: [],
       journalNotes: [],
     };
