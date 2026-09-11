@@ -12,6 +12,7 @@ import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { exportPlantsData } from '@/utils/export';
 import { requestNotificationPermission } from '@/utils/notifications';
+import { fetchCurrentTemperatureC, requestLocationPermission, seasonalFactorFromTemp } from '@/utils/weather';
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
@@ -68,6 +69,9 @@ export default function SettingsScreen() {
     setQuietEnd,
     seasonalAdjustment,
     setSeasonalAdjustment,
+    seasonalFactor,
+    seasonalTempC,
+    setSeasonalWeather,
     vacationMode,
     setVacationMode,
     vacationStart,
@@ -96,6 +100,15 @@ export default function SettingsScreen() {
       if (!granted) return;
     }
     setNotificationsEnabled(value);
+  };
+
+  const handleToggleSeasonal = async (value: boolean) => {
+    setSeasonalAdjustment(value);
+    if (!value) return;
+    const granted = await requestLocationPermission();
+    if (!granted) return;
+    const tempC = await fetchCurrentTemperatureC();
+    if (tempC !== null) setSeasonalWeather(tempC, seasonalFactorFromTemp(tempC));
   };
 
   const handleVacationStartChange = (date: Date) => {
@@ -181,12 +194,16 @@ export default function SettingsScreen() {
         <SectionCard colors={colors}>
           <Row
             title={t.settings.seasonalAdjustment}
-            subtitle={t.settings.seasonalAdjustmentSub}
+            subtitle={
+              seasonalAdjustment && seasonalTempC !== null
+                ? t.settings.seasonalEffect(Math.round(seasonalTempC), Math.round((seasonalFactor - 1) * 100))
+                : t.settings.seasonalAdjustmentSub
+            }
             colors={colors}
             right={
               <Switch
                 value={seasonalAdjustment}
-                onValueChange={setSeasonalAdjustment}
+                onValueChange={handleToggleSeasonal}
                 trackColor={{ false: colors.backgroundSelected, true: colors.tint }}
                 thumbColor="#fff"
               />

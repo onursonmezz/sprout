@@ -9,6 +9,11 @@ const STATE_KEY = 'sprout:plants-state';
 // killed between them. Read once for existing installs, then never written again.
 const LEGACY_PLANTS_KEY = 'sprout:plants';
 const LEGACY_SAVED_AT_KEY = 'sprout:plants-saved-at';
+// Read-only peek at settings-context's own storage key for the seasonal
+// watering factor. Plants-context sits outside SettingsProvider in the tree
+// (see _layout.tsx) so it can't use useSettings(); reading the same
+// AsyncStorage key directly avoids reordering the providers for this alone.
+const SETTINGS_KEY = 'sprout:settings';
 
 type PersistedState = { plants: Plant[]; savedAt: string };
 
@@ -47,11 +52,16 @@ function daysBetween(a: Date, b: Date) {
  * Plant "days ago" / "days until" fields are relative snapshots, so a plant
  * saved as "in 7 days" would still read "in 7 days" a week later unless we
  * roll every relative field forward by however long the app was closed.
+ *
+ * `seasonalFactor` scales only the watering countdown (not lastWateredDaysAgo,
+ * care tasks, or journal history, which reflect real elapsed time) — warmer
+ * weather makes it tick down faster, colder weather slower. 1 = no effect.
  */
-function fastForward(plants: Plant[], daysPassed: number): Plant[] {
+function fastForward(plants: Plant[], daysPassed: number, seasonalFactor = 1): Plant[] {
   if (daysPassed <= 0) return plants;
+  const wateringDaysPassed = daysPassed * seasonalFactor;
   return plants.map((p) => {
-    const daysUntilWatering = p.daysUntilWatering - daysPassed;
+    const daysUntilWatering = Math.round(p.daysUntilWatering - wateringDaysPassed);
     const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
     return {
       ...p,
@@ -80,7 +90,12 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       }
       const migrated = state.plants.map(migratePlant);
       const daysPassed = Math.max(0, daysBetween(new Date(state.savedAt), new Date()));
-      setPlants(fastForward(migrated, daysPassed));
+      const settings = await loadJSON<{ seasonalAdjustment?: boolean; seasonalFactor?: number } | null>(
+        SETTINGS_KEY,
+        null
+      );
+      const seasonalFactor = settings?.seasonalAdjustment ? settings.seasonalFactor ?? 1 : 1;
+      setPlants(fastForward(migrated, daysPassed, seasonalFactor));
       setLoaded(true);
     })();
   }, []);

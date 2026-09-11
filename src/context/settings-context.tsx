@@ -13,6 +13,8 @@ type PersistedSettings = {
   quietStart: string;
   quietEnd: string;
   seasonalAdjustment: boolean;
+  seasonalFactor: number;
+  seasonalTempC: number | null;
   vacationMode: boolean;
   vacationStart: string | null;
   vacationEnd: string | null;
@@ -32,6 +34,8 @@ const defaults: PersistedSettings = {
   quietStart: timeAt(22, 0).toISOString(),
   quietEnd: timeAt(7, 0).toISOString(),
   seasonalAdjustment: true,
+  seasonalFactor: 1,
+  seasonalTempC: null,
   vacationMode: false,
   vacationStart: null,
   vacationEnd: null,
@@ -52,6 +56,9 @@ type SettingsContextValue = {
   setQuietEnd: (d: Date) => void;
   seasonalAdjustment: boolean;
   setSeasonalAdjustment: (v: boolean) => void;
+  seasonalFactor: number;
+  seasonalTempC: number | null;
+  setSeasonalWeather: (tempC: number, factor: number) => void;
   vacationMode: boolean;
   setVacationMode: (v: boolean) => void;
   vacationStart: Date | null;
@@ -70,8 +77,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    loadJSON<PersistedSettings>(STORAGE_KEY, defaults).then((saved) => {
-      setSettings(saved);
+    // Merge with defaults rather than trusting the loaded shape as-is: a
+    // settings field added after a user's first install would otherwise be
+    // `undefined` for them forever (loadJSON only falls back to `defaults`
+    // when the storage key is missing entirely, not per-field).
+    loadJSON<Partial<PersistedSettings>>(STORAGE_KEY, defaults).then((saved) => {
+      setSettings({ ...defaults, ...saved });
       setLoaded(true);
     });
   }, []);
@@ -100,6 +111,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setQuietEnd: (d) => update('quietEnd', d.toISOString()),
         seasonalAdjustment: settings.seasonalAdjustment,
         setSeasonalAdjustment: (v) => update('seasonalAdjustment', v),
+        seasonalFactor: settings.seasonalFactor,
+        seasonalTempC: settings.seasonalTempC,
+        setSeasonalWeather: (tempC, factor) =>
+          setSettings((prev) => ({ ...prev, seasonalTempC: tempC, seasonalFactor: factor })),
         vacationMode: settings.vacationMode,
         setVacationMode: (v) => update('vacationMode', v),
         vacationStart: settings.vacationStart ? new Date(settings.vacationStart) : null,

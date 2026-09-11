@@ -36,7 +36,13 @@
       ],
       "@react-native-community/datetimepicker",
       "expo-sharing",
-      "expo-notifications"
+      "expo-notifications",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Sprout uses your location to check the local temperature and fine-tune watering reminders for the season."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

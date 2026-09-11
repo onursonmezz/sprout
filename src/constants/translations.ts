@@ -61,6 +61,12 @@ export const translations = {
       careSchedule: 'CARE SCHEDULE',
       seasonalAdjustment: 'Seasonal adjustment',
       seasonalAdjustmentSub: 'Adjust watering in winter and summer',
+      seasonalEffect: (tempC: number, percent: number) =>
+        percent === 0
+          ? `${tempC}°C nearby — no change to watering pace`
+          : percent > 0
+            ? `${tempC}°C nearby — watering about ${percent}% more often`
+            : `${tempC}°C nearby — watering about ${Math.abs(percent)}% less often`,
       vacationMode: 'Vacation mode',
       vacationModeSub: 'Pause all reminders for a date range',
       vacationNote: 'Before you leave, water these plants heavily:',
@@ -404,6 +410,12 @@ export const translations = {
       careSchedule: 'BAKIM PROGRAMI',
       seasonalAdjustment: 'Mevsimsel ayarlama',
       seasonalAdjustmentSub: 'Kış ve yazda sulamayı otomatik ayarla',
+      seasonalEffect: (tempC: number, percent: number) =>
+        percent === 0
+          ? `Yakınlarda ${tempC}°C — sulama hızında değişiklik yok`
+          : percent > 0
+            ? `Yakınlarda ${tempC}°C — sulama yaklaşık %${percent} daha sık`
+            : `Yakınlarda ${tempC}°C — sulama yaklaşık %${Math.abs(percent)} daha seyrek`,
       vacationMode: 'Tatil modu',
       vacationModeSub: 'Belirli bir tarih aralığında tüm hatırlatmaları duraklat',
       vacationNote: 'Gitmeden önce bu bitkileri bolca sulayın:',

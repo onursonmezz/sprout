@@ -7,6 +7,7 @@ import { PlantsProvider, usePlants } from '@/context/plants-context';
 import { SettingsProvider, useSettings } from '@/context/settings-context';
 import { ThemeModeProvider, useThemeMode } from '@/context/theme-context';
 import { useNotificationScheduler } from '@/hooks/use-notification-scheduler';
+import { useSeasonalWeather } from '@/hooks/use-seasonal-weather';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,6 +19,7 @@ function Navigation() {
   const ready = themeLoaded && langLoaded && plantsLoaded && settingsLoaded;
 
   useNotificationScheduler();
+  useSeasonalWeather();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
