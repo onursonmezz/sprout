@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { LayoutChangeEvent, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PhotoPicker } from '@/components/photo-picker';
@@ -150,6 +150,17 @@ export default function AddPlantScreen() {
   const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant) : initialForm));
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
+  const fieldGroupY = useRef(0);
+  const speciesFieldY = useRef(0);
+
+  const handleSpeciesFocus = () => {
+    // Give the keyboard's open animation a moment to start before scrolling,
+    // so the suggestion panel below the field ends up above the keyboard, not hidden under it.
+    setTimeout(() => {
+      scrollRef.current?.scrollTo({ y: Math.max(0, fieldGroupY.current + speciesFieldY.current - 16), animated: true });
+    }, 250);
+  };
 
   if (isEditing && !editingPlant) {
     return (
@@ -267,7 +278,11 @@ export default function AddPlantScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled">
         <View style={styles.topRow}>
           <Pressable onPress={handleBack}>
             <Text style={[styles.backText, { color: colors.textSecondary }]}>
@@ -295,7 +310,11 @@ export default function AddPlantScreen() {
         </View>
 
         {step === 1 && (
-          <View style={styles.fieldGroup}>
+          <View
+            style={styles.fieldGroup}
+            onLayout={(e) => {
+              fieldGroupY.current = e.nativeEvent.layout.y;
+            }}>
             <Field label={t.addPlant.photo} colors={colors}>
               <PhotoPicker uri={form.photoUri} onChange={(uri) => set('photoUri', uri)} colors={colors} t={t} />
             </Field>
@@ -308,13 +327,19 @@ export default function AddPlantScreen() {
                 style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
               />
             </Field>
-            <Field label={t.addPlant.species} colors={colors}>
+            <Field
+              label={t.addPlant.species}
+              colors={colors}
+              onLayout={(e) => {
+                speciesFieldY.current = e.nativeEvent.layout.y;
+              }}>
               <TextInput
                 value={form.species}
                 onChangeText={(v) => {
                   setSpeciesPickApplied(false);
                   set('species', v);
                 }}
+                onFocus={handleSpeciesFocus}
                 placeholder={t.addPlant.speciesPlaceholder}
                 placeholderTextColor={colors.textSecondary}
                 style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
@@ -602,9 +627,19 @@ export default function AddPlantScreen() {
   );
 }
 
-function Field({ label, colors, children }: { label: string; colors: ReturnType<typeof useTheme>; children: React.ReactNode }) {
+function Field({
+  label,
+  colors,
+  children,
+  onLayout,
+}: {
+  label: string;
+  colors: ReturnType<typeof useTheme>;
+  children: React.ReactNode;
+  onLayout?: (e: LayoutChangeEvent) => void;
+}) {
   return (
-    <View style={styles.field}>
+    <View style={styles.field} onLayout={onLayout}>
       <Text style={[styles.fieldLabel, { color: colors.text }]}>{label}</Text>
       {children}
     </View>
