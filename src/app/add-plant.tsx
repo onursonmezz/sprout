@@ -11,8 +11,10 @@ import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { CareTask, Plant, WateringStatus } from '@/data/plants';
 import { findSpeciesMatches, SpeciesGuideEntry } from '@/data/species-guide';
+import { suggestWaterEveryDays } from '@/utils/care';
 
 const DEFAULT_REPOT_INTERVAL_DAYS = 365;
+const GENERIC_BASE_WATER_DAYS = 7;
 
 const WINDOW_DIRECTIONS = ['N', 'E', 'S', 'W'] as const;
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
@@ -151,6 +153,9 @@ export default function AddPlantScreen() {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
   const [speciesDropdownDismissed, setSpeciesDropdownDismissed] = useState(false);
+  const [speciesBaseWaterDays, setSpeciesBaseWaterDays] = useState(GENERIC_BASE_WATER_DAYS);
+  // Editing an existing plant never auto-touches its already-established schedule.
+  const [waterIntervalTouched, setWaterIntervalTouched] = useState(isEditing);
 
   if (isEditing && !editingPlant) {
     return (
@@ -166,14 +171,26 @@ export default function AddPlantScreen() {
   const speciesSuggestions =
     !isEditing && !speciesPickApplied && !speciesDropdownDismissed ? findSpeciesMatches(form.species) : [];
 
+  /** Recomputes the suggested watering interval from a base cadence plus the
+   * current (or about-to-change) pot/light/drainage answers — unless the user
+   * has already manually adjusted the stepper themselves, whose choice wins. */
+  const applyWaterSuggestion = (base: number, overrides: Partial<FormState> = {}) => {
+    if (waterIntervalTouched) return;
+    const next = { ...form, ...overrides };
+    set('waterEveryDays', suggestWaterEveryDays(base, next));
+  };
+
   const applySpeciesGuide = (entry: SpeciesGuideEntry) => {
     setSpeciesPickApplied(true);
+    setSpeciesBaseWaterDays(entry.waterEveryDays);
     setForm((prev) => ({
       ...prev,
       species: entry.name,
       latinName: entry.latinName,
       lightLevelIndex: entry.lightLevelIndex,
-      waterEveryDays: entry.waterEveryDays,
+      waterEveryDays: waterIntervalTouched
+        ? prev.waterEveryDays
+        : suggestWaterEveryDays(entry.waterEveryDays, { ...prev, lightLevelIndex: entry.lightLevelIndex }),
       waterAmountMl: String(entry.waterAmountMl),
     }));
   };
@@ -376,7 +393,10 @@ export default function AddPlantScreen() {
                     title={level.label}
                     subtitle={level.hint}
                     selected={form.lightLevelIndex === i}
-                    onPress={() => set('lightLevelIndex', i)}
+                    onPress={() => {
+                      set('lightLevelIndex', i);
+                      applyWaterSuggestion(speciesBaseWaterDays, { lightLevelIndex: i });
+                    }}
                     colors={colors}
                   />
                 ))}
@@ -446,7 +466,10 @@ export default function AddPlantScreen() {
                     key={m}
                     label={m}
                     selected={form.potMaterialIndex === i}
-                    onPress={() => set('potMaterialIndex', i)}
+                    onPress={() => {
+                      set('potMaterialIndex', i);
+                      applyWaterSuggestion(speciesBaseWaterDays, { potMaterialIndex: i });
+                    }}
                     colors={colors}
                     wide
                   />
@@ -455,8 +478,26 @@ export default function AddPlantScreen() {
             </Field>
             <Field label={t.addPlant.drainageHoles} colors={colors}>
               <View style={styles.grid2}>
-                <Pill label={t.addPlant.yes} selected={form.drainage === 'yes'} onPress={() => set('drainage', 'yes')} colors={colors} wide />
-                <Pill label={t.addPlant.no} selected={form.drainage === 'no'} onPress={() => set('drainage', 'no')} colors={colors} wide />
+                <Pill
+                  label={t.addPlant.yes}
+                  selected={form.drainage === 'yes'}
+                  onPress={() => {
+                    set('drainage', 'yes');
+                    applyWaterSuggestion(speciesBaseWaterDays, { drainage: 'yes' });
+                  }}
+                  colors={colors}
+                  wide
+                />
+                <Pill
+                  label={t.addPlant.no}
+                  selected={form.drainage === 'no'}
+                  onPress={() => {
+                    set('drainage', 'no');
+                    applyWaterSuggestion(speciesBaseWaterDays, { drainage: 'no' });
+                  }}
+                  colors={colors}
+                  wide
+                />
               </View>
             </Field>
             <Field label={t.addPlant.soilMix} colors={colors}>
@@ -492,13 +533,19 @@ export default function AddPlantScreen() {
             <Field label={t.addPlant.waterEveryDays} colors={colors}>
               <View style={styles.stepperRow}>
                 <Pressable
-                  onPress={() => set('waterEveryDays', Math.max(1, form.waterEveryDays - 1))}
+                  onPress={() => {
+                    setWaterIntervalTouched(true);
+                    set('waterEveryDays', Math.max(1, form.waterEveryDays - 1));
+                  }}
                   style={[styles.stepperButton, { backgroundColor: colors.backgroundSelected }]}>
                   <Text style={[styles.stepperSymbol, { color: colors.text }]}>–</Text>
                 </Pressable>
                 <Text style={[styles.stepperValue, { color: colors.text }]}>{form.waterEveryDays}</Text>
                 <Pressable
-                  onPress={() => set('waterEveryDays', form.waterEveryDays + 1)}
+                  onPress={() => {
+                    setWaterIntervalTouched(true);
+                    set('waterEveryDays', form.waterEveryDays + 1);
+                  }}
                   style={[styles.stepperButton, { backgroundColor: colors.backgroundSelected }]}>
                   <Text style={[styles.stepperSymbol, { color: colors.text }]}>+</Text>
                 </Pressable>
