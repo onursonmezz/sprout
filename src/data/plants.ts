@@ -52,6 +52,10 @@ export type Plant = {
   acquiredDate: string;
   care: CareTask[];
   journalNotes: JournalEntry[];
+  /** Days since this plant was added to Sprout — bounds how far back
+   * synthetic/projected history (dot grid, "recent" lists) is allowed to
+   * reach, so it never fabricates events from before the plant existed here. */
+  createdDaysAgo: number;
 };
 
 export const samplePlants: Plant[] = [
@@ -69,6 +73,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: -1,
     lastWateredDaysAgo: 8,
     wateringIntervalDays: 7,
+    createdDaysAgo: 365,
     environment: { light: 'Medium', window: 'E-Facing', hoursLight: '3h Light', humidity: 'High', tempC: '21°C' },
     pot: { size: '18x16cm', material: 'Ceramic', drainage: 'Yes', soil: 'Peat-Based Mix' },
     acquiredDate: '02 May 2023',
@@ -100,6 +105,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: -1,
     lastWateredDaysAgo: 9,
     wateringIntervalDays: 8,
+    createdDaysAgo: 365,
     environment: { light: 'High', window: 'S-Facing', hoursLight: '5h Light', humidity: 'Medium', tempC: '22°C' },
     pot: { size: '25x22cm', material: 'Terracotta', drainage: 'Yes', soil: 'Standard Potting Mix' },
     acquiredDate: '14 Feb 2022',
@@ -131,6 +137,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: 0,
     lastWateredDaysAgo: 7,
     wateringIntervalDays: 7,
+    createdDaysAgo: 365,
     environment: { light: 'Low', window: 'N-Facing', hoursLight: '2h Light', humidity: 'Medium', tempC: '20°C' },
     pot: { size: '15x14cm', material: 'Plastic', drainage: 'Yes', soil: 'Standard Potting Mix' },
     acquiredDate: '10 Aug 2023',
@@ -162,6 +169,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: 1,
     lastWateredDaysAgo: 6,
     wateringIntervalDays: 7,
+    createdDaysAgo: 365,
     environment: { light: 'Low', window: 'N-Facing', hoursLight: '2h Light', humidity: 'High', tempC: '21°C' },
     pot: { size: '17x15cm', material: 'Ceramic', drainage: 'Yes', soil: 'Standard Potting Mix' },
     acquiredDate: '22 Nov 2023',
@@ -193,6 +201,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: 2,
     lastWateredDaysAgo: 5,
     wateringIntervalDays: 7,
+    createdDaysAgo: 365,
     environment: { light: 'Medium', window: 'E-Facing', hoursLight: '4h Light', humidity: 'Medium', tempC: '22°C' },
     pot: { size: '20x18cm', material: 'Plastic', drainage: 'Yes', soil: 'Standard Potting Mix' },
     acquiredDate: '30 Mar 2024',
@@ -224,6 +233,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: 2,
     lastWateredDaysAgo: 4,
     wateringIntervalDays: 6,
+    createdDaysAgo: 365,
     environment: { light: 'Medium', window: 'E-Facing', hoursLight: '3h Light', humidity: 'Medium', tempC: '21°C' },
     pot: { size: '16x14cm', material: 'Ceramic', drainage: 'Yes', soil: 'Standard Potting Mix' },
     acquiredDate: '18 Jan 2024',
@@ -255,6 +265,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: 6,
     lastWateredDaysAgo: 12,
     wateringIntervalDays: 18,
+    createdDaysAgo: 365,
     environment: { light: 'Low', window: 'N-Facing', hoursLight: '1h Light', humidity: 'Low', tempC: '21°C' },
     pot: { size: '14x13cm', material: 'Terracotta', drainage: 'Yes', soil: 'Cactus Mix' },
     acquiredDate: '05 Jun 2023',
@@ -286,6 +297,7 @@ export const samplePlants: Plant[] = [
     daysUntilWatering: 4,
     lastWateredDaysAgo: 10,
     wateringIntervalDays: 14,
+    createdDaysAgo: 365,
     environment: { light: 'High', window: 'S-Facing', hoursLight: '6h Light', humidity: 'Low', tempC: '23°C' },
     pot: { size: '12x10cm', material: 'Terracotta', drainage: 'Yes', soil: 'Cactus Mix' },
     acquiredDate: '01 Jul 2024',

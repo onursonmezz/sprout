@@ -39,13 +39,19 @@ export function daysUntilNext(intervalDays: number, lastDoneDaysAgo: number) {
   return intervalDays - lastDoneDaysAgo;
 }
 
-/** Days-ago values for past occurrences of a recurring task, most recent first. */
+/** Days-ago values for past occurrences of a recurring task, most recent
+ * first. The most recent occurrence (lastDoneDaysAgo) is always included —
+ * it's a real, known data point — even if it happens to fall outside
+ * maxDaysBack; the cap only limits how far further back synthetic,
+ * projected-from-the-interval occurrences before it are allowed to reach. */
 export function generateEventDaysAgoList(intervalDays: number, lastDoneDaysAgo: number, maxDaysBack = 84) {
-  const days: number[] = [];
+  const step = Math.max(1, intervalDays);
   let d = Math.max(0, lastDoneDaysAgo);
+  const days = [d];
+  d += step;
   while (d <= maxDaysBack) {
     days.push(d);
-    d += Math.max(1, intervalDays);
+    d += step;
   }
   return days;
 }

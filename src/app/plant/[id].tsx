@@ -599,6 +599,10 @@ function PhotoTimeline({ plant, colors, t }: { plant: Plant; colors: ReturnType<
 
 function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typeof useTheme>; t: Translations }) {
   const wateringInterval = plant.wateringIntervalDays;
+  // Never project synthetic history further back than the plant has actually
+  // existed in Sprout — a plant added 5 days ago shouldn't show fabricated
+  // waterings from a month before it was added.
+  const maxDaysBack = Math.min(84, plant.createdDaysAgo);
 
   return (
     <View style={{ gap: Spacing.four }}>
@@ -608,6 +612,7 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
         recentLabel={t.plantDetail.history.recentWaterings}
         intervalDays={wateringInterval}
         lastDoneDaysAgo={plant.lastWateredDaysAgo}
+        maxDaysBack={maxDaysBack}
         colors={colors}
         t={t}
       />
@@ -618,6 +623,7 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
           recentLabel={t.plantDetail.history.taskRecentLabel[task.type]}
           intervalDays={task.intervalDays}
           lastDoneDaysAgo={task.lastDoneDaysAgo}
+          maxDaysBack={maxDaysBack}
           colors={colors}
           t={t}
         />
@@ -631,6 +637,7 @@ function HistorySection({
   recentLabel,
   intervalDays,
   lastDoneDaysAgo,
+  maxDaysBack,
   colors,
   t,
 }: {
@@ -638,10 +645,11 @@ function HistorySection({
   recentLabel: string;
   intervalDays: number;
   lastDoneDaysAgo: number;
+  maxDaysBack: number;
   colors: ReturnType<typeof useTheme>;
   t: Translations;
 }) {
-  const eventDays = generateEventDaysAgoList(intervalDays, lastDoneDaysAgo, 84);
+  const eventDays = generateEventDaysAgoList(intervalDays, lastDoneDaysAgo, maxDaysBack);
   const eventSet = new Set(eventDays);
   const recent = eventDays.slice(0, 6);
 

@@ -279,6 +279,7 @@ export default function AddPlantScreen() {
       lastWateredDaysAgo,
       care,
       journalNotes: [],
+      createdDaysAgo: 0,
     };
     addPlant(newPlant);
     router.replace(`/plant/${id}`);

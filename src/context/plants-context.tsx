@@ -17,11 +17,15 @@ const SETTINGS_KEY = 'sprout:settings';
 
 type PersistedState = { plants: Plant[]; savedAt: string };
 
-/** Plants persisted before wateringIntervalDays existed don't have it —
- * fall back to what the field replaced (lastWateredDaysAgo + daysUntilWatering). */
+/** Plants persisted before wateringIntervalDays/createdDaysAgo existed don't
+ * have them. wateringIntervalDays falls back to what it replaced; createdDaysAgo
+ * defaults to "long enough ago" (not 0) so an existing plant's history isn't
+ * suddenly truncated — only newly-added plants get an accurate, tight bound. */
 function migratePlant(p: Plant): Plant {
-  if (typeof p.wateringIntervalDays === 'number') return p;
-  return { ...p, wateringIntervalDays: Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering) };
+  const wateringIntervalDays =
+    typeof p.wateringIntervalDays === 'number' ? p.wateringIntervalDays : Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
+  const createdDaysAgo = typeof p.createdDaysAgo === 'number' ? p.createdDaysAgo : 3650;
+  return { ...p, wateringIntervalDays, createdDaysAgo };
 }
 
 type PlantsContextValue = {
@@ -69,6 +73,7 @@ function fastForward(plants: Plant[], daysPassed: number, seasonalFactor = 1): P
     return {
       ...p,
       lastWateredDaysAgo: p.lastWateredDaysAgo + daysPassed,
+      createdDaysAgo: p.createdDaysAgo + daysPassed,
       daysUntilWatering,
       status,
       care: p.care.map((c) => ({ ...c, lastDoneDaysAgo: c.lastDoneDaysAgo + daysPassed })),
