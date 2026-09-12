@@ -8,10 +8,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
-import { hasPendingLightMeterListener, lightLevelIndexForLux, logMeterPosition, resolveLightMeterResult } from '@/utils/light-meter';
+import { LIGHT_KEYS } from '@/data/species-guide';
+import { hasPendingLightMeterListener, lightKeyForLux, logMeterPosition, resolveLightMeterResult } from '@/utils/light-meter';
 
 const BAR_HEIGHT = 280;
 const BAR_WIDTH = 56;
+// LIGHT_KEYS is full_sun→dark; the bar renders top (bright) to bottom (dim),
+// so this is already the right order for both the segments and their labels.
+const ZONE_COLORS_TOP_TO_BOTTOM = (colors: { accent: string; tint: string; tintMuted: string; textSecondary: string }) => [
+  colors.accent,
+  colors.tint,
+  colors.tintMuted,
+  colors.textSecondary,
+];
 
 export default function LightMeterScreen() {
   const colors = useTheme();
@@ -38,8 +47,8 @@ export default function LightMeterScreen() {
     return () => subscription?.remove();
   }, []);
 
-  const zoneIndex = lux != null ? lightLevelIndexForLux(lux) : null;
-  const zoneColors = [colors.textSecondary, colors.tintMuted, colors.tint, colors.accent];
+  const zoneKey = lux != null ? lightKeyForLux(lux) : null;
+  const zoneColors = ZONE_COLORS_TOP_TO_BOTTOM(colors);
   const markerBottom = lux != null ? logMeterPosition(lux) * BAR_HEIGHT : 0;
 
   return (
@@ -73,9 +82,9 @@ export default function LightMeterScreen() {
                 )}
               </View>
               <View style={[styles.zoneLabels, { height: BAR_HEIGHT }]}>
-                {[...t.lightMeter.zoneNames].reverse().map((name) => (
-                  <Text key={name} style={[styles.zoneLabel, { color: colors.text }]}>
-                    {name}
+                {LIGHT_KEYS.map((key) => (
+                  <Text key={key} style={[styles.zoneLabel, { color: colors.text }]}>
+                    {t.addPlant.lightLevels[key].label}
                   </Text>
                 ))}
               </View>
@@ -85,14 +94,14 @@ export default function LightMeterScreen() {
               {lux != null ? Math.round(lux) : '—'}
             </Text>
             <Text style={[styles.luxUnit, { color: colors.textSecondary }]}>{t.lightMeter.lux}</Text>
-            {zoneIndex != null && (
-              <Text style={[styles.zoneCurrent, { color: colors.tint }]}>{t.lightMeter.zoneNames[zoneIndex]}</Text>
+            {zoneKey != null && (
+              <Text style={[styles.zoneCurrent, { color: colors.tint }]}>{t.addPlant.lightLevels[zoneKey].label}</Text>
             )}
 
-            {canUseReading && zoneIndex != null && (
+            {canUseReading && zoneKey != null && (
               <Pressable
                 onPress={() => {
-                  resolveLightMeterResult(zoneIndex);
+                  resolveLightMeterResult(zoneKey);
                   router.back();
                 }}
                 style={[styles.useButton, { backgroundColor: colors.tint }]}>

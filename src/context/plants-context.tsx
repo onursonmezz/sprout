@@ -2,14 +2,15 @@ import { createContext, ReactNode, useContext, useEffect, useRef, useState } fro
 import { AppState } from 'react-native';
 
 import { CareTask, JournalEntry, Plant, WateringStatus } from '@/data/plants';
+import { HeatingSensitivity, LightKey, PotMaterialKey } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
+import { recomputeWateringInterval } from '@/utils/watering-algorithm';
 
-const STATE_KEY = 'sprout:plants-state';
-// Pre-migration keys: plants and the fastForward anchor used to be saved as two
-// separate, unawaited AsyncStorage writes, which could desync if the app was
-// killed between them. Read once for existing installs, then never written again.
-const LEGACY_PLANTS_KEY = 'sprout:plants';
-const LEGACY_SAVED_AT_KEY = 'sprout:plants-saved-at';
+// New schema (materialKey/lightKey/baseIntervalDays/etc. replacing the old
+// species-guide's plain display strings) — a fresh key means every existing
+// install starts over with zero plants rather than trying to migrate
+// incompatible data, per the switch to the new plant database.
+const STATE_KEY = 'sprout:plants-state-v2';
 // Read-only peek at settings-context's own storage key for the seasonal
 // watering factor. Plants-context sits outside SettingsProvider in the tree
 // (see _layout.tsx) so it can't use useSettings(); reading the same
@@ -18,15 +19,34 @@ const SETTINGS_KEY = 'sprout:settings';
 
 type PersistedState = { plants: Plant[]; savedAt: string };
 
-/** Plants persisted before wateringIntervalDays/createdDaysAgo existed don't
- * have them. wateringIntervalDays falls back to what it replaced; createdDaysAgo
- * defaults to "long enough ago" (not 0) so an existing plant's history isn't
- * suddenly truncated — only newly-added plants get an accurate, tight bound. */
+/**
+ * Defensive against plants saved before this schema existed — most notably a
+ * cloud backup made before the pot/light fields switched from translated
+ * display strings to canonical keys. Falls back to generic assumptions
+ * rather than crashing recomputeWateringInterval on a missing field.
+ */
 function migratePlant(p: Plant): Plant {
+  const legacy = p as unknown as {
+    wateringIntervalDays?: number;
+    createdDaysAgo?: number;
+    baseIntervalDays?: number;
+    heatingSensitivity?: HeatingSensitivity;
+    indoor?: boolean;
+    environment?: { lightKey?: LightKey };
+    pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null };
+  };
   const wateringIntervalDays =
-    typeof p.wateringIntervalDays === 'number' ? p.wateringIntervalDays : Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
-  const createdDaysAgo = typeof p.createdDaysAgo === 'number' ? p.createdDaysAgo : 3650;
-  return { ...p, wateringIntervalDays, createdDaysAgo };
+    typeof legacy.wateringIntervalDays === 'number' ? legacy.wateringIntervalDays : Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
+  return {
+    ...p,
+    wateringIntervalDays,
+    createdDaysAgo: typeof legacy.createdDaysAgo === 'number' ? legacy.createdDaysAgo : 3650,
+    baseIntervalDays: typeof legacy.baseIntervalDays === 'number' ? legacy.baseIntervalDays : wateringIntervalDays,
+    heatingSensitivity: legacy.heatingSensitivity ?? 'med',
+    indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
+    environment: { ...p.environment, lightKey: legacy.environment?.lightKey ?? 'part_sun' },
+    pot: { ...p.pot, materialKey: legacy.pot?.materialKey ?? 'plastic', diameterCm: legacy.pot?.diameterCm ?? null },
+  };
 }
 
 type PlantsContextValue = {
@@ -57,24 +77,25 @@ function daysBetween(a: Date, b: Date) {
 }
 
 /**
- * Plant "days ago" / "days until" fields are relative snapshots, so a plant
- * saved as "in 7 days" would still read "in 7 days" a week later unless we
- * roll every relative field forward by however long the app was closed.
- *
- * `seasonalFactor` scales only the watering countdown (not lastWateredDaysAgo,
- * care tasks, or journal history, which reflect real elapsed time) — warmer
- * weather makes it tick down faster, colder weather slower. 1 = no effect.
+ * Plant "days ago" fields are relative snapshots, so a plant saved as
+ * "watered 2 days ago" needs every such field rolled forward by however long
+ * the app was closed. wateringIntervalDays is recomputed fresh each time
+ * (rather than decremented) since it depends on today's calendar month —
+ * this is what makes the watering algorithm's season/heating factors live
+ * rather than frozen at whatever month the plant was added in.
  */
-function fastForward(plants: Plant[], daysPassed: number, seasonalFactor = 1): Plant[] {
+function fastForward(plants: Plant[], daysPassed: number, applySeasonalFactors: boolean, today: Date): Plant[] {
   if (daysPassed <= 0) return plants;
-  const wateringDaysPassed = daysPassed * seasonalFactor;
   return plants.map((p) => {
-    const daysUntilWatering = Math.round(p.daysUntilWatering - wateringDaysPassed);
+    const lastWateredDaysAgo = p.lastWateredDaysAgo + daysPassed;
+    const wateringIntervalDays = recomputeWateringInterval(p, today, applySeasonalFactors);
+    const daysUntilWatering = wateringIntervalDays - lastWateredDaysAgo;
     const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
     return {
       ...p,
-      lastWateredDaysAgo: p.lastWateredDaysAgo + daysPassed,
+      lastWateredDaysAgo,
       createdDaysAgo: p.createdDaysAgo + daysPassed,
+      wateringIntervalDays,
       daysUntilWatering,
       status,
       care: p.care.map((c) => ({ ...c, lastDoneDaysAgo: c.lastDoneDaysAgo + daysPassed })),
@@ -83,9 +104,9 @@ function fastForward(plants: Plant[], daysPassed: number, seasonalFactor = 1): P
   });
 }
 
-async function currentSeasonalFactor(): Promise<number> {
-  const settings = await loadJSON<{ seasonalAdjustment?: boolean; seasonalFactor?: number } | null>(SETTINGS_KEY, null);
-  return settings?.seasonalAdjustment ? settings.seasonalFactor ?? 1 : 1;
+async function isSeasonalAdjustmentEnabled(): Promise<boolean> {
+  const settings = await loadJSON<{ seasonalAdjustment?: boolean } | null>(SETTINGS_KEY, null);
+  return settings?.seasonalAdjustment ?? true;
 }
 
 export function PlantsProvider({ children }: { children: ReactNode }) {
@@ -98,18 +119,11 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      let state = await loadJSON<PersistedState | null>(STATE_KEY, null);
-      if (!state) {
-        const [legacyPlants, legacySavedAt] = await Promise.all([
-          loadJSON<Plant[]>(LEGACY_PLANTS_KEY, []),
-          loadJSON<string | null>(LEGACY_SAVED_AT_KEY, null),
-        ]);
-        state = { plants: legacyPlants, savedAt: legacySavedAt ?? new Date().toISOString() };
-      }
-      const migrated = state.plants.map(migratePlant);
-      const daysPassed = Math.max(0, daysBetween(new Date(state.savedAt), new Date()));
-      const seasonalFactor = await currentSeasonalFactor();
-      setPlants(fastForward(migrated, daysPassed, seasonalFactor));
+      const state = await loadJSON<PersistedState | null>(STATE_KEY, null);
+      const migrated = (state?.plants ?? []).map(migratePlant);
+      const daysPassed = state ? Math.max(0, daysBetween(new Date(state.savedAt), new Date())) : 0;
+      const applySeasonalFactors = await isSeasonalAdjustmentEnabled();
+      setPlants(fastForward(migrated, daysPassed, applySeasonalFactors, new Date()));
       setLoaded(true);
     })();
   }, []);
@@ -132,8 +146,8 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       if (!savedAtRef.current) return;
       const daysPassed = Math.max(0, daysBetween(new Date(savedAtRef.current), new Date()));
       if (daysPassed <= 0) return;
-      const seasonalFactor = await currentSeasonalFactor();
-      setPlants((prev) => fastForward(prev, daysPassed, seasonalFactor));
+      const applySeasonalFactors = await isSeasonalAdjustmentEnabled();
+      setPlants((prev) => fastForward(prev, daysPassed, applySeasonalFactors, new Date()));
     };
     const subscription = AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active') checkRollover();
@@ -158,7 +172,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const restorePlants = (restored: Plant[], savedAt: string) => {
     const migrated = restored.map(migratePlant);
     const daysPassed = Math.max(0, daysBetween(new Date(savedAt), new Date()));
-    currentSeasonalFactor().then((seasonalFactor) => setPlants(fastForward(migrated, daysPassed, seasonalFactor)));
+    isSeasonalAdjustmentEnabled().then((applySeasonalFactors) => setPlants(fastForward(migrated, daysPassed, applySeasonalFactors, new Date())));
   };
 
   const addCareTask = (plantId: string, task: CareTask) =>
@@ -178,13 +192,19 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       prev.map((p) => (p.id === plantId ? { ...p, journalNotes: [entry, ...p.journalNotes] } : p))
     );
 
-  const waterPlant = (plantId: string) =>
-    setPlants((prev) =>
-      prev.map((p) => {
-        if (p.id !== plantId) return p;
-        return { ...p, lastWateredDaysAgo: 0, daysUntilWatering: p.wateringIntervalDays, status: 'upcoming' };
-      })
-    );
+  const waterPlant = (plantId: string) => {
+    (async () => {
+      const applySeasonalFactors = await isSeasonalAdjustmentEnabled();
+      const today = new Date();
+      setPlants((prev) =>
+        prev.map((p) => {
+          if (p.id !== plantId) return p;
+          const wateringIntervalDays = recomputeWateringInterval(p, today, applySeasonalFactors);
+          return { ...p, lastWateredDaysAgo: 0, wateringIntervalDays, daysUntilWatering: wateringIntervalDays, status: 'upcoming' };
+        })
+      );
+    })();
+  };
 
   const snoozePlant = (plantId: string) =>
     setPlants((prev) =>

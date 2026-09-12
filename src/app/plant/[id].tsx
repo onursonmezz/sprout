@@ -45,7 +45,7 @@ export default function PlantDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colors = useTheme();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, snoozePlant } = usePlants();
   const plant = getPlant(String(id));
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
@@ -194,22 +194,46 @@ export default function PlantDetailScreen() {
                 <View style={[styles.speciesCard, { backgroundColor: colors.tintMuted }]}>
                   <Text style={[styles.speciesCardTitle, { color: colors.text }]}>{t.plantDetail.speciesGuideTitle}</Text>
                   <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
-                    {t.plantDetail.speciesGuideCare(speciesInfo.waterEveryDays)}
+                    {t.plantDetail.speciesGuideCare(speciesInfo.water.baseIntervalDays)}
                   </Text>
                   <Text
                     style={[
                       styles.speciesCardText,
-                      { color: speciesInfo.toxicToPets ? colors.accent : colors.textSecondary, fontWeight: '700' },
+                      {
+                        color: speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs ? colors.accent : colors.textSecondary,
+                        fontWeight: '700',
+                      },
                     ]}>
-                    {speciesInfo.toxicToPets ? t.plantDetail.toxicToPets : t.plantDetail.nonToxicToPets}
+                    {speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs
+                      ? t.plantDetail.toxicToPets
+                      : t.plantDetail.nonToxicToPets}
                   </Text>
+                  {(speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs) && (
+                    <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
+                      {t.plantDetail.toxicitySeverity[speciesInfo.toxicity.severity]}
+                    </Text>
+                  )}
+                  <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
+                    {t.plantDetail.humidityLevel[speciesInfo.humidity.level]}
+                  </Text>
+                  <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
+                    {t.plantDetail.speciesIdealTemp(speciesInfo.temperature.idealMinC, speciesInfo.temperature.idealMaxC)}
+                  </Text>
+                  <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
+                    {t.plantDetail.speciesRecommendedSoil(t.plantDetail.soilRecommendation[speciesInfo.soil.types[0]])}
+                  </Text>
+                  {lang === 'tr' && (
+                    <Text style={[styles.speciesCardText, { color: colors.textSecondary, fontStyle: 'italic' }]}>
+                      {speciesInfo.turkeyNote}
+                    </Text>
+                  )}
                 </View>
               )}
 
               <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.plantDetail.environment}</Text>
               <View style={styles.chipGrid}>
                 <InfoChip label={t.plantDetail.room} value={plant.room} colors={colors} />
-                <InfoChip label={t.plantDetail.light} value={plant.environment.light} colors={colors} />
+                <InfoChip label={t.plantDetail.light} value={t.addPlant.lightLevels[plant.environment.lightKey].label} colors={colors} />
                 <InfoChip label={t.plantDetail.window} value={plant.environment.window} colors={colors} />
                 <InfoChip label={t.plantDetail.hours} value={plant.environment.hoursLight} colors={colors} />
                 <InfoChip label={t.plantDetail.humidity} value={plant.environment.humidity} colors={colors} />
@@ -221,7 +245,7 @@ export default function PlantDetailScreen() {
               </Text>
               <View style={styles.chipGrid}>
                 <InfoChip label={t.plantDetail.potSize} value={plant.pot.size} colors={colors} />
-                <InfoChip label={t.plantDetail.material} value={plant.pot.material} colors={colors} />
+                <InfoChip label={t.plantDetail.material} value={t.addPlant.potMaterials[plant.pot.materialKey]} colors={colors} />
                 <InfoChip label={t.plantDetail.drainage} value={plant.pot.drainage} colors={colors} />
                 <InfoChip label={t.plantDetail.soil} value={plant.pot.soil} colors={colors} wide />
                 <InfoChip label={t.plantDetail.acquired} value={plant.acquiredDate} colors={colors} wide />

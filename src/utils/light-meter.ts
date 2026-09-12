@@ -1,14 +1,19 @@
-/** Rough lux boundaries between the app's four light-level categories
- * (Low, Medium, Bright indirect, Direct sun — same order as
- * addPlant.lightLevels). General horticultural ballpark figures, not
- * precise thresholds — a spot right at a boundary can go either way. */
-const ZONE_UPPER_BOUNDS = [200, 1000, 10000];
+import { lookups, LightKey } from '@/data/species-guide';
 
-export function lightLevelIndexForLux(lux: number): number {
-  for (let i = 0; i < ZONE_UPPER_BOUNDS.length; i++) {
-    if (lux < ZONE_UPPER_BOUNDS[i]) return i;
+/** Highest-min-first order, so classification (below) checks full_sun before
+ * falling back toward dark. */
+const ZONE_ORDER: LightKey[] = ['full_sun', 'part_sun', 'shade', 'dark'];
+
+/** Classifies a generic (no specific plant) lux reading into one of the
+ * database's four light categories. lookups.lightLux ranges overlap by
+ * design (a category's max reaches into the next one up), so this picks the
+ * highest category whose min the reading meets rather than trying to find a
+ * single non-overlapping bucket. */
+export function lightKeyForLux(lux: number): LightKey {
+  for (const key of ZONE_ORDER) {
+    if (lux >= lookups.lightLux[key].min) return key;
   }
-  return ZONE_UPPER_BOUNDS.length;
+  return 'dark';
 }
 
 const METER_MIN_LUX = 10;
@@ -32,9 +37,9 @@ export function logMeterPosition(lux: number) {
  * from anywhere else (no listener registered) just leaves it as a standalone
  * reference tool — "Use this reading" only renders when a listener exists.
  */
-let pendingListener: ((lightLevelIndex: number) => void) | null = null;
+let pendingListener: ((lightKey: LightKey) => void) | null = null;
 
-export function awaitLightMeterResult(listener: (lightLevelIndex: number) => void) {
+export function awaitLightMeterResult(listener: (lightKey: LightKey) => void) {
   pendingListener = listener;
 }
 
@@ -42,7 +47,7 @@ export function hasPendingLightMeterListener() {
   return pendingListener !== null;
 }
 
-export function resolveLightMeterResult(lightLevelIndex: number) {
-  pendingListener?.(lightLevelIndex);
+export function resolveLightMeterResult(lightKey: LightKey) {
+  pendingListener?.(lightKey);
   pendingListener = null;
 }

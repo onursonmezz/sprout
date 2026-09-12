@@ -9,13 +9,23 @@ import { translations, Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
+import { useSettings } from '@/context/settings-context';
 import { CareTask, Plant, WateringStatus } from '@/data/plants';
-import { findSpeciesMatches, SpeciesGuideEntry } from '@/data/species-guide';
-import { suggestWaterEveryDays } from '@/utils/care';
+import {
+  findSpeciesMatches,
+  HeatingSensitivity,
+  LightKey,
+  LIGHT_KEYS,
+  POT_MATERIAL_KEYS,
+  PotMaterialKey,
+  SpeciesRecord,
+  speciesDisplayName,
+} from '@/data/species-guide';
+import { recomputeWateringInterval } from '@/utils/watering-algorithm';
 import { awaitLightMeterResult } from '@/utils/light-meter';
 
 const DEFAULT_REPOT_INTERVAL_DAYS = 365;
-const GENERIC_BASE_WATER_DAYS = 7;
+const GENERIC_BASE_INTERVAL_DAYS = 7;
 
 const WINDOW_DIRECTIONS = ['N', 'E', 'S', 'W'] as const;
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
@@ -26,18 +36,9 @@ function todayFormatted() {
   return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
 }
 
-/** A plant stores the *displayed* label for these fields, so a plant saved
- * in one language must still resolve to the right option after the app
- * language changes — search every language's label set, not just the
- * current one. */
-function findLabelIndex(value: string, pick: (t: Translations) => string[]) {
-  for (const lang of ALL_LANGUAGES) {
-    const idx = pick(lang).indexOf(value);
-    if (idx >= 0) return idx;
-  }
-  return -1;
-}
-
+/** Drainage is still stored as a translated display label (not a canonical
+ * key like light/pot-material), so a plant saved in one language must still
+ * resolve correctly after the app language changes. */
 function matchesAnyLanguage(value: string, pick: (t: Translations) => string) {
   return ALL_LANGUAGES.some((lang) => pick(lang) === value);
 }
@@ -68,12 +69,12 @@ type FormState = {
   dateAcquired: string;
   room: string;
   windowDirection: (typeof WINDOW_DIRECTIONS)[number];
-  lightLevelIndex: number;
+  lightKey: LightKey;
   hoursLight: string;
   tempC: string;
   potDiameter: string;
   potDepth: string;
-  potMaterialIndex: number;
+  potMaterialKey: PotMaterialKey;
   drainage: 'yes' | 'no';
   soilMix: string;
   lastRepotted: string;
@@ -90,12 +91,12 @@ const initialForm: FormState = {
   dateAcquired: todayFormatted(),
   room: '',
   windowDirection: 'E',
-  lightLevelIndex: 1,
+  lightKey: 'part_sun',
   hoursLight: '',
   tempC: '',
   potDiameter: '',
   potDepth: '',
-  potMaterialIndex: 2,
+  potMaterialKey: 'plastic',
   drainage: 'yes',
   soilMix: '',
   lastRepotted: '',
@@ -105,17 +106,12 @@ const initialForm: FormState = {
 };
 
 function plantToForm(plant: Plant): FormState {
-  const lightIdx = findLabelIndex(
-    plant.environment.light,
-    (tt) => tt.addPlant.lightLevels.map((l) => l.label)
-  );
-  const materialIdx = findLabelIndex(plant.pot.material, (tt) => tt.addPlant.potMaterials);
   const windowRaw = plant.environment.window.split('-')[0];
   const windowDirection = (WINDOW_DIRECTIONS as readonly string[]).includes(windowRaw)
     ? (windowRaw as (typeof WINDOW_DIRECTIONS)[number])
     : 'E';
   const hasPotSize = plant.pot.size !== '—';
-  const [potDiameter, potDepthRaw] = hasPotSize ? plant.pot.size.split('x') : ['', ''];
+  const [, potDepthRaw] = hasPotSize ? plant.pot.size.split('x') : ['', ''];
 
   return {
     photoUri: plant.photoUri,
@@ -125,12 +121,12 @@ function plantToForm(plant: Plant): FormState {
     dateAcquired: plant.acquiredDate,
     room: plant.room === '—' ? '' : plant.room,
     windowDirection,
-    lightLevelIndex: lightIdx >= 0 ? lightIdx : 1,
+    lightKey: plant.environment.lightKey,
     hoursLight: plant.environment.hoursLight === '—' ? '' : plant.environment.hoursLight.replace('h Light', ''),
     tempC: plant.environment.tempC === '—' ? '' : plant.environment.tempC.replace('°C', ''),
-    potDiameter,
+    potDiameter: plant.pot.diameterCm != null ? String(plant.pot.diameterCm) : '',
     potDepth: hasPotSize ? potDepthRaw.replace('cm', '') : '',
-    potMaterialIndex: materialIdx >= 0 ? materialIdx : 2,
+    potMaterialKey: plant.pot.materialKey,
     drainage: matchesAnyLanguage(plant.pot.drainage, (tt) => tt.addPlant.no) ? 'no' : 'yes',
     soilMix: plant.pot.soil,
     lastRepotted: '',
@@ -143,7 +139,8 @@ function plantToForm(plant: Plant): FormState {
 export default function AddPlantScreen() {
   const colors = useTheme();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { seasonalAdjustment } = useSettings();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { plants, addPlant, updatePlant, deletePlant, getPlant } = usePlants();
   const editingPlant = id ? getPlant(String(id)) : undefined;
@@ -154,7 +151,17 @@ export default function AddPlantScreen() {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
   const [speciesDropdownDismissed, setSpeciesDropdownDismissed] = useState(false);
-  const [speciesBaseWaterDays, setSpeciesBaseWaterDays] = useState(GENERIC_BASE_WATER_DAYS);
+  // Species-derived fields the watering algorithm needs but that aren't part
+  // of the visible form — seeded from the matched species on pick, or from
+  // the plant being edited so its live recalculation stays consistent.
+  const [speciesBaseInterval, setSpeciesBaseInterval] = useState(() => editingPlant?.baseIntervalDays ?? GENERIC_BASE_INTERVAL_DAYS);
+  const [speciesHeatingSensitivity, setSpeciesHeatingSensitivity] = useState<HeatingSensitivity>(
+    () => editingPlant?.heatingSensitivity ?? 'med'
+  );
+  const [speciesIndoor, setSpeciesIndoor] = useState(() => editingPlant?.indoor ?? true);
+  const [speciesRepotIntervalDays, setSpeciesRepotIntervalDays] = useState(
+    () => editingPlant?.care.find((c) => c.type === 'repot')?.intervalDays ?? DEFAULT_REPOT_INTERVAL_DAYS
+  );
   // Editing an existing plant never auto-touches its already-established schedule.
   const [waterIntervalTouched, setWaterIntervalTouched] = useState(isEditing);
 
@@ -172,28 +179,53 @@ export default function AddPlantScreen() {
   const speciesSuggestions =
     !isEditing && !speciesPickApplied && !speciesDropdownDismissed ? findSpeciesMatches(form.species) : [];
 
-  /** Recomputes the suggested watering interval from a base cadence plus the
-   * current (or about-to-change) pot/light/drainage answers — unless the user
+  /** Recomputes the suggested watering interval from the current species
+   * base + pot/light answers and today's calendar month — unless the user
    * has already manually adjusted the stepper themselves, whose choice wins. */
-  const applyWaterSuggestion = (base: number, overrides: Partial<FormState> = {}) => {
-    if (waterIntervalTouched) return;
+  const computeSuggestion = (overrides: Partial<FormState> = {}) => {
     const next = { ...form, ...overrides };
-    set('waterEveryDays', suggestWaterEveryDays(base, next));
+    return recomputeWateringInterval(
+      {
+        baseIntervalDays: speciesBaseInterval,
+        heatingSensitivity: speciesHeatingSensitivity,
+        pot: { materialKey: next.potMaterialKey, diameterCm: next.potDiameter ? Number(next.potDiameter) : null },
+        environment: { lightKey: next.lightKey },
+        indoor: speciesIndoor,
+      },
+      new Date(),
+      seasonalAdjustment
+    );
   };
 
-  const applySpeciesGuide = (entry: SpeciesGuideEntry) => {
+  const applyWaterSuggestion = (overrides: Partial<FormState> = {}) => {
+    if (waterIntervalTouched) return;
+    set('waterEveryDays', computeSuggestion(overrides));
+  };
+
+  const applySpeciesGuide = (entry: SpeciesRecord) => {
     setSpeciesPickApplied(true);
-    setSpeciesBaseWaterDays(entry.waterEveryDays);
-    setForm((prev) => ({
-      ...prev,
-      species: entry.name,
-      latinName: entry.latinName,
-      lightLevelIndex: entry.lightLevelIndex,
-      waterEveryDays: waterIntervalTouched
-        ? prev.waterEveryDays
-        : suggestWaterEveryDays(entry.waterEveryDays, { ...prev, lightLevelIndex: entry.lightLevelIndex }),
-      waterAmountMl: String(entry.waterAmountMl),
-    }));
+    setSpeciesBaseInterval(entry.water.baseIntervalDays);
+    setSpeciesHeatingSensitivity(entry.heatingSensitivity);
+    setSpeciesIndoor(entry.category !== 'outdoor');
+    setSpeciesRepotIntervalDays(entry.repotEveryMonths * 30);
+    setForm((prev) => {
+      const next: FormState = { ...prev, species: speciesDisplayName(entry, lang), latinName: entry.scientificName, lightKey: entry.light.preferred };
+      if (waterIntervalTouched) return next;
+      return {
+        ...next,
+        waterEveryDays: recomputeWateringInterval(
+          {
+            baseIntervalDays: entry.water.baseIntervalDays,
+            heatingSensitivity: entry.heatingSensitivity,
+            pot: { materialKey: next.potMaterialKey, diameterCm: next.potDiameter ? Number(next.potDiameter) : null },
+            environment: { lightKey: next.lightKey },
+            indoor: entry.category !== 'outdoor',
+          },
+          new Date(),
+          seasonalAdjustment
+        ),
+      };
+    });
   };
 
   const canContinue = step === 1 ? form.nickname.trim().length > 0 : true;
@@ -214,8 +246,6 @@ export default function AddPlantScreen() {
       setStep((s) => s + 1);
       return;
     }
-    const lightLabel = t.addPlant.lightLevels[form.lightLevelIndex].label;
-    const materialLabel = t.addPlant.potMaterials[form.potMaterialIndex];
     const drainageLabel = form.drainage === 'yes' ? t.addPlant.yes : t.addPlant.no;
 
     const sharedFields = {
@@ -226,7 +256,7 @@ export default function AddPlantScreen() {
       room: form.room.trim() || '—',
       wateringAmountMl: Number(form.waterAmountMl) || 200,
       environment: {
-        light: lightLabel,
+        lightKey: form.lightKey,
         window: `${form.windowDirection}-Facing`,
         hoursLight: form.hoursLight ? `${form.hoursLight}h Light` : '—',
         humidity: editingPlant?.environment.humidity ?? 'Medium',
@@ -234,7 +264,8 @@ export default function AddPlantScreen() {
       },
       pot: {
         size: form.potDiameter && form.potDepth ? `${form.potDiameter}x${form.potDepth}cm` : '—',
-        material: materialLabel,
+        materialKey: form.potMaterialKey,
+        diameterCm: form.potDiameter ? Number(form.potDiameter) : null,
         drainage: drainageLabel,
         soil: form.soilMix.trim() || t.addPlant.soilMixPlaceholder,
       },
@@ -250,12 +281,15 @@ export default function AddPlantScreen() {
       if (repotDaysAgo !== null) {
         const existing = care.find((c) => c.type === 'repot');
         care = existing
-          ? care.map((c) => (c.type === 'repot' ? { ...c, lastDoneDaysAgo: repotDaysAgo } : c))
-          : [...care, { type: 'repot', intervalDays: DEFAULT_REPOT_INTERVAL_DAYS, lastDoneDaysAgo: repotDaysAgo }];
+          ? care.map((c) => (c.type === 'repot' ? { ...c, lastDoneDaysAgo: repotDaysAgo, intervalDays: speciesRepotIntervalDays } : c))
+          : [...care, { type: 'repot', intervalDays: speciesRepotIntervalDays, lastDoneDaysAgo: repotDaysAgo }];
       }
       updatePlant(editingPlant.id, {
         ...sharedFields,
         wateringIntervalDays: form.waterEveryDays,
+        baseIntervalDays: speciesBaseInterval,
+        heatingSensitivity: speciesHeatingSensitivity,
+        indoor: speciesIndoor,
         daysUntilWatering,
         status,
         care,
@@ -268,7 +302,7 @@ export default function AddPlantScreen() {
     const lastWateredDaysAgo = daysAgoFrom(form.lastWatered);
     const daysUntilWatering = form.waterEveryDays - lastWateredDaysAgo;
     const care: CareTask[] =
-      repotDaysAgo !== null ? [{ type: 'repot', intervalDays: DEFAULT_REPOT_INTERVAL_DAYS, lastDoneDaysAgo: repotDaysAgo }] : [];
+      repotDaysAgo !== null ? [{ type: 'repot', intervalDays: speciesRepotIntervalDays, lastDoneDaysAgo: repotDaysAgo }] : [];
     const newPlant: Plant = {
       id,
       ...sharedFields,
@@ -276,6 +310,9 @@ export default function AddPlantScreen() {
       avatarColor: AVATAR_COLORS[plants.length % AVATAR_COLORS.length],
       status: daysUntilWatering <= 0 ? (daysUntilWatering < 0 ? 'overdue' : 'dueToday') : 'upcoming',
       wateringIntervalDays: form.waterEveryDays,
+      baseIntervalDays: speciesBaseInterval,
+      heatingSensitivity: speciesHeatingSensitivity,
+      indoor: speciesIndoor,
       daysUntilWatering,
       lastWateredDaysAgo,
       care,
@@ -389,24 +426,27 @@ export default function AddPlantScreen() {
             </Field>
             <Field label={t.addPlant.lightLevel} colors={colors}>
               <View style={{ gap: Spacing.one }}>
-                {t.addPlant.lightLevels.map((level, i) => (
-                  <OptionRow
-                    key={level.label}
-                    title={level.label}
-                    subtitle={level.hint}
-                    selected={form.lightLevelIndex === i}
-                    onPress={() => {
-                      set('lightLevelIndex', i);
-                      applyWaterSuggestion(speciesBaseWaterDays, { lightLevelIndex: i });
-                    }}
-                    colors={colors}
-                  />
-                ))}
+                {LIGHT_KEYS.map((key) => {
+                  const level = t.addPlant.lightLevels[key];
+                  return (
+                    <OptionRow
+                      key={key}
+                      title={level.label}
+                      subtitle={level.hint}
+                      selected={form.lightKey === key}
+                      onPress={() => {
+                        set('lightKey', key);
+                        applyWaterSuggestion({ lightKey: key });
+                      }}
+                      colors={colors}
+                    />
+                  );
+                })}
                 <Pressable
                   onPress={() => {
-                    awaitLightMeterResult((i) => {
-                      set('lightLevelIndex', i);
-                      applyWaterSuggestion(speciesBaseWaterDays, { lightLevelIndex: i });
+                    awaitLightMeterResult((key: LightKey) => {
+                      set('lightKey', key);
+                      applyWaterSuggestion({ lightKey: key });
                     });
                     router.push('/light-meter');
                   }}
@@ -451,7 +491,10 @@ export default function AddPlantScreen() {
                 <Field label={t.addPlant.potDiameter} colors={colors}>
                   <TextInput
                     value={form.potDiameter}
-                    onChangeText={(v) => set('potDiameter', v)}
+                    onChangeText={(v) => {
+                      set('potDiameter', v);
+                      applyWaterSuggestion({ potDiameter: v });
+                    }}
                     keyboardType="numeric"
                     placeholder="14"
                     placeholderTextColor={colors.textSecondary}
@@ -474,14 +517,14 @@ export default function AddPlantScreen() {
             </View>
             <Field label={t.addPlant.potMaterial} colors={colors}>
               <View style={styles.grid2}>
-                {t.addPlant.potMaterials.map((m, i) => (
+                {POT_MATERIAL_KEYS.map((key) => (
                   <Pill
-                    key={m}
-                    label={m}
-                    selected={form.potMaterialIndex === i}
+                    key={key}
+                    label={t.addPlant.potMaterials[key]}
+                    selected={form.potMaterialKey === key}
                     onPress={() => {
-                      set('potMaterialIndex', i);
-                      applyWaterSuggestion(speciesBaseWaterDays, { potMaterialIndex: i });
+                      set('potMaterialKey', key);
+                      applyWaterSuggestion({ potMaterialKey: key });
                     }}
                     colors={colors}
                     wide
@@ -494,20 +537,14 @@ export default function AddPlantScreen() {
                 <Pill
                   label={t.addPlant.yes}
                   selected={form.drainage === 'yes'}
-                  onPress={() => {
-                    set('drainage', 'yes');
-                    applyWaterSuggestion(speciesBaseWaterDays, { drainage: 'yes' });
-                  }}
+                  onPress={() => set('drainage', 'yes')}
                   colors={colors}
                   wide
                 />
                 <Pill
                   label={t.addPlant.no}
                   selected={form.drainage === 'no'}
-                  onPress={() => {
-                    set('drainage', 'no');
-                    applyWaterSuggestion(speciesBaseWaterDays, { drainage: 'no' });
-                  }}
+                  onPress={() => set('drainage', 'no')}
                   colors={colors}
                   wide
                 />
@@ -594,12 +631,16 @@ export default function AddPlantScreen() {
                 <SummaryItem label={t.addPlant.summaryName} value={form.nickname || '—'} colors={colors} />
                 <SummaryItem label={t.addPlant.summarySpecies} value={form.species || '—'} colors={colors} />
                 <SummaryItem label={t.addPlant.summaryRoom} value={form.room || '—'} colors={colors} />
-                <SummaryItem label={t.addPlant.summaryLight} value={t.addPlant.lightLevels[form.lightLevelIndex].label} colors={colors} />
+                <SummaryItem label={t.addPlant.summaryLight} value={t.addPlant.lightLevels[form.lightKey].label} colors={colors} />
                 <SummaryItem label={t.addPlant.summaryWaterEvery} value={t.addPlant.summaryDays(form.waterEveryDays)} colors={colors} />
                 <SummaryItem label={t.addPlant.summaryAmount} value={`${form.waterAmountMl || '—'}ml`} colors={colors} />
                 <SummaryItem
                   label={t.addPlant.summaryPot}
-                  value={form.potDiameter ? `${form.potDiameter}cm ${t.addPlant.potMaterials[form.potMaterialIndex].toLowerCase()}` : t.addPlant.potMaterials[form.potMaterialIndex]}
+                  value={
+                    form.potDiameter
+                      ? `${form.potDiameter}cm ${t.addPlant.potMaterials[form.potMaterialKey].toLowerCase()}`
+                      : t.addPlant.potMaterials[form.potMaterialKey]
+                  }
                   colors={colors}
                 />
                 <SummaryItem label={t.addPlant.summarySoil} value={form.soilMix || t.addPlant.soilMixPlaceholder} colors={colors} />
@@ -656,13 +697,10 @@ export default function AddPlantScreen() {
           <View style={[styles.speciesModalCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <ScrollView keyboardShouldPersistTaps="handled">
               {speciesSuggestions.map((entry) => (
-                <Pressable
-                  key={entry.name}
-                  onPress={() => applySpeciesGuide(entry)}
-                  style={styles.speciesSuggestionRow}>
-                  <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{entry.name}</Text>
+                <Pressable key={entry.id} onPress={() => applySpeciesGuide(entry)} style={styles.speciesSuggestionRow}>
+                  <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{speciesDisplayName(entry, lang)}</Text>
                   <Text style={[styles.speciesSuggestionHint, { color: colors.textSecondary }]}>
-                    {t.addPlant.speciesGuideHint(entry.waterEveryDays)}
+                    {t.addPlant.speciesGuideHint(entry.water.baseIntervalDays)}
                   </Text>
                 </Pressable>
               ))}
