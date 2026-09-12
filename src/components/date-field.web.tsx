@@ -8,13 +8,15 @@ type Props = {
   displayText: string;
   textColor: string;
   backgroundColor: string;
+  /** Disallows picking a date after this one — e.g. "last watered" can't be in the future. */
+  maximumDate?: Date;
 };
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
 }
 
-export function DateField({ value, mode, onChange, textColor, backgroundColor }: Props) {
+export function DateField({ value, mode, onChange, textColor, backgroundColor, maximumDate }: Props) {
   const inputValue = !value
     ? ''
     : mode === 'date'
@@ -42,6 +44,7 @@ export function DateField({ value, mode, onChange, textColor, backgroundColor }:
         type: mode,
         value: inputValue,
         onChange: handleChange,
+        max: mode === 'date' && maximumDate ? `${maximumDate.getFullYear()}-${pad(maximumDate.getMonth() + 1)}-${pad(maximumDate.getDate())}` : undefined,
         style: {
           border: 'none',
           background: 'transparent',

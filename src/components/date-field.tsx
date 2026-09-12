@@ -10,9 +10,11 @@ type Props = {
   displayText: string;
   textColor: string;
   backgroundColor: string;
+  /** Disallows picking a date after this one — e.g. "last watered" can't be in the future. */
+  maximumDate?: Date;
 };
 
-export function DateField({ value, mode, onChange, displayText, textColor, backgroundColor }: Props) {
+export function DateField({ value, mode, onChange, displayText, textColor, backgroundColor, maximumDate }: Props) {
   const [iosVisible, setIosVisible] = useState(false);
 
   const open = () => {
@@ -21,6 +23,7 @@ export function DateField({ value, mode, onChange, displayText, textColor, backg
         value: value ?? new Date(),
         mode,
         is24Hour: true,
+        maximumDate,
         onChange: (_event, selected) => {
           if (selected) onChange(selected);
         },
@@ -41,6 +44,7 @@ export function DateField({ value, mode, onChange, displayText, textColor, backg
           value={value ?? new Date()}
           mode={mode}
           display="spinner"
+          maximumDate={maximumDate}
           onChange={(_event, selected) => {
             setIosVisible(false);
             if (selected) onChange(selected);

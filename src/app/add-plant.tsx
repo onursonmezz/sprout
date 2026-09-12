@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { DateField } from '@/components/date-field';
 import { PhotoPicker } from '@/components/photo-picker';
 import { ROOM_KEYS, RoomKey } from '@/constants/rooms';
 import { Fonts, Spacing } from '@/constants/theme';
@@ -32,9 +33,12 @@ const WINDOW_DIRECTIONS = ['N', 'E', 'S', 'W'] as const;
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
 const ALL_LANGUAGES = Object.values(translations) as Translations[];
 
-function todayFormatted() {
-  const d = new Date();
+function formatDate(d: Date) {
   return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+}
+
+function todayFormatted() {
+  return formatDate(new Date());
 }
 
 /** Drainage is still stored as a translated display label (not a canonical
@@ -634,12 +638,14 @@ export default function AddPlantScreen() {
 
             {!isEditing && (
               <Field label={t.addPlant.lastWatered} colors={colors}>
-                <TextInput
-                  value={form.lastWatered}
-                  onChangeText={(v) => set('lastWatered', v)}
-                  placeholder={t.addPlant.datePlaceholder}
-                  placeholderTextColor={colors.textSecondary}
-                  style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                <DateField
+                  value={parseFormattedDate(form.lastWatered) ?? new Date()}
+                  mode="date"
+                  maximumDate={new Date()}
+                  onChange={(d) => set('lastWatered', formatDate(d))}
+                  displayText={form.lastWatered}
+                  textColor={colors.text}
+                  backgroundColor={colors.backgroundSelected}
                 />
               </Field>
             )}
