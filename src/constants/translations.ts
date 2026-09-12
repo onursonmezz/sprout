@@ -36,7 +36,6 @@ export const translations = {
       tomorrow: 'Tomorrow',
       inDays: (n: number) => `In ${n} days`,
       water: 'Water',
-      watered: 'Watered ✓',
     },
     calendar: {
       title: 'Calendar',
@@ -497,7 +496,6 @@ export const translations = {
       tomorrow: 'Yarın',
       inDays: (n: number) => `${n} gün sonra`,
       water: 'Sula',
-      watered: 'Sulandı ✓',
     },
     calendar: {
       title: 'Takvim',

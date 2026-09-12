@@ -152,15 +152,11 @@ export default function PlantsScreen() {
                     ]}>
                     {roomDisplayName(plant, t)} · {statusLabel(plant.status, plant.daysUntilWatering, t)}
                   </Text>
-                  <View
-                    style={[
-                      styles.wateredButton,
-                      { backgroundColor: plant.status === 'upcoming' ? colors.tint : colors.accent },
-                    ]}>
-                    <Text style={styles.wateredButtonText}>
-                      {plant.status === 'upcoming' ? t.plants.watered : t.plants.water}
-                    </Text>
-                  </View>
+                  {plant.status !== 'upcoming' && (
+                    <View style={[styles.wateredButton, { backgroundColor: colors.accent }]}>
+                      <Text style={styles.wateredButtonText}>{t.plants.water}</Text>
+                    </View>
+                  )}
                 </View>
               </Pressable>
             ))}
