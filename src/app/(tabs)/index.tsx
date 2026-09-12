@@ -74,6 +74,12 @@ export default function TodayScreen() {
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.today.needsAttention}</Text>
         <View style={{ gap: Spacing.two }}>
+          {needsAttention.length === 0 && (
+            <View style={[styles.emptyCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <Text style={{ fontSize: 20 }}>🌿</Text>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t.today.noAttentionNeeded}</Text>
+            </View>
+          )}
           {needsAttention.map((plant) => {
             const isOverdue = plant.status === 'overdue';
             return (
@@ -167,6 +173,15 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 22, fontWeight: '700' },
   statLabel: { fontSize: 11, textAlign: 'center' },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5, marginBottom: Spacing.one },
+  emptyCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    borderRadius: 18,
+    borderWidth: 1,
+    padding: Spacing.three,
+  },
+  emptyText: { fontSize: 13, flex: 1 },
   attentionCard: {
     flexDirection: 'row',
     alignItems: 'center',

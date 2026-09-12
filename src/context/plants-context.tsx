@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 
 import { CareTask, JournalEntry, Plant, WateringStatus } from '@/data/plants';
 import { loadJSON, saveJSON } from '@/utils/storage';
@@ -82,9 +83,18 @@ function fastForward(plants: Plant[], daysPassed: number, seasonalFactor = 1): P
   });
 }
 
+async function currentSeasonalFactor(): Promise<number> {
+  const settings = await loadJSON<{ seasonalAdjustment?: boolean; seasonalFactor?: number } | null>(SETTINGS_KEY, null);
+  return settings?.seasonalAdjustment ? settings.seasonalFactor ?? 1 : 1;
+}
+
 export function PlantsProvider({ children }: { children: ReactNode }) {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [loaded, setLoaded] = useState(false);
+  // Tracks the last moment plants' relative fields are known to be caught up
+  // to. Kept in a ref (not state) since it's only read by the rollover check
+  // below, never rendered.
+  const savedAtRef = useRef<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -98,11 +108,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       }
       const migrated = state.plants.map(migratePlant);
       const daysPassed = Math.max(0, daysBetween(new Date(state.savedAt), new Date()));
-      const settings = await loadJSON<{ seasonalAdjustment?: boolean; seasonalFactor?: number } | null>(
-        SETTINGS_KEY,
-        null
-      );
-      const seasonalFactor = settings?.seasonalAdjustment ? settings.seasonalFactor ?? 1 : 1;
+      const seasonalFactor = await currentSeasonalFactor();
       setPlants(fastForward(migrated, daysPassed, seasonalFactor));
       setLoaded(true);
     })();
@@ -110,8 +116,34 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!loaded) return;
-    saveJSON(STATE_KEY, { plants, savedAt: new Date().toISOString() } satisfies PersistedState);
+    const savedAt = new Date().toISOString();
+    savedAtRef.current = savedAt;
+    saveJSON(STATE_KEY, { plants, savedAt } satisfies PersistedState);
   }, [plants, loaded]);
+
+  // The initial load effect only fires once per JS context, so a day
+  // boundary crossed while the app sits backgrounded (or just left open)
+  // would never get applied until the process is fully killed and
+  // relaunched. Re-check on every return to the foreground, and on a timer
+  // in case the app is never backgrounded at all (screen left on overnight).
+  useEffect(() => {
+    if (!loaded) return;
+    const checkRollover = async () => {
+      if (!savedAtRef.current) return;
+      const daysPassed = Math.max(0, daysBetween(new Date(savedAtRef.current), new Date()));
+      if (daysPassed <= 0) return;
+      const seasonalFactor = await currentSeasonalFactor();
+      setPlants((prev) => fastForward(prev, daysPassed, seasonalFactor));
+    };
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') checkRollover();
+    });
+    const interval = setInterval(checkRollover, 15 * 60 * 1000);
+    return () => {
+      subscription.remove();
+      clearInterval(interval);
+    };
+  }, [loaded]);
 
   const addPlant = (plant: Plant) => setPlants((prev) => [plant, ...prev]);
   const getPlant = (id: string) => plants.find((p) => p.id === id);
@@ -126,7 +158,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const restorePlants = (restored: Plant[], savedAt: string) => {
     const migrated = restored.map(migratePlant);
     const daysPassed = Math.max(0, daysBetween(new Date(savedAt), new Date()));
-    setPlants(fastForward(migrated, daysPassed));
+    currentSeasonalFactor().then((seasonalFactor) => setPlants(fastForward(migrated, daysPassed, seasonalFactor)));
   };
 
   const addCareTask = (plantId: string, task: CareTask) =>
