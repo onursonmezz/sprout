@@ -12,6 +12,7 @@ import { usePlants } from '@/context/plants-context';
 import { CareTask, Plant, WateringStatus } from '@/data/plants';
 import { findSpeciesMatches, SpeciesGuideEntry } from '@/data/species-guide';
 import { suggestWaterEveryDays } from '@/utils/care';
+import { awaitLightMeterResult } from '@/utils/light-meter';
 
 const DEFAULT_REPOT_INTERVAL_DAYS = 365;
 const GENERIC_BASE_WATER_DAYS = 7;
@@ -401,6 +402,17 @@ export default function AddPlantScreen() {
                     colors={colors}
                   />
                 ))}
+                <Pressable
+                  onPress={() => {
+                    awaitLightMeterResult((i) => {
+                      set('lightLevelIndex', i);
+                      applyWaterSuggestion(speciesBaseWaterDays, { lightLevelIndex: i });
+                    });
+                    router.push('/light-meter');
+                  }}
+                  style={[styles.measureButton, { borderColor: colors.border }]}>
+                  <Text style={[styles.measureButtonText, { color: colors.tint }]}>{t.lightMeter.measureLight}</Text>
+                </Pressable>
               </View>
             </Field>
             <View style={styles.twoCol}>
@@ -749,6 +761,8 @@ const styles = StyleSheet.create({
   field: { gap: 6 },
   fieldLabel: { fontSize: 13, fontWeight: '700' },
   input: { borderRadius: 14, borderWidth: 1, paddingHorizontal: 14, height: 46, fontSize: 14 },
+  measureButton: { borderRadius: 14, borderWidth: 1, borderStyle: 'dashed', paddingVertical: 12, alignItems: 'center' },
+  measureButtonText: { fontSize: 13, fontWeight: '700' },
   speciesModalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',

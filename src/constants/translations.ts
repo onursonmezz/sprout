@@ -344,6 +344,18 @@ export const translations = {
         },
       },
     },
+    lightMeter: {
+      title: 'Light Meter',
+      subtitle: 'Use in daylight',
+      instructions:
+        "Point the top of your phone toward the light source and hold steady — the sensor is usually next to the front camera.",
+      lux: 'LUX',
+      unavailableTitle: "Light sensor not available",
+      unavailableBody: "This device doesn't have an ambient light sensor, or Sprout can't access it.",
+      zoneNames: ['Low light', 'Medium light', 'Bright indirect', 'Direct sun'],
+      useThisReading: 'Use this reading',
+      measureLight: '📏 Measure light',
+    },
     onboarding: {
       slides: [
         {
@@ -712,6 +724,17 @@ export const translations = {
           ],
         },
       },
+    },
+    lightMeter: {
+      title: 'Işık Ölçer',
+      subtitle: 'Gün ışığında kullanın',
+      instructions: 'Telefonunuzun üst kısmını ışık kaynağına doğrultup sabit tutun — sensör genelde ön kameranın yanındadır.',
+      lux: 'LUX',
+      unavailableTitle: 'Işık sensörü kullanılamıyor',
+      unavailableBody: 'Bu cihazda ortam ışığı sensörü yok, ya da Sprout erişemiyor.',
+      zoneNames: ['Az ışık', 'Orta ışık', 'Parlak dolaylı ışık', 'Doğrudan güneş'],
+      useThisReading: 'Bu ölçümü kullan',
+      measureLight: '📏 Işığı ölç',
     },
     onboarding: {
       slides: [

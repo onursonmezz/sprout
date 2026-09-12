@@ -34,6 +34,7 @@ function Navigation() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="plant/[id]" />
         <Stack.Screen name="add-plant" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="light-meter" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
   );
