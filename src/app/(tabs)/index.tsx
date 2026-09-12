@@ -95,6 +95,16 @@ export default function TodayScreen() {
           <Stat value={String(thisMonth)} label={t.today.thisMonth} colors={colors} />
         </View>
 
+        <Pressable
+          onPress={() => router.push('/light-meter')}
+          style={[styles.lightMeterCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={[styles.lightMeterTitle, { color: colors.text }]}>{t.today.lightMeterCardTitle}</Text>
+            <Text style={[styles.lightMeterSubtitle, { color: colors.textSecondary }]}>{t.today.lightMeterCardSubtitle}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+        </Pressable>
+
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.today.needsAttention}</Text>
         <View style={{ gap: Spacing.two }}>
           {needsAttention.length === 0 && (
@@ -197,6 +207,16 @@ const styles = StyleSheet.create({
   statDivider: { width: 1 },
   statValue: { fontSize: 22, fontWeight: '700' },
   statLabel: { fontSize: 11, textAlign: 'center' },
+  lightMeterCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 18,
+    borderWidth: 1,
+    padding: Spacing.three,
+    gap: Spacing.two,
+  },
+  lightMeterTitle: { fontSize: 14, fontWeight: '700' },
+  lightMeterSubtitle: { fontSize: 12 },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5, marginBottom: Spacing.one },
   emptyCard: {
     flexDirection: 'row',

@@ -23,6 +23,8 @@ export const translations = {
       snooze: 'Snooze 1d',
       dateLocale: 'en-US',
       dayLength: (h: number, m: number) => `${h}h ${m}m of daylight today`,
+      lightMeterCardTitle: '📏 Light meter',
+      lightMeterCardSubtitle: 'Check how bright a spot really is',
     },
     plants: {
       title: 'My Plants',
@@ -482,6 +484,8 @@ export const translations = {
       snooze: 'Ertele 1g',
       dateLocale: 'tr-TR',
       dayLength: (h: number, m: number) => `Bugün ${h} sa ${m} dk gün ışığı`,
+      lightMeterCardTitle: '📏 Işık ölçer',
+      lightMeterCardSubtitle: 'Bir köşenin ne kadar aydınlık olduğunu ölç',
     },
     plants: {
       title: 'Bitkilerim',
