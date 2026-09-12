@@ -1,9 +1,10 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PhotoPicker } from '@/components/photo-picker';
+import { ROOM_KEYS, RoomKey } from '@/constants/rooms';
 import { Fonts, Spacing } from '@/constants/theme';
 import { translations, Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
@@ -67,7 +68,8 @@ type FormState = {
   species: string;
   latinName: string;
   dateAcquired: string;
-  room: string;
+  roomKey: RoomKey;
+  customRoom: string;
   windowDirection: (typeof WINDOW_DIRECTIONS)[number];
   lightKey: LightKey;
   hoursLight: string;
@@ -89,7 +91,8 @@ const initialForm: FormState = {
   species: '',
   latinName: '',
   dateAcquired: todayFormatted(),
-  room: '',
+  roomKey: 'living_room',
+  customRoom: '',
   windowDirection: 'E',
   lightKey: 'part_sun',
   hoursLight: '',
@@ -119,7 +122,8 @@ function plantToForm(plant: Plant): FormState {
     species: plant.species === '—' ? '' : plant.species,
     latinName: plant.latinName,
     dateAcquired: plant.acquiredDate,
-    room: plant.room === '—' ? '' : plant.room,
+    roomKey: plant.roomKey,
+    customRoom: plant.customRoom ?? '',
     windowDirection,
     lightKey: plant.environment.lightKey,
     hoursLight: plant.environment.hoursLight === '—' ? '' : plant.environment.hoursLight.replace('h Light', ''),
@@ -253,7 +257,8 @@ export default function AddPlantScreen() {
       name: form.nickname.trim(),
       species: form.species.trim() || '—',
       latinName: form.latinName.trim(),
-      room: form.room.trim() || '—',
+      roomKey: form.roomKey,
+      customRoom: form.roomKey === 'other' ? form.customRoom.trim() || null : null,
       wateringAmountMl: Number(form.waterAmountMl) || 200,
       environment: {
         lightKey: form.lightKey,
@@ -403,13 +408,27 @@ export default function AddPlantScreen() {
         {step === 2 && (
           <View style={styles.fieldGroup}>
             <Field label={t.addPlant.room} colors={colors}>
-              <TextInput
-                value={form.room}
-                onChangeText={(v) => set('room', v)}
-                placeholder={t.addPlant.roomPlaceholder}
-                placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
-              />
+              <View style={styles.grid2}>
+                {ROOM_KEYS.map((key) => (
+                  <Pill
+                    key={key}
+                    label={t.addPlant.rooms[key]}
+                    selected={form.roomKey === key}
+                    onPress={() => set('roomKey', key)}
+                    colors={colors}
+                    wide
+                  />
+                ))}
+              </View>
+              {form.roomKey === 'other' && (
+                <TextInput
+                  value={form.customRoom}
+                  onChangeText={(v) => set('customRoom', v)}
+                  placeholder={t.addPlant.roomPlaceholder}
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.input, { marginTop: 8, color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                />
+              )}
             </Field>
             <Field label={t.addPlant.windowDirection} colors={colors}>
               <View style={styles.rowWrap}>
@@ -630,7 +649,11 @@ export default function AddPlantScreen() {
               <View style={styles.summaryGrid}>
                 <SummaryItem label={t.addPlant.summaryName} value={form.nickname || '—'} colors={colors} />
                 <SummaryItem label={t.addPlant.summarySpecies} value={form.species || '—'} colors={colors} />
-                <SummaryItem label={t.addPlant.summaryRoom} value={form.room || '—'} colors={colors} />
+                <SummaryItem
+                  label={t.addPlant.summaryRoom}
+                  value={form.roomKey === 'other' ? form.customRoom || t.addPlant.rooms.other : t.addPlant.rooms[form.roomKey]}
+                  colors={colors}
+                />
                 <SummaryItem label={t.addPlant.summaryLight} value={t.addPlant.lightLevels[form.lightKey].label} colors={colors} />
                 <SummaryItem label={t.addPlant.summaryWaterEvery} value={t.addPlant.summaryDays(form.waterEveryDays)} colors={colors} />
                 <SummaryItem label={t.addPlant.summaryAmount} value={`${form.waterAmountMl || '—'}ml`} colors={colors} />
@@ -688,14 +711,15 @@ export default function AddPlantScreen() {
         </Pressable>
       </View>
 
-      <Modal
-        visible={speciesSuggestions.length > 0}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setSpeciesDropdownDismissed(true)}>
+      {speciesSuggestions.length > 0 && (
+        // A plain absolutely-positioned overlay, not <Modal> — Modal opens a
+        // real native Dialog window on Android, which steals window focus
+        // from the Species TextInput and dismisses the keyboard on every
+        // keystroke. A View overlay has no window of its own, so typing
+        // keeps the keyboard up while the list below updates live.
         <Pressable style={styles.speciesModalBackdrop} onPress={() => setSpeciesDropdownDismissed(true)}>
           <View style={[styles.speciesModalCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <ScrollView keyboardShouldPersistTaps="handled">
+            <ScrollView keyboardShouldPersistTaps="always">
               {speciesSuggestions.map((entry) => (
                 <Pressable key={entry.id} onPress={() => applySpeciesGuide(entry)} style={styles.speciesSuggestionRow}>
                   <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{speciesDisplayName(entry, lang)}</Text>
@@ -707,7 +731,7 @@ export default function AddPlantScreen() {
             </ScrollView>
           </View>
         </Pressable>
-      </Modal>
+      )}
     </SafeAreaView>
   );
 }
@@ -802,10 +826,16 @@ const styles = StyleSheet.create({
   measureButton: { borderRadius: 14, borderWidth: 1, borderStyle: 'dashed', paddingVertical: 12, alignItems: 'center' },
   measureButtonText: { fontSize: 13, fontWeight: '700' },
   speciesModalBackdrop: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.4)',
     paddingTop: 90,
     paddingHorizontal: Spacing.four,
+    zIndex: 50,
+    elevation: 50,
   },
   speciesModalCard: { borderRadius: 14, borderWidth: 1, overflow: 'hidden', maxHeight: 340 },
   speciesSuggestionRow: { paddingHorizontal: 14, paddingVertical: 12, gap: 2, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: 'rgba(128,128,128,0.2)' },

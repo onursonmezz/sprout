@@ -5,6 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PlantAvatar } from '@/components/plant-avatar';
+import { roomDisplayName } from '@/constants/rooms';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -127,7 +128,7 @@ export default function TodayScreen() {
                   </View>
                   <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.species}</Text>
                   <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>
-                    {plant.room} · {plant.wateringAmountMl}ml
+                    {roomDisplayName(plant, t)} · {plant.wateringAmountMl}ml
                   </Text>
                 </View>
                 <View style={styles.attentionActions}>

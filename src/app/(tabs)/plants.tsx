@@ -6,10 +6,12 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PlantAvatar } from '@/components/plant-avatar';
+import { ROOM_KEYS, roomDisplayName } from '@/constants/rooms';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
+import { Plant } from '@/data/plants';
 import { Translations } from '@/constants/translations';
 
 function statusLabel(status: string, days: number, t: Translations) {
@@ -19,13 +21,46 @@ function statusLabel(status: string, days: number, t: Translations) {
   return t.plants.inDays(days);
 }
 
+function PlantListRow({
+  plant,
+  colors,
+  t,
+  onPress,
+  showRoom = true,
+}: {
+  plant: Plant;
+  colors: ReturnType<typeof useTheme>;
+  t: Translations;
+  onPress: () => void;
+  showRoom?: boolean;
+}) {
+  return (
+    <Pressable onPress={onPress} style={[styles.listRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <PlantAvatar plant={plant} size={48} emojiSize={22} />
+      <View style={styles.listInfo}>
+        <View style={styles.listNameRow}>
+          <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
+          {plant.status === 'overdue' && (
+            <View style={[styles.badge, { backgroundColor: colors.accentMuted }]}>
+              <Text style={[styles.badgeText, { color: colors.accent }]}>{t.plants.overdue}</Text>
+            </View>
+          )}
+        </View>
+        <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.species}</Text>
+        <Text style={[styles.plantMeta, { color: colors.tint }]}>💧 {statusLabel(plant.status, plant.daysUntilWatering, t)}</Text>
+      </View>
+      {showRoom && <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{roomDisplayName(plant, t)}</Text>}
+    </Pressable>
+  );
+}
+
 export default function PlantsScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
   const { plants } = usePlants();
   const [query, setQuery] = useState('');
-  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [view, setView] = useState<'grid' | 'list' | 'rooms'>('grid');
 
   const filtered = useMemo(
     () =>
@@ -35,6 +70,16 @@ export default function PlantsScreen() {
           p.species.toLowerCase().includes(query.toLowerCase())
       ),
     [plants, query]
+  );
+
+  const roomSections = useMemo(
+    () =>
+      ROOM_KEYS.map((key) => ({
+        key,
+        label: t.addPlant.rooms[key],
+        plants: filtered.filter((p) => p.roomKey === key),
+      })).filter((section) => section.plants.length > 0),
+    [filtered, t]
   );
 
   return (
@@ -74,6 +119,11 @@ export default function PlantsScreen() {
             style={[styles.toggleBtn, view === 'list' && { backgroundColor: colors.tint }]}>
             <Ionicons name="list-outline" size={16} color={view === 'list' ? '#fff' : colors.textSecondary} />
           </Pressable>
+          <Pressable
+            onPress={() => setView('rooms')}
+            style={[styles.toggleBtn, view === 'rooms' && { backgroundColor: colors.tint }]}>
+            <Ionicons name="home-outline" size={16} color={view === 'rooms' ? '#fff' : colors.textSecondary} />
+          </Pressable>
         </View>
       </View>
 
@@ -100,7 +150,7 @@ export default function PlantsScreen() {
                       styles.plantMeta,
                       { color: plant.status === 'overdue' ? colors.accent : colors.textSecondary },
                     ]}>
-                    {plant.room} · {statusLabel(plant.status, plant.daysUntilWatering, t)}
+                    {roomDisplayName(plant, t)} · {statusLabel(plant.status, plant.daysUntilWatering, t)}
                   </Text>
                   <View
                     style={[
@@ -115,30 +165,28 @@ export default function PlantsScreen() {
               </Pressable>
             ))}
           </View>
-        ) : (
+        ) : view === 'list' ? (
           <View style={{ gap: Spacing.two }}>
             {filtered.map((plant) => (
-              <Pressable
-                key={plant.id}
-                onPress={() => router.push(`/plant/${plant.id}`)}
-                style={[styles.listRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
-                <PlantAvatar plant={plant} size={48} emojiSize={22} />
-                <View style={styles.listInfo}>
-                  <View style={styles.listNameRow}>
-                    <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
-                    {plant.status === 'overdue' && (
-                      <View style={[styles.badge, { backgroundColor: colors.accentMuted }]}>
-                        <Text style={[styles.badgeText, { color: colors.accent }]}>{t.plants.overdue}</Text>
-                      </View>
-                    )}
-                  </View>
-                  <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.species}</Text>
-                  <Text style={[styles.plantMeta, { color: colors.tint }]}>
-                    💧 {statusLabel(plant.status, plant.daysUntilWatering, t)}
-                  </Text>
-                </View>
-                <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.room}</Text>
-              </Pressable>
+              <PlantListRow key={plant.id} plant={plant} colors={colors} t={t} onPress={() => router.push(`/plant/${plant.id}`)} />
+            ))}
+          </View>
+        ) : (
+          <View style={{ gap: Spacing.four }}>
+            {roomSections.map((section) => (
+              <View key={section.key} style={{ gap: Spacing.two }}>
+                <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{section.label}</Text>
+                {section.plants.map((plant) => (
+                  <PlantListRow
+                    key={plant.id}
+                    plant={plant}
+                    colors={colors}
+                    t={t}
+                    onPress={() => router.push(`/plant/${plant.id}`)}
+                    showRoom={false}
+                  />
+                ))}
+              </View>
             ))}
           </View>
         )}
@@ -177,6 +225,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.three,
   },
   viewToggle: { flexDirection: 'row', borderRadius: 12, borderWidth: 1, padding: 3, gap: 3 },
+  sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5 },
   toggleBtn: { width: 30, height: 26, borderRadius: 9, alignItems: 'center', justifyContent: 'center' },
   scroll: { padding: Spacing.four, paddingBottom: Spacing.six },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },

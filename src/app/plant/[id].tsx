@@ -14,6 +14,7 @@ import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useLanguage } from '@/context/language-context';
+import { roomDisplayName } from '@/constants/rooms';
 import { CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
 import { findSpeciesLoose } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
@@ -232,7 +233,7 @@ export default function PlantDetailScreen() {
 
               <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.plantDetail.environment}</Text>
               <View style={styles.chipGrid}>
-                <InfoChip label={t.plantDetail.room} value={plant.room} colors={colors} />
+                <InfoChip label={t.plantDetail.room} value={roomDisplayName(plant, t)} colors={colors} />
                 <InfoChip label={t.plantDetail.light} value={t.addPlant.lightLevels[plant.environment.lightKey].label} colors={colors} />
                 <InfoChip label={t.plantDetail.window} value={plant.environment.window} colors={colors} />
                 <InfoChip label={t.plantDetail.hours} value={plant.environment.hoursLight} colors={colors} />

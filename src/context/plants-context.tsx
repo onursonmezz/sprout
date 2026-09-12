@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 
+import { RoomKey } from '@/constants/rooms';
 import { CareTask, JournalEntry, Plant, WateringStatus } from '@/data/plants';
 import { HeatingSensitivity, LightKey, PotMaterialKey } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
@@ -34,9 +35,14 @@ function migratePlant(p: Plant): Plant {
     indoor?: boolean;
     environment?: { lightKey?: LightKey };
     pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null };
+    roomKey?: RoomKey;
+    customRoom?: string | null;
+    /** Pre-room-picker plants stored a free-text display string here. */
+    room?: string;
   };
   const wateringIntervalDays =
     typeof legacy.wateringIntervalDays === 'number' ? legacy.wateringIntervalDays : Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
+  const hasRoomKey = typeof legacy.roomKey === 'string';
   return {
     ...p,
     wateringIntervalDays,
@@ -46,6 +52,8 @@ function migratePlant(p: Plant): Plant {
     indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
     environment: { ...p.environment, lightKey: legacy.environment?.lightKey ?? 'part_sun' },
     pot: { ...p.pot, materialKey: legacy.pot?.materialKey ?? 'plastic', diameterCm: legacy.pot?.diameterCm ?? null },
+    roomKey: hasRoomKey ? (legacy.roomKey as RoomKey) : legacy.room && legacy.room !== '—' ? 'other' : 'living_room',
+    customRoom: hasRoomKey ? legacy.customRoom ?? null : legacy.room && legacy.room !== '—' ? legacy.room : null,
   };
 }
 

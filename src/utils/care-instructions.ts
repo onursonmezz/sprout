@@ -2,6 +2,7 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
 import { Translations } from '@/constants/translations';
+import { roomDisplayName } from '@/constants/rooms';
 import { Plant } from '@/data/plants';
 
 function escapeHtml(value: string) {
@@ -28,9 +29,7 @@ export function buildCareInstructionsHtml(plants: Plant[], t: Translations, date
       return `
         <section class="plant">
           <h2>${escapeHtml(plant.emoji)} ${escapeHtml(plant.name)}</h2>
-          <p class="meta">${escapeHtml(plant.species !== '—' ? plant.species : '')} ${
-            plant.room !== '—' ? `· ${escapeHtml(plant.room)}` : ''
-          }</p>
+          <p class="meta">${escapeHtml(plant.species !== '—' ? plant.species : '')} · ${escapeHtml(roomDisplayName(plant, t))}</p>
           <p class="watering">💧 ${escapeHtml(t.careInstructions.everyDays(plant.wateringIntervalDays))} · ${plant.wateringAmountMl}ml</p>
           ${careRows ? `<ul>${careRows}</ul>` : ''}
         </section>

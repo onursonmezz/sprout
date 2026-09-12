@@ -1,3 +1,4 @@
+import { RoomKey } from '@/constants/rooms';
 import { HeatingSensitivity, LightKey, PotMaterialKey } from './species-guide';
 
 export type WateringStatus = 'overdue' | 'dueToday' | 'upcoming';
@@ -26,7 +27,9 @@ export type Plant = {
   name: string;
   species: string;
   latinName: string;
-  room: string;
+  roomKey: RoomKey;
+  /** Only meaningful when roomKey is 'other' — the user's own typed room name. */
+  customRoom: string | null;
   emoji: string;
   avatarColor: string;
   photoUri: string | null;
