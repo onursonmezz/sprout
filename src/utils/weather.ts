@@ -9,20 +9,28 @@ export async function requestLocationPermission(): Promise<boolean> {
   return requested.granted;
 }
 
-/** Current outdoor temperature near the device, or null if permission is
- * missing, location can't be resolved, or the network request fails. */
-export async function fetchCurrentTemperatureC(): Promise<number | null> {
+export type WeatherSnapshot = { tempC: number; dayLengthHours: number };
+
+/** Current outdoor temperature and today's sunrise-to-sunset length near the
+ * device, in a single request, or null if permission is missing, location
+ * can't be resolved, or the network request fails. */
+export async function fetchWeatherSnapshot(): Promise<WeatherSnapshot | null> {
   try {
     const { granted } = await Location.getForegroundPermissionsAsync();
     if (!granted) return null;
     const position = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Low });
     const { latitude, longitude } = position.coords;
-    const url = `${OPEN_METEO_URL}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m`;
+    const url = `${OPEN_METEO_URL}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&daily=sunrise,sunset&timezone=auto`;
     const response = await fetch(url);
     if (!response.ok) return null;
     const data = await response.json();
-    const temp = data?.current?.temperature_2m;
-    return typeof temp === 'number' ? temp : null;
+    const tempC = data?.current?.temperature_2m;
+    const sunrise = data?.daily?.sunrise?.[0];
+    const sunset = data?.daily?.sunset?.[0];
+    if (typeof tempC !== 'number' || !sunrise || !sunset) return null;
+    const dayLengthHours = (new Date(sunset).getTime() - new Date(sunrise).getTime()) / 3600000;
+    if (!Number.isFinite(dayLengthHours) || dayLengthHours <= 0) return null;
+    return { tempC, dayLengthHours };
   } catch {
     return null;
   }

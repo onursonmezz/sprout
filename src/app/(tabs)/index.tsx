@@ -9,6 +9,8 @@ import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
+import { useSettings } from '@/context/settings-context';
+import { hapticSuccess, hapticTap } from '@/utils/haptics';
 import { computeCareStats } from '@/utils/stats';
 
 function greeting(t: ReturnType<typeof useLanguage>['t']) {
@@ -18,11 +20,18 @@ function greeting(t: ReturnType<typeof useLanguage>['t']) {
   return t.today.greetingEvening;
 }
 
+function formatDayLength(hours: number, t: ReturnType<typeof useLanguage>['t']) {
+  const h = Math.floor(hours);
+  const m = Math.round((hours - h) * 60);
+  return t.today.dayLength(h, m);
+}
+
 export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
   const { plants, waterPlant, addJournalEntry, snoozePlant } = usePlants();
+  const { dayLengthHours } = useSettings();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
     weekday: 'long',
@@ -41,6 +50,12 @@ export default function TodayScreen() {
       description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
       daysAgo: 0,
     });
+    hapticSuccess();
+  };
+
+  const handleSnooze = (plantId: string) => {
+    snoozePlant(plantId);
+    hapticTap();
   };
 
   const needsAttention = useMemo(
@@ -58,7 +73,14 @@ export default function TodayScreen() {
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.date, { color: colors.textSecondary }]}>{todayLabel}</Text>
+        <View style={styles.dateRow}>
+          <Text style={[styles.date, { color: colors.textSecondary }]}>{todayLabel}</Text>
+          {dayLengthHours != null && (
+            <Text style={[styles.dayLength, { color: colors.textSecondary }]}>
+              ☀️ {formatDayLength(dayLengthHours, t)}
+            </Text>
+          )}
+        </View>
         <Text style={[styles.greeting, { color: colors.text, fontFamily: Fonts.serif }]}>
           {greeting(t)},{'\n'}
           <Text style={{ color: colors.tint }}>{t.today.howArePlants}</Text>
@@ -115,7 +137,7 @@ export default function TodayScreen() {
                     <Text style={styles.wateredButtonText}>{t.today.water}</Text>
                   </Pressable>
                   <Pressable
-                    onPress={() => snoozePlant(plant.id)}
+                    onPress={() => handleSnooze(plant.id)}
                     style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
                     <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.today.snooze}</Text>
                   </Pressable>
@@ -159,7 +181,9 @@ function Stat({ value, label, colors }: { value: string; label: string; colors: 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   scroll: { padding: Spacing.four, paddingBottom: Spacing.six, gap: Spacing.three },
+  dateRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   date: { fontSize: 13, fontWeight: '600' },
+  dayLength: { fontSize: 12, fontWeight: '600' },
   greeting: { fontSize: 30, lineHeight: 36, marginBottom: Spacing.two },
   statsRow: {
     flexDirection: 'row',

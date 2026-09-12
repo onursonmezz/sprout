@@ -1,11 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
+import * as Sharing from 'expo-sharing';
 import { useMemo, useRef, useState } from 'react';
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import ViewShot, { ViewShotRef } from 'react-native-view-shot';
 
 import { CircularProgress } from '@/components/circular-progress';
 import { PhotoPicker } from '@/components/photo-picker';
+import { PlantAvatar } from '@/components/plant-avatar';
 import { Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
@@ -15,6 +18,7 @@ import { CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@
 import { findSpeciesLoose } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
 import { daysUntilNext, formatDateFromDaysOffset, generateEventDaysAgoList, relativeTime } from '@/utils/care';
+import { hapticSuccess, hapticTap } from '@/utils/haptics';
 
 const TAB_KEYS = ['overview', 'care', 'journal', 'history'] as const;
 
@@ -48,6 +52,24 @@ export default function PlantDetailScreen() {
   const [toastVisible, setToastVisible] = useState(false);
   const toastOpacity = useRef(new Animated.Value(0)).current;
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [shareModalVisible, setShareModalVisible] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const shareCardRef = useRef<ViewShotRef>(null);
+
+  const handleShare = async () => {
+    if (!shareCardRef.current) return;
+    setSharing(true);
+    try {
+      const uri = await shareCardRef.current.capture();
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: t.shareCard.dialogTitle });
+      }
+    } catch {
+      // Sharing is a nice-to-have; a failed capture or a cancelled share sheet isn't an error to surface.
+    } finally {
+      setSharing(false);
+    }
+  };
 
   const tabLabels: Record<(typeof TAB_KEYS)[number], string> = {
     overview: t.plantDetail.tabOverview,
@@ -80,6 +102,7 @@ export default function PlantDetailScreen() {
       description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
       daysAgo: 0,
     });
+    hapticSuccess();
     if (toastTimer.current) clearTimeout(toastTimer.current);
     setToastVisible(true);
     Animated.timing(toastOpacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
@@ -97,9 +120,14 @@ export default function PlantDetailScreen() {
             <Pressable onPress={() => router.back()} style={styles.heroButton}>
               <Ionicons name="arrow-back" size={20} color="#1E2A22" />
             </Pressable>
-            <Pressable onPress={() => router.push(`/add-plant?id=${plant.id}`)} style={styles.heroButton}>
-              <Text style={styles.heroButtonText}>{t.plantDetail.edit}</Text>
-            </Pressable>
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+              <Pressable onPress={() => setShareModalVisible(true)} style={styles.heroButton}>
+                <Ionicons name="share-outline" size={18} color="#1E2A22" />
+              </Pressable>
+              <Pressable onPress={() => router.push(`/add-plant?id=${plant.id}`)} style={styles.heroButton}>
+                <Text style={styles.heroButtonText}>{t.plantDetail.edit}</Text>
+              </Pressable>
+            </View>
           </View>
           {!plant.photoUri && <Text style={styles.heroEmoji}>{plant.emoji}</Text>}
           <View style={styles.heroTextWrap}>
@@ -138,7 +166,10 @@ export default function PlantDetailScreen() {
               <Text style={styles.waterButtonText}>{t.plantDetail.waterNow}</Text>
             </Pressable>
             <Pressable
-              onPress={() => snoozePlant(plant.id)}
+              onPress={() => {
+                snoozePlant(plant.id);
+                hapticTap();
+              }}
               style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
               <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.plantDetail.snooze}</Text>
             </Pressable>
@@ -206,7 +237,10 @@ export default function PlantDetailScreen() {
               colors={colors}
               t={t}
               onAddTask={(task) => addCareTask(plant.id, task)}
-              onCompleteTask={(index) => completeCareTask(plant.id, index)}
+              onCompleteTask={(index) => {
+                completeCareTask(plant.id, index);
+                hapticSuccess();
+              }}
             />
           )}
 
@@ -223,6 +257,49 @@ export default function PlantDetailScreen() {
           <Text style={styles.toastText}>{t.plantDetail.wateredToast(plant.name)}</Text>
         </Animated.View>
       )}
+
+      <Modal visible={shareModalVisible} transparent animationType="fade" onRequestClose={() => setShareModalVisible(false)}>
+        <View style={styles.shareBackdrop}>
+          <ViewShot ref={shareCardRef} options={{ format: 'png', quality: 1 }}>
+            <View style={[styles.shareCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <PlantAvatar plant={plant} size={110} />
+              <Text style={[styles.shareCardName, { color: colors.text, fontFamily: Fonts.serif }]}>{plant.name}</Text>
+              {plant.species !== '—' && (
+                <Text style={[styles.shareCardSpecies, { color: colors.textSecondary }]}>{plant.species}</Text>
+              )}
+              <View style={styles.shareCardStatsRow}>
+                <View style={[styles.shareCardStat, { backgroundColor: colors.tintMuted }]}>
+                  <Text style={[styles.shareCardStatText, { color: colors.tint }]}>
+                    💧 {t.shareCard.wateringEvery(plant.wateringIntervalDays)}
+                  </Text>
+                </View>
+                <View style={[styles.shareCardStat, { backgroundColor: colors.tintMuted }]}>
+                  <Text style={[styles.shareCardStatText, { color: colors.tint }]}>
+                    {plant.wateringAmountMl}ml {t.shareCard.perWatering}
+                  </Text>
+                </View>
+              </View>
+              <Text style={[styles.shareCardFooter, { color: colors.textSecondary }]}>{t.shareCard.footer}</Text>
+            </View>
+          </ViewShot>
+
+          <View style={styles.shareActionsRow}>
+            <Pressable
+              onPress={() => setShareModalVisible(false)}
+              style={[styles.shareCancelButton, { backgroundColor: colors.backgroundSelected }]}>
+              <Text style={{ color: colors.text, fontWeight: '700' }}>{t.shareCard.cancel}</Text>
+            </Pressable>
+            <Pressable
+              onPress={handleShare}
+              disabled={sharing}
+              style={[styles.shareButton, { backgroundColor: colors.tint, opacity: sharing ? 0.6 : 1 }]}>
+              <Text style={{ color: '#fff', fontWeight: '700' }}>
+                {sharing ? t.shareCard.sharing : t.shareCard.shareButton}
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -806,6 +883,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   photoModalImage: { width: '100%', height: '80%' },
+
+  shareBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: Spacing.four,
+  },
+  shareCard: {
+    width: 280,
+    borderRadius: 24,
+    borderWidth: 1,
+    padding: Spacing.four,
+    alignItems: 'center',
+    gap: 6,
+  },
+  shareCardName: { fontSize: 24, marginTop: Spacing.two },
+  shareCardSpecies: { fontSize: 14 },
+  shareCardStatsRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: Spacing.two },
+  shareCardStat: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14 },
+  shareCardStatText: { fontSize: 12, fontWeight: '700' },
+  shareCardFooter: { fontSize: 11, fontWeight: '600', marginTop: Spacing.three, letterSpacing: 0.5 },
+  shareActionsRow: { flexDirection: 'row', gap: Spacing.two, marginTop: Spacing.four, width: 280 },
+  shareCancelButton: { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
+  shareButton: { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
 
   historyCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.two, gap: Spacing.one },
   historyCaption: { fontSize: 12 },

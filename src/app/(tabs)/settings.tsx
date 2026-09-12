@@ -11,9 +11,10 @@ import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { downloadBackup, firebaseConfigured, generateBackupCode, uploadBackup } from '@/utils/backup';
+import { shareCareInstructions } from '@/utils/care-instructions';
 import { exportPlantsData } from '@/utils/export';
 import { requestNotificationPermission } from '@/utils/notifications';
-import { fetchCurrentTemperatureC, requestLocationPermission, seasonalFactorFromTemp } from '@/utils/weather';
+import { fetchWeatherSnapshot, requestLocationPermission, seasonalFactorFromTemp } from '@/utils/weather';
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
@@ -107,6 +108,26 @@ export default function SettingsScreen() {
     exportPlantsData(plants).catch(() => setExportError(true));
   };
 
+  const [careInstructionsBusy, setCareInstructionsBusy] = useState(false);
+  const [careInstructionsError, setCareInstructionsError] = useState(false);
+
+  const handleShareCareInstructions = async () => {
+    if (plants.length === 0) return;
+    setCareInstructionsBusy(true);
+    setCareInstructionsError(false);
+    const dateRangeLabel =
+      vacationStart && vacationEnd
+        ? t.settings.careInstructionsDateRange(formatDate(vacationStart), formatDate(vacationEnd))
+        : null;
+    try {
+      await shareCareInstructions(plants, t, dateRangeLabel);
+    } catch {
+      setCareInstructionsError(true);
+    } finally {
+      setCareInstructionsBusy(false);
+    }
+  };
+
   const handleToggleNotifications = async (value: boolean) => {
     if (value) {
       const granted = await requestNotificationPermission();
@@ -120,8 +141,8 @@ export default function SettingsScreen() {
     if (!value) return;
     const granted = await requestLocationPermission();
     if (!granted) return;
-    const tempC = await fetchCurrentTemperatureC();
-    if (tempC !== null) setSeasonalWeather(tempC, seasonalFactorFromTemp(tempC));
+    const snapshot = await fetchWeatherSnapshot();
+    if (snapshot) setSeasonalWeather(snapshot.tempC, seasonalFactorFromTemp(snapshot.tempC), snapshot.dayLengthHours);
   };
 
   const handleBackupNow = async () => {
@@ -292,6 +313,20 @@ export default function SettingsScreen() {
                   />
                 </View>
               </View>
+              <Pressable
+                onPress={handleShareCareInstructions}
+                disabled={plants.length === 0 || careInstructionsBusy}
+                style={[
+                  styles.careInstructionsButton,
+                  { backgroundColor: colors.tint, opacity: plants.length === 0 || careInstructionsBusy ? 0.5 : 1 },
+                ]}>
+                <Text style={styles.careInstructionsButtonText}>
+                  {careInstructionsBusy ? t.settings.careInstructionsBusy : t.settings.careInstructionsButton}
+                </Text>
+              </Pressable>
+              {careInstructionsError && (
+                <Text style={[styles.vacationNote, { color: colors.accent }]}>{t.settings.careInstructionsError}</Text>
+              )}
             </View>
           )}
         </SectionCard>
@@ -525,6 +560,8 @@ const styles = StyleSheet.create({
   segmentText: { fontSize: 11, fontWeight: '700' },
   vacationBlock: { paddingBottom: Spacing.three, gap: Spacing.two },
   vacationNote: { fontSize: 12, lineHeight: 17 },
+  careInstructionsButton: { paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
+  careInstructionsButtonText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   vacationDatesRow: { flexDirection: 'row', gap: Spacing.two },
   vacationLabel: { fontSize: 12, fontWeight: '700' },
   exportButton: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12 },

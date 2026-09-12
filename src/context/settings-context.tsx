@@ -15,6 +15,7 @@ type PersistedSettings = {
   seasonalAdjustment: boolean;
   seasonalFactor: number;
   seasonalTempC: number | null;
+  dayLengthHours: number | null;
   vacationMode: boolean;
   vacationStart: string | null;
   vacationEnd: string | null;
@@ -38,6 +39,7 @@ const defaults: PersistedSettings = {
   seasonalAdjustment: true,
   seasonalFactor: 1,
   seasonalTempC: null,
+  dayLengthHours: null,
   vacationMode: false,
   vacationStart: null,
   vacationEnd: null,
@@ -62,7 +64,8 @@ type SettingsContextValue = {
   setSeasonalAdjustment: (v: boolean) => void;
   seasonalFactor: number;
   seasonalTempC: number | null;
-  setSeasonalWeather: (tempC: number, factor: number) => void;
+  dayLengthHours: number | null;
+  setSeasonalWeather: (tempC: number, factor: number, dayLengthHours: number) => void;
   vacationMode: boolean;
   setVacationMode: (v: boolean) => void;
   vacationStart: Date | null;
@@ -121,8 +124,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setSeasonalAdjustment: (v) => update('seasonalAdjustment', v),
         seasonalFactor: settings.seasonalFactor,
         seasonalTempC: settings.seasonalTempC,
-        setSeasonalWeather: (tempC, factor) =>
-          setSettings((prev) => ({ ...prev, seasonalTempC: tempC, seasonalFactor: factor })),
+        dayLengthHours: settings.dayLengthHours,
+        setSeasonalWeather: (tempC, factor, dayLengthHours) =>
+          setSettings((prev) => ({ ...prev, seasonalTempC: tempC, seasonalFactor: factor, dayLengthHours })),
         vacationMode: settings.vacationMode,
         setVacationMode: (v) => update('vacationMode', v),
         vacationStart: settings.vacationStart ? new Date(settings.vacationStart) : null,
