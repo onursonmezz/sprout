@@ -10,6 +10,7 @@ import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
+import { wateringAlgorithm } from '@/data/species-guide';
 import { downloadBackup, firebaseConfigured, generateBackupCode, uploadBackup } from '@/utils/backup';
 import { shareCareInstructions } from '@/utils/care-instructions';
 import { exportPlantsData } from '@/utils/export';
@@ -71,9 +72,9 @@ export default function SettingsScreen() {
     setQuietEnd,
     seasonalAdjustment,
     setSeasonalAdjustment,
-    seasonalFactor,
-    seasonalTempC,
     setSeasonalWeather,
+    heatingOn,
+    setHeatingOn,
     vacationMode,
     setVacationMode,
     vacationStart,
@@ -91,6 +92,9 @@ export default function SettingsScreen() {
   const { plants, resetPlants, restorePlants } = usePlants();
   const router = useRouter();
   const [resetConfirm, setResetConfirm] = useState(false);
+
+  const currentSeasonFactor = wateringAlgorithm.season[String(new Date().getMonth() + 1)] ?? 1;
+  const currentSeasonPercent = Math.round((currentSeasonFactor - 1) * 100);
 
   const [exportError, setExportError] = useState(false);
 
@@ -257,16 +261,25 @@ export default function SettingsScreen() {
         <SectionCard colors={colors}>
           <Row
             title={t.settings.seasonalAdjustment}
-            subtitle={
-              seasonalAdjustment && seasonalTempC !== null
-                ? t.settings.seasonalEffect(Math.round(seasonalTempC), Math.round((seasonalFactor - 1) * 100))
-                : t.settings.seasonalAdjustmentSub
-            }
+            subtitle={seasonalAdjustment ? t.settings.seasonalEffect(currentSeasonPercent) : t.settings.seasonalAdjustmentSub}
             colors={colors}
             right={
               <Switch
                 value={seasonalAdjustment}
                 onValueChange={handleToggleSeasonal}
+                trackColor={{ false: colors.backgroundSelected, true: colors.tint }}
+                thumbColor="#fff"
+              />
+            }
+          />
+          <Row
+            title={t.settings.heatingMode}
+            subtitle={t.settings.heatingModeSub}
+            colors={colors}
+            right={
+              <Switch
+                value={heatingOn}
+                onValueChange={setHeatingOn}
                 trackColor={{ false: colors.backgroundSelected, true: colors.tint }}
                 thumbColor="#fff"
               />

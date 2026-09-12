@@ -5,7 +5,7 @@ import { RoomKey } from '@/constants/rooms';
 import { CareTask, JournalEntry, Plant, WateringStatus } from '@/data/plants';
 import { HeatingSensitivity, LightKey, PotMaterialKey } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
-import { recomputeWateringInterval } from '@/utils/watering-algorithm';
+import { recomputeWateringInterval, SeasonalOptions } from '@/utils/watering-algorithm';
 
 // New schema (materialKey/lightKey/baseIntervalDays/etc. replacing the old
 // species-guide's plain display strings) — a fresh key means every existing
@@ -92,11 +92,11 @@ function daysBetween(a: Date, b: Date) {
  * this is what makes the watering algorithm's season/heating factors live
  * rather than frozen at whatever month the plant was added in.
  */
-function fastForward(plants: Plant[], daysPassed: number, applySeasonalFactors: boolean, today: Date): Plant[] {
+function fastForward(plants: Plant[], daysPassed: number, options: SeasonalOptions, today: Date): Plant[] {
   if (daysPassed <= 0) return plants;
   return plants.map((p) => {
     const lastWateredDaysAgo = p.lastWateredDaysAgo + daysPassed;
-    const wateringIntervalDays = recomputeWateringInterval(p, today, applySeasonalFactors);
+    const wateringIntervalDays = recomputeWateringInterval(p, today, options);
     const daysUntilWatering = wateringIntervalDays - lastWateredDaysAgo;
     const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
     return {
@@ -112,9 +112,12 @@ function fastForward(plants: Plant[], daysPassed: number, applySeasonalFactors: 
   });
 }
 
-async function isSeasonalAdjustmentEnabled(): Promise<boolean> {
-  const settings = await loadJSON<{ seasonalAdjustment?: boolean } | null>(SETTINGS_KEY, null);
-  return settings?.seasonalAdjustment ?? true;
+async function loadSeasonalOptions(): Promise<SeasonalOptions> {
+  const settings = await loadJSON<{ seasonalAdjustment?: boolean; heatingOn?: boolean } | null>(SETTINGS_KEY, null);
+  return {
+    applySeasonalFactors: settings?.seasonalAdjustment ?? true,
+    heatingOn: settings?.heatingOn ?? true,
+  };
 }
 
 export function PlantsProvider({ children }: { children: ReactNode }) {
@@ -130,8 +133,8 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       const state = await loadJSON<PersistedState | null>(STATE_KEY, null);
       const migrated = (state?.plants ?? []).map(migratePlant);
       const daysPassed = state ? Math.max(0, daysBetween(new Date(state.savedAt), new Date())) : 0;
-      const applySeasonalFactors = await isSeasonalAdjustmentEnabled();
-      setPlants(fastForward(migrated, daysPassed, applySeasonalFactors, new Date()));
+      const options = await loadSeasonalOptions();
+      setPlants(fastForward(migrated, daysPassed, options, new Date()));
       setLoaded(true);
     })();
   }, []);
@@ -154,8 +157,8 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       if (!savedAtRef.current) return;
       const daysPassed = Math.max(0, daysBetween(new Date(savedAtRef.current), new Date()));
       if (daysPassed <= 0) return;
-      const applySeasonalFactors = await isSeasonalAdjustmentEnabled();
-      setPlants((prev) => fastForward(prev, daysPassed, applySeasonalFactors, new Date()));
+      const options = await loadSeasonalOptions();
+      setPlants((prev) => fastForward(prev, daysPassed, options, new Date()));
     };
     const subscription = AppState.addEventListener('change', (nextState) => {
       if (nextState === 'active') checkRollover();
@@ -180,7 +183,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const restorePlants = (restored: Plant[], savedAt: string) => {
     const migrated = restored.map(migratePlant);
     const daysPassed = Math.max(0, daysBetween(new Date(savedAt), new Date()));
-    isSeasonalAdjustmentEnabled().then((applySeasonalFactors) => setPlants(fastForward(migrated, daysPassed, applySeasonalFactors, new Date())));
+    loadSeasonalOptions().then((options) => setPlants(fastForward(migrated, daysPassed, options, new Date())));
   };
 
   const addCareTask = (plantId: string, task: CareTask) =>
@@ -202,12 +205,12 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   const waterPlant = (plantId: string) => {
     (async () => {
-      const applySeasonalFactors = await isSeasonalAdjustmentEnabled();
+      const options = await loadSeasonalOptions();
       const today = new Date();
       setPlants((prev) =>
         prev.map((p) => {
           if (p.id !== plantId) return p;
-          const wateringIntervalDays = recomputeWateringInterval(p, today, applySeasonalFactors);
+          const wateringIntervalDays = recomputeWateringInterval(p, today, options);
           return { ...p, lastWateredDaysAgo: 0, wateringIntervalDays, daysUntilWatering: wateringIntervalDays, status: 'upcoming' };
         })
       );

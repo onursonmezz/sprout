@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 import { loadJSON, saveJSON } from '@/utils/storage';
+import { isHeatingSeasonNow } from '@/utils/watering-algorithm';
 
 const STORAGE_KEY = 'sprout:settings';
 
@@ -16,6 +17,11 @@ type PersistedSettings = {
   seasonalFactor: number;
   seasonalTempC: number | null;
   dayLengthHours: number | null;
+  /** The user's actual heating choice — read by the watering algorithm. */
+  heatingOn: boolean;
+  /** What the calendar said last time use-heating-season-prompt.ts checked —
+   * used only to detect a month transition, never for the calculation itself. */
+  lastHeatingSeasonState: boolean;
   vacationMode: boolean;
   vacationStart: string | null;
   vacationEnd: string | null;
@@ -40,6 +46,8 @@ const defaults: PersistedSettings = {
   seasonalFactor: 1,
   seasonalTempC: null,
   dayLengthHours: null,
+  heatingOn: isHeatingSeasonNow(),
+  lastHeatingSeasonState: isHeatingSeasonNow(),
   vacationMode: false,
   vacationStart: null,
   vacationEnd: null,
@@ -66,6 +74,10 @@ type SettingsContextValue = {
   seasonalTempC: number | null;
   dayLengthHours: number | null;
   setSeasonalWeather: (tempC: number, factor: number, dayLengthHours: number) => void;
+  heatingOn: boolean;
+  setHeatingOn: (v: boolean) => void;
+  lastHeatingSeasonState: boolean;
+  setLastHeatingSeasonState: (v: boolean) => void;
   vacationMode: boolean;
   setVacationMode: (v: boolean) => void;
   vacationStart: Date | null;
@@ -127,6 +139,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         dayLengthHours: settings.dayLengthHours,
         setSeasonalWeather: (tempC, factor, dayLengthHours) =>
           setSettings((prev) => ({ ...prev, seasonalTempC: tempC, seasonalFactor: factor, dayLengthHours })),
+        heatingOn: settings.heatingOn,
+        setHeatingOn: (v) => update('heatingOn', v),
+        lastHeatingSeasonState: settings.lastHeatingSeasonState,
+        setLastHeatingSeasonState: (v) => update('lastHeatingSeasonState', v),
         vacationMode: settings.vacationMode,
         setVacationMode: (v) => update('vacationMode', v),
         vacationStart: settings.vacationStart ? new Date(settings.vacationStart) : null,

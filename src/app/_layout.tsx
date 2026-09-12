@@ -6,6 +6,7 @@ import { LanguageProvider, useLanguage } from '@/context/language-context';
 import { PlantsProvider, usePlants } from '@/context/plants-context';
 import { SettingsProvider, useSettings } from '@/context/settings-context';
 import { ThemeModeProvider, useThemeMode } from '@/context/theme-context';
+import { useHeatingSeasonPrompt } from '@/hooks/use-heating-season-prompt';
 import { useNotificationScheduler } from '@/hooks/use-notification-scheduler';
 import { useSeasonalWeather } from '@/hooks/use-seasonal-weather';
 
@@ -20,6 +21,7 @@ function Navigation() {
 
   useNotificationScheduler();
   useSeasonalWeather();
+  useHeatingSeasonPrompt();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();

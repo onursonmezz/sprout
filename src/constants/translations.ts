@@ -63,12 +63,24 @@ export const translations = {
       careSchedule: 'CARE SCHEDULE',
       seasonalAdjustment: 'Seasonal adjustment',
       seasonalAdjustmentSub: 'Adjust watering in winter and summer',
-      seasonalEffect: (tempC: number, percent: number) =>
+      seasonalEffect: (percent: number) =>
         percent === 0
-          ? `${tempC}°C nearby — no change to watering pace`
+          ? "This month — no change to watering pace"
           : percent > 0
-            ? `${tempC}°C nearby — watering about ${percent}% more often`
-            : `${tempC}°C nearby — watering about ${Math.abs(percent)}% less often`,
+            ? `This month — watering about ${percent}% less often (dormant season)`
+            : `This month — watering about ${Math.abs(percent)}% more often`,
+      heatingMode: 'Heating mode',
+      heatingModeSub: 'Turn on while your radiators are running — dry heated air means plants need water more often',
+      heatingPromptEnter: {
+        title: 'Looks like heating season started',
+        body: 'Turn on heating mode? Indoor plants will be watered a bit more often.',
+      },
+      heatingPromptExit: {
+        title: 'Looks like heating season ended',
+        body: 'Turn off heating mode? Watering will go back to its normal pace.',
+      },
+      heatingPromptYes: 'Yes',
+      heatingPromptNo: 'No',
       vacationMode: 'Vacation mode',
       vacationModeSub: 'Pause all reminders for a date range',
       vacationNote: 'Before you leave, water these plants heavily:',
@@ -510,12 +522,24 @@ export const translations = {
       careSchedule: 'BAKIM PROGRAMI',
       seasonalAdjustment: 'Mevsimsel ayarlama',
       seasonalAdjustmentSub: 'Kış ve yazda sulamayı otomatik ayarla',
-      seasonalEffect: (tempC: number, percent: number) =>
+      seasonalEffect: (percent: number) =>
         percent === 0
-          ? `Yakınlarda ${tempC}°C — sulama hızında değişiklik yok`
+          ? 'Bu ay — sulama hızında değişiklik yok'
           : percent > 0
-            ? `Yakınlarda ${tempC}°C — sulama yaklaşık %${percent} daha sık`
-            : `Yakınlarda ${tempC}°C — sulama yaklaşık %${Math.abs(percent)} daha seyrek`,
+            ? `Bu ay — sulama yaklaşık %${percent} daha seyrek (dinlenme dönemi)`
+            : `Bu ay — sulama yaklaşık %${Math.abs(percent)} daha sık`,
+      heatingMode: 'Kalorifer modu',
+      heatingModeSub: 'Kaloriferler çalışırken açın — kuru ısınmış hava bitkilerin daha sık sulanmasını gerektirir',
+      heatingPromptEnter: {
+        title: 'Kalorifer sezonu başlamış gibi görünüyor',
+        body: 'Kalorifer modu açılsın mı? İç mekan bitkileri biraz daha sık sulanacak.',
+      },
+      heatingPromptExit: {
+        title: 'Kalorifer sezonu bitmiş gibi görünüyor',
+        body: 'Kalorifer modu kapatılsın mı? Sulama normal hızına dönecek.',
+      },
+      heatingPromptYes: 'Evet',
+      heatingPromptNo: 'Hayır',
       vacationMode: 'Tatil modu',
       vacationModeSub: 'Belirli bir tarih aralığında tüm hatırlatmaları duraklat',
       vacationNote: 'Gitmeden önce bu bitkileri bolca sulayın:',

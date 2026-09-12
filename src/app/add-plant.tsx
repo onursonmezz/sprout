@@ -144,7 +144,7 @@ export default function AddPlantScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t, lang } = useLanguage();
-  const { seasonalAdjustment } = useSettings();
+  const { seasonalAdjustment, heatingOn } = useSettings();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { plants, addPlant, updatePlant, deletePlant, getPlant } = usePlants();
   const editingPlant = id ? getPlant(String(id)) : undefined;
@@ -197,7 +197,7 @@ export default function AddPlantScreen() {
         indoor: speciesIndoor,
       },
       new Date(),
-      seasonalAdjustment
+      { applySeasonalFactors: seasonalAdjustment, heatingOn }
     );
   };
 
@@ -226,7 +226,7 @@ export default function AddPlantScreen() {
             indoor: entry.category !== 'outdoor',
           },
           new Date(),
-          seasonalAdjustment
+          { applySeasonalFactors: seasonalAdjustment, heatingOn }
         ),
       };
     });

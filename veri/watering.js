@@ -44,9 +44,11 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
 
   // 6. TÜRKİYE'YE ÖZGÜ: kalorifer havayı kurutur, toprak daha hızlı kurur.
   //    Kış yavaşlamasını kısmen dengeler. Bitkinin nem hassasiyetine göre değişir.
+  //    site.heatingOn kullanıcının kendi beyanıdır (radyatör gerçekten çalışıyor mu) —
+  //    algo.heatingMonths sadece bu beyanın hiç sorulmadığı ilk kurulum varsayılanı
+  //    içindir, burada takvime tekrar bakılmaz.
   let fHeating = 1.0;
-  const heatingSeason = algo.heatingMonths.includes(month);
-  if (site.indoor !== false && site.heatingOn && heatingSeason) {
+  if (site.indoor !== false && site.heatingOn) {
     fHeating = algo.heatingFactor[plant.heatingSensitivity] ?? 1.0;
   }
 
