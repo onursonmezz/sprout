@@ -16,7 +16,7 @@ import { usePlants } from '@/context/plants-context';
 import { useLanguage } from '@/context/language-context';
 import { roomDisplayName } from '@/constants/rooms';
 import { CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
-import { findSpeciesLoose } from '@/data/species-guide';
+import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
 import { daysUntilNext, formatDateFromDaysOffset, generateEventDaysAgoList, relativeTime } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
@@ -252,6 +252,8 @@ export default function PlantDetailScreen() {
                 <InfoChip label={t.plantDetail.acquired} value={plant.acquiredDate} colors={colors} wide />
               </View>
 
+              {speciesInfo && <GrowthSection speciesInfo={speciesInfo} colors={colors} t={t} />}
+
               <TroubleshootingSection colors={colors} t={t} />
             </>
           )}
@@ -344,6 +346,56 @@ function InfoChip({
     <View style={[styles.chip, { backgroundColor: colors.tintMuted }, wide && styles.chipWide]}>
       <Text style={[styles.chipLabel, { color: colors.textSecondary }]}>{label}</Text>
       <Text style={[styles.chipValue, { color: colors.text }]}>{value}</Text>
+    </View>
+  );
+}
+
+function GrowthSection({
+  speciesInfo,
+  colors,
+  t,
+}: {
+  speciesInfo: SpeciesRecord;
+  colors: ReturnType<typeof useTheme>;
+  t: Translations;
+}) {
+  const { idealMinC, idealMaxC, survivalMinC } = speciesInfo.temperature;
+  // Scale the bar to this plant's own range (padded a bit on each side) rather
+  // than a fixed axis — a hardy plant's -20°C hardiness would otherwise
+  // squash a tender plant's 10-30°C ideal band into a sliver.
+  const scaleMin = Math.min(survivalMinC, idealMinC) - 5;
+  const scaleMax = idealMaxC + 5;
+  const pct = (v: number) => Math.max(0, Math.min(100, ((v - scaleMin) / (scaleMax - scaleMin)) * 100));
+  const bandLeft = pct(idealMinC);
+  const bandWidth = Math.max(4, pct(idealMaxC) - bandLeft);
+  const survivalPos = pct(survivalMinC);
+
+  return (
+    <View style={{ gap: Spacing.two, marginTop: Spacing.three }}>
+      <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.plantDetail.growth}</Text>
+
+      <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <View style={styles.growthCardHeader}>
+          <Text style={[styles.growthLabel, { color: colors.text }]}>{t.plantDetail.idealTemperature}</Text>
+          <Text style={[styles.growthValue, { color: colors.tint }]}>
+            {t.plantDetail.idealTemperatureRange(idealMinC, idealMaxC)}
+          </Text>
+        </View>
+        <View style={styles.tempTrack}>
+          <View style={[styles.tempTrackBg, { backgroundColor: colors.backgroundSelected }]} />
+          <View style={[styles.tempBand, { backgroundColor: colors.tint, left: `${bandLeft}%`, width: `${bandWidth}%` }]} />
+          <View style={[styles.tempTick, { left: `${survivalPos}%`, backgroundColor: colors.accent }]} />
+        </View>
+        <View style={styles.tempScaleLabels}>
+          <Text style={[styles.tempScaleLabel, { color: colors.textSecondary }]}>{Math.round(scaleMin)}°C</Text>
+          <Text style={[styles.tempScaleLabel, { color: colors.textSecondary }]}>{Math.round(scaleMax)}°C</Text>
+        </View>
+      </View>
+
+      <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <Text style={[styles.growthLabel, { color: colors.text }]}>❄️ {t.plantDetail.hardiness}</Text>
+        <Text style={[styles.growthNote, { color: colors.textSecondary }]}>{t.plantDetail.hardinessNote(survivalMinC)}</Text>
+      </View>
     </View>
   );
 }
@@ -835,6 +887,18 @@ const styles = StyleSheet.create({
   speciesCard: { borderRadius: 16, padding: Spacing.three, gap: 3, marginBottom: Spacing.three },
   speciesCardTitle: { fontSize: 12, fontWeight: '700' },
   speciesCardText: { fontSize: 12 },
+
+  growthCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.three, gap: Spacing.two },
+  growthCardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  growthLabel: { fontSize: 13, fontWeight: '700' },
+  growthValue: { fontSize: 13, fontWeight: '700' },
+  growthNote: { fontSize: 12, lineHeight: 17 },
+  tempTrack: { height: 10, justifyContent: 'center' },
+  tempTrackBg: { position: 'absolute', left: 0, right: 0, height: 6, borderRadius: 3 },
+  tempBand: { position: 'absolute', height: 6, borderRadius: 3 },
+  tempTick: { position: 'absolute', width: 3, height: 14, borderRadius: 1.5, marginLeft: -1.5 },
+  tempScaleLabels: { flexDirection: 'row', justifyContent: 'space-between' },
+  tempScaleLabel: { fontSize: 10, fontWeight: '600' },
 
   symptomIntro: { fontSize: 12 },
   symptomCard: { borderRadius: 14, borderWidth: 1, overflow: 'hidden' },

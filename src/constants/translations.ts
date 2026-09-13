@@ -192,6 +192,12 @@ export const translations = {
       drainage: 'Drainage',
       soil: 'Soil',
       acquired: 'Acquired',
+      growth: 'GROWTH',
+      idealTemperature: 'Ideal temperature',
+      idealTemperatureRange: (min: number, max: number) => `${min}°C - ${max}°C`,
+      hardiness: 'Hardiness',
+      hardinessNote: (min: number) =>
+        `This plant can briefly tolerate temperatures down to ${min}°C. Colder than that, and it can be damaged.`,
       care: {
         addTask: '+ Add care task',
         allAdded: 'All care tasks added',
@@ -652,6 +658,12 @@ export const translations = {
       drainage: 'Drenaj',
       soil: 'Toprak',
       acquired: 'Edinme tarihi',
+      growth: 'BÜYÜME',
+      idealTemperature: 'İdeal sıcaklık',
+      idealTemperatureRange: (min: number, max: number) => `${min}°C - ${max}°C`,
+      hardiness: 'Dayanıklılık',
+      hardinessNote: (min: number) =>
+        `Bu bitki kısa süreliğine ${min}°C'ye kadar dayanabilir. Bunun altında zarar görebilir.`,
       care: {
         addTask: '+ Bakım görevi ekle',
         allAdded: 'Tüm bakım görevleri eklendi',
