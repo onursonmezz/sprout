@@ -2,7 +2,7 @@ export type Language = 'en' | 'tr';
 
 export const translations = {
   en: {
-    tabs: { today: 'Today', plants: 'Plants', calendar: 'Calendar', settings: 'Settings' },
+    tabs: { today: 'Today', plants: 'Plants', calendar: 'Calendar', guide: 'Guide', settings: 'Settings' },
     today: {
       greetingMorning: 'Good morning',
       greetingAfternoon: 'Good afternoon',
@@ -416,6 +416,287 @@ export const translations = {
         },
       },
     },
+    guide: {
+      tabTitle: 'Guide',
+      searchPlaceholder: 'Search a topic or plant',
+      searchResultsCount: (n: number) => (n === 1 ? '1 result' : `${n} results`),
+      noResults: "No results — try a different word.",
+      seasonalCard: {
+        heatingApproaching: {
+          title: 'Heating season is approaching',
+          body: "Indoor humidity drops once radiators kick in. It's worth reviewing your plants' watering intervals.",
+        },
+        heatingActive: {
+          title: "It's heating season",
+          body: 'Heated air dries out soil and leaves faster than usual — tender plants may need water a bit more often.',
+        },
+        growingSeason: {
+          title: 'Peak growing season',
+          body: "Longer days mean faster growth. It's a good time to check on repotting and fertilizing.",
+        },
+        cta: 'Read →',
+      },
+      categories: {
+        watering: 'Watering',
+        light: 'Light',
+        potSoil: 'Pot & Soil',
+        pests: 'Pests',
+        seasonal: 'Seasonal',
+      },
+      topicsSectionTitle: 'Topics',
+      featuredSectionTitle: 'Featured',
+      guideSectionTitle: 'Care basics',
+      issuesSectionTitle: 'Common issues',
+      issuesSectionSubtitle: 'Find the cause, starting from the symptom',
+      seeAll: 'See all',
+      readMinutes: (n: number) => `${n} min read`,
+      articles: {
+        lowWaterVsOverwater: {
+          title: 'Too little water saves one plant, kills another',
+          subtitle: "Succulents and calatheas can't share a watering routine. Here's where the difference comes from.",
+          body: [
+            "Succulents and cacti evolved to store water in their leaves and stems, surviving weeks without rain in the wild. That's why their soil needs to dry out completely between waterings — soil that stays damp is the fastest route to root rot.",
+            "Calatheas, marantas, and other rainforest natives want the opposite: the forest floor they come from rarely dries out at all. These plants get watered once the top 2-3cm of soil dries, and letting them go bone dry shows up as browning leaf edges.",
+            "The practical rule: knowing whether a species' natural habitat is dry or humid is a far more reliable guide than a fixed number of days — it's why Sprout's watering suggestion factors in pot, light, and season together rather than relying on a day count alone.",
+            "When in doubt, the finger test is still the most reliable method: push a finger 2-3cm into the soil — water if it's dry and the plant prefers dry spells, wait if it's still moist.",
+          ],
+        },
+        wateringInterval: {
+          title: 'How to figure out the right watering interval',
+          subtitle: "There's no single number — pot, light, and season keep shifting it.",
+          body: [
+            "The same species can end up on completely different watering schedules in two different homes. That's because a \"watering interval\" isn't really one fixed thing — it's the product of pot material, light level, distance from a window, and season, multiplied together.",
+            "Porous pots (terracotta, unglazed clay) let water evaporate quickly, meaning more frequent watering; plastic and glazed pots hold moisture much longer.",
+            "More light means more transpiration, and so more frequent watering. The same plant can go weeks in a dim corner but want water every few days on a sunny sill.",
+            "Growth slows in winter, so most plants want less water — but heating dries the air, which offsets part of that effect. This is exactly why Sprout's watering algorithm exists: instead of one fixed number, it factors in all of these together.",
+          ],
+        },
+        potMaterial: {
+          title: 'Why pot material matters',
+          subtitle: 'Same plant, same soil — just changing the pot changes how often it needs water.',
+          body: [
+            "Pot material directly determines how quickly moisture around the roots is lost. Unglazed terracotta and ceramic are porous — air and moisture pass through the walls, drying the soil faster, which is ideal for rot-prone succulents and cacti.",
+            "Plastic, glazed ceramic, and glass pots are watertight; moisture stays in the soil much longer. That's an advantage for humidity-loving plants like calatheas and ferns, but it can easily tip into overwatering for plants that want dry soil.",
+            "Pot size works the same way: extra soil volume in an oversized pot holds water the roots aren't using for far longer — a pot that's \"too big\" for a plant's actual size is one of the most common causes of overwatering.",
+            "Pots with no drainage hole never let water fully escape; using one as a decorative outer pot is far safer than planting directly into it.",
+          ],
+        },
+        lightDistance: {
+          title: 'How distance from a window changes the light',
+          subtitle: 'A 30cm difference can cut the light a plant gets in half.',
+          body: [
+            "Light intensity falls off exponentially with distance, not linearly: moving a plant 30cm back from a window often cuts far more than half the light it receives. That's why the gap between \"right by the window\" and \"across the room\" is much bigger than it looks.",
+            "Window orientation matters just as much: south-facing windows (in the northern hemisphere) get the brightest, longest light, while north-facing ones give the dimmest and most indirect — the same plant can behave completely differently depending on orientation.",
+            "Signs of too little light are usually slow to notice: wider gaps between leaves (legginess), smaller new leaves, pale new growth. Even moving a plant 15-20cm closer to a window can make a real difference.",
+            "Direct midday sun creates the opposite problem — it can scorch shade-loving plants. The fix is usually not moving the plant far away entirely, but diffusing the light with a sheer curtain or choosing a window with morning or evening sun instead.",
+          ],
+        },
+        seasonalCare: {
+          title: 'How plant care changes in winter',
+          subtitle: 'Growth slows and the air dries out — both reshape care in different ways.',
+          body: [
+            "As days shorten and temperatures drop, most houseplants enter a semi-dormant state in winter: growth slows, meaning less water and fertilizer is needed. Keeping up a summer watering pace through winter is one of the most common causes of winter plant loss.",
+            "But radiators flip that picture: heated indoor air is far drier than outside air, making soil and leaves lose moisture faster than usual. The net effect depends on the plant's humidity sensitivity — Sprout's \"Heating mode\" setting exists specifically to balance these two opposing effects.",
+            "Fertilizing should mostly stop in winter; feeding a slowed-down plant leads to a salt buildup that can burn roots. For most species, it's enough to pause fertilizing until growth picks back up in spring.",
+            "Keeping plants away from radiators, cold window glass, and door drafts is also a key part of winter care — sudden temperature swings can trigger leaf drop.",
+          ],
+        },
+      },
+      issueDetail: {
+        whyTitle: 'Why does it happen?',
+        fixTitle: 'How to fix it',
+        preventTitle: 'How to prevent it',
+        urgencyTitle: 'Should you worry?',
+        urgencyLabels: { low: 'Not urgent', medium: 'Watch closely', high: 'Act now' },
+      },
+      issues: {
+        yellowLeaves: {
+          why: [
+            'Overwatering is the most common cause — roots are starved of oxygen and can no longer move nutrients to the leaf, which the plant signals with yellowing.',
+            "Too little light gives a similar result: when the plant can't produce enough energy through photosynthesis, it sacrifices its oldest leaves first.",
+            "Occasional yellowing of a lower leaf is usually just natural aging — the plant is redirecting energy to new growth, nothing to worry about.",
+          ],
+          fix: [
+            'Check the soil with a finger: if it\'s wet, hold off on the next watering and make sure the drainage hole isn\'t blocked.',
+            "If you suspect root rot, remove the plant from its pot and inspect the roots; trim any brown, mushy ones with clean scissors and repot in fresh, well-draining soil.",
+            'If low light is the suspected cause, move the plant to a brighter spot for a few weeks and watch how it responds.',
+          ],
+          prevent: [
+            "Water based on the soil's actual condition, not a fixed schedule — make sure it's genuinely dry first.",
+            'Make sure the pot has a drainage hole and excess water can escape from the bottom.',
+            "Make sure the plant is in a spot matching the light level recommended in its species guide.",
+          ],
+          urgency: 'low',
+          urgencyNote: "A few yellowing lower leaves usually isn't urgent. But if yellowing is spreading fast or leaves are also going soft, check for root rot right away.",
+        },
+        brownTips: {
+          why: [
+            'Low humidity is the most common cause — many tropical-origin plants come from a far more humid environment than most rooms provide.',
+            'Chlorine, fluoride, and mineral buildup in tap water can cause tip burn, especially in humidity-sensitive species like calatheas and palms.',
+            'Inconsistent watering — letting the soil go bone dry too often — causes the cells at the leaf tips, the first to dry out, to die back.',
+          ],
+          fix: [
+            "Tips that have already browned won't turn green again; you can trim them with clean scissors following the leaf's natural shape to tidy the look.",
+            'To raise humidity, use a pebble tray with water or group plants together; occasional misting alone isn\'t a lasting fix.',
+            'If tap water is the suspect, switch to rested (left out overnight) or filtered water.',
+          ],
+          prevent: [
+            'Consider keeping humidity-sensitive species in naturally more humid rooms like a bathroom or kitchen.',
+            "Keep watering consistent enough that soil doesn't go bone dry for long stretches.",
+            'Keep plants away from direct airflow from radiators and AC units — both dry the air quickly.',
+          ],
+          urgency: 'low',
+          urgencyNote: "This is cosmetic and rarely threatens the plant's health. But if the browning is advancing fast and covering more than half the leaf, review your humidity and watering routine.",
+        },
+        droopingWilting: {
+          why: [
+            'Underwatering is the most common cause — once soil is bone dry, leaves lose turgor pressure (the water pressure inside cells) and droop.',
+            'Confusingly, overwatering can look identical: rotted roots can no longer move water, so the plant behaves as if it were thirsty.',
+            'A sudden temperature swing or direct hot sun can raise water loss faster than roots can take it up, causing temporary wilting.',
+          ],
+          fix: [
+            "Check the soil first: if it's dry, water thoroughly until it runs out the bottom — leaves should perk back up within a few hours.",
+            "If the soil is wet, suspect root rot: remove the plant from its pot and inspect the roots; trim any blackened, foul-smelling ones and repot in fresh soil.",
+            'If heat stress is suspected, move the plant away from direct sun and heat sources and observe for a few days.',
+          ],
+          prevent: [
+            "Check the plant's soil regularly — avoid letting it go bone dry or stay constantly soggy.",
+            'Make sure the pot drains well.',
+            'Keep the plant away from spots with sudden temperature swings — window sills, doorways, on top of radiators.',
+          ],
+          urgency: 'medium',
+          urgencyNote: 'Wilting from underwatering usually resolves within hours of a good watering. But wilting while the soil is wet can be a serious sign of root rot — check within a few days.',
+        },
+        leafDrop: {
+          why: [
+            "Plants typically respond to a change of environment (a new home, coming from a store) by dropping a few leaves — it's a temporary adjustment.",
+            'Cold drafts from doors and windows in winter can trigger sudden leaf drop, especially in tropical species.',
+            'Prolonged underwatering can cause a plant to sacrifice its older leaves to protect the newer ones.',
+          ],
+          fix: [
+            "If it's a newly acquired or recently moved plant, give it a few patient weeks — most plants stop dropping leaves as they adjust.",
+            'If a cold draft is suspected, move the plant away from windows and doors.',
+            'Check the soil and switch to a consistent watering routine if needed.',
+          ],
+          prevent: [
+            "Avoid moving a newly acquired plant's spot repeatedly in the first few weeks.",
+            'Keep plants away from touching cold window glass in winter.',
+            'Maintain a consistent watering schedule — inconsistency triggers stress responses.',
+          ],
+          urgency: 'low',
+          urgencyNote: "Dropping a few leaves is usually a temporary stress response. If it doesn't stop, or the plant goes fully bare, check root health.",
+        },
+        blackSpots: {
+          why: [
+            "Usually a fungal or bacterial infection — humid, still air and water splashing onto leaves make it easy for these infections to spread.",
+            'Water splashing onto leaves during watering and staying wet for long periods creates ideal conditions for fungal spores to germinate.',
+            'Poor air circulation between plants placed too close together lets infections spread faster.',
+          ],
+          fix: [
+            'Remove affected leaves with a clean, disinfected pair of scissors — this stops the infection from spreading.',
+            "Improve air circulation around the plant; a fan providing gentle airflow can help if needed.",
+            'If spots keep spreading, treat with a garden-center fungicide following the label instructions.',
+          ],
+          prevent: [
+            'Water directly onto the soil, avoiding wetting the leaves.',
+            "Don't crowd plants too closely together — allow airflow.",
+            'Remove fallen or diseased leaves rather than leaving them on the soil surface.',
+          ],
+          urgency: 'medium',
+          urgencyNote: 'Trimming a few spotted leaves is usually enough. If spots are multiplying fast or approaching the stem, act quickly — it may be a more serious infection.',
+        },
+        whitePowder: {
+          why: [
+            'This is powdery mildew, a fungal disease that spreads fast in environments combining high humidity with poor air circulation.',
+            'Plants placed too close together and still air let fungal spores pass easily from one leaf to another.',
+          ],
+          fix: [
+            "Cut off and discard affected leaves — don't compost them, spores can spread.",
+            'Temporarily isolate the plant from others and improve air circulation.',
+            "If it keeps spreading, apply a garden-center fungicide; for mild cases, a diluted baking-soda-and-water mix can also help.",
+          ],
+          prevent: [
+            "Leave enough space between plants — don't block airflow.",
+            'Water directly onto the soil rather than the leaves.',
+            'Avoid overfertilizing — soft, fresh growth is more susceptible to mildew.',
+          ],
+          urgency: 'medium',
+          urgencyNote: 'This disease can spread quickly; acting as soon as you notice it prevents it from reaching your other plants.',
+        },
+        slowGrowth: {
+          why: [
+            'Insufficient light is the most common cause — most houseplants need far more light than it appears, especially in winter.',
+            'Nutrient deficiency can also stall growth; nutrients in potting soil deplete over time and aren\'t replenished without regular fertilizing.',
+            "Root-bound roots (a pot completely filled with roots) leave no room to grow further, causing the plant to stagnate.",
+          ],
+          fix: [
+            "Move the plant to a brighter spot; if light conditions allow, new growth should appear within a few weeks.",
+            'Start feeding with a balanced liquid fertilizer during the growing season (spring-summer).',
+            'If roots are emerging from the drainage holes or the soil dries unusually fast, repot into a pot one size larger.',
+          ],
+          prevent: [
+            "Provide the light level recommended in the plant's species guide.",
+            'Keep a regular but not excessive fertilizing schedule during the growing season.',
+            'Check the roots every 1-2 years and repot into a larger pot if needed.',
+          ],
+          urgency: 'low',
+          urgencyNote: "Not urgent, but if there's been no new growth for a long stretch, it may be time to review light and nutrient conditions.",
+        },
+        curlingLeaves: {
+          why: [
+            'Underwatering or low humidity can cause leaves to curl inward to reduce water loss.',
+            'Direct, harsh afternoon sun can cause shade-loving plants to curl their leaves as self-protection.',
+            'Some pests (especially aphids and spider mites) deform leaves while feeding, causing curling.',
+          ],
+          fix: [
+            "Check the soil, water if dry, and add a humidity tray if humidity is low.",
+            "If the plant is getting direct midday sun, move it behind a sheer curtain or to a spot with more indirect light.",
+            'Check the undersides of leaves for pest signs (tiny dots, fine webbing, sticky residue); if found, isolate the plant and treat with an appropriate insecticide.',
+          ],
+          prevent: [
+            "Keep a consistent watering routine — don't let the soil go bone dry for long stretches.",
+            "Place the plant according to the light level in its species guide.",
+            'Keep new plants isolated for a few weeks and check for pests before placing them near others.',
+          ],
+          urgency: 'low',
+          urgencyNote: "Not urgent on its own, but acting quickly if pests are suspected prevents them from spreading.",
+        },
+        leggyGrowth: {
+          why: [
+            "Almost always a sign of insufficient light — the plant stretches its stem unusually to reach available light, leaving wide gaps between leaves.",
+          ],
+          fix: [
+            'Move the plant to a brighter spot gradually; a sudden, harsh light change can scorch leaves.',
+            'Pruning can help reshape a lanky, one-sided plant — most species branch out fuller after pruning.',
+            'Some species (like pothos and philodendron) propagate easily from the stretched cuttings and can be replanted.',
+          ],
+          prevent: [
+            "Provide the light level recommended in the plant's species guide.",
+            'Rotate the plant regularly (a quarter turn every few weeks) so all sides get even light.',
+          ],
+          urgency: 'low',
+          urgencyNote: "Not urgent — it's cosmetic and slow-progressing, but the plant keeps weakening if left uncorrected.",
+        },
+        mushyStem: {
+          why: [
+            'Almost always the result of overwatering or poor drainage; roots and the base of the stem are starved of oxygen and begin to rot.',
+            'A pot with no drainage hole, or contact with standing water collected under the pot, is one of the most common causes of accelerated rot.',
+          ],
+          fix: [
+            'Remove the plant from its pot immediately; cut away any blackened, mushy, foul-smelling roots and stem tissue with a clean knife or scissors down to healthy tissue.',
+            'Rinse the remaining healthy roots with clean water and repot in fresh, well-draining soil in a new (smaller, if needed) pot.',
+            "If rot has progressed too far and little healthy tissue remains, taking a cutting from a healthy stem to restart the plant may be more successful.",
+          ],
+          prevent: [
+            "Make sure the pot has a drainage hole and water doesn't pool in a saucer underneath.",
+            "Make sure the top few centimeters of soil are dry before watering again.",
+            "Make sure pot size matches the plant's root ball — an oversized pot holds moisture far longer than it should.",
+          ],
+          urgency: 'high',
+          urgencyNote: 'This can progress quickly and cost you the plant if left untreated — act as soon as possible.',
+        },
+      },
+    },
     careInstructions: {
       title: 'Plant Care Instructions',
       everyDays: (n: number) => `Every ${n} days`,
@@ -468,7 +749,7 @@ export const translations = {
     },
   },
   tr: {
-    tabs: { today: 'Bugün', plants: 'Bitkiler', calendar: 'Takvim', settings: 'Ayarlar' },
+    tabs: { today: 'Bugün', plants: 'Bitkiler', calendar: 'Takvim', guide: 'Rehber', settings: 'Ayarlar' },
     today: {
       greetingMorning: 'Günaydın',
       greetingAfternoon: 'İyi günler',
@@ -879,6 +1160,287 @@ export const translations = {
           causes: [
             'Fazla sulama veya kötü drenaj — saksıdan çıkarın, çürük kökleri budayın, taze ve iyi drene olan toprakla yeniden saksılayın.',
           ],
+        },
+      },
+    },
+    guide: {
+      tabTitle: 'Rehber',
+      searchPlaceholder: 'Konu veya bitki ara',
+      searchResultsCount: (n: number) => (n === 1 ? '1 sonuç' : `${n} sonuç`),
+      noResults: 'Sonuç bulunamadı — başka bir kelime dene.',
+      seasonalCard: {
+        heatingApproaching: {
+          title: 'Kalorifer sezonu yaklaşıyor',
+          body: 'Kaloriferler devreye girince iç mekân nemi düşer. Bitkilerinin sulama aralığını gözden geçirmen gerekebilir.',
+        },
+        heatingActive: {
+          title: 'Kalorifer sezonundayız',
+          body: 'Isınmış hava, toprağı ve yaprakları normalden hızlı kurutur — hassas bitkiler biraz daha sık su isteyebilir.',
+        },
+        growingSeason: {
+          title: 'Büyüme sezonu doruğunda',
+          body: 'Uzayan günlerle büyüme hızlanır. Saksı değişimi ve gübrelemeyi gözden geçirmek için iyi bir zaman.',
+        },
+        cta: 'Oku →',
+      },
+      categories: {
+        watering: 'Sulama',
+        light: 'Işık',
+        potSoil: 'Toprak & Saksı',
+        pests: 'Zararlılar',
+        seasonal: 'Mevsimsel',
+      },
+      topicsSectionTitle: 'Konular',
+      featuredSectionTitle: 'Öne çıkan',
+      guideSectionTitle: 'Bakımın temelleri',
+      issuesSectionTitle: 'Sık karşılaşılan sorunlar',
+      issuesSectionSubtitle: 'Belirtiden yola çıkarak nedenini bul',
+      seeAll: 'Tümünü gör',
+      readMinutes: (n: number) => `${n} dk okuma`,
+      articles: {
+        lowWaterVsOverwater: {
+          title: 'Az su hangi bitkiyi yaşatır, hangisini öldürür?',
+          subtitle: 'Sukulentler ve kalatealar aynı sulama rutinini paylaşamaz. Farkın nereden geldiğini açıklıyoruz.',
+          body: [
+            'Sukulent ve kaktüsler, yapraklarında ve gövdelerinde su depolayacak şekilde evrimleşmiştir; doğal ortamlarında haftalarca yağmur görmeden hayatta kalırlar. Bu yüzden toprakları sulamalar arasında tamamen kurumalı — nemli kalan toprak, kök çürümesine giden en hızlı yoldur.',
+            'Kalateler, marantalar ve diğer tropikal orman kökenli bitkiler ise tam tersini ister: yağmur ormanı tabanında toprak neredeyse hiç tam kurumaz. Bu bitkilerde toprağın üst 2-3 cm\'si kuruduğunda sulama yapılır; tamamen kurumasına izin vermek yaprak kenarlarının kahverengileşmesine yol açar.',
+            'Pratik kural: bir bitkiyi sulamadan önce, o türün doğal yaşam alanının kurak mı yoksa nemli mi olduğunu bilmek, sabit bir gün sayısından çok daha güvenilir bir rehberdir — Sprout\'un sulama önerisi de bu yüzden sadece gün sayısı değil, saksı, ışık ve mevsim gibi faktörleri birlikte hesaba katar.',
+            'Emin değilseniz parmak testi hâlâ en güvenilir yöntemdir: parmağınızı toprağa 2-3 cm batırın, kuru hissediyorsa ve bitki kurağı seven türdense sulayın; nemliyse bekleyin.',
+          ],
+        },
+        wateringInterval: {
+          title: 'Doğru sulama aralığı nasıl belirlenir?',
+          subtitle: 'Tek bir sayı yok — saksı, ışık ve mevsim aralığı sürekli değiştirir.',
+          body: [
+            'Aynı tür bitki, iki farklı evde tamamen farklı sıklıkla sulanabilir. Bunun nedeni "sulama aralığı"nın aslında tek bir sabit olmaması; saksı malzemesi, ışık miktarı, pencereye uzaklık ve mevsim gibi birden fazla etkenin çarpımıdır.',
+            'Gözenekli saksılar (toprak, terracotta) suyu hızlı buharlaştırır, bitkinin daha sık sulanmasını gerektirir; plastik ve sırlı saksılar nemi daha uzun tutar.',
+            'Daha fazla ışık daha fazla terleme (transpirasyon) demektir, yani daha sık sulama. Aynı bitki karanlık bir köşede haftalarca dayanabilirken, güneşli bir pencere kenarında birkaç günde bir su isteyebilir.',
+            'Kışın büyüme yavaşladığı için çoğu bitki daha az su ister — ama kalorifer havayı kuruttuğu için bu etkinin bir kısmını dengeler. Sprout\'un sulama algoritması tam olarak bu yüzden var: sabit bir sayı yerine, bu etkenlerin hepsini birlikte hesaba katıyor.',
+          ],
+        },
+        potMaterial: {
+          title: 'Saksı malzemesi neden önemli?',
+          subtitle: 'Aynı bitki, aynı toprak — sadece saksı değişince sulama sıklığı da değişir.',
+          body: [
+            'Saksı malzemesi, kökün etrafındaki nemin ne kadar hızlı kaybolduğunu doğrudan belirler. Pişmiş toprak (terracotta) ve sırsız seramik gözeneklidir; duvarlarından hava ve nem geçer, bu da toprağın daha hızlı kurumasına yol açar — kök çürümesine eğilimli sukulent ve kaktüsler için idealdir.',
+            'Plastik, sırlı seramik ve cam saksılar suya geçirimsizdir; nem çok daha uzun süre toprakta kalır. Nem seven kalateler, eğrelti otları gibi bitkiler için avantajlıyken, kuru toprak isteyen bitkilerde kolayca aşırı sulamaya yol açabilir.',
+            'Saksı boyutu da aynı mantıkla çalışır: büyük bir saksıdaki fazla toprak hacmi, kökler tarafından kullanılmayan suyu uzun süre tutar — bitkinin gerçek boyutuna göre "büyük" bir saksı, aslında en sık aşırı sulama nedenlerinden biridir.',
+            'Drenaj deliği olmayan saksılarda ise su hiçbir zaman tam anlamıyla tahliye olmaz; dekoratif dış saksı olarak kullanmak, doğrudan dikim yapmaktan çok daha güvenlidir.',
+          ],
+        },
+        lightDistance: {
+          title: 'Pencereye uzaklık ışığı nasıl değiştirir?',
+          subtitle: "30 cm'lik bir fark, bitkinin gördüğü ışığı yarıya indirebilir.",
+          body: [
+            'Işık şiddeti mesafeyle katlanarak azalır, doğrusal değil: bir bitkiyi pencereden 30 cm uzaklaştırmak, ışığı çoğu zaman yarıdan çok daha fazla azaltır. Bu yüzden "pencerenin yanında" ile "odanın diğer ucunda" arasındaki fark, gözle göründüğünden çok daha büyüktür.',
+            'Pencere yönü de belirleyicidir: güney cepheler en yoğun ve en uzun süreli ışığı alır, kuzey cepheler ise en düşük ve en dolaylı ışığı verir — aynı bitki, yön değişince tamamen farklı davranabilir.',
+            'Yetersiz ışık aldığını gösteren belirtiler genelde yavaş fark edilir: yapraklar arası mesafenin açılması, yaprakların küçülmesi, yeni yaprakların soluk çıkması. Bitkiyi pencereye 15-20 cm yaklaştırmak bile fark yaratabilir.',
+            'Doğrudan öğle güneşi ise tam tersi bir sorun yaratır — gölge seven bitkilerde yaprak yanığına yol açabilir. Çözüm genelde bitkiyi pencereden tamamen uzaklaştırmak değil, ince bir perdeyle ışığı yaymak veya sabah/akşam güneşi alan bir pencereye taşımaktır.',
+          ],
+        },
+        seasonalCare: {
+          title: 'Kışın bitki bakımı nasıl değişir?',
+          subtitle: 'Büyüme yavaşlar, hava kurur — ikisi de bakımını farklı şekillerde etkiler.',
+          body: [
+            'Kısalan gün ışığı ve düşen sıcaklıkla birlikte çoğu iç mekân bitkisi kışın yarı uyku (dormancy) dönemine girer: büyüme yavaşlar, bu da daha az su ve gübreye ihtiyaç demektir. Yaz aylarındaki sulama sıklığını kışın aynen sürdürmek, en sık kış kaybı nedenidir.',
+            'Ama kaloriferler bu tabloyu tersine çevirir: ısıtılan iç mekân havası dışarıdakinden çok daha kurudur, bu da toprağın ve yaprakların normalden hızlı su kaybetmesine yol açar. Net etki bitkinin nem hassasiyetine bağlıdır — Sprout\'un "Kalorifer modu" ayarı tam olarak bu iki zıt etkiyi dengelemek için var.',
+            'Gübreleme kışın büyük ölçüde durdurulmalıdır; yavaşlayan bir bitkiye gübre vermek, kökleri yakabilecek fazla tuz birikimine yol açar. Çoğu tür için ilkbaharda büyüme yeniden hızlanana kadar gübrelemeyi kesmek yeterlidir.',
+            'Bitkileri kaloriferden, soğuk pencere camından ve kapı çekmelerinden uzak tutmak da kış bakımının önemli bir parçasıdır — ani sıcaklık değişimleri yaprak dökülmesini tetikleyebilir.',
+          ],
+        },
+      },
+      issueDetail: {
+        whyTitle: 'Neden oluyor?',
+        fixTitle: 'Nasıl düzeltilir?',
+        preventTitle: 'Nasıl önlenir?',
+        urgencyTitle: 'Telaşlanmalı mısın?',
+        urgencyLabels: { low: 'Acil değil', medium: 'Yakından takip et', high: 'Hemen müdahale et' },
+      },
+      issues: {
+        yellowLeaves: {
+          why: [
+            'En sık neden aşırı sulamadır — kökler oksijensiz kalır ve yaprağa besin taşıyamaz hale gelir, bitki bunu sararan yapraklarla belli eder.',
+            'Yetersiz ışık da benzer bir sonuç verir: bitki fotosentez için yeterli enerji üretemediğinde en eski yapraklarını feda eder.',
+            'Alt yapraklardaki tek tük sararma çoğu zaman doğal yaşlanmadır — bitki enerjisini yeni büyümeye yönlendirir, endişelenecek bir şey değildir.',
+          ],
+          fix: [
+            'Toprağı parmağınızla kontrol edin: ıslaksa bir sonraki sulamayı erteleyin ve saksının drenaj deliğinin tıkalı olmadığından emin olun.',
+            'Kök çürümesi şüphesi varsa bitkiyi saksıdan çıkarıp kökleri inceleyin; kahverengi, yumuşak kökleri temiz bir makasla kesip taze, iyi drene olan toprakla yeniden saksılayın.',
+            'Sararma ışık eksikliğinden şüpheleniliyorsa bitkiyi birkaç hafta boyunca daha aydınlık bir yere taşıyıp tepkisini gözlemleyin.',
+          ],
+          prevent: [
+            'Sulamadan önce toprağın gerçekten kuruduğundan emin olun — takvime göre değil, toprağın durumuna göre sulayın.',
+            'Saksının drenaj deliği olduğundan ve fazla suyun alttan boşaldığından emin olun.',
+            'Bitkinin tür rehberinde önerilen ışık seviyesine uygun bir konumda olduğundan emin olun.',
+          ],
+          urgency: 'low',
+          urgencyNote: 'Birkaç alt yaprak sararması genelde acil değildir. Ama sararma hızla yayılıyor veya yapraklar aynı zamanda yumuşuyorsa kök çürümesi ihtimaline karşı hemen kontrol edin.',
+        },
+        brownTips: {
+          why: [
+            'Düşük nem oranı en yaygın nedendir — tropikal kökenli birçok bitki, evlerin çoğu odasından çok daha nemli bir ortamdan gelir.',
+            'Musluk suyundaki klor, flor ve mineral birikintileri, özellikle nem hassasiyeti yüksek türlerde (kalatea, palmiye) uç yanmasına yol açabilir.',
+            'Düzensiz sulama — toprağın tamamen kurumasına sık sık izin vermek — yaprak uçlarındaki hücrelerin ilk kuruyan kısımlar olmasına neden olur.',
+          ],
+          fix: [
+            'Zaten kahverengileşmiş uçlar geri yeşermez; isterseniz temiz bir makasla yaprağın doğal şekline uygun şekilde kesip görünümü düzeltebilirsiniz.',
+            'Nemi artırmak için bir nem tepsisi (çakıl + su) kullanın veya bitkileri gruplandırın; sık sisleme tek başına kalıcı bir çözüm değildir.',
+            'Musluk suyu şüpheleniliyorsa bir gece dinlendirilmiş veya filtrelenmiş suya geçin.',
+          ],
+          prevent: [
+            'Nem hassasiyeti yüksek türleri banyo veya mutfak gibi doğal olarak daha nemli odalarda tutmayı düşünün.',
+            'Sulama sıklığını toprağın tamamen kurumasına izin vermeyecek şekilde düzenli tutun.',
+            'Kaloriferlerin ve klimaların doğrudan üflediği yerlerden bitkileri uzak tutun — bu iki kaynak havayı hızla kurutur.',
+          ],
+          urgency: 'low',
+          urgencyNote: 'Kozmetik bir sorundur, bitkinin sağlığını nadiren tehdit eder. Ama uçlar hızla ilerleyip yaprağın yarısından fazlasını kaplıyorsa nem ve sulama düzenini gözden geçirin.',
+        },
+        droopingWilting: {
+          why: [
+            'Az sulama en sık nedendir — toprak tamamen kuruduğunda yapraklar turgor basıncını (hücrelerdeki su basıncı) kaybeder ve sarkar.',
+            'Paradoksal şekilde aşırı sulama da aynı görüntüyü verebilir: çürümüş kökler artık su taşıyamadığı için bitki susuz kalmış gibi davranır.',
+            'Ani sıcaklık değişimi veya doğrudan sıcak güneş, bitkinin su kaybını kök alım hızından daha hızlı artırarak geçici solmaya yol açabilir.',
+          ],
+          fix: [
+            'Önce toprağı kontrol edin: kuruysa iyice sulayın, saksı altından su akana kadar bekleyin — birkaç saat içinde yapraklar toparlanmalı.',
+            'Toprak ıslaksa kök çürümesi ihtimaline karşı bitkiyi saksıdan çıkarıp kökleri kontrol edin; kararmış, kokan kökleri kesip taze toprakla yeniden saksılayın.',
+            'Isı stresinden şüpheleniyorsanız bitkiyi doğrudan güneşten ve ısı kaynaklarından uzaklaştırıp birkaç gün gözlemleyin.',
+          ],
+          prevent: [
+            'Bitkinin toprağını düzenli kontrol edin — hem çok kurumasına hem de sürekli ıslak kalmasına izin vermeyin.',
+            'Saksının iyi drene olduğundan emin olun.',
+            'Bitkiyi ani sıcaklık değişimi yaşayan yerlerden (pencere kenarı, kapı önü, kalorifer üstü) uzak tutun.',
+          ],
+          urgency: 'medium',
+          urgencyNote: 'Az sulamadan kaynaklanan solma genelde bir sulamayla saatler içinde düzelir. Ama toprak ıslakken solma varsa bu kök çürümesinin ciddi bir işareti olabilir — birkaç gün içinde kontrol edin.',
+        },
+        leafDrop: {
+          why: [
+            'Bitkiler ortam değişikliğine (yeni eve taşınma, mağazadan eve getirilme) genelde birkaç yaprak dökerek tepki verir — bu geçici bir uyum sürecidir.',
+            'Kışın kapı ve pencerelerden gelen soğuk hava akımı, özellikle tropikal bitkilerde ani yaprak dökülmesini tetikleyebilir.',
+            'Uzun süreli az sulama, bitkinin kalan yapraklarını korumak için daha eski yapraklarını feda etmesine yol açabilir.',
+          ],
+          fix: [
+            'Yeni alınan veya yeri değiştirilen bir bitkiyse birkaç hafta sabırla bekleyin — çoğu bitki yeni ortamına alıştıkça dökülme durur.',
+            'Soğuk hava akımı şüpheleniyorsanız bitkiyi pencereden ve kapıdan uzaklaştırın.',
+            'Toprağı kontrol edip gerekirse düzenli bir sulama rutinine geçin.',
+          ],
+          prevent: [
+            'Yeni bir bitkiyi eve getirdikten sonra ilk birkaç hafta yerini sık değiştirmeyin.',
+            'Kışın bitkileri soğuk cam yüzeylere temas etmeyecek şekilde yerleştirin.',
+            'Tutarlı bir sulama takvimi sürdürün — düzensizlik stres tepkilerini tetikler.',
+          ],
+          urgency: 'low',
+          urgencyNote: 'Birkaç yaprağın dökülmesi genelde geçici bir stres tepkisidir. Dökülme durmuyorsa veya bitki tamamen çıplak kalıyorsa kök sağlığını kontrol edin.',
+        },
+        blackSpots: {
+          why: [
+            'Çoğunlukla mantar veya bakteri enfeksiyonudur; nemli, durgun hava ve yapraklara sıçrayan su bu enfeksiyonların yayılmasını kolaylaştırır.',
+            'Sulama sırasında yaprakların üzerine su sıçraması ve uzun süre ıslak kalması, mantar sporlarının çimlenmesi için ideal ortam yaratır.',
+            'Zayıf hava sirkülasyonu olan, birbirine çok yakın yerleştirilmiş bitkiler arasında enfeksiyon daha hızlı yayılır.',
+          ],
+          fix: [
+            'Etkilenen yaprakları temiz, dezenfekte edilmiş bir makasla kesip uzaklaştırın — enfeksiyonun yayılmasını önler.',
+            'Bitkinin etrafındaki hava sirkülasyonunu artırın; gerekirse bir vantilatörle hafif hava akımı sağlayın.',
+            'Leke yayılmaya devam ederse bahçe merkezlerinde satılan bir fungisitle etiketindeki talimatlara göre tedavi edin.',
+          ],
+          prevent: [
+            'Sulama yaparken suyu doğrudan toprağa verin, yaprakları ıslatmaktan kaçının.',
+            'Bitkileri birbirine çok yakın yerleştirmeyin, hava akımına izin verin.',
+            'Düşen veya hastalıklı yaprakları saksı toprağının üzerinde bırakmayın.',
+          ],
+          urgency: 'medium',
+          urgencyNote: 'Birkaç lekeli yaprağı kesmek genelde yeterlidir. Lekeler hızla çoğalıyor veya gövdeye yaklaşıyorsa daha ciddi bir enfeksiyon olabilir, hızlı müdahale edin.',
+        },
+        whitePowder: {
+          why: [
+            'Külleme (pudra küfü) adı verilen bir mantar hastalığıdır; yüksek nem ve zayıf hava sirkülasyonunun birlikte olduğu ortamlarda hızla yayılır.',
+            'Bitkiler arası fazla yakınlık ve durgun hava, mantar sporlarının bir yapraktan diğerine kolayca geçmesine izin verir.',
+          ],
+          fix: [
+            'Etkilenen yaprakları kesip atın — kompost yapmayın, sporlar yayılabilir.',
+            'Bitkiyi diğerlerinden geçici olarak ayırın, hava sirkülasyonunu artırın.',
+            'Yayılım devam ederse bahçe merkezlerinden temin edilebilen bir fungisit uygulayın; hafif vakalarda seyreltilmiş karbonat-su karışımı da yardımcı olabilir.',
+          ],
+          prevent: [
+            'Bitkiler arasında yeterli boşluk bırakın, hava akımını engellemeyin.',
+            'Yaprakları ıslatmadan, doğrudan toprağa sulayın.',
+            'Aşırı gübrelemeden kaçının — yumuşak, taze büyüme küllemeye daha yatkındır.',
+          ],
+          urgency: 'medium',
+          urgencyNote: 'Hızlı yayılabilen bir hastalıktır; fark eder etmez müdahale etmek diğer bitkilere bulaşmasını önler.',
+        },
+        slowGrowth: {
+          why: [
+            'En sık neden yetersiz ışıktır — çoğu iç mekân bitkisi göründüğünden çok daha fazla ışığa ihtiyaç duyar, özellikle kış aylarında.',
+            'Besin eksikliği de büyümeyi durdurabilir; saksı toprağındaki besinler zamanla tükenir ve düzenli gübreleme olmadan yenilenmez.',
+            'Kök sıkışması (saksının kökle dolup taşması), köklerin daha fazla büyümek için yer bulamamasına ve bitkinin durağanlaşmasına yol açar.',
+          ],
+          fix: [
+            'Bitkiyi daha aydınlık bir konuma taşıyın; ışık koşulları uygunsa birkaç hafta içinde yeni büyüme görülmeye başlar.',
+            'Büyüme sezonunda (ilkbahar-yaz) dengeli bir sıvı gübreyle beslemeye başlayın.',
+            'Saksının altındaki drenaj deliklerinden kök çıkıyorsa veya toprak çok hızlı kuruyorsa bir beden büyük saksıya alın.',
+          ],
+          prevent: [
+            'Bitkinin tür rehberinde önerilen ışık seviyesini sağlayın.',
+            'Büyüme sezonunda düzenli, ama aşırıya kaçmayan bir gübreleme programı uygulayın.',
+            'Her 1-2 yılda bir kökleri kontrol edip gerekirse daha büyük bir saksıya alın.',
+          ],
+          urgency: 'low',
+          urgencyNote: 'Acil değildir, ama uzun süredir hiç yeni yaprak çıkmıyorsa ışık ve besin koşullarını gözden geçirmenin zamanı gelmiş olabilir.',
+        },
+        curlingLeaves: {
+          why: [
+            'Az sulama veya düşük nem, yaprakların su kaybını azaltmak için içe doğru kıvrılmasına neden olabilir.',
+            'Doğrudan ve sert öğleden sonra güneşi, gölge seven bitkilerde yaprakların kendini korumak için kıvrılmasına yol açabilir.',
+            'Bazı zararlılar (özellikle yaprak biti ve kırmızı örümcek) beslenirken yaprakları deforme edip kıvrılmaya neden olabilir.',
+          ],
+          fix: [
+            'Toprağı kontrol edin, kuruysa sulayın ve nem düşükse bir nem tepsisi ekleyin.',
+            'Bitki doğrudan öğle güneşi alıyorsa ince bir perde arkasına veya daha dolaylı ışık alan bir yere taşıyın.',
+            'Yaprakların altını zararlı belirtisi (küçük noktalar, ince ağlar, yapışkan salgı) için kontrol edin; varsa bitkiyi izole edip uygun bir böcek ilacıyla tedavi edin.',
+          ],
+          prevent: [
+            'Düzenli bir sulama rutini sürdürün, toprağın uzun süre tamamen kurumasına izin vermeyin.',
+            'Bitkiyi tür rehberindeki ışık seviyesine uygun bir yere yerleştirin.',
+            'Yeni bitkileri eve getirdiğinizde birkaç hafta diğerlerinden ayrı tutup zararlı kontrolü yapın.',
+          ],
+          urgency: 'low',
+          urgencyNote: 'Tek başına acil değildir, ama zararlı şüphesi varsa hızlı davranmak yayılmayı önler.',
+        },
+        leggyGrowth: {
+          why: [
+            'Neredeyse her zaman yetersiz ışığın işaretidir — bitki mevcut ışık kaynağına ulaşmak için gövdesini olağandışı uzatır, bu da yapraklar arasında geniş boşluklara yol açar.',
+          ],
+          fix: [
+            'Bitkiyi kademeli olarak daha aydınlık bir konuma taşıyın; ani, çok sert bir ışık değişimi yaprak yanığına neden olabilir.',
+            'Sarkan, tek yönlü büyümüş bitkilerde şekil vermek için budama yapılabilir — çoğu tür budamadan sonra daha gür dallanır.',
+            'Bazı türler (pothos, filodendron gibi) uzamış sürgünlerden kolayca çoğaltılıp yeniden dikilebilir.',
+          ],
+          prevent: [
+            'Bitkinin tür rehberinde önerilen ışık seviyesini sağlayın.',
+            'Bitkiyi düzenli olarak (birkaç haftada bir çeyrek tur) çevirin, tüm yüzeylerin eşit ışık almasını sağlayın.',
+          ],
+          urgency: 'low',
+          urgencyNote: 'Acil değildir, kozmetik ve yavaş ilerleyen bir durumdur — ama düzeltilmezse bitki zayıflamaya devam eder.',
+        },
+        mushyStem: {
+          why: [
+            'Neredeyse her zaman aşırı sulama veya kötü drenajın sonucudur; kökler ve gövde dibi oksijensiz kalıp çürümeye başlar.',
+            'Drenaj deliği olmayan bir saksı veya saksı altında biriken suyla temas, çürümeyi hızlandıran en yaygın nedenlerdendir.',
+          ],
+          fix: [
+            'Bitkiyi hemen saksıdan çıkarın; kararmış, yumuşak, kötü kokan kökleri ve gövde kısımlarını temiz bir bıçak veya makasla sağlıklı dokuya kadar kesin.',
+            'Kalan sağlıklı kökleri temiz suyla durulayıp taze, iyi drene olan bir toprak karışımıyla yeni (gerekirse daha küçük) bir saksıya dikin.',
+            'Çürüme çok ilerlemişse ve sağlıklı doku çok azsa, sağlam bir sürgünden çelik alıp bitkiyi yeniden başlatmak daha başarılı olabilir.',
+          ],
+          prevent: [
+            'Saksının mutlaka drenaj deliği olduğundan ve alttaki tabakta suyun birikmediğinden emin olun.',
+            'Sulamadan önce toprağın üst birkaç santimetresinin kuruduğundan emin olun.',
+            'Saksı boyutunun bitkinin kök topuna uygun olduğundan emin olun — gereğinden büyük saksılar nemi gereğinden uzun tutar.',
+          ],
+          urgency: 'high',
+          urgencyNote: 'Bu belirti hızla ilerleyebilir ve tedavisiz bırakılırsa bitkiyi kaybettirebilir — mümkün olan en kısa sürede müdahale edin.',
         },
       },
     },

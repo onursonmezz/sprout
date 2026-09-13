@@ -45,6 +45,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="guide"
+        options={{
+          title: t.tabs.guide,
+          tabBarIcon: ({ color, size }) => <Ionicons name="library-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: t.tabs.settings,
