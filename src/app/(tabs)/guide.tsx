@@ -101,29 +101,6 @@ export default function GuideScreen() {
             </Pressable>
 
             <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>
-              {t.guide.topicsSectionTitle}
-            </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryRow}>
-              {guideCategoryKeys.map((key) => {
-                const active = activeCategory === key;
-                return (
-                  <Pressable key={key} onPress={() => toggleCategory(key)} style={styles.categoryItem}>
-                    <View
-                      style={[
-                        styles.categoryCircle,
-                        { backgroundColor: active ? colors.tint : colors.card, borderColor: colors.border },
-                      ]}>
-                      <Ionicons name={guideCategoryIcons[key]} size={26} color={active ? '#fff' : colors.text} />
-                    </View>
-                    <Text style={[styles.categoryLabel, { color: active ? colors.tint : colors.textSecondary }]}>
-                      {t.guide.categories[key]}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-
-            <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>
               {t.guide.featuredSectionTitle}
             </Text>
             <Pressable
@@ -152,6 +129,29 @@ export default function GuideScreen() {
                 </View>
               </View>
             </Pressable>
+
+            <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>
+              {t.guide.topicsSectionTitle}
+            </Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryRow}>
+              {guideCategoryKeys.map((key) => {
+                const active = activeCategory === key;
+                return (
+                  <Pressable key={key} onPress={() => toggleCategory(key)} style={styles.categoryItem}>
+                    <View
+                      style={[
+                        styles.categoryCircle,
+                        { backgroundColor: active ? colors.tint : colors.card, borderColor: colors.border },
+                      ]}>
+                      <Ionicons name={guideCategoryIcons[key]} size={26} color={active ? '#fff' : colors.text} />
+                    </View>
+                    <Text style={[styles.categoryLabel, { color: active ? colors.tint : colors.textSecondary }]}>
+                      {t.guide.categories[key]}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
 
             <View style={[styles.sectionHeaderRow, { marginTop: Spacing.four }]}>
               <View style={{ flex: 1 }}>
