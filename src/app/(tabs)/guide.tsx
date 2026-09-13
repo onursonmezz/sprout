@@ -284,7 +284,10 @@ const styles = StyleSheet.create({
   seasonalBody: { fontSize: 13, lineHeight: 19 },
   seasonalCta: { fontSize: 13, fontWeight: '700', alignSelf: 'flex-end' },
 
-  categoryRow: { gap: Spacing.three, paddingTop: Spacing.one, paddingRight: Spacing.four },
+  // Extra-generous trailing padding so the last circle+label clears the
+  // screen edge with real breathing room once fully scrolled, rather than
+  // sitting flush against it.
+  categoryRow: { gap: Spacing.three, paddingTop: Spacing.one, paddingRight: Spacing.six },
   categoryItem: { alignItems: 'center', gap: 6, width: 72 },
   categoryCircle: { width: 64, height: 64, borderRadius: 32, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   categoryLabel: { fontSize: 11, fontWeight: '600', textAlign: 'center' },
