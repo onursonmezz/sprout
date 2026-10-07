@@ -731,6 +731,9 @@ export const translations = {
       measureLight: '📏 Measure light',
       checkForPlant: '📏 Check the light where it sits',
       forPlant: (name: string, min: number, max: number) => `${name} wants ${min}–${max} lux`,
+      measuringFor: (name: string) => `Measuring for ${name}`,
+      rangeFrame: (name: string) => `Frame: ${name}'s range`,
+      waiting: 'Waiting for the sensor…',
       verdicts: {
         tooDark: 'Far too dark for this plant',
         dim: 'A bit too dim — move it closer to a window',
@@ -1491,6 +1494,9 @@ export const translations = {
       measureLight: '📏 Işığı ölç',
       checkForPlant: '📏 Durduğu yerin ışığını kontrol et',
       forPlant: (name: string, min: number, max: number) => `${name} için uygun aralık: ${min}–${max} lux`,
+      measuringFor: (name: string) => `${name} için ölçülüyor`,
+      rangeFrame: (name: string) => `Çerçeve: ${name} aralığı`,
+      waiting: 'Sensör bekleniyor…',
       verdicts: {
         tooDark: 'Bu bitki için fazla karanlık',
         dim: 'Biraz loş — pencereye yaklaştır',

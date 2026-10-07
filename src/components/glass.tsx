@@ -44,13 +44,13 @@ export function GlowBackground() {
 
 /** Fills its parent with a gradient. The parent needs `overflow: 'hidden'`
  * for rounded corners to clip it. */
-export function GradientFill({ stops, angle = 'diagonal' }: { stops: readonly string[]; angle?: 'diagonal' | 'horizontal' }) {
+export function GradientFill({ stops, angle = 'diagonal' }: { stops: readonly string[]; angle?: 'diagonal' | 'horizontal' | 'vertical' }) {
   const id = useId();
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
       <Svg width="100%" height="100%">
         <Defs>
-          <LinearGradient id={id} x1="0" y1="0" x2="1" y2={angle === 'diagonal' ? '1' : '0'}>
+          <LinearGradient id={id} x1="0" y1="0" x2={angle === 'vertical' ? '0' : '1'} y2={angle === 'horizontal' ? '0' : '1'}>
             {stops.map((color, i) => (
               <Stop key={i} offset={stops.length === 1 ? 0 : i / (stops.length - 1)} stopColor={color} />
             ))}
