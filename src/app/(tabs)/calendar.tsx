@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Fonts, Spacing } from '@/constants/theme';
+import { FloatingTabBarSpace, Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -225,7 +225,7 @@ export default function CalendarScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { padding: Spacing.four, paddingBottom: Spacing.six, gap: Spacing.two },
+  scroll: { padding: Spacing.four, paddingBottom: FloatingTabBarSpace, gap: Spacing.two },
   title: { fontSize: 28, marginBottom: Spacing.two },
   monthHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   navButton: { width: 36, height: 36, borderRadius: 18, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },

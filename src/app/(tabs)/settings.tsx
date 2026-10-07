@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DateField } from '@/components/date-field';
-import { Fonts, Spacing } from '@/constants/theme';
+import { FloatingTabBarSpace, Fonts, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
@@ -522,7 +522,7 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { padding: Spacing.four, paddingBottom: Spacing.six, gap: Spacing.one },
+  scroll: { padding: Spacing.four, paddingBottom: FloatingTabBarSpace, gap: Spacing.one },
   title: { fontSize: 28, marginBottom: Spacing.two },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5, marginTop: Spacing.three, marginBottom: Spacing.one },
   card: { borderRadius: 18, borderWidth: 1, paddingHorizontal: Spacing.three },

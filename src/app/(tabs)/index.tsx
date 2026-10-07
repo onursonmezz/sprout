@@ -4,19 +4,26 @@ import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { PlantAvatar } from '@/components/plant-avatar';
+import { GlassCard, GlowBackground, GradientButton, GradientFill, ProgressBar } from '@/components/glass';
+import { PlantAvatar, PlantPhoto } from '@/components/plant-avatar';
 import { roomDisplayName } from '@/constants/rooms';
-import { Fonts, Spacing } from '@/constants/theme';
+import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
-import { CareTaskType } from '@/data/plants';
+import { CareTaskType, Plant } from '@/data/plants';
 import { daysUntilNext } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 import { computeCareStats } from '@/utils/stats';
 
-const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
+const CARE_ICON: Record<CareTaskType, keyof typeof Ionicons.glyphMap> = {
+  fertilize: 'flask-outline',
+  rotate: 'sync-outline',
+  mist: 'water-outline',
+  prune: 'cut-outline',
+  repot: 'flower-outline',
+};
 
 function greeting(t: ReturnType<typeof useLanguage>['t']) {
   const hour = new Date().getHours();
@@ -29,6 +36,12 @@ function formatDayLength(hours: number, t: ReturnType<typeof useLanguage>['t']) 
   const h = Math.floor(hours);
   const m = Math.round((hours - h) * 60);
   return t.today.dayLength(h, m);
+}
+
+/** How far through its watering interval a plant is (1 = due now). */
+function wateringProgress(plant: Plant) {
+  const interval = Math.max(1, plant.customIntervalDays ?? plant.wateringIntervalDays);
+  return (interval - plant.daysUntilWatering) / interval;
 }
 
 export default function TodayScreen() {
@@ -87,223 +100,204 @@ export default function TodayScreen() {
     [plants]
   );
 
+  const heroPlant = needsAttention[0] ?? comingUp[0] ?? plants[0];
+
   return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <View style={styles.dateRow}>
-          <Text style={[styles.date, { color: colors.textSecondary }]}>{todayLabel}</Text>
-          {dayLengthHours != null && (
-            <Text style={[styles.dayLength, { color: colors.textSecondary }]}>
-              ☀️ {formatDayLength(dayLengthHours, t)}
-            </Text>
-          )}
-        </View>
-        <Text style={[styles.greeting, { color: colors.text, fontFamily: Fonts.serif }]}>
-          {greeting(t)},{'\n'}
-          <Text style={{ color: colors.tint }}>{t.today.howArePlants}</Text>
-        </Text>
-
-        <View style={[styles.statsRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Stat value={String(plants.length)} label={t.today.plantsAlive} colors={colors} />
-          <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
-          <Stat value={String(streak)} label={t.today.dayStreak} colors={colors} />
-          <View style={[styles.statDivider, { backgroundColor: colors.border }]} />
-          <Stat value={String(thisMonth)} label={t.today.thisMonth} colors={colors} />
-        </View>
-
-        <Pressable
-          onPress={() => router.push('/light-meter')}
-          style={[styles.lightMeterCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <View style={{ flex: 1, gap: 2 }}>
-            <Text style={[styles.lightMeterTitle, { color: colors.text }]}>{t.today.lightMeterCardTitle}</Text>
-            <Text style={[styles.lightMeterSubtitle, { color: colors.textSecondary }]}>{t.today.lightMeterCardSubtitle}</Text>
-          </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
-        </Pressable>
-
-        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.today.needsAttention}</Text>
-        <View style={{ gap: Spacing.two }}>
-          {needsAttention.length === 0 && (
-            <View style={[styles.emptyCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-              <Text style={{ fontSize: 20 }}>🌿</Text>
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t.today.noAttentionNeeded}</Text>
+    <View style={styles.safe}>
+      <GlowBackground />
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={styles.topRow}>
+            <View style={styles.logo}>
+              <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
+              <Ionicons name="leaf" size={20} color={colors.onTint} />
             </View>
-          )}
-          {needsAttention.map((plant) => {
-            const isOverdue = plant.status === 'overdue';
-            return (
-              <Pressable
-                key={plant.id}
-                onPress={() => router.push(`/plant/${plant.id}`)}
-                style={[
-                  styles.attentionCard,
-                  {
-                    backgroundColor: isOverdue ? colors.accentMuted : colors.card,
-                    borderColor: isOverdue ? colors.accent : colors.border,
-                  },
-                ]}>
-                <PlantAvatar plant={plant} size={52} />
-                <View style={styles.attentionInfo}>
-                  <View style={styles.attentionNameRow}>
-                    <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
-                    {isOverdue && (
-                      <View style={[styles.badge, { backgroundColor: colors.accent }]}>
-                        <Text style={styles.badgeText}>{t.today.daysLate(Math.abs(plant.daysUntilWatering))}</Text>
-                      </View>
-                    )}
-                  </View>
-                  <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.species}</Text>
-                  <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>
-                    {roomDisplayName(plant, t)} · {plant.wateringAmountMl}ml
-                  </Text>
-                </View>
-                <View style={styles.attentionActions}>
-                  <Pressable
-                    onPress={() => handleWater(plant)}
-                    style={[styles.wateredButton, { backgroundColor: colors.accent }]}>
-                    <Text style={styles.wateredButtonText}>{t.today.water}</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={() => handleSnooze(plant.id)}
-                    style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
-                    <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.today.snooze}</Text>
-                  </Pressable>
-                </View>
-              </Pressable>
-            );
-          })}
-        </View>
-
-        {careDue.length > 0 && (
-          <>
-            <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>{t.today.careDue}</Text>
-            <View style={{ gap: Spacing.two }}>
-              {careDue.map(({ plant, task, index }) => (
-                <Pressable
-                  key={`${plant.id}-${index}`}
-                  onPress={() => router.push(`/plant/${plant.id}`)}
-                  style={[styles.careRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
-                  <Text style={{ fontSize: 18 }}>{CARE_EMOJI[task.type]}</Text>
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.plantName, { color: colors.text }]}>{t.plantDetail.care.taskNames[task.type]}</Text>
-                    <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.name}</Text>
-                  </View>
-                  <Pressable
-                    onPress={() => {
-                      completeCareTask(plant.id, index, t.plantDetail.care.taskNames[task.type]);
-                      hapticSuccess();
-                    }}
-                    style={[styles.wateredButton, { backgroundColor: colors.tint }]}>
-                    <Text style={styles.wateredButtonText}>{t.today.careDone}</Text>
-                  </Pressable>
-                </Pressable>
-              ))}
-            </View>
-          </>
-        )}
-
-        <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>
-          {t.today.comingUp}
-        </Text>
-        {comingUp.length === 0 && (
-          <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{t.today.nothingThisWeek}</Text>
-        )}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: Spacing.two }}>
-          {comingUp.map((plant) => (
-            <Pressable
-              key={plant.id}
-              onPress={() => router.push(`/plant/${plant.id}`)}
-              style={[styles.upcomingCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-              <PlantAvatar plant={plant} size={48} />
-              <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
-              <Text style={[styles.upcomingDays, { color: colors.tint }]}>
-                {plant.daysUntilWatering === 1 ? t.today.tomorrow : t.today.inDays(plant.daysUntilWatering)}
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.greeting, { color: colors.text }]}>
+                {greeting(t)}, <Text style={{ color: colors.tintBright }}>{t.today.howArePlants}</Text>
               </Text>
+              <Text style={[styles.date, { color: colors.textSecondary }]}>{todayLabel}</Text>
+            </View>
+            <Pressable onPress={() => router.push('/light-meter')} accessibilityLabel={t.today.lightMeterCardTitle}>
+              <GlassCard style={styles.roundButton}>
+                <Ionicons name="sunny-outline" size={19} color={colors.text} />
+              </GlassCard>
             </Pressable>
-          ))}
+          </View>
+
+          {dayLengthHours != null && (
+            <GlassCard style={styles.dayLengthChip}>
+              <Ionicons name="sunny" size={13} color={colors.late} />
+              <Text style={[styles.dayLength, { color: colors.textSecondary }]}>{formatDayLength(dayLengthHours, t)}</Text>
+            </GlassCard>
+          )}
+
+          <View style={[styles.hero, { boxShadow: `0px 14px 30px ${colors.shadow}` }]}>
+            <GradientFill stops={[colors.heroFrom, colors.heroMid, colors.heroTo]} />
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.heroTitle, { color: colors.onHero }]}>
+                {needsAttention.length > 0 ? t.today.heroWaiting(needsAttention.length) : t.today.heroAllGood}
+              </Text>
+              <Text style={[styles.heroSub, { color: colors.onHero }]}>{t.today.heroSub(plants.length, streak)}</Text>
+            </View>
+            {heroPlant && (
+              <View style={styles.heroPhoto}>
+                <PlantAvatar plant={heroPlant} size={92} radius={16} />
+              </View>
+            )}
+          </View>
+
+          <View style={styles.statsRow}>
+            <Stat value={String(plants.length)} label={t.today.plantsAlive} />
+            <Stat value={String(streak)} label={t.today.dayStreak} />
+            <Stat value={String(thisMonth)} label={t.today.thisMonth} />
+          </View>
+
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.today.needsAttention}</Text>
+          <View style={{ gap: Spacing.two }}>
+            {needsAttention.length === 0 && (
+              <GlassCard style={styles.emptyCard}>
+                <Ionicons name="checkmark-circle-outline" size={22} color={colors.tintBright} />
+                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t.today.noAttentionNeeded}</Text>
+              </GlassCard>
+            )}
+            {needsAttention.map((plant) => {
+              const isOverdue = plant.status === 'overdue';
+              return (
+                <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)}>
+                  <GlassCard style={styles.attentionCard}>
+                    <PlantAvatar plant={plant} size={72} radius={13} />
+                    <View style={styles.attentionInfo}>
+                      <Text style={[styles.plantName, { color: colors.text }]} numberOfLines={1}>
+                        {plant.name}
+                      </Text>
+                      <Text style={[styles.plantMeta, { color: colors.textSecondary }]} numberOfLines={1}>
+                        {roomDisplayName(plant, t)} · {plant.wateringAmountMl}ml
+                      </Text>
+                      <Text style={[styles.status, { color: isOverdue ? colors.late : colors.tintBright }]}>
+                        {isOverdue ? t.today.daysLate(Math.abs(plant.daysUntilWatering)) : t.today.dueToday}
+                      </Text>
+                      <ProgressBar progress={1} late={isOverdue} />
+                    </View>
+                    <View style={styles.attentionActions}>
+                      <GradientButton label={t.today.water} onPress={() => handleWater(plant)} />
+                      <Pressable onPress={() => handleSnooze(plant.id)} style={[styles.snoozeButton, { borderColor: colors.glassBorder }]}>
+                        <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.today.snooze}</Text>
+                      </Pressable>
+                    </View>
+                  </GlassCard>
+                </Pressable>
+              );
+            })}
+          </View>
+
+          {careDue.length > 0 && (
+            <>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.today.careDue}</Text>
+              <View style={{ gap: Spacing.two }}>
+                {careDue.map(({ plant, task, index }) => (
+                  <Pressable key={`${plant.id}-${index}`} onPress={() => router.push(`/plant/${plant.id}`)}>
+                    <GlassCard style={styles.careRow}>
+                      <View style={[styles.careIcon, { backgroundColor: colors.track }]}>
+                        <Ionicons name={CARE_ICON[task.type]} size={18} color={colors.tintBright} />
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={[styles.plantName, { color: colors.text }]}>{t.plantDetail.care.taskNames[task.type]}</Text>
+                        <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.name}</Text>
+                      </View>
+                      <GradientButton
+                        label={t.today.careDone}
+                        onPress={() => {
+                          completeCareTask(plant.id, index, t.plantDetail.care.taskNames[task.type]);
+                          hapticSuccess();
+                        }}
+                      />
+                    </GlassCard>
+                  </Pressable>
+                ))}
+              </View>
+            </>
+          )}
+
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.today.comingUp}</Text>
+          {comingUp.length === 0 && (
+            <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{t.today.nothingThisWeek}</Text>
+          )}
+          <View style={styles.grid}>
+            {comingUp.map((plant) => (
+              <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} style={styles.gridItem}>
+                <GlassCard style={styles.tile}>
+                  <PlantPhoto plant={plant} height={92} emojiSize={38} />
+                  <View style={styles.tileInfo}>
+                    <Text style={[styles.plantName, { color: colors.text }]} numberOfLines={1}>
+                      {plant.name}
+                    </Text>
+                    <Text style={[styles.status, { color: colors.tintBright }]}>
+                      {plant.daysUntilWatering === 1 ? t.today.tomorrow : t.today.inDays(plant.daysUntilWatering)}
+                    </Text>
+                    <ProgressBar progress={wateringProgress(plant)} />
+                  </View>
+                </GlassCard>
+              </Pressable>
+            ))}
+          </View>
         </ScrollView>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
-function Stat({ value, label, colors }: { value: string; label: string; colors: ReturnType<typeof useTheme> }) {
+function Stat({ value, label }: { value: string; label: string }) {
+  const colors = useTheme();
   return (
-    <View style={styles.stat}>
-      <Text style={[styles.statValue, { color: colors.text, fontFamily: Fonts.serif }]}>{value}</Text>
+    <GlassCard style={styles.stat}>
+      <Text style={[styles.statValue, { color: colors.text }]}>{value}</Text>
       <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{label}</Text>
-    </View>
+    </GlassCard>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { padding: Spacing.four, paddingBottom: Spacing.six, gap: Spacing.three },
-  dateRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  date: { fontSize: 13, fontWeight: '600' },
-  dayLength: { fontSize: 12, fontWeight: '600' },
-  greeting: { fontSize: 30, lineHeight: 36, marginBottom: Spacing.two },
-  statsRow: {
+  scroll: { padding: Spacing.three, paddingBottom: FloatingTabBarSpace, gap: Spacing.three },
+  topRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  logo: { width: 40, height: 40, borderRadius: 20, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
+  greeting: { fontSize: 16, fontWeight: '700' },
+  date: { fontSize: 12, marginTop: 1 },
+  roundButton: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
+  dayLengthChip: {
     flexDirection: 'row',
-    borderRadius: 20,
-    borderWidth: 1,
-    paddingVertical: Spacing.three,
-    marginBottom: Spacing.two,
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: 6,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
   },
-  stat: { flex: 1, alignItems: 'center', gap: 2 },
-  statDivider: { width: 1 },
-  statValue: { fontSize: 22, fontWeight: '700' },
+  dayLength: { fontSize: 12, fontWeight: '500' },
+  hero: { flexDirection: 'row', alignItems: 'center', gap: 12, borderRadius: 20, padding: Spacing.three, overflow: 'hidden' },
+  heroTitle: { fontSize: 25, lineHeight: 28, fontWeight: '700' },
+  heroSub: { fontSize: 12, marginTop: 6, opacity: 0.85 },
+  heroPhoto: { borderRadius: 16, boxShadow: '0px 8px 20px rgba(0,0,0,0.3)' },
+  statsRow: { flexDirection: 'row', gap: Spacing.two },
+  stat: { flex: 1, alignItems: 'center', paddingVertical: 12, gap: 2, borderRadius: 16 },
+  statValue: { fontSize: 20, fontWeight: '700' },
   statLabel: { fontSize: 11, textAlign: 'center' },
-  lightMeterCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: Spacing.three,
-    gap: Spacing.two,
-  },
-  lightMeterTitle: { fontSize: 14, fontWeight: '700' },
-  lightMeterSubtitle: { fontSize: 12 },
-  sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5, marginBottom: Spacing.one },
-  emptyCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: Spacing.three,
-  },
+  sectionTitle: { fontSize: 16, fontWeight: '700', marginTop: Spacing.one },
+  emptyCard: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, padding: Spacing.three },
   emptyText: { fontSize: 13, flex: 1 },
-  attentionCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 18,
-    borderWidth: 1.5,
-    padding: Spacing.two,
-    gap: Spacing.two,
-  },
-  careRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, borderRadius: 16, borderWidth: 1, padding: Spacing.two },
-  avatar: { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
-  avatarEmoji: { fontSize: 22 },
-  attentionInfo: { flex: 1, gap: 1 },
-  attentionNameRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one },
+  attentionCard: { flexDirection: 'row', alignItems: 'center', padding: Spacing.two, gap: 12 },
+  attentionInfo: { flex: 1, gap: 2 },
+  attentionActions: { gap: 6, alignItems: 'stretch' },
   plantName: { fontSize: 15, fontWeight: '700' },
   plantMeta: { fontSize: 12 },
-  badge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 10 },
-  badgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
-  attentionActions: { gap: 6, alignItems: 'flex-end' },
-  wateredButton: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 14 },
-  wateredButtonText: { color: '#fff', fontSize: 12, fontWeight: '700' },
-  snoozeButton: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 14 },
+  status: { fontSize: 11, fontWeight: '700', marginBottom: 5 },
+  snoozeButton: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 10, borderWidth: 1, alignItems: 'center' },
   snoozeText: { fontSize: 11, fontWeight: '600' },
-  upcomingCard: {
-    width: 92,
-    borderRadius: 18,
-    borderWidth: 1,
-    padding: Spacing.two,
-    alignItems: 'center',
-    gap: 4,
-  },
-  upcomingAvatar: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
-  upcomingDays: { fontSize: 11, fontWeight: '700' },
+  careRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: Spacing.two, borderRadius: 16 },
+  careIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  gridItem: { width: '48.5%' },
+  tile: { overflow: 'hidden' },
+  tileInfo: { padding: 10, paddingTop: 9 },
 });

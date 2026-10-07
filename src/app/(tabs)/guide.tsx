@@ -5,7 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GuideImage } from '@/components/guide-image';
-import { Fonts, Spacing } from '@/constants/theme';
+import { FloatingTabBarSpace, Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import {
@@ -264,7 +264,7 @@ function IssueListRow({
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { padding: Spacing.four, paddingBottom: Spacing.six },
+  scroll: { padding: Spacing.four, paddingBottom: FloatingTabBarSpace },
   title: { fontSize: 28 },
   searchBox: {
     flexDirection: 'row',
