@@ -3,7 +3,8 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FloatingTabBarSpace, Fonts, Spacing } from '@/constants/theme';
+import { GlowBackground } from '@/components/glass';
+import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -103,13 +104,14 @@ export default function CalendarScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
+      <GlowBackground />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{t.calendar.title}</Text>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.calendar.title}</Text>
 
         <View style={styles.monthHeader}>
           <Pressable
             onPress={() => changeMonth(-1)}
-            style={[styles.navButton, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            style={[styles.navButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
             <Ionicons name="chevron-back" size={18} color={colors.text} />
           </Pressable>
           <Text style={[styles.monthLabel, { color: colors.text }]}>
@@ -117,7 +119,7 @@ export default function CalendarScreen() {
           </Text>
           <Pressable
             onPress={() => changeMonth(1)}
-            style={[styles.navButton, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            style={[styles.navButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
             <Ionicons name="chevron-forward" size={18} color={colors.text} />
           </Pressable>
         </View>
@@ -169,7 +171,7 @@ export default function CalendarScreen() {
         </View>
 
         {selectedDay != null && selectedOffset != null && (
-          <View style={[styles.selectedCard, { backgroundColor: colors.card, borderColor: colors.tint }]}>
+          <View style={[styles.selectedCard, { backgroundColor: colors.glass, borderColor: colors.tint }]}>
             <View style={styles.selectedHeader}>
               <Text style={[styles.weekDayLabel, { color: colors.text }]}>
                 {dayLabel(selectedOffset, new Date(year, month, selectedDay), t)}
@@ -202,7 +204,7 @@ export default function CalendarScreen() {
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.calendar.thisWeek}</Text>
         <View style={{ gap: Spacing.two }}>
           {weekAhead.map(({ offset, date, scheduled }) => (
-            <View key={offset} style={[styles.weekRowCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <View key={offset} style={[styles.weekRowCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
               <Text style={[styles.weekDayLabel, { color: colors.text }]}>{dayLabel(offset, date, t)}</Text>
               {scheduled.length > 0 ? (
                 <View style={styles.chipRow}>

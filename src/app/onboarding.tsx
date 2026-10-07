@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Fonts, Spacing } from '@/constants/theme';
+import { GlowBackground, GradientFill } from '@/components/glass';
+import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useSettings } from '@/context/settings-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -42,11 +43,12 @@ export default function OnboardingScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
+      <GlowBackground />
       <View style={styles.content}>
         <View style={[styles.iconWrap, { backgroundColor: colors.tintMuted }]}>
           <Text style={styles.iconEmoji}>{slide.emoji}</Text>
         </View>
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{slide.title}</Text>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{slide.title}</Text>
         <Text style={[styles.body, { color: colors.textSecondary }]}>{slide.body}</Text>
 
         {'noteTitle' in slide && (
@@ -72,7 +74,8 @@ export default function OnboardingScreen() {
         </View>
 
         <Pressable onPress={handlePrimary} style={[styles.primaryButton, { backgroundColor: colors.tint }]}>
-          <Text style={styles.primaryButtonText}>{slide.primary}</Text>
+          <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
+          <Text style={[styles.primaryButtonText, { color: colors.onTint }]}>{slide.primary}</Text>
         </Pressable>
 
         {'secondary' in slide && (
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
   dotsRow: { flexDirection: 'row', justifyContent: 'center', gap: 6 },
   dot: { width: 6, height: 6, borderRadius: 3 },
   dotActive: { width: 20 },
-  primaryButton: { borderRadius: 20, paddingVertical: 16, alignItems: 'center' },
+  primaryButton: { borderRadius: 20, overflow: 'hidden', paddingVertical: 16, alignItems: 'center' },
   primaryButtonText: { color: '#fff', fontWeight: '700', fontSize: 15 },
   secondaryButton: { alignItems: 'center', paddingVertical: 4 },
   secondaryButtonText: { fontSize: 14, fontWeight: '600' },

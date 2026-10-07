@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlowBackground, GradientFill } from '@/components/glass';
 import { DateField } from '@/components/date-field';
 import { PhotoPicker } from '@/components/photo-picker';
 import { ROOM_KEYS, RoomKey } from '@/constants/rooms';
-import { Fonts, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
@@ -319,6 +320,7 @@ export default function AddPlantScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
+      <GlowBackground />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.topRow}>
           <Pressable onPress={handleBack}>
@@ -329,7 +331,7 @@ export default function AddPlantScreen() {
           <Text style={[styles.stepCount, { color: colors.textSecondary }]}>{t.addPlant.stepOf(step)}</Text>
         </View>
 
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>
           {isEditing ? t.addPlant.editTitle : t.addPlant.title}
         </Text>
         <Text style={[styles.stepTitle, { color: colors.tint }]}>{t.addPlant.stepTitles[step - 1]}</Text>
@@ -357,7 +359,7 @@ export default function AddPlantScreen() {
                 onChangeText={(v) => set('nickname', v)}
                 placeholder={t.addPlant.nicknamePlaceholder}
                 placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
             </Field>
             <Field label={t.addPlant.species} colors={colors}>
@@ -370,7 +372,7 @@ export default function AddPlantScreen() {
                 }}
                 placeholder={t.addPlant.speciesPlaceholder}
                 placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
             </Field>
             <Field label={t.addPlant.latinName} colors={colors}>
@@ -379,7 +381,7 @@ export default function AddPlantScreen() {
                 onChangeText={(v) => set('latinName', v)}
                 placeholder={t.addPlant.latinNamePlaceholder}
                 placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
             </Field>
             <Field label={t.addPlant.dateAcquired} colors={colors}>
@@ -417,7 +419,7 @@ export default function AddPlantScreen() {
                   onChangeText={(v) => set('customRoom', v)}
                   placeholder={t.addPlant.roomPlaceholder}
                   placeholderTextColor={colors.textSecondary}
-                  style={[styles.input, { marginTop: 8, color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                  style={[styles.input, { marginTop: 8, color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
                 />
               )}
             </Field>
@@ -484,7 +486,7 @@ export default function AddPlantScreen() {
                 keyboardType="numeric"
                 placeholder="14"
                 placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
             </Field>
             <Field label={t.addPlant.potMaterial} colors={colors}>
@@ -528,7 +530,7 @@ export default function AddPlantScreen() {
                 onChangeText={(v) => set('soilMix', v)}
                 placeholder={t.addPlant.soilMixPlaceholder}
                 placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
             </Field>
             <Field label={t.addPlant.lastRepotted} colors={colors}>
@@ -594,7 +596,7 @@ export default function AddPlantScreen() {
                 keyboardType="numeric"
                 placeholder="250"
                 placeholderTextColor={colors.textSecondary}
-                style={[styles.input, { color: colors.text, backgroundColor: colors.card, borderColor: colors.border }]}
+                style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
             </Field>
 
@@ -610,7 +612,7 @@ export default function AddPlantScreen() {
               />
             </Field>
 
-            <View style={[styles.summaryCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <View style={[styles.summaryCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
               <Text style={[styles.summaryHeading, { color: colors.text }]}>{t.addPlant.summary}</Text>
               <View style={styles.summaryGrid}>
                 <SummaryItem label={t.addPlant.summaryName} value={form.nickname || '—'} colors={colors} />
@@ -671,7 +673,8 @@ export default function AddPlantScreen() {
           onPress={handleContinue}
           disabled={!canContinue}
           style={[styles.footerContinue, { backgroundColor: colors.tint, opacity: canContinue ? 1 : 0.5 }]}>
-          <Text style={styles.footerContinueText}>
+          <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
+          <Text style={[styles.footerContinueText, { color: colors.onTint }]}>
             {step === 4 ? (isEditing ? t.addPlant.saveChanges : t.addPlant.addPlant) : t.addPlant.continue}
           </Text>
         </Pressable>
@@ -730,9 +733,9 @@ function Pill({
       style={[
         styles.pillOption,
         wide && styles.pillWide,
-        { backgroundColor: selected ? colors.tint : colors.card, borderColor: selected ? colors.tint : colors.border },
+        { backgroundColor: selected ? colors.tint : colors.glass, borderColor: selected ? colors.tint : colors.glassBorder },
       ]}>
-      <Text style={[styles.pillOptionText, { color: selected ? '#fff' : colors.text }]}>{label}</Text>
+      <Text style={[styles.pillOptionText, { color: selected ? colors.onTint : colors.text }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -755,7 +758,7 @@ function OptionRow({
       onPress={onPress}
       style={[
         styles.optionRow,
-        { backgroundColor: selected ? colors.tintMuted : colors.card, borderColor: selected ? colors.tint : colors.border },
+        { backgroundColor: selected ? colors.tintMuted : colors.glass, borderColor: selected ? colors.tint : colors.glassBorder },
       ]}>
       <View>
         <Text style={[styles.optionTitle, { color: colors.text }]}>{title}</Text>
@@ -854,6 +857,6 @@ const styles = StyleSheet.create({
   },
   footerBack: { flex: 1, borderRadius: 16, paddingVertical: 14, alignItems: 'center' },
   footerBackText: { fontWeight: '700' },
-  footerContinue: { flex: 2, borderRadius: 16, paddingVertical: 14, alignItems: 'center' },
+  footerContinue: { flex: 2, borderRadius: 16, overflow: 'hidden', paddingVertical: 14, alignItems: 'center' },
   footerContinueText: { color: '#fff', fontWeight: '700' },
 });

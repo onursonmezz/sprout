@@ -58,7 +58,7 @@ export function PhotoPicker({
       </Pressable>
 
       {panelOpen && (
-        <View style={[styles.panel, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <View style={[styles.panel, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
           <Pressable onPress={handleCamera} style={styles.panelOption}>
             <Ionicons name="camera-outline" size={16} color={colors.text} />
             <Text style={[styles.panelOptionText, { color: colors.text }]}>{t.addPlant.takePhoto}</Text>

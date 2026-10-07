@@ -62,6 +62,28 @@ export function GradientFill({ stops, angle = 'diagonal' }: { stops: readonly st
   );
 }
 
+/** Fades a photo into the page colour towards the bottom, so text placed
+ * over the lower part of the photo stays readable. Fills its parent. */
+export function FadeToBackground() {
+  const colors = useTheme();
+  const id = useId();
+  return (
+    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+      <Svg width="100%" height="100%">
+        <Defs>
+          <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor="#000000" stopOpacity={0.3} />
+            <Stop offset="0.35" stopColor={colors.background} stopOpacity={0} />
+            <Stop offset="0.8" stopColor={colors.background} stopOpacity={0.85} />
+            <Stop offset="1" stopColor={colors.background} stopOpacity={1} />
+          </LinearGradient>
+        </Defs>
+        <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${id})`} />
+      </Svg>
+    </View>
+  );
+}
+
 export function GlassCard({ children, style }: { children?: ReactNode; style?: StyleProp<ViewStyle> }) {
   const colors = useTheme();
   return (

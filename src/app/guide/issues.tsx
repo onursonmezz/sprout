@@ -3,8 +3,9 @@ import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlowBackground } from '@/components/glass';
 import { GuideImage } from '@/components/guide-image';
-import { Fonts, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { issueImageKeys } from '@/data/guide-content';
 import { symptomEmoji, symptomKeys } from '@/data/troubleshooting';
@@ -17,11 +18,12 @@ export default function GuideIssuesScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
+      <GlowBackground />
       <View style={styles.topRow}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={22} color={colors.text} />
         </Pressable>
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{t.guide.issuesSectionTitle}</Text>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.guide.issuesSectionTitle}</Text>
       </View>
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t.guide.issuesSectionSubtitle}</Text>
 
@@ -30,7 +32,7 @@ export default function GuideIssuesScreen() {
           <Pressable
             key={key}
             onPress={() => router.push(`/guide/issue/${key}`)}
-            style={[styles.row, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            style={[styles.row, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
             <GuideImage imageKey={issueImageKeys[key]} emoji={symptomEmoji[key]} backgroundColor={colors.accentMuted} style={styles.thumb} emojiSize={24} />
             <View style={{ flex: 1, gap: 2 }}>
               <Text style={[styles.rowTitle, { color: colors.text }]}>{t.troubleshooting.symptoms[key].label}</Text>

@@ -2,8 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { GlowBackground } from '@/components/glass';
 import { GuideImage } from '@/components/guide-image';
-import { Fonts, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { issueImageKeys, UrgencyLevel } from '@/data/guide-content';
 import { symptomEmoji, SymptomKey } from '@/data/troubleshooting';
@@ -56,6 +57,7 @@ export default function GuideIssueScreen() {
 
   return (
     <View style={[styles.safe, { backgroundColor: colors.background }]}>
+      <GlowBackground />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.heroWrap}>
           <GuideImage
@@ -71,9 +73,9 @@ export default function GuideIssueScreen() {
         </View>
 
         <View style={styles.body}>
-          <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{symptom.label}</Text>
+          <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{symptom.label}</Text>
 
-          <View style={[styles.urgencyCard, { backgroundColor: colors.card, borderColor: urgencyColor }]}>
+          <View style={[styles.urgencyCard, { backgroundColor: colors.glass, borderColor: urgencyColor }]}>
             <Text style={[styles.urgencyLabel, { color: urgencyColor }]}>
               {t.guide.issueDetail.urgencyTitle} · {t.guide.issueDetail.urgencyLabels[urgency]}
             </Text>

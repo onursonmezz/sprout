@@ -4,8 +4,9 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlowBackground } from '@/components/glass';
 import { GuideImage } from '@/components/guide-image';
-import { FloatingTabBarSpace, Fonts, Spacing } from '@/constants/theme';
+import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import {
@@ -57,10 +58,11 @@ export default function GuideScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
+      <GlowBackground />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{t.guide.tabTitle}</Text>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.guide.tabTitle}</Text>
 
-        <View style={[styles.searchBox, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <View style={[styles.searchBox, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
           <Ionicons name="search-outline" size={18} color={colors.textSecondary} />
           <TextInput
             value={query}
@@ -109,7 +111,7 @@ export default function GuideScreen() {
             </Text>
             <Pressable
               onPress={() => router.push(`/guide/article/${featuredKey}`)}
-              style={[styles.featuredCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              style={[styles.featuredCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
               <GuideImage
                 imageKey={guideArticles[featuredKey].imageKey}
                 emoji={guideArticles[featuredKey].emoji}
@@ -119,7 +121,7 @@ export default function GuideScreen() {
               />
               <View style={styles.featuredBody}>
                 <View style={[styles.categoryPill, { backgroundColor: colors.tint, alignSelf: 'flex-start' }]}>
-                  <Text style={styles.categoryPillText}>{t.guide.categories[guideArticles[featuredKey].category].toUpperCase()}</Text>
+                  <Text style={[styles.categoryPillText, { color: colors.onTint }]}>{t.guide.categories[guideArticles[featuredKey].category].toUpperCase()}</Text>
                 </View>
                 <Text style={[styles.featuredTitle, { color: colors.text }]}>{t.guide.articles[featuredKey].title}</Text>
                 <Text style={[styles.featuredSubtitle, { color: colors.textSecondary }]} numberOfLines={2}>
@@ -145,9 +147,9 @@ export default function GuideScreen() {
                     <View
                       style={[
                         styles.categoryCircle,
-                        { backgroundColor: active ? colors.tint : colors.card, borderColor: colors.border },
+                        { backgroundColor: active ? colors.tint : colors.glass, borderColor: colors.glassBorder },
                       ]}>
-                      <Ionicons name={guideCategoryIcons[key]} size={26} color={active ? '#fff' : colors.text} />
+                      <Ionicons name={guideCategoryIcons[key]} size={26} color={active ? colors.onTint : colors.text} />
                     </View>
                     <Text style={[styles.categoryLabel, { color: active ? colors.tint : colors.textSecondary }]}>
                       {t.guide.categories[key]}
@@ -180,7 +182,7 @@ export default function GuideScreen() {
                 <Pressable
                   key={key}
                   onPress={() => router.push(`/guide/article/${key}`)}
-                  style={[styles.gridCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                  style={[styles.gridCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
                   <GuideImage
                     imageKey={guideArticles[key].imageKey}
                     emoji={guideArticles[key].emoji}
@@ -218,7 +220,7 @@ function ArticleListRow({
 }) {
   const meta = guideArticles[articleKey];
   return (
-    <Pressable onPress={onPress} style={[styles.listRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <Pressable onPress={onPress} style={[styles.listRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
       <GuideImage imageKey={meta.imageKey} emoji={meta.emoji} backgroundColor={colors.tintMuted} style={styles.listThumb} emojiSize={22} />
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={[styles.listTitle, { color: colors.text }]} numberOfLines={2}>
@@ -242,7 +244,7 @@ function IssueListRow({
   onPress: () => void;
 }) {
   return (
-    <Pressable onPress={onPress} style={[styles.listRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <Pressable onPress={onPress} style={[styles.listRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
       <GuideImage
         imageKey={issueImageKeys[issueKey]}
         emoji={symptomEmoji[issueKey]}

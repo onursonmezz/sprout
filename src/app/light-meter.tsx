@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Fonts, Spacing } from '@/constants/theme';
+import { GlowBackground, GradientFill } from '@/components/glass';
+import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { LIGHT_KEYS, speciesDisplayName, speciesGuide } from '@/data/species-guide';
@@ -68,6 +69,7 @@ export default function LightMeterScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
+      <GlowBackground />
       <View style={styles.topRow}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={22} color={colors.text} />
@@ -75,12 +77,12 @@ export default function LightMeterScreen() {
       </View>
 
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{t.lightMeter.title}</Text>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.lightMeter.title}</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t.lightMeter.subtitle}</Text>
         <Text style={[styles.instructions, { color: colors.textSecondary }]}>{t.lightMeter.instructions}</Text>
 
         {available === false ? (
-          <View style={[styles.unavailableCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <View style={[styles.unavailableCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
             <Text style={{ fontSize: 28 }}>📵</Text>
             <Text style={[styles.unavailableTitle, { color: colors.text }]}>{t.lightMeter.unavailableTitle}</Text>
             <Text style={[styles.unavailableBody, { color: colors.textSecondary }]}>{t.lightMeter.unavailableBody}</Text>
@@ -105,7 +107,7 @@ export default function LightMeterScreen() {
               </View>
             </View>
 
-            <Text style={[styles.luxValue, { color: colors.text, fontFamily: Fonts.serif }]}>
+            <Text style={[styles.luxValue, { color: colors.text, fontWeight: '700' }]}>
               {lux != null ? Math.round(lux) : '—'}
             </Text>
             <Text style={[styles.luxUnit, { color: colors.textSecondary }]}>{t.lightMeter.lux}</Text>
@@ -114,7 +116,7 @@ export default function LightMeterScreen() {
             )}
 
             {species && (
-              <View style={[styles.verdictCard, { backgroundColor: colors.card, borderColor: verdict === 'ok' ? colors.tint : colors.border }]}>
+              <View style={[styles.verdictCard, { backgroundColor: colors.glass, borderColor: verdict === 'ok' ? colors.tint : colors.glassBorder }]}>
                 <Text style={[styles.verdictPlant, { color: colors.textSecondary }]}>
                   {t.lightMeter.forPlant(speciesDisplayName(species, lang), species.light.luxMin, species.light.luxMax)}
                 </Text>
@@ -133,7 +135,8 @@ export default function LightMeterScreen() {
                   router.back();
                 }}
                 style={[styles.useButton, { backgroundColor: colors.tint }]}>
-                <Text style={styles.useButtonText}>{t.lightMeter.useThisReading}</Text>
+                <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
+                <Text style={[styles.useButtonText, { color: colors.onTint }]}>{t.lightMeter.useThisReading}</Text>
               </Pressable>
             )}
           </>
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
   verdictCard: { marginTop: Spacing.three, padding: Spacing.three, borderRadius: 16, borderWidth: 1.5, width: '100%', gap: 4 },
   verdictPlant: { fontSize: 12, textAlign: 'center' },
   verdictText: { fontSize: 15, fontWeight: '700', textAlign: 'center' },
-  useButton: { marginTop: Spacing.four, paddingVertical: 14, paddingHorizontal: Spacing.five, borderRadius: 16, width: '100%', alignItems: 'center' },
+  useButton: { overflow: 'hidden', marginTop: Spacing.four, paddingVertical: 14, paddingHorizontal: Spacing.five, borderRadius: 16, width: '100%', alignItems: 'center' },
   useButtonText: { color: '#fff', fontSize: 15, fontWeight: '700' },
   unavailableCard: {
     marginTop: Spacing.five,

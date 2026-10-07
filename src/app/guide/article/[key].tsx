@@ -3,8 +3,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlowBackground } from '@/components/glass';
 import { GuideImage } from '@/components/guide-image';
-import { Fonts, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { GuideArticleKey, guideArticles } from '@/data/guide-content';
 import { useTheme } from '@/hooks/use-theme';
@@ -29,6 +30,7 @@ export default function GuideArticleScreen() {
 
   return (
     <View style={[styles.safe, { backgroundColor: colors.background }]}>
+      <GlowBackground />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.heroWrap}>
           <GuideImage imageKey={meta.imageKey} emoji={meta.emoji} backgroundColor={colors.tintMuted} style={styles.hero} emojiSize={56} />
@@ -39,9 +41,9 @@ export default function GuideArticleScreen() {
 
         <View style={styles.body}>
           <View style={[styles.categoryPill, { backgroundColor: colors.tint }]}>
-            <Text style={styles.categoryPillText}>{t.guide.categories[meta.category].toUpperCase()}</Text>
+            <Text style={[styles.categoryPillText, { color: colors.onTint }]}>{t.guide.categories[meta.category].toUpperCase()}</Text>
           </View>
-          <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{content.title}</Text>
+          <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{content.title}</Text>
           <View style={styles.metaRow}>
             <Ionicons name="time-outline" size={14} color={colors.textSecondary} />
             <Text style={[styles.metaText, { color: colors.textSecondary }]}>{t.guide.readMinutes(meta.readMinutes)}</Text>

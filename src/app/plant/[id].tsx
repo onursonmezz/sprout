@@ -6,10 +6,11 @@ import { useMemo, useRef, useState } from 'react';
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import ViewShot, { ViewShotRef } from 'react-native-view-shot';
 
+import { FadeToBackground, GlowBackground, GradientFill } from '@/components/glass';
 import { CircularProgress } from '@/components/circular-progress';
 import { PhotoPicker } from '@/components/photo-picker';
 import { PlantAvatar } from '@/components/plant-avatar';
-import { Fonts, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
@@ -93,7 +94,7 @@ export default function PlantDetailScreen() {
   const speciesInfo = findSpeciesLoose(plant.species) ?? findSpeciesLoose(plant.latinName);
   const isOverdue = plant.status === 'overdue';
   const isDueToday = plant.status === 'dueToday';
-  const statusColor = isOverdue || isDueToday ? colors.accent : colors.tint;
+  const statusColor = isOverdue || isDueToday ? colors.late : colors.tintBright;
   const wateringInterval = plant.wateringIntervalDays;
   const wateringProgress = plant.lastWateredDaysAgo / wateringInterval;
 
@@ -117,27 +118,29 @@ export default function PlantDetailScreen() {
 
   return (
     <View style={[styles.safe, { backgroundColor: colors.background }]}>
+      <GlowBackground />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.hero, { backgroundColor: plant.avatarColor }]}>
           {plant.photoUri && <Image source={{ uri: plant.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" />}
+          {!plant.photoUri && <Text style={styles.heroEmoji}>{plant.emoji}</Text>}
+          <FadeToBackground />
           <View style={styles.heroTopRow}>
             <Pressable onPress={() => router.back()} style={styles.heroButton}>
-              <Ionicons name="arrow-back" size={20} color="#1E2A22" />
+              <Ionicons name="arrow-back" size={20} color="#fff" />
             </Pressable>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <Pressable onPress={() => setShareModalVisible(true)} style={styles.heroButton}>
-                <Ionicons name="share-outline" size={18} color="#1E2A22" />
+                <Ionicons name="share-outline" size={18} color="#fff" />
               </Pressable>
               <Pressable onPress={() => router.push(`/add-plant?id=${plant.id}`)} style={styles.heroButton}>
-                <Text style={styles.heroButtonText}>{t.plantDetail.edit}</Text>
+                <Ionicons name="pencil" size={17} color="#fff" />
               </Pressable>
             </View>
           </View>
-          {!plant.photoUri && <Text style={styles.heroEmoji}>{plant.emoji}</Text>}
           <View style={styles.heroTextWrap}>
-            <Text style={[styles.heroName, { fontFamily: Fonts.serif }]}>{plant.name}</Text>
-            <Text style={styles.heroSpecies}>{plant.species}</Text>
-            <Text style={styles.heroLatin}>{plant.latinName}</Text>
+            <Text style={[styles.heroName, { color: colors.text }]}>{plant.name}</Text>
+            <Text style={[styles.heroSpecies, { color: colors.text }]}>{plant.species}</Text>
+            <Text style={[styles.heroLatin, { color: colors.textSecondary }]}>{plant.latinName}</Text>
           </View>
         </View>
 
@@ -145,14 +148,14 @@ export default function PlantDetailScreen() {
           <View
             style={[
               styles.nextWateringCard,
-              { backgroundColor: isOverdue || isDueToday ? colors.accentMuted : colors.tintMuted, borderColor: statusColor },
+              { backgroundColor: colors.glass, borderColor: colors.glassBorder, boxShadow: `0px 10px 26px ${colors.shadow}` },
             ]}>
             <CircularProgress
               size={44}
               strokeWidth={4}
               progress={wateringProgress}
               color={statusColor}
-              trackColor={colors.backgroundSelected}
+              trackColor={colors.track}
             />
             <View style={{ flex: 1 }}>
               <Text style={[styles.nextWateringLabel, { color: colors.textSecondary }]}>{t.plantDetail.nextWatering}</Text>
@@ -166,26 +169,27 @@ export default function PlantDetailScreen() {
           </View>
 
           <View style={styles.actionsRow}>
-            <Pressable onPress={handleWaterNow} style={[styles.waterButton, { backgroundColor: statusColor }]}>
-              <Text style={styles.waterButtonText}>{t.plantDetail.waterNow}</Text>
+            <Pressable onPress={handleWaterNow} style={[styles.waterButton, { boxShadow: `0px 6px 16px ${colors.tintGlow}` }]}>
+              <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
+              <Text style={[styles.waterButtonText, { color: colors.onTint }]}>{t.plantDetail.waterNow}</Text>
             </Pressable>
             <Pressable
               onPress={() => {
                 snoozePlant(plant.id);
                 hapticTap();
               }}
-              style={[styles.snoozeButton, { backgroundColor: colors.backgroundSelected }]}>
-              <Text style={[styles.snoozeText, { color: colors.textSecondary }]}>{t.plantDetail.snooze}</Text>
+              style={[styles.snoozeButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
+              <Text style={[styles.snoozeText, { color: colors.text }]}>{t.plantDetail.snooze}</Text>
             </Pressable>
           </View>
 
-          <View style={[styles.tabRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <View style={[styles.tabRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
             {TAB_KEYS.map((key) => (
               <Pressable
                 key={key}
                 onPress={() => setTab(key)}
                 style={[styles.tabButton, tab === key && { backgroundColor: colors.tint }]}>
-                <Text style={[styles.tabText, { color: tab === key ? '#fff' : colors.textSecondary }]}>
+                <Text style={[styles.tabText, { color: tab === key ? colors.onTint : colors.textSecondary }]}>
                   {tabLabels[key]}
                 </Text>
               </Pressable>
@@ -195,7 +199,7 @@ export default function PlantDetailScreen() {
           {tab === 'overview' && (
             <>
               {speciesInfo && (
-                <View style={[styles.speciesCard, { backgroundColor: colors.tintMuted }]}>
+                <View style={[styles.speciesCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
                   <Text style={[styles.speciesCardTitle, { color: colors.text }]}>{t.plantDetail.speciesGuideTitle}</Text>
                   <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
                     {t.plantDetail.speciesGuideCare(speciesInfo.water.baseIntervalDays)}
@@ -294,7 +298,7 @@ export default function PlantDetailScreen() {
 
       {toastVisible && (
         <Animated.View pointerEvents="none" style={[styles.toast, { backgroundColor: colors.tint, opacity: toastOpacity }]}>
-          <Text style={styles.toastText}>{t.plantDetail.wateredToast(plant.name)}</Text>
+          <Text style={[styles.toastText, { color: colors.onTint }]}>{t.plantDetail.wateredToast(plant.name)}</Text>
         </Animated.View>
       )}
 
@@ -303,7 +307,7 @@ export default function PlantDetailScreen() {
           <ViewShot ref={shareCardRef} options={{ format: 'png', quality: 1 }}>
             <View style={[styles.shareCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <PlantAvatar plant={plant} size={110} />
-              <Text style={[styles.shareCardName, { color: colors.text, fontFamily: Fonts.serif }]}>{plant.name}</Text>
+              <Text style={[styles.shareCardName, { color: colors.text, fontWeight: '700' }]}>{plant.name}</Text>
               {plant.species !== '—' && (
                 <Text style={[styles.shareCardSpecies, { color: colors.textSecondary }]}>{plant.species}</Text>
               )}
@@ -333,7 +337,7 @@ export default function PlantDetailScreen() {
               onPress={handleShare}
               disabled={sharing}
               style={[styles.shareButton, { backgroundColor: colors.tint, opacity: sharing ? 0.6 : 1 }]}>
-              <Text style={{ color: '#fff', fontWeight: '700' }}>
+              <Text style={{ color: colors.onTint, fontWeight: '700' }}>
                 {sharing ? t.shareCard.sharing : t.shareCard.shareButton}
               </Text>
             </Pressable>
@@ -356,7 +360,7 @@ function InfoChip({
   wide?: boolean;
 }) {
   return (
-    <View style={[styles.chip, { backgroundColor: colors.tintMuted }, wide && styles.chipWide]}>
+    <View style={[styles.chip, { backgroundColor: colors.glass, borderColor: colors.glassBorder }, wide && styles.chipWide]}>
       <Text style={[styles.chipLabel, { color: colors.textSecondary }]}>{label}</Text>
       <Text style={[styles.chipValue, { color: colors.text }]}>{value}</Text>
     </View>
@@ -400,7 +404,7 @@ function GrowthSection({
     <View style={{ gap: Spacing.two, marginTop: Spacing.three }}>
       <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.plantDetail.growth}</Text>
 
-      <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={[styles.growthCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <View style={styles.growthCardHeader}>
           <Text style={[styles.growthLabel, { color: colors.text }]}>{t.plantDetail.idealTemperature}</Text>
           <Text style={[styles.growthValue, { color: colors.tint }]}>
@@ -418,12 +422,12 @@ function GrowthSection({
         </View>
       </View>
 
-      <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={[styles.growthCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.growthLabel, { color: colors.text }]}>❄️ {t.plantDetail.hardiness}</Text>
         <Text style={[styles.growthNote, { color: colors.textSecondary }]}>{t.plantDetail.hardinessNote(survivalMinC)}</Text>
       </View>
 
-      <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={[styles.growthCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <FactRow label={t.plantDetail.facts.size} value={t.plantDetail.facts.sizeValue(speciesInfo.size.heightMinCm, speciesInfo.size.heightMaxCm)} colors={colors} />
         <FactRow label={t.plantDetail.facts.growthRate} value={t.plantDetail.facts.growthRates[speciesInfo.growthRate]} colors={colors} />
         <FactRow label={t.plantDetail.facts.difficulty} value={`${speciesInfo.difficulty} / 5`} colors={colors} />
@@ -444,7 +448,7 @@ function GrowthSection({
         {lang === 'tr' && <FactRow label={t.plantDetail.facts.propagation} value={speciesInfo.propagation.join(', ')} colors={colors} />}
       </View>
 
-      <Pressable onPress={onCheckLight} style={[styles.addButton, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <Pressable onPress={onCheckLight} style={[styles.addButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.addButtonText, { color: colors.tint }]}>{t.lightMeter.checkForPlant}</Text>
       </Pressable>
     </View>
@@ -463,7 +467,7 @@ function TroubleshootingSection({ colors, t }: { colors: ReturnType<typeof useTh
           const symptom = t.troubleshooting.symptoms[key];
           const isOpen = expanded === key;
           return (
-            <View key={key} style={[styles.symptomCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <View key={key} style={[styles.symptomCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
               <Pressable onPress={() => setExpanded(isOpen ? null : key)} style={styles.symptomRow}>
                 <Text style={{ fontSize: 16 }}>{symptomEmoji[key]}</Text>
                 <Text style={[styles.symptomLabel, { color: colors.text }]}>{symptom.label}</Text>
@@ -510,12 +514,12 @@ function CareTab({
     <View style={{ gap: Spacing.two }}>
       <Pressable
         onPress={() => setPickerOpen((o) => !o)}
-        style={[styles.addButton, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        style={[styles.addButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.addButtonText, { color: colors.tint }]}>{t.plantDetail.care.addTask}</Text>
       </Pressable>
 
       {pickerOpen && (
-        <View style={[styles.pickerPanel, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <View style={[styles.pickerPanel, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
           {availableTypes.length === 0 ? (
             <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{t.plantDetail.care.allAdded}</Text>
           ) : (
@@ -598,7 +602,7 @@ function CareRow({
   onComplete?: () => void;
 }) {
   return (
-    <View style={[styles.careRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
+    <View style={[styles.careRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
       <View style={[styles.careIcon, { backgroundColor: colors.tintMuted }]}>
         <Text style={{ fontSize: 18 }}>{emoji}</Text>
       </View>
@@ -664,12 +668,12 @@ function JournalTab({
     <View style={{ gap: Spacing.two }}>
       <Pressable
         onPress={() => setFormOpen((o) => !o)}
-        style={[styles.addButton, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        style={[styles.addButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.addButtonText, { color: colors.tint }]}>{t.plantDetail.journal.addEntry}</Text>
       </Pressable>
 
       {formOpen && (
-        <View style={[styles.pickerPanel, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <View style={[styles.pickerPanel, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
           <View style={styles.journalTypeRow}>
             {JOURNAL_TYPES.map((ty) => (
               <Pressable
@@ -712,7 +716,7 @@ function JournalTab({
               onPress={handleSave}
               disabled={!title.trim()}
               style={[styles.formSaveButton, { backgroundColor: colors.tint, opacity: title.trim() ? 1 : 0.5 }]}>
-              <Text style={{ color: '#fff', fontWeight: '700', fontSize: 13 }}>{t.plantDetail.journal.save}</Text>
+              <Text style={{ color: colors.onTint, fontWeight: '700', fontSize: 13 }}>{t.plantDetail.journal.save}</Text>
             </Pressable>
           </View>
         </View>
@@ -729,7 +733,7 @@ function JournalTab({
               </View>
               {i < entries.length - 1 && <View style={[styles.timelineLine, { backgroundColor: colors.border }]} />}
             </View>
-            <View style={[styles.timelineCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <View style={[styles.timelineCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
               <View style={styles.timelineHeader}>
                 <Text style={[styles.timelineTitle, { color: colors.text }]}>{entry.title}</Text>
                 <Text style={[styles.timelineTime, { color: colors.textSecondary }]}>{relativeTime(entry.daysAgo, t)}</Text>
@@ -836,7 +840,7 @@ function HistorySection({
     <View style={{ gap: Spacing.two }}>
       <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{title}</Text>
 
-      <View style={[styles.historyCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={[styles.historyCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.historyCaption, { color: colors.textSecondary }]}>{t.plantDetail.history.last12Weeks}</Text>
         <View style={styles.dotGrid}>
           {Array.from({ length: 84 }).map((_, i) => {
@@ -851,7 +855,7 @@ function HistorySection({
         </View>
       </View>
 
-      <View style={[styles.historyCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={[styles.historyCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.historyCaption, { color: colors.text, fontWeight: '700' }]}>{recentLabel}</Text>
         {recent.length === 0 ? (
           <Text style={{ color: colors.textSecondary, fontSize: 12 }}>{t.plantDetail.history.noHistory}</Text>
@@ -872,7 +876,7 @@ function HistorySection({
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  hero: { height: 260, paddingTop: 56, paddingHorizontal: Spacing.four, justifyContent: 'flex-end' },
+  hero: { height: 320, paddingTop: 56, paddingHorizontal: Spacing.four, justifyContent: 'flex-end', alignItems: 'stretch' },
   heroTopRow: {
     position: 'absolute',
     top: 56,
@@ -881,35 +885,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  heroButton: { backgroundColor: 'rgba(255,255,255,0.7)', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16 },
-  heroButtonText: { fontWeight: '700', color: '#1E2A22' },
-  heroEmoji: { position: 'absolute', right: 24, top: 90, fontSize: 64, opacity: 0.7 },
+  heroButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(7,11,9,0.45)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  heroEmoji: { position: 'absolute', alignSelf: 'center', top: 96, fontSize: 84 },
   heroTextWrap: { paddingBottom: Spacing.three },
-  heroName: { fontSize: 30, color: '#1E2A22' },
-  heroSpecies: { fontSize: 15, color: '#3A4A3E', fontWeight: '600' },
-  heroLatin: { fontSize: 12, color: '#4C5C50', fontStyle: 'italic' },
-  body: { padding: Spacing.four, gap: Spacing.three },
+  heroName: { fontSize: 30, fontWeight: '700' },
+  heroSpecies: { fontSize: 15, fontWeight: '600' },
+  heroLatin: { fontSize: 12, fontStyle: 'italic' },
+  body: { padding: Spacing.three, paddingBottom: Spacing.five, gap: Spacing.three },
   nextWateringCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
     borderRadius: 18,
-    borderWidth: 1.5,
+    borderWidth: 1,
     padding: Spacing.three,
   },
   nextWateringLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
   nextWateringValue: { fontSize: 18, fontWeight: '700' },
   nextWateringMeta: { fontSize: 12, marginTop: 2 },
   actionsRow: { flexDirection: 'row', gap: Spacing.two },
-  waterButton: { flex: 1, borderRadius: 16, paddingVertical: 14, alignItems: 'center' },
+  waterButton: { flex: 1, borderRadius: 14, paddingVertical: 14, alignItems: 'center', overflow: 'hidden' },
   waterButtonText: { color: '#fff', fontWeight: '700' },
-  snoozeButton: { borderRadius: 16, paddingVertical: 14, paddingHorizontal: 18, alignItems: 'center' },
+  snoozeButton: { borderRadius: 14, borderWidth: 1, paddingVertical: 13, paddingHorizontal: 18, alignItems: 'center' },
   snoozeText: { fontWeight: '600' },
   tabRow: { flexDirection: 'row', borderRadius: 16, borderWidth: 1, padding: 4, gap: 4 },
   tabButton: { flex: 1, paddingVertical: 8, borderRadius: 12, alignItems: 'center' },
   tabText: { fontSize: 12, fontWeight: '700' },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5 },
-  speciesCard: { borderRadius: 16, padding: Spacing.three, gap: 3, marginBottom: Spacing.three },
+  speciesCard: { borderRadius: 16, borderWidth: 1, padding: Spacing.three, gap: 3, marginBottom: Spacing.three },
   speciesCardTitle: { fontSize: 12, fontWeight: '700' },
   speciesCardText: { fontSize: 12 },
 
@@ -936,7 +948,7 @@ const styles = StyleSheet.create({
   symptomCauseText: { fontSize: 12, lineHeight: 17 },
 
   chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
-  chip: { width: '31%', borderRadius: 14, padding: Spacing.two, gap: 2 },
+  chip: { width: '31%', borderRadius: 14, borderWidth: 1, padding: Spacing.two, gap: 2 },
   chipWide: { width: '48%' },
   chipLabel: { fontSize: 10, fontWeight: '600' },
   chipValue: { fontSize: 13, fontWeight: '700' },

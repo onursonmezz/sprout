@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { GlowBackground } from '@/components/glass';
 import { DateField } from '@/components/date-field';
-import { FloatingTabBarSpace, Fonts, Spacing } from '@/constants/theme';
+import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
@@ -29,7 +30,7 @@ function formatDate(date: Date) {
 }
 
 function SectionCard({ children, colors }: { children: React.ReactNode; colors: ReturnType<typeof useTheme> }) {
-  return <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>{children}</View>;
+  return <View style={[styles.card, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>{children}</View>;
 }
 
 function Row({
@@ -190,8 +191,9 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
+      <GlowBackground />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, { color: colors.text, fontFamily: Fonts.serif }]}>{t.settings.title}</Text>
+        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.settings.title}</Text>
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.settings.notifications}</Text>
         <SectionCard colors={colors}>
@@ -317,7 +319,7 @@ export default function SettingsScreen() {
                   styles.careInstructionsButton,
                   { backgroundColor: colors.tint, opacity: plants.length === 0 || careInstructionsBusy ? 0.5 : 1 },
                 ]}>
-                <Text style={styles.careInstructionsButtonText}>
+                <Text style={[styles.careInstructionsButtonText, { color: colors.onTint }]}>
                   {careInstructionsBusy ? t.settings.careInstructionsBusy : t.settings.careInstructionsButton}
                 </Text>
               </Pressable>
@@ -353,14 +355,14 @@ export default function SettingsScreen() {
                 <Pressable
                   onPress={() => setLang('en')}
                   style={[styles.segmentBtn, lang === 'en' && { backgroundColor: colors.tint }]}>
-                  <Text style={[styles.segmentText, { color: lang === 'en' ? '#fff' : colors.text }]}>
+                  <Text style={[styles.segmentText, { color: lang === 'en' ? colors.onTint : colors.text }]}>
                     {t.settings.english}
                   </Text>
                 </Pressable>
                 <Pressable
                   onPress={() => setLang('tr')}
                   style={[styles.segmentBtn, lang === 'tr' && { backgroundColor: colors.tint }]}>
-                  <Text style={[styles.segmentText, { color: lang === 'tr' ? '#fff' : colors.text }]}>
+                  <Text style={[styles.segmentText, { color: lang === 'tr' ? colors.onTint : colors.text }]}>
                     {t.settings.turkish}
                   </Text>
                 </Pressable>
