@@ -15,8 +15,8 @@ SplashScreen.preventAutoHideAsync();
 function Navigation() {
   const { scheme, loaded: themeLoaded } = useThemeMode();
   const { loaded: langLoaded } = useLanguage();
-  const { loaded: plantsLoaded } = usePlants();
-  const { loaded: settingsLoaded } = useSettings();
+  const { loaded: plantsLoaded, recomputeIntervals } = usePlants();
+  const { loaded: settingsLoaded, seasonalAdjustment, heatingOn } = useSettings();
   const ready = themeLoaded && langLoaded && plantsLoaded && settingsLoaded;
 
   useNotificationScheduler();
@@ -26,6 +26,14 @@ function Navigation() {
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
   }, [ready]);
+
+  // Flipping seasonal adjustment or heating mode re-times every plant at once,
+  // rather than leaving each one on its old interval until it's next watered.
+  useEffect(() => {
+    if (plantsLoaded && settingsLoaded) recomputeIntervals({ applySeasonalFactors: seasonalAdjustment, heatingOn });
+    // recomputeIntervals is a fresh closure every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plantsLoaded, settingsLoaded, seasonalAdjustment, heatingOn]);
 
   if (!ready) return null;
 

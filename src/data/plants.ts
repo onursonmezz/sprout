@@ -11,7 +11,7 @@ export type CareTask = {
   lastDoneDaysAgo: number;
 };
 
-export type JournalEntryType = 'watered' | 'newLeaf' | 'fertilized' | 'repotted' | 'note';
+export type JournalEntryType = 'watered' | 'newLeaf' | 'fertilized' | 'repotted' | 'rotated' | 'misted' | 'pruned' | 'note';
 
 export type JournalEntry = {
   id: string;
@@ -41,6 +41,11 @@ export type Plant = {
    * output, cached here and refreshed on add/edit, watering, and the daily
    * rollover check (not on every render). */
   wateringIntervalDays: number;
+  /** Set when the user picked their own interval with the stepper — it then
+   * wins over the algorithm everywhere until they switch back to automatic. */
+  customIntervalDays: number | null;
+  /** Extra days added to the due date by "snooze"; cleared on watering. */
+  snoozeDays: number;
   /** The species' reference-condition interval (or a generic fallback when
    * no species matched at add-time) — the fixed baseline
    * recomputeWateringInterval() scales by this plant's actual pot/light/
@@ -52,18 +57,13 @@ export type Plant = {
   indoor: boolean;
   environment: {
     lightKey: LightKey;
-    window: string;
-    hoursLight: string;
-    humidity: string;
-    tempC: string;
+    /** How far the plant sits from its window — feeds the watering algorithm. */
+    windowDistanceCm: number;
   };
   pot: {
-    size: string;
     materialKey: PotMaterialKey;
-    /** Raw pot diameter in cm, used by the watering algorithm — `size` above
-     * is just the "15x14cm" display string. */
     diameterCm: number | null;
-    drainage: string;
+    hasDrainage: boolean;
     soil: string;
   };
   acquiredDate: string;

@@ -33,6 +33,9 @@ const JOURNAL_EMOJI: Record<JournalEntryType, string> = {
   newLeaf: '🌿',
   fertilized: '🌱',
   repotted: '🪴',
+  rotated: '🔄',
+  misted: '💦',
+  pruned: '✂️',
   note: '📝',
 };
 
@@ -235,20 +238,21 @@ export default function PlantDetailScreen() {
               <View style={styles.chipGrid}>
                 <InfoChip label={t.plantDetail.room} value={roomDisplayName(plant, t)} colors={colors} />
                 <InfoChip label={t.plantDetail.light} value={t.addPlant.lightLevels[plant.environment.lightKey].label} colors={colors} />
-                <InfoChip label={t.plantDetail.window} value={plant.environment.window} colors={colors} />
-                <InfoChip label={t.plantDetail.hours} value={plant.environment.hoursLight} colors={colors} />
-                <InfoChip label={t.plantDetail.humidity} value={plant.environment.humidity} colors={colors} />
-                <InfoChip label={t.plantDetail.temp} value={plant.environment.tempC} colors={colors} />
+                <InfoChip
+                  label={t.plantDetail.window}
+                  value={t.addPlant.windowDistances[plant.environment.windowDistanceCm as 30 | 100 | 250 | 400] ?? `${plant.environment.windowDistanceCm} cm`}
+                  colors={colors}
+                />
               </View>
 
               <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.three }]}>
                 {t.plantDetail.potSoil}
               </Text>
               <View style={styles.chipGrid}>
-                <InfoChip label={t.plantDetail.potSize} value={plant.pot.size} colors={colors} />
+                <InfoChip label={t.plantDetail.potSize} value={plant.pot.diameterCm != null ? `${plant.pot.diameterCm} cm` : '—'} colors={colors} />
                 <InfoChip label={t.plantDetail.material} value={t.addPlant.potMaterials[plant.pot.materialKey]} colors={colors} />
-                <InfoChip label={t.plantDetail.drainage} value={plant.pot.drainage} colors={colors} />
-                <InfoChip label={t.plantDetail.soil} value={plant.pot.soil} colors={colors} wide />
+                <InfoChip label={t.plantDetail.drainage} value={plant.pot.hasDrainage ? t.addPlant.yes : t.addPlant.no} colors={colors} />
+                <InfoChip label={t.plantDetail.soil} value={plant.pot.soil || '—'} colors={colors} wide />
                 <InfoChip label={t.plantDetail.acquired} value={plant.acquiredDate} colors={colors} wide />
               </View>
 

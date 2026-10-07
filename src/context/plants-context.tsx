@@ -2,10 +2,15 @@ import { createContext, ReactNode, useContext, useEffect, useRef, useState } fro
 import { AppState } from 'react-native';
 
 import { RoomKey } from '@/constants/rooms';
-import { CareTask, JournalEntry, Plant, WateringStatus } from '@/data/plants';
+import { CareTask, JournalEntry, Plant } from '@/data/plants';
 import { HeatingSensitivity, LightKey, PotMaterialKey } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
-import { recomputeWateringInterval, SeasonalOptions } from '@/utils/watering-algorithm';
+import {
+  DEFAULT_WINDOW_DISTANCE_CM,
+  effectiveWateringInterval,
+  SeasonalOptions,
+  wateringSchedule,
+} from '@/utils/watering-algorithm';
 
 // New schema (materialKey/lightKey/baseIntervalDays/etc. replacing the old
 // species-guide's plain display strings) — a fresh key means every existing
@@ -33,8 +38,10 @@ function migratePlant(p: Plant): Plant {
     baseIntervalDays?: number;
     heatingSensitivity?: HeatingSensitivity;
     indoor?: boolean;
-    environment?: { lightKey?: LightKey };
-    pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null };
+    customIntervalDays?: number | null;
+    snoozeDays?: number;
+    environment?: { lightKey?: LightKey; windowDistanceCm?: number };
+    pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null; hasDrainage?: boolean; drainage?: string; soil?: string };
     roomKey?: RoomKey;
     customRoom?: string | null;
     /** Pre-room-picker plants stored a free-text display string here. */
@@ -50,8 +57,20 @@ function migratePlant(p: Plant): Plant {
     baseIntervalDays: typeof legacy.baseIntervalDays === 'number' ? legacy.baseIntervalDays : wateringIntervalDays,
     heatingSensitivity: legacy.heatingSensitivity ?? 'med',
     indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
-    environment: { ...p.environment, lightKey: legacy.environment?.lightKey ?? 'part_sun' },
-    pot: { ...p.pot, materialKey: legacy.pot?.materialKey ?? 'plastic', diameterCm: legacy.pot?.diameterCm ?? null },
+    customIntervalDays: legacy.customIntervalDays ?? null,
+    snoozeDays: legacy.snoozeDays ?? 0,
+    environment: {
+      lightKey: legacy.environment?.lightKey ?? 'part_sun',
+      windowDistanceCm: legacy.environment?.windowDistanceCm ?? DEFAULT_WINDOW_DISTANCE_CM,
+    },
+    pot: {
+      materialKey: legacy.pot?.materialKey ?? 'plastic',
+      diameterCm: legacy.pot?.diameterCm ?? null,
+      // Older saves stored a translated "Yes"/"No" label instead of a boolean.
+      hasDrainage:
+        typeof legacy.pot?.hasDrainage === 'boolean' ? legacy.pot.hasDrainage : !['No', 'Hayır'].includes(legacy.pot?.drainage ?? ''),
+      soil: legacy.pot?.soil ?? '',
+    },
     roomKey: hasRoomKey ? (legacy.roomKey as RoomKey) : legacy.room && legacy.room !== '—' ? 'other' : 'living_room',
     customRoom: hasRoomKey ? legacy.customRoom ?? null : legacy.room && legacy.room !== '—' ? legacy.room : null,
   };
@@ -68,6 +87,9 @@ type PlantsContextValue = {
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
   waterPlant: (plantId: string) => void;
   snoozePlant: (plantId: string) => void;
+  /** Re-applies the watering algorithm to every plant right away — called
+   * when a setting that feeds it (seasonal adjustment, heating) changes. */
+  recomputeIntervals: (options: SeasonalOptions) => void;
   resetPlants: () => void;
   /** Replaces all local plants with a restored backup, fast-forwarding its
    * relative fields by however long has passed since the backup was made. */
@@ -77,11 +99,13 @@ type PlantsContextValue = {
 
 const PlantsContext = createContext<PlantsContextValue | null>(null);
 
-/** Whole days of real elapsed time between two timestamps. Using elapsed
- * milliseconds (rather than diffing local-calendar dates) keeps this correct
- * even if the device's timezone changes between saves, e.g. after a flight. */
+/** Calendar days between two moments, in the device's local time: saving at
+ * 23:00 and reopening at 08:00 the next morning is one day, not zero. Counting
+ * elapsed 24h blocks instead would drop the remainder every time the state is
+ * re-saved, so plants would age slower than the calendar. */
 function daysBetween(a: Date, b: Date) {
-  return Math.floor((b.getTime() - a.getTime()) / 86400000);
+  const day = (d: Date) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  return Math.round((day(b) - day(a)) / 86400000);
 }
 
 /**
@@ -96,16 +120,13 @@ function fastForward(plants: Plant[], daysPassed: number, options: SeasonalOptio
   if (daysPassed <= 0) return plants;
   return plants.map((p) => {
     const lastWateredDaysAgo = p.lastWateredDaysAgo + daysPassed;
-    const wateringIntervalDays = recomputeWateringInterval(p, today, options);
-    const daysUntilWatering = wateringIntervalDays - lastWateredDaysAgo;
-    const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
+    const wateringIntervalDays = effectiveWateringInterval(p, today, options);
     return {
       ...p,
       lastWateredDaysAgo,
       createdDaysAgo: p.createdDaysAgo + daysPassed,
       wateringIntervalDays,
-      daysUntilWatering,
-      status,
+      ...wateringSchedule(wateringIntervalDays, lastWateredDaysAgo, p.snoozeDays),
       care: p.care.map((c) => ({ ...c, lastDoneDaysAgo: c.lastDoneDaysAgo + daysPassed })),
       journalNotes: p.journalNotes.map((j) => ({ ...j, daysAgo: j.daysAgo + daysPassed })),
     };
@@ -210,8 +231,8 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       setPlants((prev) =>
         prev.map((p) => {
           if (p.id !== plantId) return p;
-          const wateringIntervalDays = recomputeWateringInterval(p, today, options);
-          return { ...p, lastWateredDaysAgo: 0, wateringIntervalDays, daysUntilWatering: wateringIntervalDays, status: 'upcoming' };
+          const wateringIntervalDays = effectiveWateringInterval(p, today, options);
+          return { ...p, lastWateredDaysAgo: 0, snoozeDays: 0, wateringIntervalDays, ...wateringSchedule(wateringIntervalDays, 0, 0) };
         })
       );
     })();
@@ -221,11 +242,26 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
     setPlants((prev) =>
       prev.map((p) => {
         if (p.id !== plantId) return p;
-        const daysUntilWatering = p.daysUntilWatering + 1;
-        const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
-        return { ...p, daysUntilWatering, status };
+        // Snoozing a due/overdue plant means "remind me tomorrow", not "one
+        // day less overdue"; an upcoming one just moves a day further out.
+        const target = Math.max(1, p.daysUntilWatering + 1);
+        const snoozeDays = target - (p.wateringIntervalDays - p.lastWateredDaysAgo);
+        return { ...p, snoozeDays, ...wateringSchedule(p.wateringIntervalDays, p.lastWateredDaysAgo, snoozeDays) };
       })
     );
+
+  const recomputeIntervals = (options: SeasonalOptions) =>
+    setPlants((prev) => {
+      const today = new Date();
+      let changed = false;
+      const next = prev.map((p) => {
+        const wateringIntervalDays = effectiveWateringInterval(p, today, options);
+        if (wateringIntervalDays === p.wateringIntervalDays) return p;
+        changed = true;
+        return { ...p, wateringIntervalDays, ...wateringSchedule(wateringIntervalDays, p.lastWateredDaysAgo, p.snoozeDays) };
+      });
+      return changed ? next : prev;
+    });
 
   return (
     <PlantsContext.Provider
@@ -240,6 +276,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         addJournalEntry,
         waterPlant,
         snoozePlant,
+        recomputeIntervals,
         resetPlants,
         restorePlants,
         loaded,

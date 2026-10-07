@@ -1,25 +1,24 @@
 // @ts-ignore - veri/watering.js is a plain JS module (see veri/VERITABANI.md);
 // its exports are typed at the call sites below instead of at the source.
 import { wateringInterval as rawWateringInterval } from '../../veri/watering.js';
+import { WateringStatus } from '@/data/plants';
 import { HeatingSensitivity, LightKey, PotMaterialKey, wateringAlgorithm, WateringAlgorithm } from '@/data/species-guide';
 
-/** The algorithm needs a window-distance input the app doesn't collect from
- * the user yet. Hardcoded here so it's trivial to replace once there's a
- * real UI for it — TODO: ask the user directly instead of assuming this. */
 export const DEFAULT_WINDOW_DISTANCE_CM = 100;
 
+/** The distances offered in the add/edit form, one per band of the
+ * algorithm's windowDistance table. */
+export const WINDOW_DISTANCE_OPTIONS = [30, 100, 250, 400] as const;
+
 /** Whether the calendar says this is conventional Turkish heating season
- * (Oct-Apr). This is only a default / transition-detection signal now — the
- * live watering calculation uses the user's own heatingOn setting instead
- * (see use-heating-season-prompt.ts), since not everyone's radiator follows
- * the calendar exactly. */
+ * (Oct-Apr). Only a default / transition-detection signal — the live watering
+ * calculation uses the user's own heatingOn setting instead. */
 export function isHeatingSeasonNow(date: Date = new Date()): boolean {
   return wateringAlgorithm.heatingMonths.includes(date.getMonth() + 1);
 }
 
 /** wateringAlgorithm with season/heating/outdoor-heat factors neutralized —
- * used when the user has "Seasonal adjustment" turned off, so the interval
- * still reflects pot + light but not the calendar. */
+ * used when the user has "Seasonal adjustment" turned off. */
 function neutralAlgorithm(algo: WateringAlgorithm): WateringAlgorithm {
   return {
     ...algo,
@@ -29,20 +28,11 @@ function neutralAlgorithm(algo: WateringAlgorithm): WateringAlgorithm {
   };
 }
 
-export type WateringSite = {
-  potMaterial: PotMaterialKey;
-  potDiameterCm: number;
-  light: LightKey;
-  windowDistanceCm: number;
-  indoor: boolean;
-  heatingOn: boolean;
-};
-
 type WateringPlantInput = {
   baseIntervalDays: number;
   heatingSensitivity: HeatingSensitivity;
   pot: { materialKey: PotMaterialKey; diameterCm: number | null };
-  environment: { lightKey: LightKey };
+  environment: { lightKey: LightKey; windowDistanceCm?: number };
   indoor: boolean;
 };
 
@@ -50,23 +40,17 @@ export type SeasonalOptions = {
   /** "Seasonal adjustment" master toggle — off means season + heating both
    * sit at a neutral 1.0, only pot/light still shape the interval. */
   applySeasonalFactors: boolean;
-  /** The user's own heating setting (Settings → "Kalorifer modu"), not an
-   * automatic calendar guess — see use-heating-season-prompt.ts for how it
-   * gets kept in sync with the calendar. */
+  /** The user's own heating setting (Settings → "Kalorifer modu"). */
   heatingOn: boolean;
 };
 
-/**
- * Recomputes a plant's watering interval from its own stored conditions and
- * today's calendar month. Meant to be called at well-defined points (add/edit
- * save, watering, the daily rollover check) rather than on every render.
- */
+/** The algorithm's interval for a plant's own conditions on a given date. */
 export function recomputeWateringInterval(plant: WateringPlantInput, date: Date = new Date(), options: SeasonalOptions): number {
-  const site: WateringSite = {
+  const site = {
     potMaterial: plant.pot.materialKey,
     potDiameterCm: plant.pot.diameterCm ?? 15,
     light: plant.environment.lightKey,
-    windowDistanceCm: DEFAULT_WINDOW_DISTANCE_CM,
+    windowDistanceCm: plant.environment.windowDistanceCm ?? DEFAULT_WINDOW_DISTANCE_CM,
     indoor: plant.indoor,
     heatingOn: options.heatingOn,
   };
@@ -74,4 +58,21 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
   const algo = options.applySeasonalFactors ? wateringAlgorithm : neutralAlgorithm(wateringAlgorithm);
   const result = rawWateringInterval(speciesLike, site, algo, date) as { intervalDays: number };
   return result.intervalDays;
+}
+
+/** The interval actually in force: the user's own choice when they set one,
+ * otherwise the algorithm's. */
+export function effectiveWateringInterval(
+  plant: WateringPlantInput & { customIntervalDays: number | null },
+  date: Date,
+  options: SeasonalOptions
+): number {
+  return plant.customIntervalDays ?? recomputeWateringInterval(plant, date, options);
+}
+
+/** Countdown + status from the three things that determine them. */
+export function wateringSchedule(intervalDays: number, lastWateredDaysAgo: number, snoozeDays: number) {
+  const daysUntilWatering = intervalDays - lastWateredDaysAgo + snoozeDays;
+  const status: WateringStatus = daysUntilWatering < 0 ? 'overdue' : daysUntilWatering === 0 ? 'dueToday' : 'upcoming';
+  return { daysUntilWatering, status };
 }
