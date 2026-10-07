@@ -13,6 +13,15 @@ export type CareTask = {
 
 export type JournalEntryType = 'watered' | 'newLeaf' | 'fertilized' | 'repotted' | 'rotated' | 'misted' | 'pruned' | 'note';
 
+/** The journal entry type a completed care task is logged as. */
+export const careJournalType: Record<CareTaskType, JournalEntryType> = {
+  fertilize: 'fertilized',
+  rotate: 'rotated',
+  mist: 'misted',
+  prune: 'pruned',
+  repot: 'repotted',
+};
+
 export type JournalEntry = {
   id: string;
   type: JournalEntryType;

@@ -2,7 +2,6 @@ import Constants, { AppOwnership } from 'expo-constants';
 import { Platform } from 'react-native';
 import type * as NotificationsType from 'expo-notifications';
 
-const DAILY_REMINDER_ID = 'sprout-daily-reminder';
 const CHANNEL_ID = 'plant-reminders';
 
 let notificationsModule: typeof NotificationsType | null = null;
@@ -71,52 +70,37 @@ export async function requestNotificationPermission(): Promise<boolean> {
   }
 }
 
-export async function scheduleDailyReminder({
-  hour,
-  minute,
-  title,
-  body,
-}: {
-  hour: number;
-  minute: number;
-  title: string;
-  body: string;
-}) {
+export type PlannedReminder = { date: Date; title: string; body: string };
+
+/**
+ * Replaces every pending reminder with the given dated ones. Each carries the
+ * text for its own day (which plants will be due by then), so the reminders
+ * stay right even if the app isn't opened in between — unlike a single
+ * repeating notification, whose text is frozen at whatever was true when it
+ * was scheduled.
+ */
+export async function scheduleReminders(reminders: PlannedReminder[]) {
   const Notifications = await loadNotifications();
   if (!Notifications) return;
   try {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    if (reminders.length === 0) return;
     const { granted } = await Notifications.getPermissionsAsync();
-    if (!granted) {
-      console.warn('[notifications] scheduleDailyReminder skipped: permission not granted');
-      return;
-    }
+    if (!granted) return;
     await ensureAndroidChannel(Notifications);
-    await Notifications.cancelScheduledNotificationAsync(DAILY_REMINDER_ID).catch(() => {});
-    const trigger: NotificationsType.DailyTriggerInput = {
-      type: Notifications.SchedulableTriggerInputTypes.DAILY,
-      hour,
-      minute,
-      channelId: CHANNEL_ID,
-    };
-    await Notifications.scheduleNotificationAsync({
-      identifier: DAILY_REMINDER_ID,
-      content: { title, body, sound: true },
-      trigger,
-    });
-    const nextTrigger = await Notifications.getNextTriggerDateAsync(trigger);
-    console.log(
-      '[notifications] scheduled daily reminder for',
-      `${hour}:${String(minute).padStart(2, '0')}`,
-      '- next fire at',
-      nextTrigger ? new Date(nextTrigger).toString() : 'unknown',
-    );
+    for (const reminder of reminders) {
+      await Notifications.scheduleNotificationAsync({
+        content: { title: reminder.title, body: reminder.body, sound: true },
+        trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: reminder.date, channelId: CHANNEL_ID },
+      });
+    }
   } catch (err) {
-    console.warn('[notifications] scheduleDailyReminder failed:', err);
+    console.warn('[notifications] scheduleReminders failed:', err);
   }
 }
 
-export async function cancelDailyReminder() {
+export async function cancelReminders() {
   const Notifications = notificationsModule ?? (await loadNotifications());
   if (!Notifications) return;
-  await Notifications.cancelScheduledNotificationAsync(DAILY_REMINDER_ID).catch(() => {});
+  await Notifications.cancelAllScheduledNotificationsAsync().catch(() => {});
 }

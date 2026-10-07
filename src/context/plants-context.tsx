@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useRef, useState } fro
 import { AppState } from 'react-native';
 
 import { RoomKey } from '@/constants/rooms';
-import { CareTask, JournalEntry, Plant } from '@/data/plants';
+import { careJournalType, CareTask, JournalEntry, Plant } from '@/data/plants';
 import { HeatingSensitivity, LightKey, PotMaterialKey } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
 import {
@@ -83,7 +83,7 @@ type PlantsContextValue = {
   deletePlant: (plantId: string) => void;
   getPlant: (id: string) => Plant | undefined;
   addCareTask: (plantId: string, task: CareTask) => void;
-  completeCareTask: (plantId: string, taskIndex: number) => void;
+  completeCareTask: (plantId: string, taskIndex: number, journalTitle: string) => void;
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
   waterPlant: (plantId: string) => void;
   snoozePlant: (plantId: string) => void;
@@ -210,13 +210,25 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const addCareTask = (plantId: string, task: CareTask) =>
     setPlants((prev) => prev.map((p) => (p.id === plantId ? { ...p, care: [...p.care, task] } : p)));
 
-  const completeCareTask = (plantId: string, taskIndex: number) =>
+  // Completing a task also logs it, so History shows what was actually done
+  // rather than what the schedule implies.
+  const completeCareTask = (plantId: string, taskIndex: number, journalTitle: string) =>
     setPlants((prev) =>
-      prev.map((p) =>
-        p.id === plantId
-          ? { ...p, care: p.care.map((c, i) => (i === taskIndex ? { ...c, lastDoneDaysAgo: 0 } : c)) }
-          : p
-      )
+      prev.map((p) => {
+        if (p.id !== plantId || !p.care[taskIndex]) return p;
+        const entry: JournalEntry = {
+          id: `care-${Date.now()}`,
+          type: careJournalType[p.care[taskIndex].type],
+          title: journalTitle,
+          description: '',
+          daysAgo: 0,
+        };
+        return {
+          ...p,
+          care: p.care.map((c, i) => (i === taskIndex ? { ...c, lastDoneDaysAgo: 0 } : c)),
+          journalNotes: [entry, ...p.journalNotes],
+        };
+      })
     );
 
   const addJournalEntry = (plantId: string, entry: JournalEntry) =>

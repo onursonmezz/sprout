@@ -15,10 +15,10 @@ import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useLanguage } from '@/context/language-context';
 import { roomDisplayName } from '@/constants/rooms';
-import { CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
+import { careJournalType, CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
 import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
-import { daysUntilNext, formatDateFromDaysOffset, generateEventDaysAgoList, relativeTime } from '@/utils/care';
+import { daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 
 const TAB_KEYS = ['overview', 'care', 'journal', 'history'] as const;
@@ -256,7 +256,15 @@ export default function PlantDetailScreen() {
                 <InfoChip label={t.plantDetail.acquired} value={plant.acquiredDate} colors={colors} wide />
               </View>
 
-              {speciesInfo && <GrowthSection speciesInfo={speciesInfo} colors={colors} t={t} />}
+              {speciesInfo && (
+                <GrowthSection
+                  speciesInfo={speciesInfo}
+                  colors={colors}
+                  t={t}
+                  lang={lang}
+                  onCheckLight={() => router.push(`/light-meter?species=${speciesInfo.id}`)}
+                />
+              )}
 
               <TroubleshootingSection colors={colors} t={t} />
             </>
@@ -267,9 +275,10 @@ export default function PlantDetailScreen() {
               plant={plant}
               colors={colors}
               t={t}
+              speciesInfo={speciesInfo}
               onAddTask={(task) => addCareTask(plant.id, task)}
               onCompleteTask={(index) => {
-                completeCareTask(plant.id, index);
+                completeCareTask(plant.id, index, t.plantDetail.care.taskNames[plant.care[index].type]);
                 hapticSuccess();
               }}
             />
@@ -354,14 +363,27 @@ function InfoChip({
   );
 }
 
+function FactRow({ label, value, colors }: { label: string; value: string; colors: ReturnType<typeof useTheme> }) {
+  return (
+    <View style={styles.factRow}>
+      <Text style={[styles.factLabel, { color: colors.textSecondary }]}>{label}</Text>
+      <Text style={[styles.factValue, { color: colors.text }]}>{value}</Text>
+    </View>
+  );
+}
+
 function GrowthSection({
   speciesInfo,
   colors,
   t,
+  lang,
+  onCheckLight,
 }: {
   speciesInfo: SpeciesRecord;
   colors: ReturnType<typeof useTheme>;
   t: Translations;
+  lang: 'en' | 'tr';
+  onCheckLight: () => void;
 }) {
   const { idealMinC, idealMaxC, survivalMinC } = speciesInfo.temperature;
   // Scale the bar to this plant's own range (padded a bit on each side) rather
@@ -400,6 +422,31 @@ function GrowthSection({
         <Text style={[styles.growthLabel, { color: colors.text }]}>❄️ {t.plantDetail.hardiness}</Text>
         <Text style={[styles.growthNote, { color: colors.textSecondary }]}>{t.plantDetail.hardinessNote(survivalMinC)}</Text>
       </View>
+
+      <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <FactRow label={t.plantDetail.facts.size} value={t.plantDetail.facts.sizeValue(speciesInfo.size.heightMinCm, speciesInfo.size.heightMaxCm)} colors={colors} />
+        <FactRow label={t.plantDetail.facts.growthRate} value={t.plantDetail.facts.growthRates[speciesInfo.growthRate]} colors={colors} />
+        <FactRow label={t.plantDetail.facts.difficulty} value={`${speciesInfo.difficulty} / 5`} colors={colors} />
+        <FactRow
+          label={t.plantDetail.facts.fertilize}
+          value={
+            speciesInfo.fertilize.months.length > 0
+              ? t.plantDetail.facts.fertilizeValue(
+                  t.calendar.monthsShort[speciesInfo.fertilize.months[0] - 1],
+                  t.calendar.monthsShort[speciesInfo.fertilize.months[speciesInfo.fertilize.months.length - 1] - 1],
+                  speciesInfo.fertilize.intervalDays
+                )
+              : '—'
+          }
+          colors={colors}
+        />
+        {/* Propagation methods only exist in Turkish in the plant database. */}
+        {lang === 'tr' && <FactRow label={t.plantDetail.facts.propagation} value={speciesInfo.propagation.join(', ')} colors={colors} />}
+      </View>
+
+      <Pressable onPress={onCheckLight} style={[styles.addButton, { backgroundColor: colors.card, borderColor: colors.border }]}>
+        <Text style={[styles.addButtonText, { color: colors.tint }]}>{t.lightMeter.checkForPlant}</Text>
+      </Pressable>
     </View>
   );
 }
@@ -443,12 +490,14 @@ function CareTab({
   plant,
   colors,
   t,
+  speciesInfo,
   onAddTask,
   onCompleteTask,
 }: {
   plant: Plant;
   colors: ReturnType<typeof useTheme>;
   t: Translations;
+  speciesInfo: SpeciesRecord | undefined;
   onAddTask: (task: CareTask) => void;
   onCompleteTask: (index: number) => void;
 }) {
@@ -474,7 +523,14 @@ function CareTab({
               <Pressable
                 key={ty}
                 onPress={() => {
-                  onAddTask({ type: ty, intervalDays: CARE_DEFAULT_INTERVAL[ty], lastDoneDaysAgo: 0 });
+                  // The species' own fertilizing/repotting rhythm when known.
+                  const intervalDays =
+                    ty === 'fertilize' && speciesInfo
+                      ? speciesInfo.fertilize.intervalDays
+                      : ty === 'repot' && speciesInfo
+                        ? speciesInfo.repotEveryMonths * 30
+                        : CARE_DEFAULT_INTERVAL[ty];
+                  onAddTask({ type: ty, intervalDays, lastDoneDaysAgo: 0 });
                   setPickerOpen(false);
                 }}
                 style={styles.pickerOption}>
@@ -585,36 +641,7 @@ function JournalTab({
   const [description, setDescription] = useState('');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
 
-  const fertilizeTask = plant.care.find((c) => c.type === 'fertilize');
-  const hasLoggedWatering = plant.journalNotes.some((e) => e.type === 'watered');
-  const autoEntries: JournalEntry[] = [
-    // Real "watered" entries are logged from handleWaterNow going forward; this
-    // synthetic fallback only covers plants watered before that logging existed.
-    ...(hasLoggedWatering
-      ? []
-      : [
-          {
-            id: 'auto-watered',
-            type: 'watered' as JournalEntryType,
-            title: t.plantDetail.journal.wateredTitle,
-            description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
-            daysAgo: plant.lastWateredDaysAgo,
-          },
-        ]),
-    ...(fertilizeTask
-      ? [
-          {
-            id: 'auto-fertilized',
-            type: 'fertilized' as JournalEntryType,
-            title: t.plantDetail.journal.fertilizedTitle,
-            description: t.plantDetail.journal.fertilizedDesc,
-            daysAgo: fertilizeTask.lastDoneDaysAgo,
-          },
-        ]
-      : []),
-  ];
-
-  const entries = [...plant.journalNotes, ...autoEntries].sort((a, b) => a.daysAgo - b.daysAgo);
+  const entries = [...plant.journalNotes].sort((a, b) => a.daysAgo - b.daysAgo);
 
   const handleSave = () => {
     if (!title.trim()) return;
@@ -756,11 +783,13 @@ function PhotoTimeline({ plant, colors, t }: { plant: Plant; colors: ReturnType<
 }
 
 function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typeof useTheme>; t: Translations }) {
-  const wateringInterval = plant.wateringIntervalDays;
-  // Never project synthetic history further back than the plant has actually
-  // existed in Sprout — a plant added 5 days ago shouldn't show fabricated
-  // waterings from a month before it was added.
-  const maxDaysBack = Math.min(84, plant.createdDaysAgo);
+  // Only what actually happened: logged journal entries plus the one "last
+  // done" date each schedule already tracks. Nothing is projected backwards
+  // from the interval.
+  const daysFor = (type: JournalEntryType, lastDoneDaysAgo: number) =>
+    [...new Set([lastDoneDaysAgo, ...plant.journalNotes.filter((e) => e.type === type).map((e) => e.daysAgo)])].sort(
+      (a, b) => a - b
+    );
 
   return (
     <View style={{ gap: Spacing.four }}>
@@ -768,9 +797,7 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
       <HistorySection
         title={t.plantDetail.history.wateringHistory}
         recentLabel={t.plantDetail.history.recentWaterings}
-        intervalDays={wateringInterval}
-        lastDoneDaysAgo={plant.lastWateredDaysAgo}
-        maxDaysBack={maxDaysBack}
+        eventDays={daysFor('watered', plant.lastWateredDaysAgo)}
         colors={colors}
         t={t}
       />
@@ -779,9 +806,7 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
           key={i}
           title={t.plantDetail.history.taskHistoryTitle[task.type]}
           recentLabel={t.plantDetail.history.taskRecentLabel[task.type]}
-          intervalDays={task.intervalDays}
-          lastDoneDaysAgo={task.lastDoneDaysAgo}
-          maxDaysBack={maxDaysBack}
+          eventDays={daysFor(careJournalType[task.type], task.lastDoneDaysAgo)}
           colors={colors}
           t={t}
         />
@@ -793,21 +818,17 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
 function HistorySection({
   title,
   recentLabel,
-  intervalDays,
-  lastDoneDaysAgo,
-  maxDaysBack,
+  eventDays,
   colors,
   t,
 }: {
   title: string;
   recentLabel: string;
-  intervalDays: number;
-  lastDoneDaysAgo: number;
-  maxDaysBack: number;
+  /** Days-ago of each real occurrence, most recent first. */
+  eventDays: number[];
   colors: ReturnType<typeof useTheme>;
   t: Translations;
 }) {
-  const eventDays = generateEventDaysAgoList(intervalDays, lastDoneDaysAgo, maxDaysBack);
   const eventSet = new Set(eventDays);
   const recent = eventDays.slice(0, 6);
 
@@ -897,6 +918,9 @@ const styles = StyleSheet.create({
   growthLabel: { fontSize: 13, fontWeight: '700' },
   growthValue: { fontSize: 13, fontWeight: '700' },
   growthNote: { fontSize: 12, lineHeight: 17 },
+  factRow: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
+  factLabel: { fontSize: 12 },
+  factValue: { fontSize: 12, fontWeight: '700', flexShrink: 1, textAlign: 'right' },
   tempTrack: { height: 10, justifyContent: 'center' },
   tempTrackBg: { position: 'absolute', left: 0, right: 0, height: 6, borderRadius: 3 },
   tempBand: { position: 'absolute', height: 6, borderRadius: 3 },

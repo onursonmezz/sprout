@@ -9,6 +9,7 @@ import { Fonts, Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import {
+  GuideArticleKey,
   GuideCategoryKey,
   guideArticleKeys,
   guideArticles,
@@ -36,6 +37,9 @@ export default function GuideScreen() {
   const [activeCategory, setActiveCategory] = useState<GuideCategoryKey | null>(null);
 
   const seasonal = useMemo(() => seasonalCardCopy(t), [t]);
+  // The winter-care article only fits the heating-season cards; in the
+  // growing season the card leads to the watering article instead.
+  const seasonalArticle: GuideArticleKey = seasonal === t.guide.seasonalCard.growingSeason ? 'wateringInterval' : 'seasonalCare';
   const searching = query.trim().length > 0;
   const q = query.trim().toLowerCase();
 
@@ -88,7 +92,7 @@ export default function GuideScreen() {
         ) : (
           <>
             <Pressable
-              onPress={() => router.push('/guide/article/seasonalCare')}
+              onPress={() => router.push(`/guide/article/${seasonalArticle}`)}
               style={[styles.seasonalCard, { backgroundColor: colors.tintMuted }]}>
               <View style={styles.seasonalHeader}>
                 <View style={[styles.seasonalIcon, { backgroundColor: colors.background }]}>

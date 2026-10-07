@@ -5,17 +5,11 @@ import { isHeatingSeasonNow } from '@/utils/watering-algorithm';
 
 const STORAGE_KEY = 'sprout:settings';
 
-type Units = 'metric' | 'imperial';
-
 type PersistedSettings = {
   onboarded: boolean;
   notificationsEnabled: boolean;
   reminderTime: string;
-  quietStart: string;
-  quietEnd: string;
   seasonalAdjustment: boolean;
-  seasonalFactor: number;
-  seasonalTempC: number | null;
   dayLengthHours: number | null;
   /** The user's actual heating choice — read by the watering algorithm. */
   heatingOn: boolean;
@@ -25,7 +19,6 @@ type PersistedSettings = {
   vacationMode: boolean;
   vacationStart: string | null;
   vacationEnd: string | null;
-  units: Units;
   backupCode: string | null;
   lastBackupAt: string | null;
 };
@@ -40,18 +33,13 @@ const defaults: PersistedSettings = {
   onboarded: false,
   notificationsEnabled: true,
   reminderTime: timeAt(8, 0).toISOString(),
-  quietStart: timeAt(22, 0).toISOString(),
-  quietEnd: timeAt(7, 0).toISOString(),
   seasonalAdjustment: true,
-  seasonalFactor: 1,
-  seasonalTempC: null,
   dayLengthHours: null,
   heatingOn: isHeatingSeasonNow(),
   lastHeatingSeasonState: isHeatingSeasonNow(),
   vacationMode: false,
   vacationStart: null,
   vacationEnd: null,
-  units: 'metric',
   backupCode: null,
   lastBackupAt: null,
 };
@@ -64,16 +52,10 @@ type SettingsContextValue = {
   setNotificationsEnabled: (v: boolean) => void;
   reminderTime: Date;
   setReminderTime: (d: Date) => void;
-  quietStart: Date;
-  setQuietStart: (d: Date) => void;
-  quietEnd: Date;
-  setQuietEnd: (d: Date) => void;
   seasonalAdjustment: boolean;
   setSeasonalAdjustment: (v: boolean) => void;
-  seasonalFactor: number;
-  seasonalTempC: number | null;
   dayLengthHours: number | null;
-  setSeasonalWeather: (tempC: number, factor: number, dayLengthHours: number) => void;
+  setDayLengthHours: (hours: number) => void;
   heatingOn: boolean;
   setHeatingOn: (v: boolean) => void;
   lastHeatingSeasonState: boolean;
@@ -84,8 +66,6 @@ type SettingsContextValue = {
   setVacationStart: (d: Date | null) => void;
   vacationEnd: Date | null;
   setVacationEnd: (d: Date | null) => void;
-  units: Units;
-  setUnits: (u: Units) => void;
   backupCode: string | null;
   setBackupCode: (code: string) => void;
   lastBackupAt: Date | null;
@@ -128,17 +108,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setNotificationsEnabled: (v) => update('notificationsEnabled', v),
         reminderTime: new Date(settings.reminderTime),
         setReminderTime: (d) => update('reminderTime', d.toISOString()),
-        quietStart: new Date(settings.quietStart),
-        setQuietStart: (d) => update('quietStart', d.toISOString()),
-        quietEnd: new Date(settings.quietEnd),
-        setQuietEnd: (d) => update('quietEnd', d.toISOString()),
         seasonalAdjustment: settings.seasonalAdjustment,
         setSeasonalAdjustment: (v) => update('seasonalAdjustment', v),
-        seasonalFactor: settings.seasonalFactor,
-        seasonalTempC: settings.seasonalTempC,
         dayLengthHours: settings.dayLengthHours,
-        setSeasonalWeather: (tempC, factor, dayLengthHours) =>
-          setSettings((prev) => ({ ...prev, seasonalTempC: tempC, seasonalFactor: factor, dayLengthHours })),
+        setDayLengthHours: (hours) => update('dayLengthHours', hours),
         heatingOn: settings.heatingOn,
         setHeatingOn: (v) => update('heatingOn', v),
         lastHeatingSeasonState: settings.lastHeatingSeasonState,
@@ -149,8 +122,6 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setVacationStart: (d) => update('vacationStart', d ? d.toISOString() : null),
         vacationEnd: settings.vacationEnd ? new Date(settings.vacationEnd) : null,
         setVacationEnd: (d) => update('vacationEnd', d ? d.toISOString() : null),
-        units: settings.units,
-        setUnits: (u) => update('units', u),
         backupCode: settings.backupCode,
         setBackupCode: (code) => update('backupCode', code),
         lastBackupAt: settings.lastBackupAt ? new Date(settings.lastBackupAt) : null,

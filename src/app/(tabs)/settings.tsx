@@ -15,7 +15,6 @@ import { downloadBackup, firebaseConfigured, generateBackupCode, uploadBackup } 
 import { shareCareInstructions } from '@/utils/care-instructions';
 import { exportPlantsData } from '@/utils/export';
 import { requestNotificationPermission } from '@/utils/notifications';
-import { fetchWeatherSnapshot, requestLocationPermission, seasonalFactorFromTemp } from '@/utils/weather';
 
 function pad(n: number) {
   return String(n).padStart(2, '0');
@@ -66,13 +65,8 @@ export default function SettingsScreen() {
     setNotificationsEnabled,
     reminderTime,
     setReminderTime,
-    quietStart,
-    setQuietStart,
-    quietEnd,
-    setQuietEnd,
     seasonalAdjustment,
     setSeasonalAdjustment,
-    setSeasonalWeather,
     heatingOn,
     setHeatingOn,
     vacationMode,
@@ -81,8 +75,6 @@ export default function SettingsScreen() {
     setVacationStart,
     vacationEnd,
     setVacationEnd,
-    units,
-    setUnits,
     backupCode,
     setBackupCode,
     lastBackupAt,
@@ -140,14 +132,16 @@ export default function SettingsScreen() {
     setNotificationsEnabled(value);
   };
 
-  const handleToggleSeasonal = async (value: boolean) => {
-    setSeasonalAdjustment(value);
-    if (!value) return;
-    const granted = await requestLocationPermission();
-    if (!granted) return;
-    const snapshot = await fetchWeatherSnapshot();
-    if (snapshot) setSeasonalWeather(snapshot.tempC, seasonalFactorFromTemp(snapshot.tempC), snapshot.dayLengthHours);
-  };
+  // Plants that will come due before the user is back: the ones worth a deep
+  // watering on the way out, or handing to whoever is plant-sitting.
+  const daysUntilReturn = vacationEnd
+    ? Math.round(
+        (new Date(vacationEnd.getFullYear(), vacationEnd.getMonth(), vacationEnd.getDate()).getTime() -
+          new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime()) /
+          86400000
+      )
+    : 0;
+  const dueBeforeReturn = plants.filter((p) => p.daysUntilWatering <= daysUntilReturn);
 
   const handleBackupNow = async () => {
     setBackupBusy(true);
@@ -218,6 +212,7 @@ export default function SettingsScreen() {
             title={t.settings.reminderTime}
             subtitle={t.settings.reminderTimeSub}
             colors={colors}
+            divider={false}
             right={
               <DateField
                 value={reminderTime}
@@ -227,32 +222,6 @@ export default function SettingsScreen() {
                 textColor={colors.text}
                 backgroundColor={colors.backgroundSelected}
               />
-            }
-          />
-          <Row
-            title={t.settings.quietHours}
-            subtitle={t.settings.quietHoursSub}
-            colors={colors}
-            divider={false}
-            right={
-              <View style={{ flexDirection: 'row', gap: 6 }}>
-                <DateField
-                  value={quietStart}
-                  mode="time"
-                  onChange={setQuietStart}
-                  displayText={formatTime(quietStart)}
-                  textColor={colors.text}
-                  backgroundColor={colors.backgroundSelected}
-                />
-                <DateField
-                  value={quietEnd}
-                  mode="time"
-                  onChange={setQuietEnd}
-                  displayText={formatTime(quietEnd)}
-                  textColor={colors.text}
-                  backgroundColor={colors.backgroundSelected}
-                />
-              </View>
             }
           />
         </SectionCard>
@@ -266,7 +235,7 @@ export default function SettingsScreen() {
             right={
               <Switch
                 value={seasonalAdjustment}
-                onValueChange={handleToggleSeasonal}
+                onValueChange={setSeasonalAdjustment}
                 trackColor={{ false: colors.backgroundSelected, true: colors.tint }}
                 thumbColor="#fff"
               />
@@ -301,7 +270,6 @@ export default function SettingsScreen() {
           />
           {vacationMode && (
             <View style={styles.vacationBlock}>
-              <Text style={[styles.vacationNote, { color: colors.textSecondary }]}>{t.settings.vacationNote}</Text>
               <View style={styles.vacationDatesRow}>
                 <View style={{ flex: 1, gap: 4 }}>
                   <Text style={[styles.vacationLabel, { color: colors.text }]}>{t.settings.vacationDepart}</Text>
@@ -326,6 +294,22 @@ export default function SettingsScreen() {
                   />
                 </View>
               </View>
+              {vacationEnd && (
+                <>
+                  <Text style={[styles.vacationNote, { color: colors.textSecondary }]}>
+                    {dueBeforeReturn.length > 0 ? t.settings.vacationNote : t.settings.vacationNoneDue}
+                  </Text>
+                  {dueBeforeReturn.length > 0 && (
+                    <View style={styles.vacationChips}>
+                      {dueBeforeReturn.map((p) => (
+                        <View key={p.id} style={[styles.vacationChip, { backgroundColor: colors.tintMuted }]}>
+                          <Text style={[styles.vacationChipText, { color: colors.tint }]}>💧 {p.name}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </>
+              )}
               <Pressable
                 onPress={handleShareCareInstructions}
                 disabled={plants.length === 0 || careInstructionsBusy}
@@ -363,6 +347,7 @@ export default function SettingsScreen() {
             title={t.settings.language}
             subtitle={t.settings.languageSub}
             colors={colors}
+            divider={false}
             right={
               <View style={[styles.segment, { backgroundColor: colors.backgroundSelected }]}>
                 <Pressable
@@ -377,30 +362,6 @@ export default function SettingsScreen() {
                   style={[styles.segmentBtn, lang === 'tr' && { backgroundColor: colors.tint }]}>
                   <Text style={[styles.segmentText, { color: lang === 'tr' ? '#fff' : colors.text }]}>
                     {t.settings.turkish}
-                  </Text>
-                </Pressable>
-              </View>
-            }
-          />
-          <Row
-            title={t.settings.units}
-            subtitle={t.settings.unitsSub}
-            colors={colors}
-            divider={false}
-            right={
-              <View style={[styles.segment, { backgroundColor: colors.backgroundSelected }]}>
-                <Pressable
-                  onPress={() => setUnits('metric')}
-                  style={[styles.segmentBtn, units === 'metric' && { backgroundColor: colors.tint }]}>
-                  <Text style={[styles.segmentText, { color: units === 'metric' ? '#fff' : colors.text }]}>
-                    {t.settings.metric}
-                  </Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => setUnits('imperial')}
-                  style={[styles.segmentBtn, units === 'imperial' && { backgroundColor: colors.tint }]}>
-                  <Text style={[styles.segmentText, { color: units === 'imperial' ? '#fff' : colors.text }]}>
-                    {t.settings.imperial}
                   </Text>
                 </Pressable>
               </View>
@@ -573,6 +534,9 @@ const styles = StyleSheet.create({
   segmentText: { fontSize: 11, fontWeight: '700' },
   vacationBlock: { paddingBottom: Spacing.three, gap: Spacing.two },
   vacationNote: { fontSize: 12, lineHeight: 17 },
+  vacationChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  vacationChip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  vacationChipText: { fontSize: 11, fontWeight: '600' },
   careInstructionsButton: { paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
   careInstructionsButtonText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   vacationDatesRow: { flexDirection: 'row', gap: Spacing.two },

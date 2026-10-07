@@ -8,8 +8,8 @@ import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
-import { CareTask, CareTaskType, Plant } from '@/data/plants';
-import { daysUntilNext } from '@/utils/care';
+import { careJournalType, CareTask, CareTaskType, Plant } from '@/data/plants';
+import { daysUntilNext, fallsOn } from '@/utils/care';
 
 const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
 
@@ -39,11 +39,29 @@ function dayOffsetFromToday(today: Date, year: number, month: number, day: numbe
   return Math.round((target - todayMidnight) / 86400000);
 }
 
+/** Whether a plant is (or was) watered on the day `offset` days from today:
+ * future days are projected from its interval, past days come only from what
+ * actually happened. */
+function wateringOn(p: Plant, offset: number) {
+  if (offset > 0) return fallsOn(offset, p.daysUntilWatering, p.wateringIntervalDays);
+  if (offset === 0 && p.daysUntilWatering <= 0) return true;
+  return p.lastWateredDaysAgo === -offset || p.journalNotes.some((e) => e.type === 'watered' && e.daysAgo === -offset);
+}
+
+function taskOn(p: Plant, task: CareTask, offset: number) {
+  const dueIn = daysUntilNext(task.intervalDays, task.lastDoneDaysAgo);
+  if (offset > 0) return fallsOn(offset, dueIn, task.intervalDays);
+  if (offset === 0 && dueIn <= 0) return true;
+  return (
+    task.lastDoneDaysAgo === -offset || p.journalNotes.some((e) => e.type === careJournalType[task.type] && e.daysAgo === -offset)
+  );
+}
+
 export default function CalendarScreen() {
   const colors = useTheme();
   const { t } = useLanguage();
   const { plants } = usePlants();
-  const today = useMemo(() => new Date(), []);
+  const today = new Date();
   const [monthOffset, setMonthOffset] = useState(0);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
@@ -60,36 +78,26 @@ export default function CalendarScreen() {
 
   const dotsForDay = (day: number) => {
     const offset = dayOffsetFromToday(today, year, month, day);
-    const future = plants.filter((p) => p.daysUntilWatering === offset).length;
-    const past = offset <= 0 ? plants.filter((p) => -p.lastWateredDaysAgo === offset).length : 0;
-    return Math.min(future + past, 3);
+    let count = 0;
+    for (const p of plants) {
+      if (wateringOn(p, offset)) count++;
+      for (const task of p.care) if (taskOn(p, task, offset)) count++;
+    }
+    return Math.min(count, 3);
   };
 
   const selectedOffset = selectedDay != null ? dayOffsetFromToday(today, year, month, selectedDay) : null;
 
-  const selectedWatering = useMemo(() => {
-    if (selectedOffset == null) return [];
-    return plants.filter((p) => p.daysUntilWatering === selectedOffset || -p.lastWateredDaysAgo === selectedOffset);
-  }, [plants, selectedOffset]);
-
-  const selectedTasks = useMemo(() => {
-    if (selectedOffset == null) return [];
-    const result: { plant: Plant; task: CareTask }[] = [];
-    for (const p of plants) {
-      for (const task of p.care) {
-        const dueOffset = daysUntilNext(task.intervalDays, task.lastDoneDaysAgo);
-        if (dueOffset === selectedOffset || -task.lastDoneDaysAgo === selectedOffset) {
-          result.push({ plant: p, task });
-        }
-      }
-    }
-    return result;
-  }, [plants, selectedOffset]);
+  const selectedWatering = selectedOffset == null ? [] : plants.filter((p) => wateringOn(p, selectedOffset));
+  const selectedTasks =
+    selectedOffset == null
+      ? []
+      : plants.flatMap((plant) => plant.care.filter((task) => taskOn(plant, task, selectedOffset)).map((task) => ({ plant, task })));
 
   const weekAhead = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(today);
     date.setDate(today.getDate() + i);
-    const scheduled = plants.filter((p) => p.daysUntilWatering === i);
+    const scheduled = plants.filter((p) => (i === 0 ? p.daysUntilWatering <= 0 : fallsOn(i, p.daysUntilWatering, p.wateringIntervalDays)));
     return { offset: i, date, scheduled };
   });
 
@@ -157,10 +165,6 @@ export default function CalendarScreen() {
           <View style={styles.legendItem}>
             <View style={[styles.dot, { backgroundColor: colors.tint }]} />
             <Text style={[styles.legendText, { color: colors.textSecondary }]}>{t.calendar.legendWatering}</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View style={[styles.legendRing, { borderColor: colors.tint }]} />
-            <Text style={[styles.legendText, { color: colors.textSecondary }]}>{t.calendar.legendToday}</Text>
           </View>
         </View>
 

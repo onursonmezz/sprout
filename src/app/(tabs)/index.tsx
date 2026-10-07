@@ -11,8 +11,12 @@ import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
+import { CareTaskType } from '@/data/plants';
+import { daysUntilNext } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 import { computeCareStats } from '@/utils/stats';
+
+const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
 
 function greeting(t: ReturnType<typeof useLanguage>['t']) {
   const hour = new Date().getHours();
@@ -31,7 +35,7 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, waterPlant, addJournalEntry, snoozePlant } = usePlants();
+  const { plants, waterPlant, addJournalEntry, snoozePlant, completeCareTask } = usePlants();
   const { dayLengthHours } = useSettings();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
@@ -67,7 +71,19 @@ export default function TodayScreen() {
     [plants]
   );
   const comingUp = useMemo(
-    () => plants.filter((p) => p.status === 'upcoming').sort((a, b) => a.daysUntilWatering - b.daysUntilWatering),
+    () =>
+      plants
+        .filter((p) => p.status === 'upcoming' && p.daysUntilWatering <= 7)
+        .sort((a, b) => a.daysUntilWatering - b.daysUntilWatering),
+    [plants]
+  );
+  const careDue = useMemo(
+    () =>
+      plants.flatMap((plant) =>
+        plant.care
+          .map((task, index) => ({ plant, task, index }))
+          .filter(({ task }) => daysUntilNext(task.intervalDays, task.lastDoneDaysAgo) <= 0)
+      ),
     [plants]
   );
 
@@ -158,9 +174,40 @@ export default function TodayScreen() {
           })}
         </View>
 
+        {careDue.length > 0 && (
+          <>
+            <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>{t.today.careDue}</Text>
+            <View style={{ gap: Spacing.two }}>
+              {careDue.map(({ plant, task, index }) => (
+                <Pressable
+                  key={`${plant.id}-${index}`}
+                  onPress={() => router.push(`/plant/${plant.id}`)}
+                  style={[styles.careRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                  <Text style={{ fontSize: 18 }}>{CARE_EMOJI[task.type]}</Text>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.plantName, { color: colors.text }]}>{t.plantDetail.care.taskNames[task.type]}</Text>
+                    <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{plant.name}</Text>
+                  </View>
+                  <Pressable
+                    onPress={() => {
+                      completeCareTask(plant.id, index, t.plantDetail.care.taskNames[task.type]);
+                      hapticSuccess();
+                    }}
+                    style={[styles.wateredButton, { backgroundColor: colors.tint }]}>
+                    <Text style={styles.wateredButtonText}>{t.today.careDone}</Text>
+                  </Pressable>
+                </Pressable>
+              ))}
+            </View>
+          </>
+        )}
+
         <Text style={[styles.sectionLabel, { color: colors.textSecondary, marginTop: Spacing.four }]}>
           {t.today.comingUp}
         </Text>
+        {comingUp.length === 0 && (
+          <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{t.today.nothingThisWeek}</Text>
+        )}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: Spacing.two }}>
           {comingUp.map((plant) => (
             <Pressable
@@ -235,6 +282,7 @@ const styles = StyleSheet.create({
     padding: Spacing.two,
     gap: Spacing.two,
   },
+  careRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, borderRadius: 16, borderWidth: 1, padding: Spacing.two },
   avatar: { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
   avatarEmoji: { fontSize: 22 },
   attentionInfo: { flex: 1, gap: 1 },

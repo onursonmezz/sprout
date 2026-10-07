@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { LightSensor } from 'expo-sensors';
 import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Fonts, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
-import { LIGHT_KEYS } from '@/data/species-guide';
+import { LIGHT_KEYS, speciesDisplayName, speciesGuide } from '@/data/species-guide';
 import { hasPendingLightMeterListener, lightKeyForLux, logMeterPosition, resolveLightMeterResult } from '@/utils/light-meter';
 
 const BAR_HEIGHT = 280;
@@ -25,7 +25,8 @@ const ZONE_COLORS_TOP_TO_BOTTOM = (colors: { accent: string; tint: string; tintM
 export default function LightMeterScreen() {
   const colors = useTheme();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const { species: speciesId } = useLocalSearchParams<{ species?: string }>();
 
   const [available, setAvailable] = useState<boolean | null>(null);
   const [lux, setLux] = useState<number | null>(null);
@@ -46,6 +47,20 @@ export default function LightMeterScreen() {
     })();
     return () => subscription?.remove();
   }, []);
+
+  // Opened from a plant's page: judge the reading against that species' own
+  // light needs instead of just naming the generic zone.
+  const species = speciesId ? speciesGuide.find((s) => s.id === speciesId) : undefined;
+  const verdict =
+    species && lux != null
+      ? lux < species.light.luxMin * 0.5
+        ? 'tooDark'
+        : lux < species.light.luxMin
+          ? 'dim'
+          : lux <= species.light.luxMax
+            ? 'ok'
+            : 'tooBright'
+      : null;
 
   const zoneKey = lux != null ? lightKeyForLux(lux) : null;
   const zoneColors = ZONE_COLORS_TOP_TO_BOTTOM(colors);
@@ -98,6 +113,19 @@ export default function LightMeterScreen() {
               <Text style={[styles.zoneCurrent, { color: colors.tint }]}>{t.addPlant.lightLevels[zoneKey].label}</Text>
             )}
 
+            {species && (
+              <View style={[styles.verdictCard, { backgroundColor: colors.card, borderColor: verdict === 'ok' ? colors.tint : colors.border }]}>
+                <Text style={[styles.verdictPlant, { color: colors.textSecondary }]}>
+                  {t.lightMeter.forPlant(speciesDisplayName(species, lang), species.light.luxMin, species.light.luxMax)}
+                </Text>
+                {verdict && (
+                  <Text style={[styles.verdictText, { color: verdict === 'ok' ? colors.tint : colors.accent }]}>
+                    {t.lightMeter.verdicts[verdict]}
+                  </Text>
+                )}
+              </View>
+            )}
+
             {canUseReading && zoneKey != null && (
               <Pressable
                 onPress={() => {
@@ -132,6 +160,9 @@ const styles = StyleSheet.create({
   luxValue: { fontSize: 40, marginTop: Spacing.four },
   luxUnit: { fontSize: 12, fontWeight: '700', letterSpacing: 1 },
   zoneCurrent: { fontSize: 15, fontWeight: '700', marginTop: Spacing.two },
+  verdictCard: { marginTop: Spacing.three, padding: Spacing.three, borderRadius: 16, borderWidth: 1.5, width: '100%', gap: 4 },
+  verdictPlant: { fontSize: 12, textAlign: 'center' },
+  verdictText: { fontSize: 15, fontWeight: '700', textAlign: 'center' },
   useButton: { marginTop: Spacing.four, paddingVertical: 14, paddingHorizontal: Spacing.five, borderRadius: 16, width: '100%', alignItems: 'center' },
   useButtonText: { color: '#fff', fontSize: 15, fontWeight: '700' },
   unavailableCard: {
