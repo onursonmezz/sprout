@@ -53,6 +53,10 @@ export type Plant = {
   /** Set when the user picked their own interval with the stepper — it then
    * wins over the algorithm everywhere until they switch back to automatic. */
   customIntervalDays: number | null;
+  /** Learned from the user's "how was the soil?" answers: the algorithm's
+   * interval is multiplied by this (1 = no correction yet). Ignored while a
+   * custom interval is set. */
+  intervalAdjust: number;
   /** Extra days added to the due date by "snooze"; cleared on watering. */
   snoozeDays: number;
   /** The species' reference-condition interval (or a generic fallback when

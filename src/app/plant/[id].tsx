@@ -51,7 +51,7 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t, lang } = useLanguage();
-  const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, snoozePlant } = usePlants();
+  const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, snoozePlant, resetIntervalAdjust } = usePlants();
   const plant = getPlant(String(id));
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
   const [toastVisible, setToastVisible] = useState(false);
@@ -165,6 +165,15 @@ export default function PlantDetailScreen() {
               <Text style={[styles.nextWateringMeta, { color: colors.textSecondary }]}>
                 {t.plantDetail.lastWatered(plant.lastWateredDaysAgo, plant.wateringAmountMl)}
               </Text>
+              {plant.customIntervalDays == null && Math.round(Math.abs(plant.intervalAdjust - 1) * 100) >= 3 && (
+                <Text style={[styles.nextWateringMeta, { color: colors.textSecondary }]}>
+                  {t.wateringFeedback.learned(Math.round(Math.abs(plant.intervalAdjust - 1) * 100), plant.intervalAdjust < 1)}
+                  {'  '}
+                  <Text style={{ color: colors.tintBright, fontWeight: '700' }} onPress={() => resetIntervalAdjust(plant.id)}>
+                    {t.wateringFeedback.reset}
+                  </Text>
+                </Text>
+              )}
             </View>
           </View>
 

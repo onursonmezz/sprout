@@ -60,14 +60,45 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
   return result.intervalDays;
 }
 
+export const INTERVAL_ADJUST_MIN = 0.5;
+export const INTERVAL_ADJUST_MAX = 2;
+
+const clampAdjust = (value: number) => Math.min(INTERVAL_ADJUST_MAX, Math.max(INTERVAL_ADJUST_MIN, value));
+
 /** The interval actually in force: the user's own choice when they set one,
- * otherwise the algorithm's. */
+ * otherwise the algorithm's, corrected by what their soil feedback taught. */
 export function effectiveWateringInterval(
-  plant: WateringPlantInput & { customIntervalDays: number | null },
+  plant: WateringPlantInput & { customIntervalDays: number | null; intervalAdjust?: number },
   date: Date,
   options: SeasonalOptions
 ): number {
-  return plant.customIntervalDays ?? recomputeWateringInterval(plant, date, options);
+  if (plant.customIntervalDays != null) return plant.customIntervalDays;
+  const algo = recomputeWateringInterval(plant, date, options);
+  return Math.max(1, Math.round(algo * clampAdjust(plant.intervalAdjust ?? 1)));
+}
+
+/** How the soil was when the user watered. */
+export type SoilFeedback = 'dry' | 'ok' | 'wet';
+
+/** How strongly one answer pulls the correction toward what it implies. */
+const LEARNING_RATE = 0.4;
+
+/**
+ * Updates a plant's interval correction from one answer.
+ *
+ * An answer is evidence about the ideal interval relative to how long the
+ * soil actually went without water (elapsedDays), not relative to the
+ * schedule: "just right" after 12 days says ~12 days is ideal; "still moist"
+ * says the ideal is longer than that, so it can only lengthen the interval;
+ * "too dry" says it is shorter, so it can only shorten it. That way watering
+ * late or early by choice never teaches the wrong thing.
+ */
+export function learnIntervalAdjust(prevAdjust: number, algoIntervalDays: number, elapsedDays: number, answer: SoilFeedback): number {
+  const prev = clampAdjust(prevAdjust);
+  const elapsedRatio = elapsedDays / Math.max(1, algoIntervalDays);
+  const target =
+    answer === 'ok' ? elapsedRatio : answer === 'wet' ? Math.max(prev, elapsedRatio * 1.2) : Math.min(prev, elapsedRatio * 0.85);
+  return clampAdjust(prev + LEARNING_RATE * (clampAdjust(target) - prev));
 }
 
 /** Countdown + status from the three things that determine them. */

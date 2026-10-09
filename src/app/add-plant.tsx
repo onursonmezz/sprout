@@ -256,7 +256,11 @@ export default function AddPlantScreen() {
       acquiredDate: form.dateAcquired,
       customIntervalDays: waterIntervalTouched ? form.waterEveryDays : null,
     };
-    const wateringIntervalDays = waterIntervalTouched ? form.waterEveryDays : computeSuggestion();
+    // An edited plant keeps what soil feedback taught about it.
+    const learnedAdjust = editingPlant?.intervalAdjust ?? 1;
+    const wateringIntervalDays = waterIntervalTouched
+      ? form.waterEveryDays
+      : Math.max(1, Math.round(computeSuggestion() * learnedAdjust));
     const lastWateredDaysAgo = daysAgoFrom(form.lastWatered);
 
     const repotDaysAgo = form.lastRepotted ? daysAgoFrom(form.lastRepotted) : null;
@@ -307,6 +311,7 @@ export default function AddPlantScreen() {
       indoor: speciesIndoor,
       lastWateredDaysAgo,
       snoozeDays: 0,
+      intervalAdjust: 1,
       ...wateringSchedule(wateringIntervalDays, lastWateredDaysAgo, 0),
       care,
       // The last watering the user told us about is a real event, so it

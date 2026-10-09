@@ -8,6 +8,9 @@ import { loadJSON, saveJSON } from '@/utils/storage';
 import {
   DEFAULT_WINDOW_DISTANCE_CM,
   effectiveWateringInterval,
+  learnIntervalAdjust,
+  recomputeWateringInterval,
+  SoilFeedback,
   SeasonalOptions,
   wateringSchedule,
 } from '@/utils/watering-algorithm';
@@ -39,6 +42,7 @@ function migratePlant(p: Plant): Plant {
     heatingSensitivity?: HeatingSensitivity;
     indoor?: boolean;
     customIntervalDays?: number | null;
+    intervalAdjust?: number;
     snoozeDays?: number;
     environment?: { lightKey?: LightKey; windowDistanceCm?: number };
     pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null; hasDrainage?: boolean; drainage?: string; soil?: string };
@@ -58,6 +62,7 @@ function migratePlant(p: Plant): Plant {
     heatingSensitivity: legacy.heatingSensitivity ?? 'med',
     indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
     customIntervalDays: legacy.customIntervalDays ?? null,
+    intervalAdjust: typeof legacy.intervalAdjust === 'number' ? legacy.intervalAdjust : 1,
     snoozeDays: legacy.snoozeDays ?? 0,
     environment: {
       lightKey: legacy.environment?.lightKey ?? 'part_sun',
@@ -87,6 +92,13 @@ type PlantsContextValue = {
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
   waterPlant: (plantId: string) => void;
   snoozePlant: (plantId: string) => void;
+  /** Set right after a watering that is worth asking about; drives the
+   * "how was the soil?" prompt. */
+  pendingFeedback: { plantId: string; elapsedDays: number } | null;
+  answerWateringFeedback: (answer: SoilFeedback) => void;
+  dismissWateringFeedback: () => void;
+  /** Forgets what soil feedback taught for one plant. */
+  resetIntervalAdjust: (plantId: string) => void;
   /** Re-applies the watering algorithm to every plant right away — called
    * when a setting that feeds it (seasonal adjustment, heating) changes. */
   recomputeIntervals: (options: SeasonalOptions) => void;
@@ -236,7 +248,18 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       prev.map((p) => (p.id === plantId ? { ...p, journalNotes: [entry, ...p.journalNotes] } : p))
     );
 
+  const [pendingFeedback, setPendingFeedback] = useState<{ plantId: string; elapsedDays: number } | null>(null);
+
   const waterPlant = (plantId: string) => {
+    // Only ask about the soil when the answer can teach something: the
+    // algorithm (not a custom interval) is in charge, and enough days have
+    // passed for the soil's state to mean anything.
+    const before = plants.find((p) => p.id === plantId);
+    setPendingFeedback(
+      before && before.customIntervalDays == null && before.lastWateredDaysAgo >= 2
+        ? { plantId, elapsedDays: before.lastWateredDaysAgo }
+        : null
+    );
     (async () => {
       const options = await loadSeasonalOptions();
       const today = new Date();
@@ -249,6 +272,32 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       );
     })();
   };
+
+  const applyIntervalAdjust = (plantId: string, nextAdjust: (p: Plant, algoInterval: number) => number) => {
+    (async () => {
+      const options = await loadSeasonalOptions();
+      const today = new Date();
+      setPlants((prev) =>
+        prev.map((p) => {
+          if (p.id !== plantId) return p;
+          const adjusted = { ...p, intervalAdjust: nextAdjust(p, recomputeWateringInterval(p, today, options)) };
+          const wateringIntervalDays = effectiveWateringInterval(adjusted, today, options);
+          return { ...adjusted, wateringIntervalDays, ...wateringSchedule(wateringIntervalDays, p.lastWateredDaysAgo, p.snoozeDays) };
+        })
+      );
+    })();
+  };
+
+  const answerWateringFeedback = (answer: SoilFeedback) => {
+    if (!pendingFeedback) return;
+    const { plantId, elapsedDays } = pendingFeedback;
+    setPendingFeedback(null);
+    applyIntervalAdjust(plantId, (p, algoInterval) => learnIntervalAdjust(p.intervalAdjust, algoInterval, elapsedDays, answer));
+  };
+
+  const dismissWateringFeedback = () => setPendingFeedback(null);
+
+  const resetIntervalAdjust = (plantId: string) => applyIntervalAdjust(plantId, () => 1);
 
   const snoozePlant = (plantId: string) =>
     setPlants((prev) =>
@@ -288,6 +337,10 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         addJournalEntry,
         waterPlant,
         snoozePlant,
+        pendingFeedback,
+        answerWateringFeedback,
+        dismissWateringFeedback,
+        resetIntervalAdjust,
         recomputeIntervals,
         resetPlants,
         restorePlants,

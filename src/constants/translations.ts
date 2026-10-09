@@ -719,6 +719,15 @@ export const translations = {
       shareButton: 'Share',
       sharing: 'Preparing…',
     },
+    wateringFeedback: {
+      title: (name: string) => `${name} watered. How was the soil?`,
+      subtitle: 'Your answer fine-tunes this plant\'s schedule.',
+      idealHint: (level: string) => level,
+      options: { dry: 'Too dry', ok: 'Just right', wet: 'Still moist' },
+      dismiss: 'Skip',
+      learned: (pct: number, moreOften: boolean) => `From your feedback: ${pct}% ${moreOften ? 'more often' : 'less often'}`,
+      reset: 'Reset',
+    },
     lightMeter: {
       title: 'Light Meter',
       subtitle: 'Use in daylight',
@@ -1482,6 +1491,15 @@ export const translations = {
       cancel: 'Vazgeç',
       shareButton: 'Paylaş',
       sharing: 'Hazırlanıyor…',
+    },
+    wateringFeedback: {
+      title: (name: string) => `${name} sulandı. Toprak nasıldı?`,
+      subtitle: 'Cevabın bu bitkinin sulama aralığını ince ayarlar.',
+      idealHint: (level: string) => `Bu bitki için ideal: ${level.charAt(0).toLocaleLowerCase('tr-TR')}${level.slice(1)}`,
+      options: { dry: 'Fazla kurumuştu', ok: 'Tam kıvamında', wet: 'Hâlâ nemliydi' },
+      dismiss: 'Geç',
+      learned: (pct: number, moreOften: boolean) => `Geri bildirimlerine göre %${pct} daha ${moreOften ? 'sık' : 'seyrek'}`,
+      reset: 'Sıfırla',
     },
     lightMeter: {
       title: 'Işık Ölçer',
