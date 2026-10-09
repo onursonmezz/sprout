@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 
-import { RoomKey } from '@/constants/rooms';
+import { isOutdoorRoom, RoomKey } from '@/constants/rooms';
 import { careJournalType, CareTask, JournalEntry, Plant } from '@/data/plants';
 import { findSpeciesLoose, HeatingSensitivity, LightKey, PotMaterialKey, SeasonProfile, seasonProfileFor } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
@@ -64,6 +64,12 @@ function migratePlant(p: Plant): Plant {
   const wateringIntervalDays =
     typeof legacy.wateringIntervalDays === 'number' ? legacy.wateringIntervalDays : Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
   const hasRoomKey = typeof legacy.roomKey === 'string';
+  let roomKey: RoomKey = hasRoomKey ? (legacy.roomKey as RoomKey) : legacy.room && legacy.room !== '—' ? 'other' : 'living_room';
+  // "Outdoor" used to come from the species; now the room decides. A plant
+  // saved as outdoor but filed under an indoor room moves to the balcony so
+  // it keeps behaving as it did. A custom ("other") room keeps its own flag.
+  if (legacy.indoor === false && !isOutdoorRoom(roomKey) && roomKey !== 'other') roomKey = 'balcony';
+  const indoor = isOutdoorRoom(roomKey) ? false : roomKey === 'other' ? (legacy.indoor ?? true) : true;
   const hasDrainage =
     typeof legacy.pot?.hasDrainage === 'boolean' ? legacy.pot.hasDrainage : !['No', 'Hayır'].includes(legacy.pot?.drainage ?? '');
   // Before amounts were suggested from the pot, every plant started at the
@@ -78,11 +84,10 @@ function migratePlant(p: Plant): Plant {
     // Plants saved before season profiles existed get theirs from the species
     // they were added as.
     seasonProfile: legacy.seasonProfile ?? seasonProfileOf(p),
-    indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
     customIntervalDays: legacy.customIntervalDays ?? null,
     intervalAdjust: typeof legacy.intervalAdjust === 'number' ? legacy.intervalAdjust : 1,
     amountAuto,
-    rainExposed: legacy.rainExposed ?? false,
+    rainExposed: !indoor && (legacy.rainExposed ?? false),
     wateringAmountMl: amountAuto ? suggestWaterAmountMl(legacy.pot?.diameterCm ?? null, hasDrainage) : p.wateringAmountMl,
     snoozeDays: legacy.snoozeDays ?? 0,
     environment: {
@@ -96,7 +101,8 @@ function migratePlant(p: Plant): Plant {
       hasDrainage,
       soil: legacy.pot?.soil ?? '',
     },
-    roomKey: hasRoomKey ? (legacy.roomKey as RoomKey) : legacy.room && legacy.room !== '—' ? 'other' : 'living_room',
+    roomKey,
+    indoor,
     customRoom: hasRoomKey ? legacy.customRoom ?? null : legacy.room && legacy.room !== '—' ? legacy.room : null,
   };
 }

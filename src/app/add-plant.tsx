@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlowBackground, GradientFill } from '@/components/glass';
 import { DateField } from '@/components/date-field';
 import { PhotoPicker } from '@/components/photo-picker';
-import { ROOM_KEYS, RoomKey } from '@/constants/rooms';
+import { isOutdoorRoom, ROOM_KEYS, RoomKey } from '@/constants/rooms';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
@@ -154,7 +154,6 @@ export default function AddPlantScreen() {
     () => editingPlant?.heatingSensitivity ?? 'med'
   );
   const [speciesSeasonProfile, setSpeciesSeasonProfile] = useState<SeasonProfile>(() => editingPlant?.seasonProfile ?? 'normal');
-  const [speciesIndoor, setSpeciesIndoor] = useState(() => editingPlant?.indoor ?? true);
   const [speciesRepotIntervalDays, setSpeciesRepotIntervalDays] = useState(
     () => editingPlant?.care.find((c) => c.type === 'repot')?.intervalDays ?? DEFAULT_REPOT_INTERVAL_DAYS
   );
@@ -171,6 +170,11 @@ export default function AddPlantScreen() {
       </View>
     );
   }
+
+  /** Whether a room choice makes the plant an outdoor one. A custom ("other")
+   * room has no fixed answer, so an edited plant keeps the one it had. */
+  const outdoorIn = (roomKey: RoomKey) => isOutdoorRoom(roomKey) || (roomKey === 'other' && editingPlant?.indoor === false);
+  const isOutdoor = outdoorIn(form.roomKey);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -194,7 +198,7 @@ export default function AddPlantScreen() {
           hasDrainage: next.drainage === 'yes',
         },
         environment: { lightKey: next.lightKey, windowDistanceCm: next.windowDistanceCm },
-        indoor: speciesIndoor,
+        indoor: !outdoorIn(next.roomKey),
       },
       new Date(),
       { applySeasonalFactors: seasonalAdjustment, heatingOn, latitude }
@@ -218,10 +222,12 @@ export default function AddPlantScreen() {
     setSpeciesBaseInterval(entry.water.baseIntervalDays);
     setSpeciesHeatingSensitivity(entry.heatingSensitivity);
     setSpeciesSeasonProfile(seasonProfileFor(entry));
-    setSpeciesIndoor(entry.category !== 'outdoor');
     setSpeciesRepotIntervalDays(entry.repotEveryMonths * 30);
     setForm((prev) => {
       const next: FormState = { ...prev, species: speciesDisplayName(entry, lang), latinName: entry.scientificName, lightKey: entry.light.preferred };
+      // A balcony/terrace species most likely lives outside: suggest the
+      // balcony unless the user already picked an outdoor room.
+      if (entry.category === 'outdoor' && !outdoorIn(next.roomKey)) next.roomKey = 'balcony';
       if (waterIntervalTouched) return next;
       return {
         ...next,
@@ -236,7 +242,7 @@ export default function AddPlantScreen() {
           hasDrainage: next.drainage === 'yes',
         },
             environment: { lightKey: next.lightKey, windowDistanceCm: next.windowDistanceCm },
-            indoor: entry.category !== 'outdoor',
+            indoor: !outdoorIn(next.roomKey),
           },
           new Date(),
           { applySeasonalFactors: seasonalAdjustment, heatingOn, latitude }
@@ -272,7 +278,7 @@ export default function AddPlantScreen() {
       customRoom: form.roomKey === 'other' ? form.customRoom.trim() || null : null,
       wateringAmountMl: Number(form.waterAmountMl) || Number(suggestedAmount()),
       amountAuto: !waterAmountTouched,
-      rainExposed: !speciesIndoor && form.rainExposed === 'yes',
+      rainExposed: isOutdoor && form.rainExposed === 'yes',
       environment: { lightKey: form.lightKey, windowDistanceCm: form.windowDistanceCm },
       pot: {
         materialKey: form.potMaterialKey,
@@ -308,7 +314,7 @@ export default function AddPlantScreen() {
         baseIntervalDays: speciesBaseInterval,
         heatingSensitivity: speciesHeatingSensitivity,
         seasonProfile: speciesSeasonProfile,
-        indoor: speciesIndoor,
+        indoor: !isOutdoor,
         lastWateredDaysAgo,
         snoozeDays,
         ...wateringSchedule(wateringIntervalDays, lastWateredDaysAgo, snoozeDays),
@@ -337,7 +343,7 @@ export default function AddPlantScreen() {
       baseIntervalDays: speciesBaseInterval,
       heatingSensitivity: speciesHeatingSensitivity,
       seasonProfile: speciesSeasonProfile,
-      indoor: speciesIndoor,
+      indoor: !isOutdoor,
       lastWateredDaysAgo,
       snoozeDays: 0,
       intervalAdjust: 1,
@@ -441,7 +447,10 @@ export default function AddPlantScreen() {
                     key={key}
                     label={t.addPlant.rooms[key]}
                     selected={form.roomKey === key}
-                    onPress={() => set('roomKey', key)}
+                    onPress={() => {
+                      set('roomKey', key);
+                      applyWaterSuggestion({ roomKey: key });
+                    }}
                     colors={colors}
                     wide
                   />
@@ -457,7 +466,7 @@ export default function AddPlantScreen() {
                 />
               )}
             </Field>
-            {!speciesIndoor && (
+            {isOutdoor && (
               <Field label={t.addPlant.rainExposed} colors={colors}>
                 <View style={styles.grid2}>
                   <Pill label={t.addPlant.rainExposedYes} selected={form.rainExposed === 'yes'} onPress={() => set('rainExposed', 'yes')} colors={colors} wide />
