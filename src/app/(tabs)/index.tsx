@@ -296,8 +296,11 @@ const styles = StyleSheet.create({
   snoozeText: { fontSize: 11, fontWeight: '600' },
   careRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: Spacing.two, borderRadius: 16 },
   careIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  gridItem: { width: '48.5%' },
+  // Two columns at any screen width: the cards take 48% each and the leftover
+  // 4% becomes the gutter, instead of a fixed gap that can push the second
+  // card onto its own row on narrow phones.
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 10 },
+  gridItem: { width: '48%' },
   tile: { overflow: 'hidden' },
   tileInfo: { padding: 10, paddingTop: 9 },
 });

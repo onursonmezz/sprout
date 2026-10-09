@@ -206,8 +206,11 @@ const styles = StyleSheet.create({
   toggleBtn: { width: 34, height: 34, borderRadius: 10, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
   sectionLabel: { fontSize: 16, fontWeight: '700' },
   scroll: { padding: Spacing.three, paddingBottom: FloatingTabBarSpace },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  gridItem: { width: '48.5%' },
+  // Two columns at any screen width: the cards take 48% each and the leftover
+  // 4% becomes the gutter, instead of a fixed gap that can push the second
+  // card onto its own row on narrow phones.
+  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 10 },
+  gridItem: { width: '48%' },
   gridCard: { overflow: 'hidden' },
   gridInfo: { padding: 10, paddingTop: 9 },
   waterBadge: { position: 'absolute', top: 8, right: 8, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 9 },
