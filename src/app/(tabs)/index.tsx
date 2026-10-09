@@ -243,6 +243,13 @@ export default function TodayScreen() {
               <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} style={styles.gridItem}>
                 <GlassCard style={styles.tile}>
                   <PlantPhoto plant={plant} height={92} emojiSize={38} />
+                  <Pressable
+                    onPress={() => handleWater(plant)}
+                    hitSlop={6}
+                    accessibilityLabel={t.today.water}
+                    style={[styles.tileWater, { backgroundColor: colors.navBackground, borderColor: colors.navBorder }]}>
+                    <Ionicons name="water-outline" size={17} color={colors.tintBright} />
+                  </Pressable>
                   <View style={styles.tileInfo}>
                     <Text style={[styles.plantName, { color: colors.text }]} numberOfLines={1}>
                       {plant.name}
@@ -319,5 +326,16 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', rowGap: 10 },
   gridItem: { width: '48%' },
   tile: { overflow: 'hidden' },
+  tileWater: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   tileInfo: { padding: 10, paddingTop: 9 },
 });

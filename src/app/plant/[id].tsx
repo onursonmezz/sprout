@@ -54,7 +54,7 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t, lang } = useLanguage();
-  const { getPlant, addCareTask, removeCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust } = usePlants();
+  const { getPlant, addCareTask, removeCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust, clearCustomInterval } = usePlants();
   const plant = getPlant(String(id));
   const { lastRainDate } = useSettings();
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
@@ -156,6 +156,15 @@ export default function PlantDetailScreen() {
               <Text style={[styles.nextWateringMeta, { color: colors.textSecondary }]}>
                 {t.plantDetail.lastWatered(plant.lastWateredDaysAgo, plant.wateringAmountMl)}
               </Text>
+              {plant.customIntervalDays != null && (
+                <Text style={[styles.nextWateringMeta, { color: colors.textSecondary }]}>
+                  {t.plantDetail.customInterval(plant.customIntervalDays)}
+                  {'  '}
+                  <Text style={{ color: colors.tintBright, fontWeight: '700' }} onPress={() => clearCustomInterval(plant.id)}>
+                    {t.plantDetail.backToAutomatic}
+                  </Text>
+                </Text>
+              )}
               {rainCredit != null && (
                 <Text style={[styles.nextWateringMeta, { color: colors.tintBright }]}>{t.plantDetail.rainCredit(rainCredit)}</Text>
               )}

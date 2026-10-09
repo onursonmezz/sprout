@@ -142,6 +142,8 @@ type PlantsContextValue = {
   dismissWateringFeedback: () => void;
   /** Puts the plant back exactly as it was before its last watering. */
   undoWatering: () => void;
+  /** Drops the user's own interval so the algorithm (and what it has learned) takes over again. */
+  clearCustomInterval: (plantId: string) => void;
   /** Forgets what soil feedback taught for one plant. */
   resetIntervalAdjust: (plantId: string) => void;
   /** Re-applies the watering algorithm to every plant right away — called
@@ -369,6 +371,25 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   const resetIntervalAdjust = (plantId: string) => applyIntervalAdjust(plantId, () => 1);
 
+  const clearCustomInterval = (plantId: string) => {
+    (async () => {
+      const options = await loadSeasonalOptions();
+      const today = new Date();
+      setPlants((prev) =>
+        prev.map((p) => {
+          if (p.id !== plantId) return p;
+          const automatic = { ...p, customIntervalDays: null };
+          const wateringIntervalDays = effectiveWateringInterval(automatic, today, options);
+          return {
+            ...automatic,
+            wateringIntervalDays,
+            ...wateringSchedule(wateringIntervalDays, effectiveLastWatered(p, options, today), p.snoozeDays),
+          };
+        })
+      );
+    })();
+  };
+
   const snoozePlant = (plantId: string) =>
     setPlants((prev) =>
       prev.map((p) => {
@@ -418,6 +439,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         dismissWateringFeedback,
         undoWatering,
         resetIntervalAdjust,
+        clearCustomInterval,
         recomputeIntervals,
         resetPlants,
         restorePlants,

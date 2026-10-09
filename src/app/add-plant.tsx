@@ -34,6 +34,14 @@ const GENERIC_BASE_INTERVAL_DAYS = 7;
 
 const AVATAR_COLORS = ['#DDE7D2', '#E4E9DA', '#DCE9D9', '#E8F0E2', '#DFE9D6', '#E6E2D2', '#DEE7D8', '#EDE6D6'];
 
+/** Everyday pot sizes and the diameter each stands for. */
+const POT_SIZES = [
+  { key: 'small', cm: 10 },
+  { key: 'medium', cm: 15 },
+  { key: 'large', cm: 22 },
+  { key: 'xlarge', cm: 30 },
+] as const;
+
 function formatDate(d: Date) {
   return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
 }
@@ -265,8 +273,11 @@ export default function AddPlantScreen() {
     router.replace('/plants');
   };
 
-  const handleContinue = () => {
-    if (step < 4) {
+  /** Moves to the next step, or saves on the last one. finishNow saves from
+   * any step: everything not yet answered keeps its default and can be
+   * edited later. */
+  const handleContinue = (finishNow = false) => {
+    if (step < 4 && !finishNow) {
       setStep((s) => s + 1);
       return;
     }
@@ -530,6 +541,22 @@ export default function AddPlantScreen() {
         {step === 3 && (
           <View style={styles.fieldGroup}>
             <Field label={t.addPlant.potDiameter} colors={colors}>
+              <View style={styles.grid2}>
+                {POT_SIZES.map(({ key, cm }) => (
+                  <Pill
+                    key={key}
+                    label={t.addPlant.potSizes[key]}
+                    selected={form.potDiameter === String(cm)}
+                    onPress={() => {
+                      set('potDiameter', String(cm));
+                      applyWaterSuggestion({ potDiameter: String(cm) });
+                    }}
+                    colors={colors}
+                    wide
+                  />
+                ))}
+              </View>
+              <Text style={[styles.intervalNote, { color: colors.textSecondary, marginBottom: 6 }]}>{t.addPlant.potDiameterOrCm}</Text>
               <TextInput
                 value={form.potDiameter}
                 onChangeText={(v) => {
@@ -744,12 +771,18 @@ export default function AddPlantScreen() {
         )}
       </ScrollView>
 
+      {!isEditing && step < 4 && canContinue && (
+        <Pressable onPress={() => handleContinue(true)} style={[styles.finishNow, { backgroundColor: colors.background }]}>
+          <Text style={[styles.finishNowText, { color: colors.tintBright }]}>{t.addPlant.finishNow}</Text>
+        </Pressable>
+      )}
+
       <View style={[styles.footer, { borderTopColor: colors.border, backgroundColor: colors.background }]}>
         <Pressable onPress={handleBack} style={[styles.footerBack, { backgroundColor: colors.backgroundSelected }]}>
           <Text style={[styles.footerBackText, { color: colors.text }]}>{t.addPlant.backButton}</Text>
         </Pressable>
         <Pressable
-          onPress={handleContinue}
+          onPress={() => handleContinue()}
           disabled={!canContinue}
           style={[styles.footerContinue, { backgroundColor: colors.tint, opacity: canContinue ? 1 : 0.5 }]}>
           <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
@@ -936,6 +969,8 @@ const styles = StyleSheet.create({
   },
   footerBack: { flex: 1, borderRadius: 16, paddingVertical: 14, alignItems: 'center' },
   footerBackText: { fontWeight: '700' },
+  finishNow: { alignItems: 'center', paddingVertical: 10 },
+  finishNowText: { fontSize: 13, fontWeight: '700' },
   footerContinue: { flex: 2, borderRadius: 16, overflow: 'hidden', paddingVertical: 14, alignItems: 'center' },
   footerContinueText: { color: '#fff', fontWeight: '700' },
 });
