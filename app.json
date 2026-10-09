@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "sprout-app",
+    "name": "Sprout",
     "slug": "sprout-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#15201A",
+        "backgroundColor": "#12241A",
+        "backgroundImage": "./assets/images/android-icon-background.png",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
@@ -25,7 +26,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#15201A",
+          "backgroundColor": "#0F1813",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 180
         }
