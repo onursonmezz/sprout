@@ -1,5 +1,24 @@
 export type Language = 'en' | 'tr';
 
+/** Nobody measures millilitres, so amounts are also given in glasses. */
+const decimalTr = (n: number) => String(n).replace('.', ',');
+
+/** A Turkish water glass is about 200 ml. */
+function approxAmountTr(ml: number): string {
+  if (ml >= 1000) return `yaklaşık ${decimalTr(Math.round(ml / 250) / 4)} litre`;
+  if (ml < 75) return 'çeyrek su bardağı';
+  const halfGlasses = Math.max(1, Math.round(ml / 100));
+  return halfGlasses === 1 ? 'yarım su bardağı' : `yaklaşık ${decimalTr(halfGlasses / 2)} su bardağı`;
+}
+
+/** A cup is about 240 ml. */
+function approxAmountEn(ml: number): string {
+  if (ml >= 1000) return `about ${Math.round(ml / 250) / 4} litres`;
+  if (ml < 90) return 'a quarter cup';
+  const halfCups = Math.max(1, Math.round(ml / 120));
+  return halfCups === 1 ? 'half a cup' : halfCups === 2 ? 'about 1 cup' : `about ${halfCups / 2} cups`;
+}
+
 export const translations = {
   en: {
     tabs: { today: 'Today', plants: 'Plants', calendar: 'Calendar', guide: 'Guide', settings: 'Settings' },
@@ -9,12 +28,12 @@ export const translations = {
       greetingEvening: 'Good evening',
       howArePlants: 'how are the plants?',
       plantsAlive: 'Plants alive',
-      dayStreak: 'Day streak',
+      dayStreak: 'Days on time',
       thisMonth: 'This month',
       needsAttention: 'Time to water',
       heroWaiting: (n: number) => (n === 1 ? '1 plant is\nwaiting for you' : `${n} plants are\nwaiting for you`),
       heroAllGood: 'All plants\nare happy',
-      heroSub: (plants: number, streak: number) => `${plants} plants · ${streak}-day streak`,
+      heroSub: (plants: number, streak: number) => (streak > 0 ? `${plants} plants · on time for ${streak} days` : `${plants} plants`),
       noAttentionNeeded: "You have no plants that need care today.",
       comingUp: 'Coming up',
       nothingThisWeek: 'Nothing else needs water this week.',
@@ -146,7 +165,7 @@ export const translations = {
       daysOverdue: (n: number) => `${n} days overdue`,
       dueToday: 'Due today',
       inDays: (n: number) => `In ${n} days`,
-      lastWatered: (days: number, ml: number) => `Last watered ${days} days ago · ${ml}ml`,
+      lastWatered: (days: number, ml: number) => `Last watered ${days} days ago · ${ml} ml (${approxAmountEn(ml)})`,
       waterNow: '💧 Water now',
       wateredToast: (name: string) => `✓ ${name} watered! 💧`,
       snooze: 'Snooze 1d',
@@ -736,7 +755,13 @@ export const translations = {
       shareButton: 'Share',
       sharing: 'Preparing…',
     },
+    water: {
+      approx: (ml: number) => approxAmountEn(ml),
+      approxSentence: (ml: number) => `That is ${approxAmountEn(ml)}.`,
+    },
     wateringFeedback: {
+      undo: 'Undo',
+      watered: (name: string) => `${name} watered`,
       title: (name: string) => `${name} watered. How was the soil?`,
       subtitle: 'Your answer fine-tunes this plant\'s schedule.',
       idealHint: (level: string) => level,
@@ -801,12 +826,12 @@ export const translations = {
       greetingEvening: 'İyi akşamlar',
       howArePlants: 'bitkiler nasıl?',
       plantsAlive: 'Yaşayan bitki',
-      dayStreak: 'Günlük seri',
+      dayStreak: 'Gecikmesiz gün',
       thisMonth: 'Bu ay',
       needsAttention: 'Sulama zamanı',
       heroWaiting: (n: number) => `${n} bitki\nseni bekliyor`,
       heroAllGood: 'Bütün bitkilerin\nkeyfi yerinde',
-      heroSub: (plants: number, streak: number) => `${plants} bitki · ${streak} günlük seri`,
+      heroSub: (plants: number, streak: number) => (streak > 0 ? `${plants} bitki · ${streak} gündür gecikme yok` : `${plants} bitki`),
       noAttentionNeeded: 'Bugün bakıma ihtiyacı olan bir bitkiniz yok.',
       comingUp: 'Sıradakiler',
       nothingThisWeek: 'Bu hafta sulanacak başka bitki yok.',
@@ -936,7 +961,7 @@ export const translations = {
       daysOverdue: (n: number) => `${n} gün gecikti`,
       dueToday: 'Bugün sırası',
       inDays: (n: number) => `${n} gün sonra`,
-      lastWatered: (days: number, ml: number) => `${days} gün önce sulandı · ${ml}ml`,
+      lastWatered: (days: number, ml: number) => `${days} gün önce sulandı · ${ml} ml (${approxAmountTr(ml)})`,
       waterNow: '💧 Şimdi sula',
       wateredToast: (name: string) => `✓ ${name} sulandı! 💧`,
       snooze: 'Ertele 1g',
@@ -1526,7 +1551,13 @@ export const translations = {
       shareButton: 'Paylaş',
       sharing: 'Hazırlanıyor…',
     },
+    water: {
+      approx: (ml: number) => approxAmountTr(ml),
+      approxSentence: (ml: number) => `Bu, ${approxAmountTr(ml)} eder.`,
+    },
     wateringFeedback: {
+      undo: 'Geri al',
+      watered: (name: string) => `${name} sulandı`,
       title: (name: string) => `${name} sulandı. Toprak nasıldı?`,
       subtitle: 'Cevabın bu bitkinin sulama aralığını ince ayarlar.',
       idealHint: (level: string) => `Bu bitki için ideal: ${level.charAt(0).toLocaleLowerCase('tr-TR')}${level.slice(1)}`,

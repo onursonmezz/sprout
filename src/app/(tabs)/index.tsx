@@ -10,6 +10,7 @@ import { roomDisplayName } from '@/constants/rooms';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
+import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { CareTaskType, Plant } from '@/data/plants';
@@ -48,7 +49,8 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, waterPlant, addJournalEntry, snoozePlant, completeCareTask } = usePlants();
+  const { plants, snoozePlant, completeCareTask } = usePlants();
+  const handleWater = useWaterPlant();
   const { dayLengthHours } = useSettings();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
@@ -58,18 +60,6 @@ export default function TodayScreen() {
   });
 
   const { streak, thisMonth } = useMemo(() => computeCareStats(plants), [plants]);
-
-  const handleWater = (plant: (typeof plants)[number]) => {
-    waterPlant(plant.id);
-    addJournalEntry(plant.id, {
-      id: `watered-${Date.now()}`,
-      type: 'watered',
-      title: t.plantDetail.journal.wateredTitle,
-      description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
-      daysAgo: 0,
-    });
-    hapticSuccess();
-  };
 
   const handleSnooze = (plantId: string) => {
     snoozePlant(plantId);
@@ -172,7 +162,7 @@ export default function TodayScreen() {
                         {plant.name}
                       </Text>
                       <Text style={[styles.plantMeta, { color: colors.textSecondary }]} numberOfLines={1}>
-                        {roomDisplayName(plant, t)} · {plant.wateringAmountMl}ml
+                        {roomDisplayName(plant, t)} · {t.water.approx(plant.wateringAmountMl)}
                       </Text>
                       <Text style={[styles.status, { color: isOverdue ? colors.late : colors.tintBright }]}>
                         {isOverdue ? t.today.daysLate(Math.abs(plant.daysUntilWatering)) : t.today.dueToday}

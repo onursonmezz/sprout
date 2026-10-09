@@ -107,6 +107,17 @@ function migratePlant(p: Plant): Plant {
   };
 }
 
+/** The watering that just happened: what the undo / soil-question prompt works from. */
+type PendingWatering = {
+  plantId: string;
+  /** Days the soil had gone without water. */
+  elapsedDays: number;
+  /** Whether the soil question is worth asking for this watering. */
+  askSoil: boolean;
+  /** The plant as it was just before, for undo. */
+  before: Plant;
+};
+
 type PlantsContextValue = {
   plants: Plant[];
   addPlant: (plant: Plant) => void;
@@ -120,9 +131,11 @@ type PlantsContextValue = {
   snoozePlant: (plantId: string) => void;
   /** Set right after a watering that is worth asking about; drives the
    * "how was the soil?" prompt. */
-  pendingFeedback: { plantId: string; elapsedDays: number } | null;
+  pendingFeedback: PendingWatering | null;
   answerWateringFeedback: (answer: SoilFeedback) => void;
   dismissWateringFeedback: () => void;
+  /** Puts the plant back exactly as it was before its last watering. */
+  undoWatering: () => void;
   /** Forgets what soil feedback taught for one plant. */
   resetIntervalAdjust: (plantId: string) => void;
   /** Re-applies the watering algorithm to every plant right away — called
@@ -286,7 +299,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
       prev.map((p) => (p.id === plantId ? { ...p, journalNotes: [entry, ...p.journalNotes] } : p))
     );
 
-  const [pendingFeedback, setPendingFeedback] = useState<{ plantId: string; elapsedDays: number } | null>(null);
+  const [pendingFeedback, setPendingFeedback] = useState<PendingWatering | null>(null);
 
   const waterPlant = (plantId: string) => {
     // Only ask about the soil when the answer can teach something: the
@@ -294,7 +307,9 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
     // passed for the soil's state to mean anything.
     const before = plants.find((p) => p.id === plantId);
     const elapsedDays = before ? effectiveLastWatered(before, latestOptions, new Date()) : 0;
-    setPendingFeedback(before && before.customIntervalDays == null && elapsedDays >= 2 ? { plantId, elapsedDays } : null);
+    setPendingFeedback(
+      before ? { plantId, elapsedDays, askSoil: before.customIntervalDays == null && elapsedDays >= 2, before } : null
+    );
     (async () => {
       const options = await loadSeasonalOptions();
       const today = new Date();
@@ -328,13 +343,20 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   };
 
   const answerWateringFeedback = (answer: SoilFeedback) => {
-    if (!pendingFeedback) return;
+    if (!pendingFeedback || !pendingFeedback.askSoil) return;
     const { plantId, elapsedDays } = pendingFeedback;
     setPendingFeedback(null);
     applyIntervalAdjust(plantId, (p, algoInterval) => learnIntervalAdjust(p.intervalAdjust, algoInterval, elapsedDays, answer));
   };
 
   const dismissWateringFeedback = () => setPendingFeedback(null);
+
+  const undoWatering = () => {
+    if (!pendingFeedback) return;
+    const { before } = pendingFeedback;
+    setPendingFeedback(null);
+    setPlants((prev) => prev.map((p) => (p.id === before.id ? before : p)));
+  };
 
   const resetIntervalAdjust = (plantId: string) => applyIntervalAdjust(plantId, () => 1);
 
@@ -384,6 +406,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         pendingFeedback,
         answerWateringFeedback,
         dismissWateringFeedback,
+        undoWatering,
         resetIntervalAdjust,
         recomputeIntervals,
         resetPlants,

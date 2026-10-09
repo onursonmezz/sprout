@@ -3,7 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useMemo, useRef, useState } from 'react';
-import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import ViewShot, { ViewShotRef } from 'react-native-view-shot';
 
 import { FadeToBackground, GlowBackground, GradientFill } from '@/components/glass';
@@ -13,6 +13,7 @@ import { PlantAvatar } from '@/components/plant-avatar';
 import { Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
+import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
 import { useLanguage } from '@/context/language-context';
 import { roomDisplayName } from '@/constants/rooms';
@@ -53,13 +54,11 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t, lang } = useLanguage();
-  const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, snoozePlant, resetIntervalAdjust } = usePlants();
+  const { getPlant, addCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust } = usePlants();
   const plant = getPlant(String(id));
   const { lastRainDate } = useSettings();
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
-  const [toastVisible, setToastVisible] = useState(false);
-  const toastOpacity = useRef(new Animated.Value(0)).current;
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const water = useWaterPlant();
   const [shareModalVisible, setShareModalVisible] = useState(false);
   const [sharing, setSharing] = useState(false);
   const shareCardRef = useRef<ViewShotRef>(null);
@@ -104,23 +103,9 @@ export default function PlantDetailScreen() {
   const rainCredit = rainAgo != null && rainAgo < plant.lastWateredDaysAgo ? rainAgo : null;
   const wateringProgress = plant.lastWateredDaysAgo / wateringInterval;
 
-  const handleWaterNow = () => {
-    waterPlant(plant.id);
-    addJournalEntry(plant.id, {
-      id: `watered-${Date.now()}`,
-      type: 'watered',
-      title: t.plantDetail.journal.wateredTitle,
-      description: t.plantDetail.journal.wateredDesc(plant.wateringAmountMl),
-      daysAgo: 0,
-    });
-    hapticSuccess();
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    setToastVisible(true);
-    Animated.timing(toastOpacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
-    toastTimer.current = setTimeout(() => {
-      Animated.timing(toastOpacity, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => setToastVisible(false));
-    }, 2000);
-  };
+  // Confirmation, undo and the soil question come from WateringFeedbackPrompt.
+  const handleWaterNow = () => water(plant);
+
 
   return (
     <View style={[styles.safe, { backgroundColor: colors.background }]}>
@@ -316,12 +301,6 @@ export default function PlantDetailScreen() {
           {tab === 'history' && <HistoryTab plant={plant} colors={colors} t={t} />}
         </View>
       </ScrollView>
-
-      {toastVisible && (
-        <Animated.View pointerEvents="none" style={[styles.toast, { backgroundColor: colors.tint, opacity: toastOpacity }]}>
-          <Text style={[styles.toastText, { color: colors.onTint }]}>{t.plantDetail.wateredToast(plant.name)}</Text>
-        </Animated.View>
-      )}
 
       <Modal visible={shareModalVisible} transparent animationType="fade" onRequestClose={() => setShareModalVisible(false)}>
         <View style={styles.shareBackdrop}>
@@ -974,21 +953,6 @@ const styles = StyleSheet.create({
   chipLabel: { fontSize: 10, fontWeight: '600' },
   chipValue: { fontSize: 13, fontWeight: '700' },
 
-  toast: {
-    position: 'absolute',
-    bottom: Spacing.five,
-    left: Spacing.four,
-    right: Spacing.four,
-    borderRadius: 16,
-    paddingVertical: 14,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
-  },
-  toastText: { color: '#fff', fontWeight: '700', fontSize: 14 },
 
   addButton: { borderRadius: 14, borderWidth: 1, paddingVertical: 12, alignItems: 'center' },
   addButtonText: { fontWeight: '700', fontSize: 13 },

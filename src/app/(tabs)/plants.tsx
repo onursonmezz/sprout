@@ -10,6 +10,7 @@ import { ROOM_KEYS, roomDisplayName } from '@/constants/rooms';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
+import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
 import { Plant } from '@/data/plants';
 import { Translations } from '@/constants/translations';
@@ -67,6 +68,7 @@ export default function PlantsScreen() {
   const router = useRouter();
   const { t } = useLanguage();
   const { plants } = usePlants();
+  const handleWater = useWaterPlant();
   const [query, setQuery] = useState('');
   const [view, setView] = useState<'grid' | 'list' | 'rooms'>('grid');
 
@@ -144,7 +146,11 @@ export default function PlantsScreen() {
                 <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} style={styles.gridItem}>
                   <GlassCard style={styles.gridCard}>
                     <PlantPhoto plant={plant} height={104} />
-                    {plant.status !== 'upcoming' && <GradientButton label={t.plants.water} style={styles.waterBadge} />}
+                    {plant.status !== 'upcoming' && (
+                      <View style={styles.waterBadgeWrap}>
+                        <GradientButton label={t.plants.water} onPress={() => handleWater(plant)} style={styles.waterBadge} />
+                      </View>
+                    )}
                     <View style={styles.gridInfo}>
                       <Text style={[styles.plantName, { color: colors.text }]} numberOfLines={1}>
                         {plant.name}
@@ -213,7 +219,8 @@ const styles = StyleSheet.create({
   gridItem: { width: '48%' },
   gridCard: { overflow: 'hidden' },
   gridInfo: { padding: 10, paddingTop: 9 },
-  waterBadge: { position: 'absolute', top: 8, right: 8, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 9 },
+  waterBadgeWrap: { position: 'absolute', top: 8, right: 8 },
+  waterBadge: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: 10 },
   plantName: { fontSize: 15, fontWeight: '700' },
   plantMeta: { fontSize: 11, marginTop: 1 },
   status: { fontSize: 11, fontWeight: '700', marginTop: 4, marginBottom: 6 },

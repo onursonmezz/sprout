@@ -1,35 +1,44 @@
 import { Plant } from '@/data/plants';
 
-function dateKey(d: Date) {
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+/** Longest streak worth counting — also the loop's safety bound. */
+const MAX_STREAK_DAYS = 999;
+
+/** Days-ago values of every watering known for a plant. */
+function wateringDays(plant: Plant): number[] {
+  const days = [plant.lastWateredDaysAgo];
+  for (const entry of plant.journalNotes) if (entry.type === 'watered') days.push(entry.daysAgo);
+  return days;
 }
 
-/** Calendar dates (as local-day keys) on which at least one plant was watered,
- * reconstructed from each journal entry's daysAgo relative to today. */
-function wateredDayKeys(plants: Plant[]): Set<string> {
-  const today = new Date();
-  const keys = new Set<string>();
-  for (const plant of plants) {
-    for (const entry of plant.journalNotes) {
-      if (entry.type !== 'watered') continue;
-      const d = new Date(today);
-      d.setDate(d.getDate() - entry.daysAgo);
-      keys.add(dateKey(d));
-    }
-  }
-  return keys;
+/** Whether a plant was past due on the day `daysAgo` days back, judged from
+ * its known waterings and its current interval. Days before the plant was
+ * added, or before its first known watering, never count against the user. */
+function wasOverdue(plant: Plant, waterings: number[], daysAgo: number): boolean {
+  if (daysAgo > plant.createdDaysAgo) return false;
+  let previous: number | null = null;
+  for (const w of waterings) if (w >= daysAgo && (previous === null || w < previous)) previous = w;
+  if (previous === null) return false;
+  return previous - daysAgo > (plant.customIntervalDays ?? plant.wateringIntervalDays);
 }
 
-/** Consecutive days (ending today or yesterday) with at least one watering
- * logged. Today not having a watering yet doesn't break the streak until the
- * day fully lapses. */
-function computeStreak(days: Set<string>): number {
-  const cursor = new Date();
-  if (!days.has(dateKey(cursor))) cursor.setDate(cursor.getDate() - 1);
-  let streak = 0;
-  while (days.has(dateKey(cursor))) {
+/**
+ * Consecutive days, ending today, on which no plant was overdue.
+ *
+ * Deliberately not "days in a row with a watering": plants should not be
+ * watered every day, so a streak that breaks on a day with nothing to do
+ * would reward overwatering. Keeping every plant on time is the habit worth
+ * counting. The streak cannot be longer than the oldest plant has been here.
+ */
+function computeStreak(plants: Plant[]): number {
+  if (plants.length === 0) return 0;
+  // Today uses the live status, which also knows about snoozes and rain.
+  if (plants.some((p) => p.status === 'overdue')) return 0;
+  const withWaterings = plants.map((plant) => ({ plant, waterings: wateringDays(plant) }));
+  const oldest = Math.min(MAX_STREAK_DAYS, Math.max(...plants.map((p) => p.createdDaysAgo)));
+  let streak = 1;
+  for (let daysAgo = 1; daysAgo <= oldest; daysAgo++) {
+    if (withWaterings.some(({ plant, waterings }) => wasOverdue(plant, waterings, daysAgo))) break;
     streak++;
-    cursor.setDate(cursor.getDate() - 1);
   }
   return streak;
 }
@@ -51,7 +60,7 @@ function countThisMonth(plants: Plant[]): number {
 
 export function computeCareStats(plants: Plant[]) {
   return {
-    streak: computeStreak(wateredDayKeys(plants)),
+    streak: computeStreak(plants),
     thisMonth: countThisMonth(plants),
   };
 }

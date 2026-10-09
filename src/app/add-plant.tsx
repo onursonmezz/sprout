@@ -662,6 +662,9 @@ export default function AddPlantScreen() {
                 placeholderTextColor={colors.textSecondary}
                 style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
+              {Number(form.waterAmountMl) > 0 && (
+                <Text style={[styles.intervalNote, { color: colors.text }]}>{t.water.approxSentence(Number(form.waterAmountMl))}</Text>
+              )}
               {waterAmountTouched ? (
                 <Pressable
                   onPress={() => {
