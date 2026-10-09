@@ -1,6 +1,6 @@
 // @ts-ignore - veri/watering.js is a plain JS module (see veri/VERITABANI.md);
 // its exports are typed at the call sites below instead of at the source.
-import { wateringInterval as rawWateringInterval } from '../../veri/watering.js';
+import { waterAmountMl as rawWaterAmountMl, wateringInterval as rawWateringInterval } from '../../veri/watering.js';
 import { WateringStatus } from '@/data/plants';
 import { HeatingSensitivity, LightKey, PotMaterialKey, SeasonProfile, wateringAlgorithm, WateringAlgorithm } from '@/data/species-guide';
 
@@ -33,7 +33,7 @@ type WateringPlantInput = {
   baseIntervalDays: number;
   heatingSensitivity: HeatingSensitivity;
   seasonProfile?: SeasonProfile;
-  pot: { materialKey: PotMaterialKey; diameterCm: number | null };
+  pot: { materialKey: PotMaterialKey; diameterCm: number | null; hasDrainage?: boolean };
   environment: { lightKey: LightKey; windowDistanceCm?: number };
   indoor: boolean;
 };
@@ -51,6 +51,7 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
   const site = {
     potMaterial: plant.pot.materialKey,
     potDiameterCm: plant.pot.diameterCm ?? 15,
+    hasDrainage: plant.pot.hasDrainage ?? true,
     light: plant.environment.lightKey,
     windowDistanceCm: plant.environment.windowDistanceCm ?? DEFAULT_WINDOW_DISTANCE_CM,
     indoor: plant.indoor,
@@ -60,6 +61,11 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
   const algo = options.applySeasonalFactors ? wateringAlgorithm : neutralAlgorithm(wateringAlgorithm);
   const result = rawWateringInterval(speciesLike, site, algo, date) as { intervalDays: number };
   return result.intervalDays;
+}
+
+/** How much water one watering should be for this pot, in ml. */
+export function suggestWaterAmountMl(diameterCm: number | null, hasDrainage: boolean): number {
+  return rawWaterAmountMl({ potDiameterCm: diameterCm ?? 15, hasDrainage }, wateringAlgorithm) as number;
 }
 
 export const INTERVAL_ADJUST_MIN = 0.5;

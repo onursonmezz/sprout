@@ -69,7 +69,10 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
     fOutdoor = algo.outdoorSummer[String(month)] ?? 1.0;
   }
 
-  const raw = base * fMaterial * fSize * fLight * fWindow * fSeason * fHeating * fOutdoor;
+  // 8. Drenaj deliği yoksa fazla su dipte birikir ve toprak daha geç kurur
+  const fDrainage = site.hasDrainage === false ? (algo.noDrainageFactor ?? 1.0) : 1.0;
+
+  const raw = base * fMaterial * fSize * fLight * fWindow * fSeason * fHeating * fOutdoor * fDrainage;
   const intervalDays = Math.max(
     algo.minIntervalDays,
     Math.min(algo.maxIntervalDays, Math.round(raw))
@@ -87,8 +90,26 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
       { key: "season",   label: "Mevsim",                factor: fSeason },
       { key: "heating",  label: "Kalorifer",             factor: fHeating },
       { key: "outdoor",  label: "Dış mekan sıcaklığı",   factor: fOutdoor },
+      { key: "drainage", label: "Drenaj deliği yok",     factor: fDrainage },
     ].filter((x) => x.factor === undefined || x.factor !== 1.0),
   };
+}
+
+/**
+ * Bir sulamada verilecek su miktarı (ml). Saksı hacminin kabaca beşte biri:
+ * çapı d olan saksının hacmi ~0.5 x d^3 cm3 kabul edilir, bunun %20'si toprağı
+ * baştan sona ıslatıp altından hafifçe süzülmeye yeter. Drenaj deliği yoksa
+ * fazla su çıkamayacağı için miktar yarıya iner.
+ */
+export function waterAmountMl(site, algo) {
+  const cfg = algo.waterAmount;
+  const d = site.potDiameterCm ?? 15;
+  let ml = cfg.mlPerCubicCm * d * d * d;
+  ml = Math.min(cfg.maxMl, ml);
+  if (site.hasDrainage === false) ml *= cfg.noDrainageFactor;
+  ml = Math.max(cfg.minMl, ml);
+  const step = ml < 200 ? 10 : 50;
+  return Math.round(ml / step) * step;
 }
 
 /** Bir sonraki sulama tarihi. lastWatered verilmezse bugünden sayar. */

@@ -43,6 +43,9 @@ export type Plant = {
   avatarColor: string;
   photoUri: string | null;
   wateringAmountMl: number;
+  /** True while the amount follows the pot-size suggestion; false once the
+   * user typed their own. */
+  amountAuto: boolean;
   status: WateringStatus;
   daysUntilWatering: number;
   lastWateredDaysAgo: number;

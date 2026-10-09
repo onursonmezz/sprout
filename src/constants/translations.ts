@@ -306,6 +306,9 @@ export const translations = {
       windowDistances: { 30: 'On the sill', 100: 'About 1 m', 250: '2–3 m away', 400: 'Far side of room' },
       intervalAutoNote: 'Calculated automatically from pot, light and season.',
       intervalBackToAuto: 'Using your own interval · back to automatic',
+      amountAutoNote: 'Suggested from the pot size.',
+      amountBackToAuto: (ml: number) => `Using your own amount · back to suggested (${ml} ml)`,
+      noDrainageNote: 'Without a drainage hole water collects at the bottom, so Sprout suggests less water, less often.',
       lightLevels: {
         full_sun: { label: 'Direct sun', hint: 'Full sun most of the day' },
         part_sun: { label: 'Part sun / bright indirect', hint: 'Near a window, no direct sun' },
@@ -1086,6 +1089,9 @@ export const translations = {
       windowDistances: { 30: 'Pencere kenarı', 100: 'Yaklaşık 1 m', 250: '2-3 m uzakta', 400: 'Odanın diğer ucu' },
       intervalAutoNote: 'Saksı, ışık ve mevsime göre otomatik hesaplanıyor.',
       intervalBackToAuto: 'Kendi belirlediğin sıklık kullanılıyor · otomatiğe dön',
+      amountAutoNote: 'Saksı çapına göre önerilen miktar.',
+      amountBackToAuto: (ml: number) => `Kendi belirlediğin miktar kullanılıyor · önerilene dön (${ml} ml)`,
+      noDrainageNote: 'Deliksiz saksıda su dipte birikir; bu yüzden Sprout daha az su ve daha seyrek sulama önerir.',
       lightLevels: {
         full_sun: { label: 'Tam güneş', hint: 'Günün çoğunda doğrudan güneş alır' },
         part_sun: { label: 'Yarı gölge / parlak dolaylı', hint: 'Pencere yanı, doğrudan güneş yok' },

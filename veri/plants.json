@@ -202,6 +202,13 @@
       "11": 1,
       "12": 1
     },
+    "noDrainageFactor": 1.2,
+    "waterAmount": {
+      "mlPerCubicCm": 0.1,
+      "noDrainageFactor": 0.5,
+      "minMl": 50,
+      "maxMl": 3000
+    },
     "minIntervalDays": 2,
     "maxIntervalDays": 75
   },

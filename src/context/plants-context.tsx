@@ -11,6 +11,7 @@ import {
   learnIntervalAdjust,
   recomputeWateringInterval,
   SoilFeedback,
+  suggestWaterAmountMl,
   SeasonalOptions,
   wateringSchedule,
 } from '@/utils/watering-algorithm';
@@ -49,6 +50,7 @@ function migratePlant(p: Plant): Plant {
     indoor?: boolean;
     customIntervalDays?: number | null;
     intervalAdjust?: number;
+    amountAuto?: boolean;
     snoozeDays?: number;
     environment?: { lightKey?: LightKey; windowDistanceCm?: number };
     pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null; hasDrainage?: boolean; drainage?: string; soil?: string };
@@ -60,6 +62,11 @@ function migratePlant(p: Plant): Plant {
   const wateringIntervalDays =
     typeof legacy.wateringIntervalDays === 'number' ? legacy.wateringIntervalDays : Math.max(1, p.lastWateredDaysAgo + p.daysUntilWatering);
   const hasRoomKey = typeof legacy.roomKey === 'string';
+  const hasDrainage =
+    typeof legacy.pot?.hasDrainage === 'boolean' ? legacy.pot.hasDrainage : !['No', 'Hayır'].includes(legacy.pot?.drainage ?? '');
+  // Before amounts were suggested from the pot, every plant started at the
+  // fixed default of 200 ml — those are treated as "never chosen".
+  const amountAuto = typeof legacy.amountAuto === 'boolean' ? legacy.amountAuto : p.wateringAmountMl === 200;
   return {
     ...p,
     wateringIntervalDays,
@@ -72,6 +79,8 @@ function migratePlant(p: Plant): Plant {
     indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
     customIntervalDays: legacy.customIntervalDays ?? null,
     intervalAdjust: typeof legacy.intervalAdjust === 'number' ? legacy.intervalAdjust : 1,
+    amountAuto,
+    wateringAmountMl: amountAuto ? suggestWaterAmountMl(legacy.pot?.diameterCm ?? null, hasDrainage) : p.wateringAmountMl,
     snoozeDays: legacy.snoozeDays ?? 0,
     environment: {
       lightKey: legacy.environment?.lightKey ?? 'part_sun',
@@ -81,8 +90,7 @@ function migratePlant(p: Plant): Plant {
       materialKey: legacy.pot?.materialKey ?? 'plastic',
       diameterCm: legacy.pot?.diameterCm ?? null,
       // Older saves stored a translated "Yes"/"No" label instead of a boolean.
-      hasDrainage:
-        typeof legacy.pot?.hasDrainage === 'boolean' ? legacy.pot.hasDrainage : !['No', 'Hayır'].includes(legacy.pot?.drainage ?? ''),
+      hasDrainage,
       soil: legacy.pot?.soil ?? '',
     },
     roomKey: hasRoomKey ? (legacy.roomKey as RoomKey) : legacy.room && legacy.room !== '—' ? 'other' : 'living_room',

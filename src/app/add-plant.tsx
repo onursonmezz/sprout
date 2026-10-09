@@ -25,7 +25,7 @@ import {
   SeasonProfile,
   seasonProfileFor,
 } from '@/data/species-guide';
-import { recomputeWateringInterval, WINDOW_DISTANCE_OPTIONS, wateringSchedule } from '@/utils/watering-algorithm';
+import { recomputeWateringInterval, WINDOW_DISTANCE_OPTIONS, wateringSchedule, suggestWaterAmountMl } from '@/utils/watering-algorithm';
 import { awaitLightMeterResult } from '@/utils/light-meter';
 
 const DEFAULT_REPOT_INTERVAL_DAYS = 365;
@@ -95,7 +95,7 @@ const initialForm: FormState = {
   soilMix: '',
   lastRepotted: '',
   waterEveryDays: 7,
-  waterAmountMl: '',
+  waterAmountMl: String(suggestWaterAmountMl(null, true)),
   lastWatered: todayFormatted(),
 };
 
@@ -159,6 +159,7 @@ export default function AddPlantScreen() {
   // choice is then saved as the plant's custom interval and the algorithm
   // stops overriding it, until they tap "back to automatic".
   const [waterIntervalTouched, setWaterIntervalTouched] = useState(() => editingPlant?.customIntervalDays != null);
+  const [waterAmountTouched, setWaterAmountTouched] = useState(() => (editingPlant ? !editingPlant.amountAuto : false));
 
   if (isEditing && !editingPlant) {
     return (
@@ -184,7 +185,11 @@ export default function AddPlantScreen() {
         baseIntervalDays: speciesBaseInterval,
         heatingSensitivity: speciesHeatingSensitivity,
         seasonProfile: speciesSeasonProfile,
-        pot: { materialKey: next.potMaterialKey, diameterCm: next.potDiameter ? Number(next.potDiameter) : null },
+        pot: {
+          materialKey: next.potMaterialKey,
+          diameterCm: next.potDiameter ? Number(next.potDiameter) : null,
+          hasDrainage: next.drainage === 'yes',
+        },
         environment: { lightKey: next.lightKey, windowDistanceCm: next.windowDistanceCm },
         indoor: speciesIndoor,
       },
@@ -193,7 +198,14 @@ export default function AddPlantScreen() {
     );
   };
 
+  /** The pot-size-based amount for the current (or about-to-be) answers. */
+  const suggestedAmount = (overrides: Partial<FormState> = {}) => {
+    const next = { ...form, ...overrides };
+    return String(suggestWaterAmountMl(next.potDiameter ? Number(next.potDiameter) : null, next.drainage === 'yes'));
+  };
+
   const applyWaterSuggestion = (overrides: Partial<FormState> = {}) => {
+    if (!waterAmountTouched) set('waterAmountMl', suggestedAmount(overrides));
     if (waterIntervalTouched) return;
     set('waterEveryDays', computeSuggestion(overrides));
   };
@@ -215,7 +227,11 @@ export default function AddPlantScreen() {
             baseIntervalDays: entry.water.baseIntervalDays,
             heatingSensitivity: entry.heatingSensitivity,
             seasonProfile: seasonProfileFor(entry),
-            pot: { materialKey: next.potMaterialKey, diameterCm: next.potDiameter ? Number(next.potDiameter) : null },
+            pot: {
+          materialKey: next.potMaterialKey,
+          diameterCm: next.potDiameter ? Number(next.potDiameter) : null,
+          hasDrainage: next.drainage === 'yes',
+        },
             environment: { lightKey: next.lightKey, windowDistanceCm: next.windowDistanceCm },
             indoor: entry.category !== 'outdoor',
           },
@@ -251,7 +267,8 @@ export default function AddPlantScreen() {
       latinName: form.latinName.trim(),
       roomKey: form.roomKey,
       customRoom: form.roomKey === 'other' ? form.customRoom.trim() || null : null,
-      wateringAmountMl: Number(form.waterAmountMl) || 200,
+      wateringAmountMl: Number(form.waterAmountMl) || Number(suggestedAmount()),
+      amountAuto: !waterAmountTouched,
       environment: { lightKey: form.lightKey, windowDistanceCm: form.windowDistanceCm },
       pot: {
         materialKey: form.potMaterialKey,
@@ -524,18 +541,27 @@ export default function AddPlantScreen() {
                 <Pill
                   label={t.addPlant.yes}
                   selected={form.drainage === 'yes'}
-                  onPress={() => set('drainage', 'yes')}
+                  onPress={() => {
+                    set('drainage', 'yes');
+                    applyWaterSuggestion({ drainage: 'yes' });
+                  }}
                   colors={colors}
                   wide
                 />
                 <Pill
                   label={t.addPlant.no}
                   selected={form.drainage === 'no'}
-                  onPress={() => set('drainage', 'no')}
+                  onPress={() => {
+                    set('drainage', 'no');
+                    applyWaterSuggestion({ drainage: 'no' });
+                  }}
                   colors={colors}
                   wide
                 />
               </View>
+              {form.drainage === 'no' && (
+                <Text style={[styles.intervalNote, { color: colors.textSecondary }]}>{t.addPlant.noDrainageNote}</Text>
+              )}
             </Field>
             <Field label={t.addPlant.soilMix} colors={colors}>
               <TextInput
@@ -605,12 +631,26 @@ export default function AddPlantScreen() {
             <Field label={t.addPlant.waterAmount} colors={colors}>
               <TextInput
                 value={form.waterAmountMl}
-                onChangeText={(v) => set('waterAmountMl', v)}
+                onChangeText={(v) => {
+                  setWaterAmountTouched(true);
+                  set('waterAmountMl', v);
+                }}
                 keyboardType="numeric"
-                placeholder="250"
+                placeholder={suggestedAmount()}
                 placeholderTextColor={colors.textSecondary}
                 style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
+              {waterAmountTouched ? (
+                <Pressable
+                  onPress={() => {
+                    setWaterAmountTouched(false);
+                    set('waterAmountMl', suggestedAmount());
+                  }}>
+                  <Text style={[styles.intervalNote, { color: colors.tint }]}>{t.addPlant.amountBackToAuto(Number(suggestedAmount()))}</Text>
+                </Pressable>
+              ) : (
+                <Text style={[styles.intervalNote, { color: colors.textSecondary }]}>{t.addPlant.amountAutoNote}</Text>
+              )}
             </Field>
 
             <Field label={t.addPlant.lastWatered} colors={colors}>
