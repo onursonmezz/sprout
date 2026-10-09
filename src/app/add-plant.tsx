@@ -142,7 +142,6 @@ export default function AddPlantScreen() {
   const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant) : initialForm));
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
-  const [speciesDropdownDismissed, setSpeciesDropdownDismissed] = useState(false);
   // Species-derived fields the watering algorithm needs but that aren't part
   // of the visible form — seeded from the matched species on pick, or from
   // the plant being edited so its live recalculation stays consistent.
@@ -173,7 +172,7 @@ export default function AddPlantScreen() {
     setForm((prev) => ({ ...prev, [key]: value }));
 
   const speciesSuggestions =
-    !isEditing && !speciesPickApplied && !speciesDropdownDismissed ? findSpeciesMatches(form.species) : [];
+    !isEditing && !speciesPickApplied ? findSpeciesMatches(form.species) : [];
 
   /** Recomputes the suggested watering interval from the current species
    * base + pot/light answers and today's calendar month — unless the user
@@ -397,13 +396,30 @@ export default function AddPlantScreen() {
                 value={form.species}
                 onChangeText={(v) => {
                   setSpeciesPickApplied(false);
-                  setSpeciesDropdownDismissed(false);
                   set('species', v);
                 }}
                 placeholder={t.addPlant.speciesPlaceholder}
                 placeholderTextColor={colors.textSecondary}
                 style={[styles.input, { color: colors.text, backgroundColor: colors.glass, borderColor: colors.glassBorder }]}
               />
+              {/* Listed in the page itself rather than in a floating layer, so
+                  it cannot end up hidden behind other views or the keyboard
+                  and never takes focus away from the field while typing. */}
+              {speciesSuggestions.length > 0 && (
+                <View style={[styles.speciesSuggestions, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                  {speciesSuggestions.map((entry, i) => (
+                    <Pressable
+                      key={entry.id}
+                      onPress={() => applySpeciesGuide(entry)}
+                      style={[styles.speciesSuggestionRow, i > 0 && { borderTopWidth: 1, borderTopColor: colors.border }]}>
+                      <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{speciesDisplayName(entry, lang)}</Text>
+                      <Text style={[styles.speciesSuggestionHint, { color: colors.textSecondary }]}>
+                        {t.addPlant.speciesGuideHint(entry.water.baseIntervalDays)}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+              )}
             </Field>
             <Field label={t.addPlant.latinName} colors={colors}>
               <TextInput
@@ -733,27 +749,6 @@ export default function AddPlantScreen() {
         </Pressable>
       </View>
 
-      {speciesSuggestions.length > 0 && (
-        // A plain absolutely-positioned overlay, not <Modal> — Modal opens a
-        // real native Dialog window on Android, which steals window focus
-        // from the Species TextInput and dismisses the keyboard on every
-        // keystroke. A View overlay has no window of its own, so typing
-        // keeps the keyboard up while the list below updates live.
-        <Pressable style={styles.speciesModalBackdrop} onPress={() => setSpeciesDropdownDismissed(true)}>
-          <View style={[styles.speciesModalCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <ScrollView keyboardShouldPersistTaps="always">
-              {speciesSuggestions.map((entry) => (
-                <Pressable key={entry.id} onPress={() => applySpeciesGuide(entry)} style={styles.speciesSuggestionRow}>
-                  <Text style={[styles.speciesSuggestionName, { color: colors.text }]}>{speciesDisplayName(entry, lang)}</Text>
-                  <Text style={[styles.speciesSuggestionHint, { color: colors.textSecondary }]}>
-                    {t.addPlant.speciesGuideHint(entry.water.baseIntervalDays)}
-                  </Text>
-                </Pressable>
-              ))}
-            </ScrollView>
-          </View>
-        </Pressable>
-      )}
     </SafeAreaView>
   );
 }
@@ -848,20 +843,8 @@ const styles = StyleSheet.create({
   input: { borderRadius: 14, borderWidth: 1, paddingHorizontal: 14, height: 46, fontSize: 14 },
   measureButton: { borderRadius: 14, borderWidth: 1, borderStyle: 'dashed', paddingVertical: 12, alignItems: 'center' },
   measureButtonText: { fontSize: 13, fontWeight: '700' },
-  speciesModalBackdrop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    paddingTop: 90,
-    paddingHorizontal: Spacing.four,
-    zIndex: 50,
-    elevation: 50,
-  },
-  speciesModalCard: { borderRadius: 14, borderWidth: 1, overflow: 'hidden', maxHeight: 340 },
-  speciesSuggestionRow: { paddingHorizontal: 14, paddingVertical: 12, gap: 2, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: 'rgba(128,128,128,0.2)' },
+  speciesSuggestions: { marginTop: 8, borderRadius: 14, borderWidth: 1, overflow: 'hidden' },
+  speciesSuggestionRow: { paddingHorizontal: 14, paddingVertical: 12, gap: 2 },
   speciesSuggestionName: { fontSize: 13, fontWeight: '700' },
   speciesSuggestionHint: { fontSize: 11 },
   rowWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
