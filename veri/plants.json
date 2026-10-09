@@ -209,6 +209,8 @@
       "minMl": 50,
       "maxMl": 3000
     },
+    "minTotalFactor": 0.5,
+    "maxTotalFactor": 2.5,
     "minIntervalDays": 2,
     "maxIntervalDays": 75
   },

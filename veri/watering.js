@@ -23,8 +23,26 @@ function pickFromRanges(ranges, value) {
   return ranges[ranges.length - 1][1];
 }
 
+/**
+ * Aylık bir tablodan o günün değerini okur. Tablodaki değer ayın ortası için
+ * geçerli sayılır; iki ay ortası arasındaki günlerde doğrusal geçiş yapılır.
+ * Böylece ayın 1'inde çarpan bir gecede sıçramaz, geri sayım aniden kaymaz.
+ * Tabloda olmayan aylar 1.0 (etkisiz) kabul edilir.
+ */
+function monthlyValue(table, date) {
+  const at = (year, monthIndex) => {
+    const mid = new Date(year, monthIndex, 15);
+    return { time: mid.getTime(), value: table[String(mid.getMonth() + 1)] ?? 1.0 };
+  };
+  const y = date.getFullYear();
+  const m = date.getMonth();
+  const here = at(y, m);
+  const [from, to] = date.getTime() >= here.time ? [here, at(y, m + 1)] : [at(y, m - 1), here];
+  const t = (date.getTime() - from.time) / (to.time - from.time);
+  return from.value + (to.value - from.value) * t;
+}
+
 export function wateringInterval(plant, site, algo, date = new Date()) {
-  const month = date.getMonth() + 1; // 1-12
   const base = plant.water.baseIntervalDays;
 
   // 1. Saksı malzemesi - gözenekli malzeme daha hızlı kurur
@@ -47,10 +65,10 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
   const profile = plant.seasonProfile ?? "normal";
   let fSeason;
   if (profile === "summerDormant" && algo.summerDormantSeason) {
-    fSeason = algo.summerDormantSeason[String(month)] ?? 1.0;
+    fSeason = monthlyValue(algo.summerDormantSeason, date);
   } else {
     const strength = algo.seasonStrength?.[profile] ?? 1.0;
-    fSeason = 1 + ((algo.season[String(month)] ?? 1.0) - 1) * strength;
+    fSeason = 1 + (monthlyValue(algo.season, date) - 1) * strength;
   }
 
   // 6. TÜRKİYE'YE ÖZGÜ: kalorifer havayı kurutur, toprak daha hızlı kurur.
@@ -66,13 +84,17 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
   // 7. Dışarıdaysa yaz sıcağı ek yük bindirir
   let fOutdoor = 1.0;
   if (site.indoor === false) {
-    fOutdoor = algo.outdoorSummer[String(month)] ?? 1.0;
+    fOutdoor = monthlyValue(algo.outdoorSummer, date);
   }
 
   // 8. Drenaj deliği yoksa fazla su dipte birikir ve toprak daha geç kurur
   const fDrainage = site.hasDrainage === false ? (algo.noDrainageFactor ?? 1.0) : 1.0;
 
-  const raw = base * fMaterial * fSize * fLight * fWindow * fSeason * fHeating * fOutdoor * fDrainage;
+  // Çarpanlar üst üste bindiğinde (karanlık köşe + uzak pencere + büyük saksı +
+  // kış) toplam etki aşırıya kaçmasın diye sınırlanır.
+  const product = fMaterial * fSize * fLight * fWindow * fSeason * fHeating * fOutdoor * fDrainage;
+  const fTotal = Math.max(algo.minTotalFactor ?? 0, Math.min(algo.maxTotalFactor ?? Infinity, product));
+  const raw = base * fTotal;
   const intervalDays = Math.max(
     algo.minIntervalDays,
     Math.min(algo.maxIntervalDays, Math.round(raw))
