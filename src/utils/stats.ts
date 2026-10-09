@@ -10,6 +10,11 @@ function wateringDays(plant: Plant): number[] {
   return days;
 }
 
+/** A stretch of days (as days-ago, inclusive) when the user was away. */
+export type AwayRange = { fromDaysAgo: number; toDaysAgo: number } | null;
+
+const isAway = (away: AwayRange, daysAgo: number) => away != null && daysAgo <= away.fromDaysAgo && daysAgo >= away.toDaysAgo;
+
 /** Whether a plant was past due on the day `daysAgo` days back, judged from
  * its known waterings and its current interval. Days before the plant was
  * added, or before its first known watering, never count against the user. */
@@ -29,15 +34,16 @@ function wasOverdue(plant: Plant, waterings: number[], daysAgo: number): boolean
  * would reward overwatering. Keeping every plant on time is the habit worth
  * counting. The streak cannot be longer than the oldest plant has been here.
  */
-function computeStreak(plants: Plant[]): number {
+function computeStreak(plants: Plant[], away: AwayRange): number {
   if (plants.length === 0) return 0;
+  // Days spent on vacation never break the streak: nobody was there to water.
   // Today uses the live status, which also knows about snoozes and rain.
-  if (plants.some((p) => p.status === 'overdue')) return 0;
+  if (!isAway(away, 0) && plants.some((p) => p.status === 'overdue')) return 0;
   const withWaterings = plants.map((plant) => ({ plant, waterings: wateringDays(plant) }));
   const oldest = Math.min(MAX_STREAK_DAYS, Math.max(...plants.map((p) => p.createdDaysAgo)));
   let streak = 1;
   for (let daysAgo = 1; daysAgo <= oldest; daysAgo++) {
-    if (withWaterings.some(({ plant, waterings }) => wasOverdue(plant, waterings, daysAgo))) break;
+    if (!isAway(away, daysAgo) && withWaterings.some(({ plant, waterings }) => wasOverdue(plant, waterings, daysAgo))) break;
     streak++;
   }
   return streak;
@@ -58,9 +64,9 @@ function countThisMonth(plants: Plant[]): number {
   return count;
 }
 
-export function computeCareStats(plants: Plant[]) {
+export function computeCareStats(plants: Plant[], away: AwayRange = null) {
   return {
-    streak: computeStreak(plants),
+    streak: computeStreak(plants, away),
     thisMonth: countThisMonth(plants),
   };
 }

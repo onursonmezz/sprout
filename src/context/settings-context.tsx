@@ -95,7 +95,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     // `undefined` for them forever (loadJSON only falls back to `defaults`
     // when the storage key is missing entirely, not per-field).
     loadJSON<Partial<PersistedSettings>>(STORAGE_KEY, defaults).then((saved) => {
-      setSettings({ ...defaults, ...saved });
+      const merged = { ...defaults, ...saved };
+      // A vacation whose return date has passed is over; the dates stay so
+      // the days away are still known (they do not count against the streak).
+      if (merged.vacationMode && merged.vacationEnd) {
+        const end = new Date(merged.vacationEnd);
+        const today = new Date();
+        const day = (d: Date) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+        if (day(end) < day(today)) merged.vacationMode = false;
+      }
+      setSettings(merged);
       setLoaded(true);
     });
   }, []);

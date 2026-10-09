@@ -51,7 +51,7 @@ export default function TodayScreen() {
   const { t } = useLanguage();
   const { plants, snoozePlant, completeCareTask } = usePlants();
   const handleWater = useWaterPlant();
-  const { dayLengthHours } = useSettings();
+  const { dayLengthHours, vacationMode, vacationStart, vacationEnd } = useSettings();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
     weekday: 'long',
@@ -59,7 +59,20 @@ export default function TodayScreen() {
     month: 'long',
   });
 
-  const { streak, thisMonth } = useMemo(() => computeCareStats(plants), [plants]);
+  // Vacation days, as days-ago, so they neither break the streak nor go unexplained.
+  const dayDiff = (d: Date) => {
+    const now = new Date();
+    return Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())) / 86400000);
+  };
+  const awayFrom = vacationStart ? dayDiff(vacationStart) : null;
+  const awayTo = vacationEnd ? dayDiff(vacationEnd) : null;
+  const onVacation = vacationMode && awayFrom != null && awayTo != null && awayFrom >= 0 && awayTo <= 0;
+  const justBack = !vacationMode && awayTo != null && awayTo > 0 && awayTo <= 3;
+  const { streak, thisMonth } = useMemo(
+    // One extra day after the return date: time to catch up before the streak can break.
+    () => computeCareStats(plants, awayFrom != null && awayTo != null ? { fromDaysAgo: awayFrom, toDaysAgo: awayTo - 1 } : null),
+    [plants, awayFrom, awayTo]
+  );
 
   const handleSnooze = (plantId: string) => {
     snoozePlant(plantId);
@@ -90,6 +103,7 @@ export default function TodayScreen() {
     [plants]
   );
 
+  const needsAttentionCount = needsAttention.length;
   const heroPlant = needsAttention[0] ?? comingUp[0] ?? plants[0];
 
   return (
@@ -119,6 +133,17 @@ export default function TodayScreen() {
             <GlassCard style={styles.dayLengthChip}>
               <Ionicons name="sunny" size={13} color={colors.late} />
               <Text style={[styles.dayLength, { color: colors.textSecondary }]}>{formatDayLength(dayLengthHours, t)}</Text>
+            </GlassCard>
+          )}
+
+          {(onVacation || (justBack && needsAttentionCount > 0)) && (
+            <GlassCard style={styles.vacationCard}>
+              <Ionicons name={onVacation ? 'airplane-outline' : 'home-outline'} size={20} color={colors.tintBright} />
+              <Text style={[styles.vacationText, { color: colors.text }]}>
+                {onVacation && vacationEnd
+                  ? t.today.vacationOn(vacationEnd.toLocaleDateString(t.today.dateLocale, { day: 'numeric', month: 'long' }))
+                  : t.today.vacationBack(needsAttentionCount)}
+              </Text>
             </GlassCard>
           )}
 
@@ -274,6 +299,8 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 20, fontWeight: '700' },
   statLabel: { fontSize: 11, textAlign: 'center' },
   sectionTitle: { fontSize: 16, fontWeight: '700', marginTop: Spacing.one },
+  vacationCard: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 16 },
+  vacationText: { flex: 1, fontSize: 13, lineHeight: 18 },
   emptyCard: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, padding: Spacing.three },
   emptyText: { fontSize: 13, flex: 1 },
   attentionCard: { flexDirection: 'row', alignItems: 'center', padding: Spacing.two, gap: 12 },

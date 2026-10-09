@@ -25,6 +25,7 @@ import {
   SeasonProfile,
   seasonProfileFor,
 } from '@/data/species-guide';
+import { defaultCareTasks, speciesOf } from '@/utils/care';
 import { recomputeWateringInterval, WINDOW_DISTANCE_OPTIONS, wateringSchedule, suggestWaterAmountMl } from '@/utils/watering-algorithm';
 import { awaitLightMeterResult } from '@/utils/light-meter';
 
@@ -325,8 +326,7 @@ export default function AddPlantScreen() {
     }
 
     const id = `${form.nickname.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Date.now().toString(36)}`;
-    const care: CareTask[] =
-      repotDaysAgo !== null ? [{ type: 'repot', intervalDays: speciesRepotIntervalDays, lastDoneDaysAgo: repotDaysAgo }] : [];
+    const care: CareTask[] = defaultCareTasks(speciesOf({ species: form.species, latinName: form.latinName }), !isOutdoor, repotDaysAgo);
     const wateredEntry: JournalEntry = {
       id: `watered-${Date.now()}`,
       type: 'watered',
@@ -349,6 +349,7 @@ export default function AddPlantScreen() {
       intervalAdjust: 1,
       ...wateringSchedule(wateringIntervalDays, lastWateredDaysAgo, 0),
       care,
+      careDefaultsApplied: true,
       // The last watering the user told us about is a real event, so it
       // belongs in the history from day one.
       journalNotes: [wateredEntry],

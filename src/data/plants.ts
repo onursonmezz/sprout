@@ -91,6 +91,9 @@ export type Plant = {
   };
   acquiredDate: string;
   care: CareTask[];
+  /** True once the automatic care tasks have been added — so removing one
+   * does not bring it back on the next launch. */
+  careDefaultsApplied: boolean;
   journalNotes: JournalEntry[];
   /** Days since this plant was added to Sprout — bounds how far back
    * synthetic/projected history (dot grid, "recent" lists) is allowed to

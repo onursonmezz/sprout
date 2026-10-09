@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
-import { daysUntilNext } from '@/utils/care';
+import { careTaskInSeason, daysUntilNext } from '@/utils/care';
 import { cancelReminders, PlannedReminder, scheduleReminders } from '@/utils/notifications';
 
 /** How far ahead reminders are queued. Opening the app re-plans the whole
@@ -45,7 +45,7 @@ export function useNotificationScheduler() {
       // Anything due on or before that day and still not done by then.
       const thirsty = plants.filter((p) => p.daysUntilWatering <= offset);
       const careDue = plants.reduce(
-        (n, p) => n + p.care.filter((c) => daysUntilNext(c.intervalDays, c.lastDoneDaysAgo) <= offset).length,
+        (n, p) => n + p.care.filter((c) => careTaskInSeason(c, p, date) && daysUntilNext(c.intervalDays, c.lastDoneDaysAgo) <= offset).length,
         0
       );
       if (thirsty.length === 0 && careDue === 0) continue;

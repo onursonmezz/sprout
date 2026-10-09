@@ -20,7 +20,7 @@ import { roomDisplayName } from '@/constants/rooms';
 import { careJournalType, CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
 import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
-import { daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
+import { careTaskInSeason, daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 import { useSettings } from '@/context/settings-context';
 import { rainDaysAgo } from '@/utils/watering-algorithm';
@@ -54,7 +54,7 @@ export default function PlantDetailScreen() {
   const router = useRouter();
   const colors = useTheme();
   const { t, lang } = useLanguage();
-  const { getPlant, addCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust } = usePlants();
+  const { getPlant, addCareTask, removeCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust } = usePlants();
   const plant = getPlant(String(id));
   const { lastRainDate } = useSettings();
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
@@ -287,6 +287,7 @@ export default function PlantDetailScreen() {
               t={t}
               speciesInfo={speciesInfo}
               onAddTask={(task) => addCareTask(plant.id, task)}
+              onRemoveTask={(index) => removeCareTask(plant.id, index)}
               onCompleteTask={(index) => {
                 completeCareTask(plant.id, index, t.plantDetail.care.taskNames[plant.care[index].type]);
                 hapticSuccess();
@@ -496,6 +497,7 @@ function CareTab({
   t,
   speciesInfo,
   onAddTask,
+  onRemoveTask,
   onCompleteTask,
 }: {
   plant: Plant;
@@ -503,6 +505,7 @@ function CareTab({
   t: Translations;
   speciesInfo: SpeciesRecord | undefined;
   onAddTask: (task: CareTask) => void;
+  onRemoveTask: (index: number) => void;
   onCompleteTask: (index: number) => void;
 }) {
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -562,6 +565,7 @@ function CareTab({
 
       {plant.care.map((task, i) => {
         const daysLeft = daysUntilNext(task.intervalDays, task.lastDoneDaysAgo);
+        const inSeason = careTaskInSeason(task, plant);
         return (
           <CareRow
             key={i}
@@ -569,12 +573,17 @@ function CareTab({
             title={t.plantDetail.care.taskNames[task.type]}
             subtitle={t.plantDetail.care.everyDays(task.intervalDays)}
             nextText={
-              daysLeft <= 0 ? t.plantDetail.care.nextDueNow : t.plantDetail.care.nextOn(formatDateFromDaysOffset(daysLeft, t))
+              !inSeason
+                ? t.plantDetail.care.offSeason
+                : daysLeft <= 0
+                  ? t.plantDetail.care.nextDueNow
+                  : t.plantDetail.care.nextOn(formatDateFromDaysOffset(daysLeft, t))
             }
-            overdue={daysLeft <= 0}
+            overdue={inSeason && daysLeft <= 0}
             colors={colors}
             t={t}
             onComplete={() => onCompleteTask(i)}
+            onRemove={() => onRemoveTask(i)}
           />
         );
       })}
@@ -591,6 +600,7 @@ function CareRow({
   colors,
   t,
   onComplete,
+  onRemove,
 }: {
   emoji: string;
   title: string;
@@ -600,6 +610,7 @@ function CareRow({
   colors: ReturnType<typeof useTheme>;
   t: Translations;
   onComplete?: () => void;
+  onRemove?: () => void;
 }) {
   return (
     <View style={[styles.careRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
@@ -611,6 +622,11 @@ function CareRow({
         <Text style={[styles.careSubtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
         <Text style={[styles.careSubtitle, { color: colors.textSecondary }]}>{nextText}</Text>
       </View>
+      {onRemove && (
+        <Pressable onPress={onRemove} hitSlop={8} accessibilityLabel={t.plantDetail.care.remove} style={styles.removeButton}>
+          <Ionicons name="trash-outline" size={17} color={colors.textSecondary} />
+        </Pressable>
+      )}
       {onComplete ? (
         <Pressable
           onPress={onComplete}
@@ -966,6 +982,7 @@ const styles = StyleSheet.create({
   careSubtitle: { fontSize: 11 },
   overdueBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
   overdueBadgeText: { fontSize: 10, fontWeight: '700' },
+  removeButton: { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
   completeButton: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },
 
   journalTypeRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },

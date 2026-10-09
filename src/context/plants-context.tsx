@@ -4,6 +4,7 @@ import { AppState } from 'react-native';
 import { isOutdoorRoom, RoomKey } from '@/constants/rooms';
 import { careJournalType, CareTask, JournalEntry, Plant } from '@/data/plants';
 import { findSpeciesLoose, HeatingSensitivity, LightKey, PotMaterialKey, SeasonProfile, seasonProfileFor } from '@/data/species-guide';
+import { defaultCareTasks, speciesOf, withDefaultCare } from '@/utils/care';
 import { loadJSON, saveJSON } from '@/utils/storage';
 import {
   DEFAULT_WINDOW_DISTANCE_CM,
@@ -53,6 +54,7 @@ function migratePlant(p: Plant): Plant {
     intervalAdjust?: number;
     amountAuto?: boolean;
     rainExposed?: boolean;
+    careDefaultsApplied?: boolean;
     snoozeDays?: number;
     environment?: { lightKey?: LightKey; windowDistanceCm?: number };
     pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null; hasDrainage?: boolean; drainage?: string; soil?: string };
@@ -88,6 +90,9 @@ function migratePlant(p: Plant): Plant {
     intervalAdjust: typeof legacy.intervalAdjust === 'number' ? legacy.intervalAdjust : 1,
     amountAuto,
     rainExposed: !indoor && (legacy.rainExposed ?? false),
+    // Plants from before automatic care get it once, counted from today.
+    care: legacy.careDefaultsApplied ? p.care : withDefaultCare(p.care, defaultCareTasks(speciesOf(p), indoor, null)),
+    careDefaultsApplied: true,
     wateringAmountMl: amountAuto ? suggestWaterAmountMl(legacy.pot?.diameterCm ?? null, hasDrainage) : p.wateringAmountMl,
     snoozeDays: legacy.snoozeDays ?? 0,
     environment: {
@@ -125,6 +130,7 @@ type PlantsContextValue = {
   deletePlant: (plantId: string) => void;
   getPlant: (id: string) => Plant | undefined;
   addCareTask: (plantId: string, task: CareTask) => void;
+  removeCareTask: (plantId: string, taskIndex: number) => void;
   completeCareTask: (plantId: string, taskIndex: number, journalTitle: string) => void;
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
   waterPlant: (plantId: string) => void;
@@ -273,6 +279,9 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const addCareTask = (plantId: string, task: CareTask) =>
     setPlants((prev) => prev.map((p) => (p.id === plantId ? { ...p, care: [...p.care, task] } : p)));
 
+  const removeCareTask = (plantId: string, taskIndex: number) =>
+    setPlants((prev) => prev.map((p) => (p.id === plantId ? { ...p, care: p.care.filter((_, i) => i !== taskIndex) } : p)));
+
   // Completing a task also logs it, so History shows what was actually done
   // rather than what the schedule implies.
   const completeCareTask = (plantId: string, taskIndex: number, journalTitle: string) =>
@@ -399,6 +408,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         deletePlant,
         getPlant,
         addCareTask,
+        removeCareTask,
         completeCareTask,
         addJournalEntry,
         waterPlant,

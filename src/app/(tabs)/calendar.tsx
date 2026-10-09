@@ -10,7 +10,7 @@ import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { careJournalType, CareTask, CareTaskType, Plant } from '@/data/plants';
-import { daysUntilNext, fallsOn } from '@/utils/care';
+import { careTaskInSeason, daysUntilNext, fallsOn } from '@/utils/care';
 
 const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
 
@@ -50,6 +50,12 @@ function wateringOn(p: Plant, offset: number) {
 }
 
 function taskOn(p: Plant, task: CareTask, offset: number) {
+  if (offset >= 0) {
+    // Out-of-season fertilizing is not projected onto the calendar.
+    const day = new Date();
+    day.setDate(day.getDate() + offset);
+    if (!careTaskInSeason(task, p, day)) return false;
+  }
   const dueIn = daysUntilNext(task.intervalDays, task.lastDoneDaysAgo);
   if (offset > 0) return fallsOn(offset, dueIn, task.intervalDays);
   if (offset === 0 && dueIn <= 0) return true;
