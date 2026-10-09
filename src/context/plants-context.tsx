@@ -7,6 +7,7 @@ import { findSpeciesLoose, HeatingSensitivity, LightKey, PotMaterialKey, SeasonP
 import { loadJSON, saveJSON } from '@/utils/storage';
 import {
   DEFAULT_WINDOW_DISTANCE_CM,
+  effectiveLastWatered,
   effectiveWateringInterval,
   learnIntervalAdjust,
   recomputeWateringInterval,
@@ -51,6 +52,7 @@ function migratePlant(p: Plant): Plant {
     customIntervalDays?: number | null;
     intervalAdjust?: number;
     amountAuto?: boolean;
+    rainExposed?: boolean;
     snoozeDays?: number;
     environment?: { lightKey?: LightKey; windowDistanceCm?: number };
     pot?: { materialKey?: PotMaterialKey; diameterCm?: number | null; hasDrainage?: boolean; drainage?: string; soil?: string };
@@ -80,6 +82,7 @@ function migratePlant(p: Plant): Plant {
     customIntervalDays: legacy.customIntervalDays ?? null,
     intervalAdjust: typeof legacy.intervalAdjust === 'number' ? legacy.intervalAdjust : 1,
     amountAuto,
+    rainExposed: legacy.rainExposed ?? false,
     wateringAmountMl: amountAuto ? suggestWaterAmountMl(legacy.pot?.diameterCm ?? null, hasDrainage) : p.wateringAmountMl,
     snoozeDays: legacy.snoozeDays ?? 0,
     environment: {
@@ -155,19 +158,31 @@ function fastForward(plants: Plant[], daysPassed: number, options: SeasonalOptio
       lastWateredDaysAgo,
       createdDaysAgo: p.createdDaysAgo + daysPassed,
       wateringIntervalDays,
-      ...wateringSchedule(wateringIntervalDays, lastWateredDaysAgo, p.snoozeDays),
+      ...wateringSchedule(wateringIntervalDays, effectiveLastWatered({ ...p, lastWateredDaysAgo }, options, today), p.snoozeDays),
       care: p.care.map((c) => ({ ...c, lastDoneDaysAgo: c.lastDoneDaysAgo + daysPassed })),
       journalNotes: p.journalNotes.map((j) => ({ ...j, daysAgo: j.daysAgo + daysPassed })),
     };
   });
 }
 
+/** The options most recently used — for the few synchronous actions (snooze,
+ * the soil-feedback question) that cannot wait for storage. */
+let latestOptions: SeasonalOptions = { applySeasonalFactors: true, heatingOn: true };
+
 async function loadSeasonalOptions(): Promise<SeasonalOptions> {
-  const settings = await loadJSON<{ seasonalAdjustment?: boolean; heatingOn?: boolean } | null>(SETTINGS_KEY, null);
-  return {
+  const settings = await loadJSON<{
+    seasonalAdjustment?: boolean;
+    heatingOn?: boolean;
+    latitude?: number | null;
+    lastRainDate?: string | null;
+  } | null>(SETTINGS_KEY, null);
+  latestOptions = {
     applySeasonalFactors: settings?.seasonalAdjustment ?? true,
     heatingOn: settings?.heatingOn ?? true,
+    latitude: settings?.latitude ?? null,
+    lastRainDate: settings?.lastRainDate ?? null,
   };
+  return latestOptions;
 }
 
 export function PlantsProvider({ children }: { children: ReactNode }) {
@@ -272,11 +287,8 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
     // algorithm (not a custom interval) is in charge, and enough days have
     // passed for the soil's state to mean anything.
     const before = plants.find((p) => p.id === plantId);
-    setPendingFeedback(
-      before && before.customIntervalDays == null && before.lastWateredDaysAgo >= 2
-        ? { plantId, elapsedDays: before.lastWateredDaysAgo }
-        : null
-    );
+    const elapsedDays = before ? effectiveLastWatered(before, latestOptions, new Date()) : 0;
+    setPendingFeedback(before && before.customIntervalDays == null && elapsedDays >= 2 ? { plantId, elapsedDays } : null);
     (async () => {
       const options = await loadSeasonalOptions();
       const today = new Date();
@@ -299,7 +311,11 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
           if (p.id !== plantId) return p;
           const adjusted = { ...p, intervalAdjust: nextAdjust(p, recomputeWateringInterval(p, today, options)) };
           const wateringIntervalDays = effectiveWateringInterval(adjusted, today, options);
-          return { ...adjusted, wateringIntervalDays, ...wateringSchedule(wateringIntervalDays, p.lastWateredDaysAgo, p.snoozeDays) };
+          return {
+            ...adjusted,
+            wateringIntervalDays,
+            ...wateringSchedule(wateringIntervalDays, effectiveLastWatered(p, options, today), p.snoozeDays),
+          };
         })
       );
     })();
@@ -323,23 +339,28 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         // Snoozing a due/overdue plant means "remind me tomorrow", not "one
         // day less overdue"; an upcoming one just moves a day further out.
         const target = Math.max(1, p.daysUntilWatering + 1);
-        const snoozeDays = target - (p.wateringIntervalDays - p.lastWateredDaysAgo);
-        return { ...p, snoozeDays, ...wateringSchedule(p.wateringIntervalDays, p.lastWateredDaysAgo, snoozeDays) };
+        const last = effectiveLastWatered(p, latestOptions, new Date());
+        const snoozeDays = target - (p.wateringIntervalDays - last);
+        return { ...p, snoozeDays, ...wateringSchedule(p.wateringIntervalDays, last, snoozeDays) };
       })
     );
 
-  const recomputeIntervals = (options: SeasonalOptions) =>
+  const recomputeIntervals = (options: SeasonalOptions) => {
+    latestOptions = options;
     setPlants((prev) => {
       const today = new Date();
       let changed = false;
       const next = prev.map((p) => {
         const wateringIntervalDays = effectiveWateringInterval(p, today, options);
-        if (wateringIntervalDays === p.wateringIntervalDays) return p;
+        const schedule = wateringSchedule(wateringIntervalDays, effectiveLastWatered(p, options, today), p.snoozeDays);
+        // A rainy day moves the countdown without touching the interval.
+        if (wateringIntervalDays === p.wateringIntervalDays && schedule.daysUntilWatering === p.daysUntilWatering) return p;
         changed = true;
-        return { ...p, wateringIntervalDays, ...wateringSchedule(wateringIntervalDays, p.lastWateredDaysAgo, p.snoozeDays) };
+        return { ...p, wateringIntervalDays, ...schedule };
       });
       return changed ? next : prev;
     });
+  };
 
   return (
     <PlantsContext.Provider

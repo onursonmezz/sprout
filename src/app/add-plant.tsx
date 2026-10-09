@@ -72,6 +72,7 @@ type FormState = {
   potDiameter: string;
   potMaterialKey: PotMaterialKey;
   drainage: 'yes' | 'no';
+  rainExposed: 'yes' | 'no';
   soilMix: string;
   lastRepotted: string;
   waterEveryDays: number;
@@ -92,6 +93,7 @@ const initialForm: FormState = {
   potDiameter: '',
   potMaterialKey: 'plastic',
   drainage: 'yes',
+  rainExposed: 'no',
   soilMix: '',
   lastRepotted: '',
   waterEveryDays: 7,
@@ -120,6 +122,7 @@ function plantToForm(plant: Plant): FormState {
     potDiameter: plant.pot.diameterCm != null ? String(plant.pot.diameterCm) : '',
     potMaterialKey: plant.pot.materialKey,
     drainage: plant.pot.hasDrainage ? 'yes' : 'no',
+    rainExposed: plant.rainExposed ? 'yes' : 'no',
     soilMix: plant.pot.soil,
     lastRepotted: repot ? formatDate(daysAgoToDate(repot.lastDoneDaysAgo)) : '',
     waterEveryDays: plant.wateringIntervalDays,
@@ -132,7 +135,7 @@ export default function AddPlantScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t, lang } = useLanguage();
-  const { seasonalAdjustment, heatingOn } = useSettings();
+  const { seasonalAdjustment, heatingOn, latitude } = useSettings();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { plants, addPlant, updatePlant, deletePlant, getPlant } = usePlants();
   const editingPlant = id ? getPlant(String(id)) : undefined;
@@ -194,7 +197,7 @@ export default function AddPlantScreen() {
         indoor: speciesIndoor,
       },
       new Date(),
-      { applySeasonalFactors: seasonalAdjustment, heatingOn }
+      { applySeasonalFactors: seasonalAdjustment, heatingOn, latitude }
     );
   };
 
@@ -236,7 +239,7 @@ export default function AddPlantScreen() {
             indoor: entry.category !== 'outdoor',
           },
           new Date(),
-          { applySeasonalFactors: seasonalAdjustment, heatingOn }
+          { applySeasonalFactors: seasonalAdjustment, heatingOn, latitude }
         ),
       };
     });
@@ -269,6 +272,7 @@ export default function AddPlantScreen() {
       customRoom: form.roomKey === 'other' ? form.customRoom.trim() || null : null,
       wateringAmountMl: Number(form.waterAmountMl) || Number(suggestedAmount()),
       amountAuto: !waterAmountTouched,
+      rainExposed: !speciesIndoor && form.rainExposed === 'yes',
       environment: { lightKey: form.lightKey, windowDistanceCm: form.windowDistanceCm },
       pot: {
         materialKey: form.potMaterialKey,
@@ -453,6 +457,15 @@ export default function AddPlantScreen() {
                 />
               )}
             </Field>
+            {!speciesIndoor && (
+              <Field label={t.addPlant.rainExposed} colors={colors}>
+                <View style={styles.grid2}>
+                  <Pill label={t.addPlant.rainExposedYes} selected={form.rainExposed === 'yes'} onPress={() => set('rainExposed', 'yes')} colors={colors} wide />
+                  <Pill label={t.addPlant.rainExposedNo} selected={form.rainExposed === 'no'} onPress={() => set('rainExposed', 'no')} colors={colors} wide />
+                </View>
+                <Text style={[styles.intervalNote, { color: colors.textSecondary }]}>{t.addPlant.rainExposedNote}</Text>
+              </Field>
+            )}
             <Field label={t.addPlant.windowDistance} colors={colors}>
               <View style={styles.grid2}>
                 {WINDOW_DISTANCE_OPTIONS.map((cm) => (

@@ -54,21 +54,37 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
   // 3. Işık - çok ışık = çok terleme
   const fLight = algo.lightFactor[site.light] ?? 1.0;
 
-  // 4. Pencereye uzaklık
-  const fWindow = pickFromRanges(algo.windowDistance, site.windowDistanceCm ?? 100);
+  // 4. Pencereye uzaklık. Işık seviyesi ile aynı şeyi (bitkinin aldığı ışığı)
+  //    ölçtüğü için tam ağırlıkla çarpılmaz: yalnızca ışık seviyesinin içinde ince
+  //    ayar yapar ve ikisinin birleşik etkisi ışık tablosunun sınırlarını aşamaz.
+  const fWindowRaw = pickFromRanges(algo.windowDistance, site.windowDistanceCm ?? 100);
+  const fWindowSoft = 1 + (fWindowRaw - 1) * (algo.windowWeight ?? 1);
+  const [lightMin, lightMax] = algo.lightCombinedRange ?? [0, Infinity];
+  const fLightCombined = Math.max(lightMin, Math.min(lightMax, fLight * fWindowSoft));
+  const fWindow = fLightCombined / fLight;
 
   // 5. Mevsim - kışın büyüme yavaşlar, aralık uzar. Ne kadar uzayacağı bitkinin
   //    mevsim profiline bağlıdır: kaktüs/sukulent kışın neredeyse durur (strong),
   //    eğreltiler ve nem sevenler az etkilenir (mild), kışın çiçek açanlar hemen
   //    hiç etkilenmez (winterActive). Yazın dinlenen türlerin (siklamen) kendi
   //    tablosu vardır: onlarda aralık kışın değil yazın uzar.
+  //    Konum biliniyorsa: güney yarımkürede mevsimler altı ay kaydırılır; ekvatora
+  //    yakın yerlerde gün uzunluğu yıl boyu az değiştiği için mevsim etkisi
+  //    zayıflar, kutuplara doğru güçlenir (referans: 40. enlem, Türkiye).
+  const lat = typeof site.latitude === "number" ? site.latitude : null;
+  const seasonDate = lat != null && lat < 0 ? new Date(date.getFullYear(), date.getMonth() + 6, date.getDate()) : date;
+  let latStrength = 1.0;
+  if (lat != null && algo.seasonReferenceLatitude) {
+    const [lo, hi] = algo.seasonLatitudeStrengthRange ?? [1, 1];
+    latStrength = Math.max(lo, Math.min(hi, Math.abs(lat) / algo.seasonReferenceLatitude));
+  }
   const profile = plant.seasonProfile ?? "normal";
   let fSeason;
   if (profile === "summerDormant" && algo.summerDormantSeason) {
-    fSeason = monthlyValue(algo.summerDormantSeason, date);
+    fSeason = 1 + (monthlyValue(algo.summerDormantSeason, seasonDate) - 1) * latStrength;
   } else {
     const strength = algo.seasonStrength?.[profile] ?? 1.0;
-    fSeason = 1 + (monthlyValue(algo.season, date) - 1) * strength;
+    fSeason = 1 + (monthlyValue(algo.season, seasonDate) - 1) * strength * latStrength;
   }
 
   // 6. TÜRKİYE'YE ÖZGÜ: kalorifer havayı kurutur, toprak daha hızlı kurur.
@@ -84,7 +100,7 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
   // 7. Dışarıdaysa yaz sıcağı ek yük bindirir
   let fOutdoor = 1.0;
   if (site.indoor === false) {
-    fOutdoor = monthlyValue(algo.outdoorSummer, date);
+    fOutdoor = monthlyValue(algo.outdoorSummer, seasonDate);
   }
 
   // 8. Drenaj deliği yoksa fazla su dipte birikir ve toprak daha geç kurur

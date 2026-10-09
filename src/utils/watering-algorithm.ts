@@ -44,6 +44,11 @@ export type SeasonalOptions = {
   applySeasonalFactors: boolean;
   /** The user's own heating setting (Settings → "Kalorifer modu"). */
   heatingOn: boolean;
+  /** Rounded latitude from the device's location, when known — flips the
+   * seasons south of the equator and scales how strong they are. */
+  latitude?: number | null;
+  /** Date (YYYY-MM-DD) of the most recent day with real rain near the user. */
+  lastRainDate?: string | null;
 };
 
 /** The algorithm's interval for a plant's own conditions on a given date. */
@@ -56,6 +61,7 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
     windowDistanceCm: plant.environment.windowDistanceCm ?? DEFAULT_WINDOW_DISTANCE_CM,
     indoor: plant.indoor,
     heatingOn: options.heatingOn,
+    latitude: options.latitude ?? null,
   };
   const speciesLike = { water: { baseIntervalDays: plant.baseIntervalDays }, heatingSensitivity: plant.heatingSensitivity, seasonProfile: plant.seasonProfile ?? 'normal' };
   const algo = options.applySeasonalFactors ? wateringAlgorithm : neutralAlgorithm(wateringAlgorithm);
@@ -107,6 +113,27 @@ export function learnIntervalAdjust(prevAdjust: number, algoIntervalDays: number
   const target =
     answer === 'ok' ? elapsedRatio : answer === 'wet' ? Math.max(prev, elapsedRatio * 1.2) : Math.min(prev, elapsedRatio * 0.85);
   return clampAdjust(prev + LEARNING_RATE * (clampAdjust(target) - prev));
+}
+
+/** Whole calendar days since the last rainy day, or null when none is known. */
+export function rainDaysAgo(lastRainDate: string | null | undefined, today: Date): number | null {
+  if (!lastRainDate) return null;
+  const [y, m, d] = lastRainDate.split('-').map(Number);
+  if (!y || !m || !d) return null;
+  const diff = Math.round((Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) - Date.UTC(y, m - 1, d)) / 86400000);
+  return diff >= 0 ? diff : null;
+}
+
+/** Days since the soil last got water: the user's own watering, or — for an
+ * outdoor plant the rain reaches — a more recent rainy day. */
+export function effectiveLastWatered(
+  plant: { lastWateredDaysAgo: number; indoor: boolean; rainExposed?: boolean },
+  options: SeasonalOptions,
+  today: Date
+): number {
+  if (plant.indoor || !plant.rainExposed) return plant.lastWateredDaysAgo;
+  const rain = rainDaysAgo(options.lastRainDate, today);
+  return rain == null ? plant.lastWateredDaysAgo : Math.min(plant.lastWateredDaysAgo, rain);
 }
 
 /** Countdown + status from the three things that determine them. */

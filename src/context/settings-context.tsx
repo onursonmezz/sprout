@@ -11,6 +11,11 @@ type PersistedSettings = {
   reminderTime: string;
   seasonalAdjustment: boolean;
   dayLengthHours: number | null;
+  /** Device latitude rounded to whole degrees (coarse on purpose), or null
+   * without location permission. */
+  latitude: number | null;
+  /** Date (YYYY-MM-DD) of the most recent rainy day nearby, if any. */
+  lastRainDate: string | null;
   /** The user's actual heating choice — read by the watering algorithm. */
   heatingOn: boolean;
   /** What the calendar said last time use-heating-season-prompt.ts checked —
@@ -35,6 +40,8 @@ const defaults: PersistedSettings = {
   reminderTime: timeAt(8, 0).toISOString(),
   seasonalAdjustment: true,
   dayLengthHours: null,
+  latitude: null,
+  lastRainDate: null,
   heatingOn: isHeatingSeasonNow(),
   lastHeatingSeasonState: isHeatingSeasonNow(),
   vacationMode: false,
@@ -55,7 +62,10 @@ type SettingsContextValue = {
   seasonalAdjustment: boolean;
   setSeasonalAdjustment: (v: boolean) => void;
   dayLengthHours: number | null;
-  setDayLengthHours: (hours: number) => void;
+  latitude: number | null;
+  lastRainDate: string | null;
+  /** Stores everything one weather lookup returned, in a single update. */
+  setLocalConditions: (c: { dayLengthHours: number | null; latitude: number; lastRainDate: string | null }) => void;
   heatingOn: boolean;
   setHeatingOn: (v: boolean) => void;
   lastHeatingSeasonState: boolean;
@@ -111,7 +121,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         seasonalAdjustment: settings.seasonalAdjustment,
         setSeasonalAdjustment: (v) => update('seasonalAdjustment', v),
         dayLengthHours: settings.dayLengthHours,
-        setDayLengthHours: (hours) => update('dayLengthHours', hours),
+        latitude: settings.latitude,
+        lastRainDate: settings.lastRainDate,
+        setLocalConditions: (c) =>
+          setSettings((prev) => ({
+            ...prev,
+            dayLengthHours: c.dayLengthHours ?? prev.dayLengthHours,
+            latitude: c.latitude,
+            // A lookup only sees the past week; keep an older known rainy day.
+            lastRainDate: c.lastRainDate ?? prev.lastRainDate,
+          })),
         heatingOn: settings.heatingOn,
         setHeatingOn: (v) => update('heatingOn', v),
         lastHeatingSeasonState: settings.lastHeatingSeasonState,

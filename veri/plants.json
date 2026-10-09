@@ -209,6 +209,11 @@
       "minMl": 50,
       "maxMl": 3000
     },
+    "windowWeight": 0.5,
+    "lightCombinedRange": [0.7, 1.5],
+    "seasonReferenceLatitude": 40,
+    "seasonLatitudeStrengthRange": [0.25, 1.25],
+    "rainThresholdMm": 5,
     "minTotalFactor": 0.5,
     "maxTotalFactor": 2.5,
     "minIntervalDays": 2,

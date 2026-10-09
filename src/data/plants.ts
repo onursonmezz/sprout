@@ -74,6 +74,10 @@ export type Plant = {
   /** Whether this specific plant lives indoors or outdoors — only affects
    * the outdoor-summer-heat factor. */
   indoor: boolean;
+  /** Outdoor plants only: true when rain actually reaches the pot (an open
+   * terrace or garden, not a covered balcony), so a rainy day can count as
+   * a watering. */
+  rainExposed: boolean;
   environment: {
     lightKey: LightKey;
     /** How far the plant sits from its window — feeds the watering algorithm. */

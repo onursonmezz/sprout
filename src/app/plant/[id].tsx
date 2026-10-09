@@ -21,6 +21,8 @@ import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
 import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
 import { daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
+import { useSettings } from '@/context/settings-context';
+import { rainDaysAgo } from '@/utils/watering-algorithm';
 
 const TAB_KEYS = ['overview', 'care', 'journal', 'history'] as const;
 
@@ -53,6 +55,7 @@ export default function PlantDetailScreen() {
   const { t, lang } = useLanguage();
   const { getPlant, addCareTask, completeCareTask, addJournalEntry, waterPlant, snoozePlant, resetIntervalAdjust } = usePlants();
   const plant = getPlant(String(id));
+  const { lastRainDate } = useSettings();
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
   const [toastVisible, setToastVisible] = useState(false);
   const toastOpacity = useRef(new Animated.Value(0)).current;
@@ -96,6 +99,9 @@ export default function PlantDetailScreen() {
   const isDueToday = plant.status === 'dueToday';
   const statusColor = isOverdue || isDueToday ? colors.late : colors.tintBright;
   const wateringInterval = plant.wateringIntervalDays;
+  // Set when a rainy day, not the user's own watering, is what the countdown runs from.
+  const rainAgo = !plant.indoor && plant.rainExposed ? rainDaysAgo(lastRainDate, new Date()) : null;
+  const rainCredit = rainAgo != null && rainAgo < plant.lastWateredDaysAgo ? rainAgo : null;
   const wateringProgress = plant.lastWateredDaysAgo / wateringInterval;
 
   const handleWaterNow = () => {
@@ -165,6 +171,9 @@ export default function PlantDetailScreen() {
               <Text style={[styles.nextWateringMeta, { color: colors.textSecondary }]}>
                 {t.plantDetail.lastWatered(plant.lastWateredDaysAgo, plant.wateringAmountMl)}
               </Text>
+              {rainCredit != null && (
+                <Text style={[styles.nextWateringMeta, { color: colors.tintBright }]}>{t.plantDetail.rainCredit(rainCredit)}</Text>
+              )}
               {plant.customIntervalDays == null && Math.round(Math.abs(plant.intervalAdjust - 1) * 100) >= 3 && (
                 <Text style={[styles.nextWateringMeta, { color: colors.textSecondary }]}>
                   {t.wateringFeedback.learned(Math.round(Math.abs(plant.intervalAdjust - 1) * 100), plant.intervalAdjust < 1)}

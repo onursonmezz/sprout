@@ -99,6 +99,11 @@ export type WateringAlgorithm = {
   seasonStrength: Record<Exclude<SeasonProfile, 'summerDormant'>, number>;
   summerDormantSeason: Record<string, number>;
   noDrainageFactor: number;
+  windowWeight: number;
+  lightCombinedRange: [number, number];
+  seasonReferenceLatitude: number;
+  seasonLatitudeStrengthRange: [number, number];
+  rainThresholdMm: number;
   minTotalFactor: number;
   maxTotalFactor: number;
   waterAmount: { mlPerCubicCm: number; noDrainageFactor: number; minMl: number; maxMl: number };
