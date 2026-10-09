@@ -9,7 +9,7 @@ import ViewShot, { ViewShotRef } from 'react-native-view-shot';
 import { FadeToBackground, GlowBackground, GradientFill } from '@/components/glass';
 import { CircularProgress } from '@/components/circular-progress';
 import { PhotoPicker } from '@/components/photo-picker';
-import { PlantAvatar } from '@/components/plant-avatar';
+import { PlantPhoto } from '@/components/plant-avatar';
 import { Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
 import { useTheme } from '@/hooks/use-theme';
@@ -42,6 +42,21 @@ const JOURNAL_EMOJI: Record<JournalEntryType, string> = {
   pruned: '✂️',
   note: '📝',
 };
+
+/** Days the plant has been with the user: from the date they said they got
+ * it, or — if that is missing or unreadable — from when it was added here.
+ * Plants migrated from very old saves have no real added-date, so those
+ * return null rather than a made-up number. */
+function daysSinceAcquired(plant: Plant): number | null {
+  const match = plant.acquiredDate.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (match) {
+    const then = Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+    const now = new Date();
+    const days = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - then) / 86400000);
+    if (days >= 0) return days;
+  }
+  return plant.createdDaysAgo < 3650 ? plant.createdDaysAgo : null;
+}
 
 function watchingText(status: string, days: number, t: Translations) {
   if (status === 'overdue') return t.plantDetail.daysOverdue(Math.abs(days));
@@ -102,6 +117,18 @@ export default function PlantDetailScreen() {
   const rainAgo = !plant.indoor && plant.rainExposed ? rainDaysAgo(lastRainDate, new Date()) : null;
   const rainCredit = rainAgo != null && rainAgo < plant.lastWateredDaysAgo ? rainAgo : null;
   const wateringProgress = plant.lastWateredDaysAgo / wateringInterval;
+
+  // What the share card shows: the plant's story so far, not its schedule.
+  const journalCount = (...types: JournalEntryType[]) => plant.journalNotes.filter((e) => types.includes(e.type)).length;
+  const daysTogether = daysSinceAcquired(plant);
+  const newLeaves = journalCount('newLeaf');
+  const shareStats = [
+    ...(daysTogether != null ? [t.shareCard.together(daysTogether)] : []),
+    { value: String(journalCount('watered')), label: t.shareCard.waterings },
+    newLeaves > 0
+      ? { value: String(newLeaves), label: t.shareCard.newLeaves }
+      : { value: String(journalCount('fertilized', 'repotted', 'rotated', 'misted', 'pruned')), label: t.shareCard.careDone },
+  ];
 
   // Confirmation, undo and the soil question come from WateringFeedbackPrompt.
   const handleWaterNow = () => water(plant);
@@ -315,25 +342,29 @@ export default function PlantDetailScreen() {
       <Modal visible={shareModalVisible} transparent animationType="fade" onRequestClose={() => setShareModalVisible(false)}>
         <View style={styles.shareBackdrop}>
           <ViewShot ref={shareCardRef} options={{ format: 'png', quality: 1 }}>
-            <View style={[styles.shareCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-              <PlantAvatar plant={plant} size={110} />
-              <Text style={[styles.shareCardName, { color: colors.text, fontWeight: '700' }]}>{plant.name}</Text>
-              {plant.species !== '—' && (
-                <Text style={[styles.shareCardSpecies, { color: colors.textSecondary }]}>{plant.species}</Text>
-              )}
-              <View style={styles.shareCardStatsRow}>
-                <View style={[styles.shareCardStat, { backgroundColor: colors.tintMuted }]}>
-                  <Text style={[styles.shareCardStatText, { color: colors.tint }]}>
-                    💧 {t.shareCard.wateringEvery(plant.wateringIntervalDays)}
+            {/* Always the brand's dark green, whatever the app theme: the image
+                is going to live outside the app. */}
+            <View style={styles.shareCard}>
+              <PlantPhoto plant={plant} height={230} emojiSize={96} />
+              <View style={styles.shareCardBody}>
+                <Text style={styles.shareCardName} numberOfLines={1}>
+                  {plant.name}
+                </Text>
+                {plant.species !== '—' && (
+                  <Text style={styles.shareCardSpecies} numberOfLines={1}>
+                    {plant.species}
                   </Text>
+                )}
+                <View style={styles.shareCardStatsRow}>
+                  {shareStats.map((stat) => (
+                    <View key={stat.label} style={styles.shareCardStat}>
+                      <Text style={styles.shareCardStatValue}>{stat.value}</Text>
+                      <Text style={styles.shareCardStatLabel}>{stat.label}</Text>
+                    </View>
+                  ))}
                 </View>
-                <View style={[styles.shareCardStat, { backgroundColor: colors.tintMuted }]}>
-                  <Text style={[styles.shareCardStatText, { color: colors.tint }]}>
-                    {plant.wateringAmountMl}ml {t.shareCard.perWatering}
-                  </Text>
-                </View>
+                <Text style={styles.shareCardFooter}>{t.shareCard.footer}</Text>
               </View>
-              <Text style={[styles.shareCardFooter, { color: colors.textSecondary }]}>{t.shareCard.footer}</Text>
             </View>
           </ViewShot>
 
@@ -1031,20 +1062,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: Spacing.four,
   },
-  shareCard: {
-    width: 280,
-    borderRadius: 24,
-    borderWidth: 1,
-    padding: Spacing.four,
-    alignItems: 'center',
-    gap: 6,
-  },
-  shareCardName: { fontSize: 24, marginTop: Spacing.two },
-  shareCardSpecies: { fontSize: 14 },
-  shareCardStatsRow: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 6, marginTop: Spacing.two },
-  shareCardStat: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14 },
-  shareCardStatText: { fontSize: 12, fontWeight: '700' },
-  shareCardFooter: { fontSize: 11, fontWeight: '600', marginTop: Spacing.three, letterSpacing: 0.5 },
+  shareCard: { width: 300, borderRadius: 26, overflow: 'hidden', backgroundColor: '#12241A' },
+  shareCardBody: { padding: Spacing.three, paddingTop: 14 },
+  shareCardName: { fontSize: 26, fontWeight: '700', color: '#F3F7F4' },
+  shareCardSpecies: { fontSize: 14, color: '#A9BDB0', marginTop: 1 },
+  shareCardStatsRow: { flexDirection: 'row', gap: 8, marginTop: Spacing.three },
+  shareCardStat: { flex: 1, borderRadius: 16, paddingVertical: 12, paddingHorizontal: 6, alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.07)' },
+  shareCardStatValue: { fontSize: 24, fontWeight: '700', color: '#8FE3A1' },
+  shareCardStatLabel: { fontSize: 11, color: '#A9BDB0', textAlign: 'center', marginTop: 2 },
+  shareCardFooter: { fontSize: 12, fontWeight: '600', color: '#6FBF7F', textAlign: 'center', marginTop: Spacing.three, letterSpacing: 0.5 },
   shareActionsRow: { flexDirection: 'row', gap: Spacing.two, marginTop: Spacing.four, width: 280 },
   shareCancelButton: { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center' },
   shareButton: { flex: 1, paddingVertical: 12, borderRadius: 14, alignItems: 'center' },

@@ -757,9 +757,16 @@ export const translations = {
     },
     shareCard: {
       dialogTitle: 'Share your plant',
-      wateringEvery: (n: number) => `Every ${n}d`,
-      perWatering: 'per watering',
-      footer: '🌱 Grown with Sprout',
+      together: (days: number) =>
+        days < 60
+          ? { value: String(days), label: 'days together' }
+          : days < 730
+            ? { value: String(Math.round(days / 30)), label: 'months together' }
+            : { value: String(Math.floor(days / 365)), label: 'years together' },
+      waterings: 'waterings',
+      newLeaves: 'new leaves',
+      careDone: 'care tasks',
+      footer: 'Grown with Sprout',
       cancel: 'Cancel',
       shareButton: 'Share',
       sharing: 'Preparing…',
@@ -1562,9 +1569,16 @@ export const translations = {
     },
     shareCard: {
       dialogTitle: 'Bitkini paylaş',
-      wateringEvery: (n: number) => `${n} günde bir`,
-      perWatering: 'her sulamada',
-      footer: '🌱 Sprout ile büyüyor',
+      together: (days: number) =>
+        days < 60
+          ? { value: String(days), label: 'gündür birlikte' }
+          : days < 730
+            ? { value: String(Math.round(days / 30)), label: 'aydır birlikte' }
+            : { value: String(Math.floor(days / 365)), label: 'yıldır birlikte' },
+      waterings: 'sulama',
+      newLeaves: 'yeni yaprak',
+      careDone: 'bakım',
+      footer: 'Sprout ile büyüyor',
       cancel: 'Vazgeç',
       shareButton: 'Paylaş',
       sharing: 'Hazırlanıyor…',
