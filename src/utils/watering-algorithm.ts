@@ -2,7 +2,7 @@
 // its exports are typed at the call sites below instead of at the source.
 import { wateringInterval as rawWateringInterval } from '../../veri/watering.js';
 import { WateringStatus } from '@/data/plants';
-import { HeatingSensitivity, LightKey, PotMaterialKey, wateringAlgorithm, WateringAlgorithm } from '@/data/species-guide';
+import { HeatingSensitivity, LightKey, PotMaterialKey, SeasonProfile, wateringAlgorithm, WateringAlgorithm } from '@/data/species-guide';
 
 export const DEFAULT_WINDOW_DISTANCE_CM = 100;
 
@@ -23,6 +23,7 @@ function neutralAlgorithm(algo: WateringAlgorithm): WateringAlgorithm {
   return {
     ...algo,
     season: Object.fromEntries(Object.keys(algo.season).map((m) => [m, 1])),
+    summerDormantSeason: Object.fromEntries(Object.keys(algo.summerDormantSeason).map((m) => [m, 1])),
     heatingFactor: Object.fromEntries(Object.keys(algo.heatingFactor).map((k) => [k, 1])) as Record<HeatingSensitivity, number>,
     outdoorSummer: {},
   };
@@ -31,6 +32,7 @@ function neutralAlgorithm(algo: WateringAlgorithm): WateringAlgorithm {
 type WateringPlantInput = {
   baseIntervalDays: number;
   heatingSensitivity: HeatingSensitivity;
+  seasonProfile?: SeasonProfile;
   pot: { materialKey: PotMaterialKey; diameterCm: number | null };
   environment: { lightKey: LightKey; windowDistanceCm?: number };
   indoor: boolean;
@@ -54,7 +56,7 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
     indoor: plant.indoor,
     heatingOn: options.heatingOn,
   };
-  const speciesLike = { water: { baseIntervalDays: plant.baseIntervalDays }, heatingSensitivity: plant.heatingSensitivity };
+  const speciesLike = { water: { baseIntervalDays: plant.baseIntervalDays }, heatingSensitivity: plant.heatingSensitivity, seasonProfile: plant.seasonProfile ?? 'normal' };
   const algo = options.applySeasonalFactors ? wateringAlgorithm : neutralAlgorithm(wateringAlgorithm);
   const result = rawWateringInterval(speciesLike, site, algo, date) as { intervalDays: number };
   return result.intervalDays;

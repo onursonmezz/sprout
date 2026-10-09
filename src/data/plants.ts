@@ -1,5 +1,5 @@
 import { RoomKey } from '@/constants/rooms';
-import { HeatingSensitivity, LightKey, PotMaterialKey } from './species-guide';
+import { HeatingSensitivity, LightKey, PotMaterialKey, SeasonProfile } from './species-guide';
 
 export type WateringStatus = 'overdue' | 'dueToday' | 'upcoming';
 
@@ -65,6 +65,9 @@ export type Plant = {
    * season conditions to produce wateringIntervalDays. */
   baseIntervalDays: number;
   heatingSensitivity: HeatingSensitivity;
+  /** How strongly the seasons change this plant's watering — from its
+   * species ('normal' when no species matched). */
+  seasonProfile: SeasonProfile;
   /** Whether this specific plant lives indoors or outdoors — only affects
    * the outdoor-summer-heat factor. */
   indoor: boolean;

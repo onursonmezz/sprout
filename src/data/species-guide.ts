@@ -87,12 +87,17 @@ export type SpeciesRecord = {
   turkeyNote: string;
 };
 
+/** How strongly the seasons change a plant's thirst — see seasonProfileFor(). */
+export type SeasonProfile = 'strong' | 'normal' | 'mild' | 'winterActive' | 'summerDormant';
+
 export type WateringAlgorithm = {
   potMaterial: Record<PotMaterialKey, number>;
   potSize: [number, number][];
   lightFactor: Record<LightKey, number>;
   windowDistance: [number, number][];
   season: Record<string, number>;
+  seasonStrength: Record<Exclude<SeasonProfile, 'summerDormant'>, number>;
+  summerDormantSeason: Record<string, number>;
   heatingFactor: Record<HeatingSensitivity, number>;
   heatingMonths: number[];
   outdoorSummer: Record<string, number>;
@@ -145,6 +150,29 @@ export function findSpeciesExact(name: string): SpeciesRecord | undefined {
 /** Looser match for real-world species text ("Monstera Deliciosa", "monstera")
  * that won't hit findSpeciesExact's exact-name requirement — matches either
  * direction as a substring against any of the plant's names. */
+/** Species whose yearly rhythm runs against the usual "rest in winter". */
+const SEASON_PROFILE_OVERRIDES: Record<string, SeasonProfile> = {
+  // Bloom in winter, so they keep drinking through it.
+  'schlumbergera-truncata': 'winterActive',
+  'euphorbia-pulcherrima': 'winterActive',
+  // Grows in the cool months and rests through summer.
+  'cyclamen-persicum': 'summerDormant',
+  // A jungle cactus: behaves like a foliage plant, not a desert one.
+  'rhipsalis-baccifera': 'normal',
+};
+
+/** A species' season profile: desert plants and anything that wants its soil
+ * fully dry nearly stop drinking in winter; ferns and plants that want
+ * constantly moist soil barely change; everything else follows the standard
+ * curve. */
+export function seasonProfileFor(species: SpeciesRecord): SeasonProfile {
+  const override = SEASON_PROFILE_OVERRIDES[species.id];
+  if (override) return override;
+  if (species.category === 'succulent' || species.category === 'cactus' || species.water.dryLevel === 'full') return 'strong';
+  if (species.category === 'fern' || species.water.dryLevel === 'moist') return 'mild';
+  return 'normal';
+}
+
 export function findSpeciesLoose(name: string): SpeciesRecord | undefined {
   const q = name.trim().toLowerCase();
   if (!q || q === '—') return undefined;

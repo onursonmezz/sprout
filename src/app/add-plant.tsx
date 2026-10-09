@@ -22,6 +22,8 @@ import {
   PotMaterialKey,
   SpeciesRecord,
   speciesDisplayName,
+  SeasonProfile,
+  seasonProfileFor,
 } from '@/data/species-guide';
 import { recomputeWateringInterval, WINDOW_DISTANCE_OPTIONS, wateringSchedule } from '@/utils/watering-algorithm';
 import { awaitLightMeterResult } from '@/utils/light-meter';
@@ -148,6 +150,7 @@ export default function AddPlantScreen() {
   const [speciesHeatingSensitivity, setSpeciesHeatingSensitivity] = useState<HeatingSensitivity>(
     () => editingPlant?.heatingSensitivity ?? 'med'
   );
+  const [speciesSeasonProfile, setSpeciesSeasonProfile] = useState<SeasonProfile>(() => editingPlant?.seasonProfile ?? 'normal');
   const [speciesIndoor, setSpeciesIndoor] = useState(() => editingPlant?.indoor ?? true);
   const [speciesRepotIntervalDays, setSpeciesRepotIntervalDays] = useState(
     () => editingPlant?.care.find((c) => c.type === 'repot')?.intervalDays ?? DEFAULT_REPOT_INTERVAL_DAYS
@@ -180,6 +183,7 @@ export default function AddPlantScreen() {
       {
         baseIntervalDays: speciesBaseInterval,
         heatingSensitivity: speciesHeatingSensitivity,
+        seasonProfile: speciesSeasonProfile,
         pot: { materialKey: next.potMaterialKey, diameterCm: next.potDiameter ? Number(next.potDiameter) : null },
         environment: { lightKey: next.lightKey, windowDistanceCm: next.windowDistanceCm },
         indoor: speciesIndoor,
@@ -198,6 +202,7 @@ export default function AddPlantScreen() {
     setSpeciesPickApplied(true);
     setSpeciesBaseInterval(entry.water.baseIntervalDays);
     setSpeciesHeatingSensitivity(entry.heatingSensitivity);
+    setSpeciesSeasonProfile(seasonProfileFor(entry));
     setSpeciesIndoor(entry.category !== 'outdoor');
     setSpeciesRepotIntervalDays(entry.repotEveryMonths * 30);
     setForm((prev) => {
@@ -209,6 +214,7 @@ export default function AddPlantScreen() {
           {
             baseIntervalDays: entry.water.baseIntervalDays,
             heatingSensitivity: entry.heatingSensitivity,
+            seasonProfile: seasonProfileFor(entry),
             pot: { materialKey: next.potMaterialKey, diameterCm: next.potDiameter ? Number(next.potDiameter) : null },
             environment: { lightKey: next.lightKey, windowDistanceCm: next.windowDistanceCm },
             indoor: entry.category !== 'outdoor',
@@ -280,6 +286,7 @@ export default function AddPlantScreen() {
         wateringIntervalDays,
         baseIntervalDays: speciesBaseInterval,
         heatingSensitivity: speciesHeatingSensitivity,
+        seasonProfile: speciesSeasonProfile,
         indoor: speciesIndoor,
         lastWateredDaysAgo,
         snoozeDays,
@@ -308,6 +315,7 @@ export default function AddPlantScreen() {
       wateringIntervalDays,
       baseIntervalDays: speciesBaseInterval,
       heatingSensitivity: speciesHeatingSensitivity,
+      seasonProfile: speciesSeasonProfile,
       indoor: speciesIndoor,
       lastWateredDaysAgo,
       snoozeDays: 0,

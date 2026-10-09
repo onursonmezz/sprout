@@ -213,6 +213,9 @@ export default function PlantDetailScreen() {
                   <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
                     {t.plantDetail.speciesGuideCare(speciesInfo.water.baseIntervalDays)}
                   </Text>
+                  <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
+                    {t.plantDetail.seasonProfile[plant.seasonProfile]}
+                  </Text>
                   <Text
                     style={[
                       styles.speciesCardText,

@@ -182,6 +182,26 @@
       "8": 0.7,
       "9": 0.85
     },
+    "seasonStrength": {
+      "strong": 2,
+      "normal": 1,
+      "mild": 0.5,
+      "winterActive": 0.3
+    },
+    "summerDormantSeason": {
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 1.1,
+      "5": 1.3,
+      "6": 1.7,
+      "7": 1.9,
+      "8": 1.9,
+      "9": 1.4,
+      "10": 1.05,
+      "11": 1,
+      "12": 1
+    },
     "minIntervalDays": 2,
     "maxIntervalDays": 75
   },

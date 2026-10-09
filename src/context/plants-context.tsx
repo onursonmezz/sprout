@@ -3,7 +3,7 @@ import { AppState } from 'react-native';
 
 import { RoomKey } from '@/constants/rooms';
 import { careJournalType, CareTask, JournalEntry, Plant } from '@/data/plants';
-import { HeatingSensitivity, LightKey, PotMaterialKey } from '@/data/species-guide';
+import { findSpeciesLoose, HeatingSensitivity, LightKey, PotMaterialKey, SeasonProfile, seasonProfileFor } from '@/data/species-guide';
 import { loadJSON, saveJSON } from '@/utils/storage';
 import {
   DEFAULT_WINDOW_DISTANCE_CM,
@@ -34,12 +34,18 @@ type PersistedState = { plants: Plant[]; savedAt: string };
  * display strings to canonical keys. Falls back to generic assumptions
  * rather than crashing recomputeWateringInterval on a missing field.
  */
+function seasonProfileOf(p: { species: string; latinName: string }): SeasonProfile {
+  const species = findSpeciesLoose(p.species) ?? findSpeciesLoose(p.latinName);
+  return species ? seasonProfileFor(species) : 'normal';
+}
+
 function migratePlant(p: Plant): Plant {
   const legacy = p as unknown as {
     wateringIntervalDays?: number;
     createdDaysAgo?: number;
     baseIntervalDays?: number;
     heatingSensitivity?: HeatingSensitivity;
+    seasonProfile?: SeasonProfile;
     indoor?: boolean;
     customIntervalDays?: number | null;
     intervalAdjust?: number;
@@ -60,6 +66,9 @@ function migratePlant(p: Plant): Plant {
     createdDaysAgo: typeof legacy.createdDaysAgo === 'number' ? legacy.createdDaysAgo : 3650,
     baseIntervalDays: typeof legacy.baseIntervalDays === 'number' ? legacy.baseIntervalDays : wateringIntervalDays,
     heatingSensitivity: legacy.heatingSensitivity ?? 'med',
+    // Plants saved before season profiles existed get theirs from the species
+    // they were added as.
+    seasonProfile: legacy.seasonProfile ?? seasonProfileOf(p),
     indoor: typeof legacy.indoor === 'boolean' ? legacy.indoor : true,
     customIntervalDays: legacy.customIntervalDays ?? null,
     intervalAdjust: typeof legacy.intervalAdjust === 'number' ? legacy.intervalAdjust : 1,

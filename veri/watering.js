@@ -39,8 +39,19 @@ export function wateringInterval(plant, site, algo, date = new Date()) {
   // 4. Pencereye uzaklık
   const fWindow = pickFromRanges(algo.windowDistance, site.windowDistanceCm ?? 100);
 
-  // 5. Mevsim - kışın büyüme yavaşlar, aralık uzar
-  const fSeason = algo.season[String(month)] ?? 1.0;
+  // 5. Mevsim - kışın büyüme yavaşlar, aralık uzar. Ne kadar uzayacağı bitkinin
+  //    mevsim profiline bağlıdır: kaktüs/sukulent kışın neredeyse durur (strong),
+  //    eğreltiler ve nem sevenler az etkilenir (mild), kışın çiçek açanlar hemen
+  //    hiç etkilenmez (winterActive). Yazın dinlenen türlerin (siklamen) kendi
+  //    tablosu vardır: onlarda aralık kışın değil yazın uzar.
+  const profile = plant.seasonProfile ?? "normal";
+  let fSeason;
+  if (profile === "summerDormant" && algo.summerDormantSeason) {
+    fSeason = algo.summerDormantSeason[String(month)] ?? 1.0;
+  } else {
+    const strength = algo.seasonStrength?.[profile] ?? 1.0;
+    fSeason = 1 + ((algo.season[String(month)] ?? 1.0) - 1) * strength;
+  }
 
   // 6. TÜRKİYE'YE ÖZGÜ: kalorifer havayı kurutur, toprak daha hızlı kurur.
   //    Kış yavaşlamasını kısmen dengeler. Bitkinin nem hassasiyetine göre değişir.
