@@ -91,6 +91,13 @@ export function effectiveWateringInterval(
   return Math.max(1, Math.round(algo * clampAdjust(plant.intervalAdjust ?? 1)));
 }
 
+/** After a big change (new pot, new spot) what was learned only half applies:
+ * part of it was about the old conditions. Pulls the correction halfway back
+ * to neutral rather than discarding it. */
+export function softenIntervalAdjust(adjust: number | undefined): number {
+  return clampAdjust(1 + ((adjust ?? 1) - 1) / 2);
+}
+
 /** How the soil was when the user watered. */
 export type SoilFeedback = 'dry' | 'ok' | 'wet';
 

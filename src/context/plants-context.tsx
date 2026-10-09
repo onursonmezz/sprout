@@ -12,6 +12,7 @@ import {
   effectiveWateringInterval,
   learnIntervalAdjust,
   recomputeWateringInterval,
+  softenIntervalAdjust,
   SoilFeedback,
   suggestWaterAmountMl,
   SeasonalOptions,
@@ -123,6 +124,11 @@ type PendingWatering = {
   before: Plant;
 };
 
+/** One quick change to where a plant lives or what it lives in. */
+export type PlantConditionsChange =
+  | { kind: 'place'; roomKey: RoomKey; customRoom: string | null; lightKey: LightKey; windowDistanceCm: number; rainExposed: boolean }
+  | { kind: 'pot'; diameterCm: number | null; materialKey: PotMaterialKey; hasDrainage: boolean; soil: string; journalTitle: string };
+
 type PlantsContextValue = {
   plants: Plant[];
   addPlant: (plant: Plant) => void;
@@ -142,6 +148,12 @@ type PlantsContextValue = {
   dismissWateringFeedback: () => void;
   /** Puts the plant back exactly as it was before its last watering. */
   undoWatering: () => void;
+  /** Moves or repots a plant and re-times it for the new conditions. */
+  changePlantConditions: (plantId: string, change: PlantConditionsChange) => void;
+  /** The plant whose quick-actions sheet is open, if any. */
+  quickActionsPlantId: string | null;
+  openQuickActions: (plantId: string) => void;
+  closeQuickActions: () => void;
   /** Drops the user's own interval so the algorithm (and what it has learned) takes over again. */
   clearCustomInterval: (plantId: string) => void;
   /** Forgets what soil feedback taught for one plant. */
@@ -371,6 +383,50 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   const resetIntervalAdjust = (plantId: string) => applyIntervalAdjust(plantId, () => 1);
 
+  const [quickActionsPlantId, setQuickActionsPlantId] = useState<string | null>(null);
+
+  const changePlantConditions = (plantId: string, change: PlantConditionsChange) => {
+    (async () => {
+      const options = await loadSeasonalOptions();
+      const today = new Date();
+      setPlants((prev) =>
+        prev.map((p) => {
+          if (p.id !== plantId) return p;
+          let next: Plant;
+          if (change.kind === 'place') {
+            // The room decides indoors/outdoors; a custom room keeps the plant's own flag.
+            const indoor = isOutdoorRoom(change.roomKey) ? false : change.roomKey === 'other' ? p.indoor : true;
+            next = {
+              ...p,
+              roomKey: change.roomKey,
+              customRoom: change.customRoom,
+              indoor,
+              rainExposed: !indoor && change.rainExposed,
+              environment: { lightKey: change.lightKey, windowDistanceCm: change.windowDistanceCm },
+            };
+          } else {
+            // A new pot is a repotting: it goes in the journal and restarts the repot countdown.
+            const entry: JournalEntry = { id: `care-${Date.now()}`, type: 'repotted', title: change.journalTitle, description: '', daysAgo: 0 };
+            next = {
+              ...p,
+              pot: { materialKey: change.materialKey, diameterCm: change.diameterCm, hasDrainage: change.hasDrainage, soil: change.soil },
+              wateringAmountMl: p.amountAuto ? suggestWaterAmountMl(change.diameterCm, change.hasDrainage) : p.wateringAmountMl,
+              care: p.care.map((c) => (c.type === 'repot' ? { ...c, lastDoneDaysAgo: 0 } : c)),
+              journalNotes: [entry, ...p.journalNotes],
+            };
+          }
+          next = { ...next, intervalAdjust: softenIntervalAdjust(p.intervalAdjust) };
+          const wateringIntervalDays = effectiveWateringInterval(next, today, options);
+          return {
+            ...next,
+            wateringIntervalDays,
+            ...wateringSchedule(wateringIntervalDays, effectiveLastWatered(next, options, today), next.snoozeDays),
+          };
+        })
+      );
+    })();
+  };
+
   const clearCustomInterval = (plantId: string) => {
     (async () => {
       const options = await loadSeasonalOptions();
@@ -440,6 +496,10 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         undoWatering,
         resetIntervalAdjust,
         clearCustomInterval,
+        changePlantConditions,
+        quickActionsPlantId,
+        openQuickActions: setQuickActionsPlantId,
+        closeQuickActions: () => setQuickActionsPlantId(null),
         recomputeIntervals,
         resetPlants,
         restorePlants,

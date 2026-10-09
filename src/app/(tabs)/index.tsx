@@ -49,7 +49,7 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, snoozePlant, completeCareTask } = usePlants();
+  const { plants, snoozePlant, completeCareTask, openQuickActions } = usePlants();
   const handleWater = useWaterPlant();
   const { dayLengthHours, vacationMode, vacationStart, vacationEnd } = useSettings();
 
@@ -179,7 +179,11 @@ export default function TodayScreen() {
             {needsAttention.map((plant) => {
               const isOverdue = plant.status === 'overdue';
               return (
-                <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)}>
+                <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} onLongPress={() => {
+                  hapticTap();
+                  openQuickActions(plant.id);
+                }}
+                delayLongPress={300}>
                   <GlassCard style={styles.attentionCard}>
                     <PlantAvatar plant={plant} size={72} radius={13} />
                     <View style={styles.attentionInfo}>
@@ -240,7 +244,11 @@ export default function TodayScreen() {
           )}
           <View style={styles.grid}>
             {comingUp.map((plant) => (
-              <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} style={styles.gridItem}>
+              <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} onLongPress={() => {
+                  hapticTap();
+                  openQuickActions(plant.id);
+                }}
+                delayLongPress={300} style={styles.gridItem}>
                 <GlassCard style={styles.tile}>
                   <PlantPhoto plant={plant} height={92} emojiSize={38} />
                   <Pressable

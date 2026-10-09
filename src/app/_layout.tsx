@@ -3,6 +3,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { View } from 'react-native';
 
+import { PlantQuickActions } from '@/components/plant-quick-actions';
 import { WateringFeedbackPrompt } from '@/components/watering-feedback-prompt';
 import { LanguageProvider, useLanguage } from '@/context/language-context';
 import { PlantsProvider, usePlants } from '@/context/plants-context';
@@ -56,6 +57,7 @@ function Navigation() {
         <Stack.Screen name="guide/issues" />
       </Stack>
       <WateringFeedbackPrompt />
+      <PlantQuickActions />
       </View>
     </ThemeProvider>
   );

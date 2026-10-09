@@ -10,6 +10,7 @@ import { ROOM_KEYS, roomDisplayName } from '@/constants/rooms';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
+import { hapticTap } from '@/utils/haptics';
 import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
 import { Plant } from '@/data/plants';
@@ -42,8 +43,15 @@ function PlantListRow({
   showRoom?: boolean;
 }) {
   const isOverdue = plant.status === 'overdue';
+  const { openQuickActions } = usePlants();
   return (
-    <Pressable onPress={onPress}>
+    <Pressable
+      onPress={onPress}
+      onLongPress={() => {
+        hapticTap();
+        openQuickActions(plant.id);
+      }}
+      delayLongPress={300}>
       <GlassCard style={styles.listRow}>
         <PlantAvatar plant={plant} size={56} radius={12} emojiSize={24} />
         <View style={styles.listInfo}>
@@ -67,7 +75,7 @@ export default function PlantsScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants } = usePlants();
+  const { plants, openQuickActions } = usePlants();
   const handleWater = useWaterPlant();
   const [query, setQuery] = useState('');
   const [view, setView] = useState<'grid' | 'list' | 'rooms'>('grid');
@@ -143,7 +151,11 @@ export default function PlantsScreen() {
             {filtered.map((plant) => {
               const isOverdue = plant.status === 'overdue';
               return (
-                <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} style={styles.gridItem}>
+                <Pressable key={plant.id} onPress={() => router.push(`/plant/${plant.id}`)} onLongPress={() => {
+                  hapticTap();
+                  openQuickActions(plant.id);
+                }}
+                delayLongPress={300} style={styles.gridItem}>
                   <GlassCard style={styles.gridCard}>
                     <PlantPhoto plant={plant} height={104} />
                     {plant.status !== 'upcoming' && (
