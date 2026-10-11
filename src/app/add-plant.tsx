@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -145,13 +145,23 @@ export default function AddPlantScreen() {
   const router = useRouter();
   const { t, lang } = useLanguage();
   const { seasonalAdjustment, heatingOn, latitude } = useSettings();
-  const { id } = useLocalSearchParams<{ id?: string }>();
+  // prefill* come from a finished propagation project being added as a plant.
+  const { id, prefillName, prefillSpecies, prefillLatin } = useLocalSearchParams<{
+    id?: string;
+    prefillName?: string;
+    prefillSpecies?: string;
+    prefillLatin?: string;
+  }>();
   const { plants, addPlant, updatePlant, deletePlant, getPlant } = usePlants();
   const editingPlant = id ? getPlant(String(id)) : undefined;
   const isEditing = Boolean(id);
 
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormState>(() => (editingPlant ? plantToForm(editingPlant) : initialForm));
+  const [form, setForm] = useState<FormState>(() =>
+    editingPlant
+      ? plantToForm(editingPlant)
+      : { ...initialForm, nickname: prefillName ?? '', species: prefillSpecies ?? '', latinName: prefillLatin ?? '' }
+  );
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
   const [speciesDropdownDismissed, setSpeciesDropdownDismissed] = useState(false);
@@ -261,6 +271,16 @@ export default function AddPlantScreen() {
   };
 
   const canContinue = step === 1 ? form.nickname.trim().length > 0 : true;
+
+  // A prefilled species should behave as if it had been picked from the
+  // suggestions, so the watering interval starts from that species' data.
+  useEffect(() => {
+    if (editingPlant) return;
+    const known = speciesOf({ species: prefillSpecies ?? '', latinName: prefillLatin ?? '' });
+    if (known) applySpeciesGuide(known);
+    // Once, when the form opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleBack = () => {
     if (step === 1) router.back();

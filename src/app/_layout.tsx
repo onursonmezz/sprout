@@ -7,6 +7,7 @@ import { PlantQuickActions } from '@/components/plant-quick-actions';
 import { WateringFeedbackPrompt } from '@/components/watering-feedback-prompt';
 import { LanguageProvider, useLanguage } from '@/context/language-context';
 import { PlantsProvider, usePlants } from '@/context/plants-context';
+import { PropagationProvider } from '@/context/propagation-context';
 import { SettingsProvider, useSettings } from '@/context/settings-context';
 import { ThemeModeProvider, useThemeMode } from '@/context/theme-context';
 import { useAutoBackup } from '@/hooks/use-auto-backup';
@@ -53,6 +54,7 @@ function Navigation() {
         <Stack.Screen name="add-plant" options={{ presentation: 'modal' }} />
         <Stack.Screen name="light-meter" options={{ presentation: 'modal' }} />
         <Stack.Screen name="tour" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="propagation/[id]" />
         <Stack.Screen name="guide/article/[key]" />
         <Stack.Screen name="guide/issue/[key]" />
         <Stack.Screen name="guide/issues" />
@@ -70,7 +72,9 @@ export default function RootLayout() {
       <LanguageProvider>
         <PlantsProvider>
           <SettingsProvider>
-            <Navigation />
+            <PropagationProvider>
+              <Navigation />
+            </PropagationProvider>
           </SettingsProvider>
         </PlantsProvider>
       </LanguageProvider>

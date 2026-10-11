@@ -12,6 +12,7 @@ import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
+import { daysSince, usePropagation, waterChangeDue } from '@/context/propagation-context';
 import { useSettings } from '@/context/settings-context';
 import { CareTaskType, Plant } from '@/data/plants';
 import { careTaskDue } from '@/utils/care';
@@ -114,6 +115,8 @@ export default function TodayScreen() {
   const tourDue = plants.length > 0 && (!lastTourDate || dayDiff(lastTourDate) >= 7);
   const photoPlants = useMemo(() => plants.filter(photoDue), [plants]);
   const tasks = useMemo(() => monthlyTasks(plants, new Date(), heatingOn), [plants, heatingOn]);
+  const { projects } = usePropagation();
+  const thirstyCutting = projects.find(waterChangeDue);
   const thisMonthKey = monthKey(now);
   const doneKeys = monthlyTasksDone.month === thisMonthKey ? monthlyTasksDone.keys : [];
   const heroPlant = needsAttention[0] ?? comingUp[0] ?? plants[0];
@@ -200,6 +203,20 @@ export default function TodayScreen() {
                   <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{t.today.tourCardSub(plants.length)}</Text>
                 </View>
                 <GradientButton label={t.today.tourStart} />
+              </GlassCard>
+            </Pressable>
+          )}
+
+          {thirstyCutting && (
+            <Pressable onPress={() => router.push(`/propagation/${thirstyCutting.id}`)}>
+              <GlassCard style={styles.actionCard}>
+                <View style={[styles.careIcon, { backgroundColor: colors.track }]}>
+                  <Ionicons name="cut-outline" size={20} color={colors.tintBright} />
+                </View>
+                <Text style={[styles.plantMeta, { color: colors.text, flex: 1, lineHeight: 17 }]}>
+                  {t.today.propWater(thirstyCutting.name, daysSince(thirstyCutting.waterChangedAt))}
+                </Text>
+                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
               </GlassCard>
             </Pressable>
           )}

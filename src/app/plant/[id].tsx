@@ -10,6 +10,7 @@ import { FadeToBackground, GlowBackground, GradientFill } from '@/components/gla
 import { CircularProgress } from '@/components/circular-progress';
 import { GrowthAlbum } from '@/components/growth-album';
 import { PhotoPicker } from '@/components/photo-picker';
+import { PropagationSection } from '@/components/propagation-section';
 import { PlantPhoto } from '@/components/plant-avatar';
 import { Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
@@ -240,6 +241,8 @@ export default function PlantDetailScreen() {
           {tab === 'overview' && (
             <>
               <GrowthAlbum plant={plant} />
+
+              <PropagationSection plant={plant} />
 
               {speciesInfo && (
                 <View style={[styles.speciesCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
