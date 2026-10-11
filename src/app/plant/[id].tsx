@@ -10,6 +10,7 @@ import { FadeToBackground, GlowBackground, GradientFill } from '@/components/gla
 import { CircularProgress } from '@/components/circular-progress';
 import { GrowthAlbum } from '@/components/growth-album';
 import { IssueStrip } from '@/components/issue-strip';
+import { WhyInterval } from '@/components/why-interval';
 import { PLACEHOLDER_LEAF } from '@/components/plant-avatar';
 import { PhotoPicker } from '@/components/photo-picker';
 import { PropagationSection } from '@/components/propagation-section';
@@ -217,6 +218,8 @@ export default function PlantDetailScreen() {
               )}
             </View>
           </View>
+
+          <WhyInterval plant={plant} />
 
           <View style={styles.actionsRow}>
             <Pressable onPress={handleWaterNow} style={[styles.waterButton, { boxShadow: `0px 6px 16px ${colors.tintGlow}` }]}>

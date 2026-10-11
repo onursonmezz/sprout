@@ -69,6 +69,32 @@ export function recomputeWateringInterval(plant: WateringPlantInput, date: Date 
   return result.intervalDays;
 }
 
+/** The species' starting interval and each condition's multiplier on it
+ * (below 1 = water more often), for explaining a plant's schedule. */
+export function wateringBreakdown(
+  plant: WateringPlantInput,
+  date: Date,
+  options: SeasonalOptions
+): { baseDays: number; factors: { key: string; factor: number }[] } {
+  const site = {
+    potMaterial: plant.pot.materialKey,
+    potDiameterCm: plant.pot.diameterCm ?? 15,
+    hasDrainage: plant.pot.hasDrainage ?? true,
+    light: plant.environment.lightKey,
+    windowDistanceCm: plant.environment.windowDistanceCm ?? DEFAULT_WINDOW_DISTANCE_CM,
+    indoor: plant.indoor,
+    heatingOn: options.heatingOn,
+    latitude: options.latitude ?? null,
+  };
+  const speciesLike = { water: { baseIntervalDays: plant.baseIntervalDays }, heatingSensitivity: plant.heatingSensitivity, seasonProfile: plant.seasonProfile ?? 'normal' };
+  const algo = options.applySeasonalFactors ? wateringAlgorithm : neutralAlgorithm(wateringAlgorithm);
+  const result = rawWateringInterval(speciesLike, site, algo, date) as { breakdown: { key: string; factor?: number }[] };
+  return {
+    baseDays: plant.baseIntervalDays,
+    factors: result.breakdown.flatMap((b) => (b.factor == null ? [] : [{ key: b.key, factor: b.factor }])),
+  };
+}
+
 /** How much water one watering should be for this pot, in ml. */
 export function suggestWaterAmountMl(diameterCm: number | null, hasDrainage: boolean): number {
   return rawWaterAmountMl({ potDiameterCm: diameterCm ?? 15, hasDrainage }, wateringAlgorithm) as number;
