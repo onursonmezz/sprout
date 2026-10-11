@@ -170,11 +170,16 @@ export default function CalendarScreen() {
                 const hasCare = items.some((i) => i.kind === 'care');
                 return (
                   <Pressable key={di} onPress={() => selectDay(offset)} style={styles.dayCell}>
+                    {/* The circle is rebuilt when its state changes and never clips its content:
+                        on Android the number vanished from today's circle once it was selected. */}
                     <View
+                      key={isSelected ? 'selected' : isToday ? 'today' : 'plain'}
                       style={[
                         styles.dayCircle,
-                        isToday && !isSelected && { borderWidth: 1.5, borderColor: colors.tintBright },
-                        isSelected && { backgroundColor: colors.tint },
+                        {
+                          borderColor: isToday && !isSelected ? colors.tintBright : 'transparent',
+                          backgroundColor: isSelected ? colors.tint : 'transparent',
+                        },
                       ]}>
                       <Text
                         style={[
@@ -328,7 +333,7 @@ const styles = StyleSheet.create({
   weekdayText: { flex: 1, textAlign: 'center', fontSize: 11, fontWeight: '600' },
   weekRow: { flexDirection: 'row' },
   dayCell: { flex: 1, alignItems: 'center', paddingVertical: 3, minHeight: 46 },
-  dayCircle: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  dayCircle: { width: 34, height: 34, borderRadius: 17, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center' },
   dayText: { fontSize: 13, fontWeight: '500' },
   dotsRow: { flexDirection: 'row', gap: 3, height: 6, marginTop: 2 },
   dot: { width: 5, height: 5, borderRadius: 2.5 },
