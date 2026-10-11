@@ -168,6 +168,12 @@ const SEASON_PROFILE_OVERRIDES: Record<string, SeasonProfile> = {
   'cyclamen-persicum': 'summerDormant',
   // A jungle cactus: behaves like a foliage plant, not a desert one.
   'rhipsalis-baccifera': 'normal',
+  'epiphyllum-oxypetalum': 'normal',
+  'rhipsalidopsis-gaertneri': 'normal',
+  // Grows in the cool months, closes its rosettes and rests in summer heat.
+  'aeonium-arboreum': 'summerDormant',
+  // An air plant: no soil to dry out, soaked on the same rhythm all year.
+  'tillandsia-ionantha': 'normal',
 };
 
 /** A species' season profile: desert plants and anything that wants its soil

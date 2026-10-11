@@ -55,9 +55,16 @@ Kalorifer sezonu Ekim-Nisan varsayılmıştır. Kullanıcıya "kaloriferin yanı
 
 ## Yeni bitki eklemek
 
-`data_0X_*.py` dosyalarındaki biçimi kopyalayıp `build.py` çalıştırmak yeterli. Doğrulayıcı şunları kendi yakalar: tekrar eden id, eksik alan, geçersiz sözlük değeri, ters sıcaklık aralığı, dayanma sıcaklığının ideal minimumdan yüksek olması, sukulent için fazla kısa sulama aralığı, yüksek nem isteyip kalorifer hassasiyeti düşük işaretlenmiş kayıtlar.
+Yeni türler `veri/turler-ek-N.js` biçiminde bir dosyaya, tür başına tek satır olarak yazılır (sütunların açıklaması `turler-ek-1.js` dosyasının başında). Ardından:
 
-Yani 100'den 300'e çıkarmak artık veri girme işi, tasarım işi değil.
+    node veri/tur-ekle.js veri/turler-ek-1.js --kontrol   # yalnızca doğrular
+    node veri/tur-ekle.js veri/turler-ek-1.js             # doğrular ve plants.json'a ekler
+
+Doğrulayıcı şunları yakalar: tekrar eden tür, başka türle çakışan Türkçe/İngilizce ad, geçersiz sözlük değeri, ters sıcaklık ya da boyut aralığı, dayanma sıcaklığının ideal minimumdan yüksek olması, tam kuruma isteyen sukulent için fazla kısa sulama aralığı, yüksek nem isteyip kalorifer hassasiyeti düşük işaretlenmiş kayıtlar. Bir satır hatalıysa hiçbir şey yazılmaz; zaten ekli türler atlanır.
+
+Mevsim davranışı olağandışı olan türler (kışın çiçek açan, yazın dinlenen, orman kaktüsü gibi) için `src/data/species-guide.ts` içindeki `SEASON_PROFILE_OVERRIDES` listesine de bir satır eklemek gerekir.
+
+Ek paket 1 (`turler-ek-1.js`) ile tür sayısı 100'den 216'ya çıktı.
 
 ## Sıradaki 50 için aday listesi
 
