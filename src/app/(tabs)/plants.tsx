@@ -54,7 +54,7 @@ function PlantListRow({
       }}
       delayLongPress={300}>
       <GlassCard style={styles.listRow}>
-        <PlantAvatar plant={plant} size={56} radius={12} emojiSize={24} />
+        <PlantAvatar plant={plant} size={56} radius={12} iconSize={24} />
         <View style={styles.listInfo}>
           <Text style={[styles.plantName, { color: colors.text }]} numberOfLines={1}>
             {plant.name}

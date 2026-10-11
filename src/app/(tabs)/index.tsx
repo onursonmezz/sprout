@@ -320,7 +320,7 @@ export default function TodayScreen() {
                 }}
                 delayLongPress={300} style={styles.gridItem}>
                 <GlassCard style={styles.tile}>
-                  <PlantPhoto plant={plant} height={92} emojiSize={38} />
+                  <PlantPhoto plant={plant} height={92} iconSize={38} />
                   <Pressable
                     onPress={() => handleWater(plant)}
                     hitSlop={6}

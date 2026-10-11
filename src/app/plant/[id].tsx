@@ -10,6 +10,7 @@ import { FadeToBackground, GlowBackground, GradientFill } from '@/components/gla
 import { CircularProgress } from '@/components/circular-progress';
 import { GrowthAlbum } from '@/components/growth-album';
 import { IssueStrip } from '@/components/issue-strip';
+import { PLACEHOLDER_LEAF } from '@/components/plant-avatar';
 import { PhotoPicker } from '@/components/photo-picker';
 import { PropagationSection } from '@/components/propagation-section';
 import { PlantPhoto } from '@/components/plant-avatar';
@@ -150,7 +151,7 @@ export default function PlantDetailScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={[styles.hero, { backgroundColor: plant.avatarColor }]}>
           {plant.photoUri && <Image source={{ uri: plant.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" />}
-          {!plant.photoUri && <Text style={styles.heroEmoji}>{plant.emoji}</Text>}
+          {!plant.photoUri && <Ionicons name="leaf" size={92} color={PLACEHOLDER_LEAF} style={styles.heroLeaf} />}
           <FadeToBackground />
           <View style={styles.heroTopRow}>
             <Pressable onPress={() => router.back()} style={styles.heroButton}>
@@ -359,7 +360,7 @@ export default function PlantDetailScreen() {
             {/* Always the brand's dark green, whatever the app theme: the image
                 is going to live outside the app. */}
             <View style={styles.shareCard}>
-              <PlantPhoto plant={plant} height={230} emojiSize={96} />
+              <PlantPhoto plant={plant} height={230} iconSize={96} />
               <View style={styles.shareCardBody}>
                 <Text style={styles.shareCardName} numberOfLines={1}>
                   {plant.name}
@@ -933,7 +934,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.2)',
   },
-  heroEmoji: { position: 'absolute', alignSelf: 'center', top: 96, fontSize: 84 },
+  heroLeaf: { position: 'absolute', alignSelf: 'center', top: 96 },
   heroTextWrap: { paddingBottom: Spacing.three },
   heroName: { fontSize: 30, fontWeight: '700' },
   heroSpecies: { fontSize: 15, fontWeight: '600' },

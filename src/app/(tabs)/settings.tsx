@@ -305,7 +305,7 @@ export default function SettingsScreen() {
                     <View style={styles.vacationChips}>
                       {dueBeforeReturn.map((p) => (
                         <View key={p.id} style={[styles.vacationChip, { backgroundColor: colors.tintMuted }]}>
-                          <Text style={[styles.vacationChipText, { color: colors.tint }]}>💧 {p.name}</Text>
+                          <Text style={[styles.vacationChipText, { color: colors.tint }]}>{p.name}</Text>
                         </View>
                       ))}
                     </View>

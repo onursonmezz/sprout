@@ -28,9 +28,9 @@ export function buildCareInstructionsHtml(plants: Plant[], t: Translations, date
         .join('');
       return `
         <section class="plant">
-          <h2>${escapeHtml(plant.emoji)} ${escapeHtml(plant.name)}</h2>
+          <h2>${escapeHtml(plant.name)}</h2>
           <p class="meta">${escapeHtml(plant.species !== '—' ? plant.species : '')} · ${escapeHtml(roomDisplayName(plant, t))}</p>
-          <p class="watering">💧 ${escapeHtml(t.careInstructions.everyDays(plant.wateringIntervalDays))} · ${plant.wateringAmountMl}ml</p>
+          <p class="watering">${escapeHtml(t.careInstructions.everyDays(plant.wateringIntervalDays))} · ${plant.wateringAmountMl}ml</p>
           ${careRows ? `<ul>${careRows}</ul>` : ''}
         </section>
       `;
@@ -54,7 +54,7 @@ export function buildCareInstructionsHtml(plants: Plant[], t: Translations, date
         </style>
       </head>
       <body>
-        <h1>🌱 ${escapeHtml(t.careInstructions.title)}</h1>
+        <h1>${escapeHtml(t.careInstructions.title)}</h1>
         <p class="subtitle">${escapeHtml(dateRangeLabel ?? '')}</p>
         ${rows}
         <p class="footer">${escapeHtml(t.careInstructions.footer)}</p>

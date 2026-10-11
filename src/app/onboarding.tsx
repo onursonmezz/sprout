@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -8,6 +9,9 @@ import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { useSettings } from '@/context/settings-context';
 import { useTheme } from '@/hooks/use-theme';
+
+/** One line icon per slide, in the order the slides are written in the translations. */
+const SLIDE_ICONS: (keyof typeof Ionicons.glyphMap)[] = ['leaf-outline', 'notifications-outline', 'flower-outline'];
 
 export default function OnboardingScreen() {
   const colors = useTheme();
@@ -46,7 +50,7 @@ export default function OnboardingScreen() {
       <GlowBackground />
       <View style={styles.content}>
         <View style={[styles.iconWrap, { backgroundColor: colors.tintMuted }]}>
-          <Text style={styles.iconEmoji}>{slide.emoji}</Text>
+          <Ionicons name={SLIDE_ICONS[index] ?? 'leaf-outline'} size={38} color={colors.tintBright} />
         </View>
         <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{slide.title}</Text>
         <Text style={[styles.body, { color: colors.textSecondary }]}>{slide.body}</Text>
@@ -92,7 +96,6 @@ const styles = StyleSheet.create({
   safe: { flex: 1, justifyContent: 'space-between' },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: Spacing.five, gap: Spacing.three },
   iconWrap: { width: 80, height: 80, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
-  iconEmoji: { fontSize: 36 },
   title: { fontSize: 30, textAlign: 'center' },
   body: { fontSize: 15, textAlign: 'center', lineHeight: 22 },
   note: { borderRadius: 16, padding: Spacing.three, gap: 4, marginTop: Spacing.two },

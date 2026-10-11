@@ -132,7 +132,7 @@ export default function TourScreen() {
 
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
         <GlassCard style={styles.plantCard}>
-          <PlantPhoto plant={plant} height={250} emojiSize={90} />
+          <PlantPhoto plant={plant} height={250} iconSize={90} />
           <View style={styles.plantInfo}>
             <Text style={[styles.plantName, { color: colors.text }]}>{plant.name}</Text>
             <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>
