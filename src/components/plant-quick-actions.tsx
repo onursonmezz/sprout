@@ -15,7 +15,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { hapticSuccess } from '@/utils/haptics';
 import { effectiveWateringInterval, softenIntervalAdjust, WINDOW_DISTANCE_OPTIONS } from '@/utils/watering-algorithm';
 
-type View_ = 'menu' | 'place' | 'pot' | 'photo' | 'journal';
+type View_ = 'menu' | 'place' | 'pot' | 'photo' | 'journal' | 'delete';
 
 const POT_SIZES = [
   { key: 'small', cm: 10 },
@@ -28,7 +28,7 @@ const POT_SIZES = [
  * actions that actually do them, so they are not typed in by hand. */
 const JOURNAL_TYPES: JournalEntryType[] = ['newLeaf', 'fertilized', 'pruned', 'note'];
 
-const MENU: { view: Exclude<View_, 'menu'>; icon: keyof typeof Ionicons.glyphMap }[] = [
+const MENU: { view: Exclude<View_, 'menu' | 'delete'>; icon: keyof typeof Ionicons.glyphMap }[] = [
   { view: 'place', icon: 'location-outline' },
   { view: 'pot', icon: 'flower-outline' },
   { view: 'photo', icon: 'camera-outline' },
@@ -75,7 +75,7 @@ export function PlantQuickActions() {
   const colors = useTheme();
   const insets = useSafeAreaInsets();
   const { t } = useLanguage();
-  const { quickActionsPlantId, closeQuickActions, getPlant, changePlantConditions, updatePlant, addJournalEntry } = usePlants();
+  const { quickActionsPlantId, closeQuickActions, getPlant, changePlantConditions, updatePlant, addJournalEntry, deletePlant } = usePlants();
   const { seasonalAdjustment, heatingOn, latitude } = useSettings();
   const plant = quickActionsPlantId ? getPlant(quickActionsPlantId) : undefined;
 
@@ -210,6 +210,32 @@ export function PlantQuickActions() {
                   <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
                 </Pressable>
               ))}
+
+            {view === 'menu' && (
+              <Pressable onPress={() => setView('delete')} style={[styles.menuRow, { backgroundColor: colors.backgroundSelected }]}>
+                <Ionicons name="trash-outline" size={20} color={colors.late} />
+                <Text style={[styles.menuText, { color: colors.late }]}>{t.quick.actions.delete}</Text>
+              </Pressable>
+            )}
+
+            {view === 'delete' && (
+              <>
+                <Text style={[styles.confirmText, { color: colors.text }]}>{t.addPlant.deleteConfirm}</Text>
+                <View style={styles.confirmRow}>
+                  <Pressable onPress={() => setView('menu')} style={[styles.confirmButton, { borderColor: colors.border }]}>
+                    <Text style={[styles.saveText, { color: colors.text }]}>{t.prop.cancel}</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      closeQuickActions();
+                      deletePlant(plant.id);
+                    }}
+                    style={[styles.confirmButton, { borderColor: colors.late }]}>
+                    <Text style={[styles.saveText, { color: colors.late }]}>{t.addPlant.deleteConfirmYes}</Text>
+                  </Pressable>
+                </View>
+              </>
+            )}
 
             {view === 'place' && (
               <>
@@ -366,4 +392,7 @@ const styles = StyleSheet.create({
   note: { fontSize: 12, lineHeight: 17 },
   save: { overflow: 'hidden', borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
   saveText: { fontSize: 15, fontWeight: '700' },
+  confirmText: { fontSize: 14, lineHeight: 20 },
+  confirmRow: { flexDirection: 'row', gap: 10 },
+  confirmButton: { flex: 1, borderWidth: 1, borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
 });
