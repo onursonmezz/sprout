@@ -9,6 +9,7 @@ import ViewShot, { ViewShotRef } from 'react-native-view-shot';
 import { FadeToBackground, GlowBackground, GradientFill } from '@/components/glass';
 import { CircularProgress } from '@/components/circular-progress';
 import { GrowthAlbum } from '@/components/growth-album';
+import { IssueStrip } from '@/components/issue-strip';
 import { PhotoPicker } from '@/components/photo-picker';
 import { PropagationSection } from '@/components/propagation-section';
 import { PlantPhoto } from '@/components/plant-avatar';
@@ -21,7 +22,6 @@ import { useLanguage } from '@/context/language-context';
 import { roomDisplayName } from '@/constants/rooms';
 import { careJournalType, CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
 import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
-import { symptomEmoji, symptomKeys, SymptomKey } from '@/data/troubleshooting';
 import { careTaskInSeason, daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 import { useSettings } from '@/context/settings-context';
@@ -30,20 +30,27 @@ import { rainDaysAgo } from '@/utils/watering-algorithm';
 const TAB_KEYS = ['overview', 'care', 'journal', 'history'] as const;
 
 const CARE_TYPES: CareTaskType[] = ['fertilize', 'rotate', 'mist', 'prune', 'repot'];
-const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
+type IconName = keyof typeof Ionicons.glyphMap;
+const CARE_ICON: Record<CareTaskType, IconName> = {
+  fertilize: 'flask-outline',
+  rotate: 'sync-outline',
+  mist: 'water-outline',
+  prune: 'cut-outline',
+  repot: 'flower-outline',
+};
 const CARE_DEFAULT_INTERVAL: Record<CareTaskType, number> = { fertilize: 21, rotate: 14, mist: 3, prune: 30, repot: 365 };
 
 const JOURNAL_TYPES: JournalEntryType[] = ['watered', 'newLeaf', 'fertilized', 'repotted', 'note'];
-const JOURNAL_EMOJI: Record<JournalEntryType, string> = {
-  watered: '💧',
-  newLeaf: '🌿',
-  fertilized: '🌱',
-  repotted: '🪴',
-  rotated: '🔄',
-  misted: '💦',
-  pruned: '✂️',
-  photo: '📷',
-  note: '📝',
+const JOURNAL_ICON: Record<JournalEntryType, IconName> = {
+  watered: 'water-outline',
+  newLeaf: 'leaf-outline',
+  fertilized: 'flask-outline',
+  repotted: 'flower-outline',
+  rotated: 'sync-outline',
+  misted: 'water-outline',
+  pruned: 'cut-outline',
+  photo: 'camera-outline',
+  note: 'create-outline',
 };
 
 /** Days the plant has been with the user: from the date they said they got
@@ -319,7 +326,7 @@ export default function PlantDetailScreen() {
                 />
               )}
 
-              <TroubleshootingSection colors={colors} t={t} />
+              <IssueStrip />
             </>
           )}
 
@@ -471,7 +478,10 @@ function GrowthSection({
       </View>
 
       <View style={[styles.growthCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
-        <Text style={[styles.growthLabel, { color: colors.text }]}>❄️ {t.plantDetail.hardiness}</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <Ionicons name="snow-outline" size={15} color={colors.tintBright} />
+          <Text style={[styles.growthLabel, { color: colors.text }]}>{t.plantDetail.hardiness}</Text>
+        </View>
         <Text style={[styles.growthNote, { color: colors.textSecondary }]}>{t.plantDetail.hardinessNote(survivalMinC)}</Text>
       </View>
 
@@ -499,41 +509,6 @@ function GrowthSection({
       <Pressable onPress={onCheckLight} style={[styles.addButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.addButtonText, { color: colors.tint }]}>{t.lightMeter.checkForPlant}</Text>
       </Pressable>
-    </View>
-  );
-}
-
-function TroubleshootingSection({ colors, t }: { colors: ReturnType<typeof useTheme>; t: Translations }) {
-  const [expanded, setExpanded] = useState<SymptomKey | null>(null);
-
-  return (
-    <View style={{ gap: Spacing.two, marginTop: Spacing.three }}>
-      <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.troubleshooting.sectionTitle}</Text>
-      <Text style={[styles.symptomIntro, { color: colors.textSecondary }]}>{t.troubleshooting.intro}</Text>
-      <View style={{ gap: 6 }}>
-        {symptomKeys.map((key) => {
-          const symptom = t.troubleshooting.symptoms[key];
-          const isOpen = expanded === key;
-          return (
-            <View key={key} style={[styles.symptomCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
-              <Pressable onPress={() => setExpanded(isOpen ? null : key)} style={styles.symptomRow}>
-                <Text style={{ fontSize: 16 }}>{symptomEmoji[key]}</Text>
-                <Text style={[styles.symptomLabel, { color: colors.text }]}>{symptom.label}</Text>
-                <Ionicons name={isOpen ? 'chevron-up' : 'chevron-down'} size={16} color={colors.textSecondary} />
-              </Pressable>
-              {isOpen && (
-                <View style={styles.symptomCauses}>
-                  {symptom.causes.map((cause, i) => (
-                    <Text key={i} style={[styles.symptomCauseText, { color: colors.textSecondary }]}>
-                      • {cause}
-                    </Text>
-                  ))}
-                </View>
-              )}
-            </View>
-          );
-        })}
-      </View>
     </View>
   );
 }
@@ -588,7 +563,7 @@ function CareTab({
                   setPickerOpen(false);
                 }}
                 style={styles.pickerOption}>
-                <Text style={{ fontSize: 16 }}>{CARE_EMOJI[ty]}</Text>
+                <Ionicons name={CARE_ICON[ty]} size={18} color={colors.tintBright} />
                 <Text style={[styles.pickerOptionText, { color: colors.text }]}>{t.plantDetail.care.taskNames[ty]}</Text>
               </Pressable>
             ))
@@ -597,7 +572,7 @@ function CareTab({
       )}
 
       <CareRow
-        emoji="💧"
+        icon="water-outline"
         title={t.plantDetail.care.watering}
         subtitle={`${t.plantDetail.care.everyDays(wateringInterval)} · ${plant.wateringAmountMl}ml`}
         nextText={
@@ -616,7 +591,7 @@ function CareTab({
         return (
           <CareRow
             key={i}
-            emoji={CARE_EMOJI[task.type]}
+            icon={CARE_ICON[task.type]}
             title={t.plantDetail.care.taskNames[task.type]}
             subtitle={t.plantDetail.care.everyDays(task.intervalDays)}
             nextText={
@@ -639,7 +614,7 @@ function CareTab({
 }
 
 function CareRow({
-  emoji,
+  icon,
   title,
   subtitle,
   nextText,
@@ -649,7 +624,7 @@ function CareRow({
   onComplete,
   onRemove,
 }: {
-  emoji: string;
+  icon: IconName;
   title: string;
   subtitle: string;
   nextText: string;
@@ -662,7 +637,7 @@ function CareRow({
   return (
     <View style={[styles.careRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
       <View style={[styles.careIcon, { backgroundColor: colors.tintMuted }]}>
-        <Text style={{ fontSize: 18 }}>{emoji}</Text>
+        <Ionicons name={icon} size={19} color={colors.tintBright} />
       </View>
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={[styles.careTitle, { color: colors.text }]}>{title}</Text>
@@ -746,7 +721,7 @@ function JournalTab({
                   styles.journalTypeChip,
                   { borderColor: colors.border, backgroundColor: type === ty ? colors.tintMuted : colors.background },
                 ]}>
-                <Text style={{ fontSize: 14 }}>{JOURNAL_EMOJI[ty]}</Text>
+                <Ionicons name={JOURNAL_ICON[ty]} size={15} color={colors.tintBright} />
                 <Text style={[styles.journalTypeText, { color: colors.text }]}>{t.plantDetail.journal.typeNames[ty]}</Text>
               </Pressable>
             ))}
@@ -792,7 +767,7 @@ function JournalTab({
           <View key={entry.id} style={styles.timelineRow}>
             <View style={styles.timelineIconColumn}>
               <View style={[styles.timelineIcon, { backgroundColor: colors.tintMuted }]}>
-                <Text style={{ fontSize: 14 }}>{JOURNAL_EMOJI[entry.type]}</Text>
+                <Ionicons name={JOURNAL_ICON[entry.type]} size={15} color={colors.tintBright} />
               </View>
               {i < entries.length - 1 && <View style={[styles.timelineLine, { backgroundColor: colors.border }]} />}
             </View>
