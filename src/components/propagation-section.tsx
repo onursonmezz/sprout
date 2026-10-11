@@ -174,6 +174,10 @@ export function PropagationStrip() {
   const { t } = useLanguage();
   const { projects, startProject } = usePropagation();
 
+  // Nothing to show to someone who has never taken a cutting; the first one
+  // is started from a plant's own page, and the strip appears from then on.
+  if (projects.length === 0) return null;
+
   return (
     <View style={{ gap: Spacing.two, marginBottom: Spacing.three }}>
       <Text style={[styles.title, { color: colors.text }]}>{t.prop.title}</Text>
