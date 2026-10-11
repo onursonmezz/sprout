@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 import { loadJSON, saveJSON } from '@/utils/storage';
+import { ForecastDay } from '@/utils/seasonal-tasks';
 import { isHeatingSeasonNow } from '@/utils/watering-algorithm';
 
 const STORAGE_KEY = 'sprout:settings';
@@ -16,6 +17,12 @@ type PersistedSettings = {
   latitude: number | null;
   /** Date (YYYY-MM-DD) of the most recent rainy day nearby, if any. */
   lastRainDate: string | null;
+  /** Today and the next days' coldest/hottest temperatures, from the last lookup. */
+  forecast: ForecastDay[];
+  /** When the weekly plant tour was last finished. */
+  lastTourDate: string | null;
+  /** Monthly tasks ticked off, for the month named (YYYY-MM). */
+  monthlyTasksDone: { month: string; keys: string[] };
   /** The user's actual heating choice — read by the watering algorithm. */
   heatingOn: boolean;
   /** What the calendar said last time use-heating-season-prompt.ts checked —
@@ -42,6 +49,9 @@ const defaults: PersistedSettings = {
   dayLengthHours: null,
   latitude: null,
   lastRainDate: null,
+  forecast: [],
+  lastTourDate: null,
+  monthlyTasksDone: { month: '', keys: [] },
   heatingOn: isHeatingSeasonNow(),
   lastHeatingSeasonState: isHeatingSeasonNow(),
   vacationMode: false,
@@ -65,7 +75,13 @@ type SettingsContextValue = {
   latitude: number | null;
   lastRainDate: string | null;
   /** Stores everything one weather lookup returned, in a single update. */
-  setLocalConditions: (c: { dayLengthHours: number | null; latitude: number; lastRainDate: string | null }) => void;
+  forecast: ForecastDay[];
+  setLocalConditions: (c: { dayLengthHours: number | null; latitude: number; lastRainDate: string | null; forecast: ForecastDay[] }) => void;
+  lastTourDate: Date | null;
+  setLastTourDate: (d: Date) => void;
+  monthlyTasksDone: { month: string; keys: string[] };
+  /** Ticks or unticks one of this month's tasks. */
+  toggleMonthlyTask: (month: string, key: string) => void;
   heatingOn: boolean;
   setHeatingOn: (v: boolean) => void;
   lastHeatingSeasonState: boolean;
@@ -139,7 +155,18 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             latitude: c.latitude,
             // A lookup only sees the past week; keep an older known rainy day.
             lastRainDate: c.lastRainDate ?? prev.lastRainDate,
+            forecast: c.forecast,
           })),
+        forecast: settings.forecast,
+        lastTourDate: settings.lastTourDate ? new Date(settings.lastTourDate) : null,
+        setLastTourDate: (d) => update('lastTourDate', d.toISOString()),
+        monthlyTasksDone: settings.monthlyTasksDone,
+        toggleMonthlyTask: (month, key) =>
+          setSettings((prev) => {
+            // A new month starts with nothing ticked.
+            const keys = prev.monthlyTasksDone.month === month ? prev.monthlyTasksDone.keys : [];
+            return { ...prev, monthlyTasksDone: { month, keys: keys.includes(key) ? keys.filter((k) => k !== key) : [...keys, key] } };
+          }),
         heatingOn: settings.heatingOn,
         setHeatingOn: (v) => update('heatingOn', v),
         lastHeatingSeasonState: settings.lastHeatingSeasonState,

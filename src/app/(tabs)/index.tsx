@@ -14,8 +14,9 @@ import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { CareTaskType, Plant } from '@/data/plants';
-import { daysUntilNext } from '@/utils/care';
+import { careTaskDue } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
+import { monthKey, monthlyTasks, photoDue, temperatureAlerts } from '@/utils/seasonal-tasks';
 import { computeCareStats } from '@/utils/stats';
 
 const CARE_ICON: Record<CareTaskType, keyof typeof Ionicons.glyphMap> = {
@@ -51,7 +52,8 @@ export default function TodayScreen() {
   const { t } = useLanguage();
   const { plants, snoozePlant, completeCareTask, openQuickActions } = usePlants();
   const handleWater = useWaterPlant();
-  const { dayLengthHours, vacationMode, vacationStart, vacationEnd } = useSettings();
+  const { dayLengthHours, vacationMode, vacationStart, vacationEnd, heatingOn, forecast, lastTourDate, monthlyTasksDone, toggleMonthlyTask } =
+    useSettings();
 
   const todayLabel = new Date().toLocaleDateString(t.today.dateLocale, {
     weekday: 'long',
@@ -98,12 +100,22 @@ export default function TodayScreen() {
       plants.flatMap((plant) =>
         plant.care
           .map((task, index) => ({ plant, task, index }))
-          .filter(({ task }) => daysUntilNext(task.intervalDays, task.lastDoneDaysAgo) <= 0)
+          .filter(({ task }) => careTaskDue(task, plant))
       ),
     [plants]
   );
 
   const needsAttentionCount = needsAttention.length;
+
+  // Things to do beyond watering: a warning for outdoor plants, the weekly
+  // tour, a monthly growth photo, and this month's tasks.
+  const now = new Date();
+  const alert = useMemo(() => temperatureAlerts(plants, forecast)[0], [plants, forecast]);
+  const tourDue = plants.length > 0 && (!lastTourDate || dayDiff(lastTourDate) >= 7);
+  const photoPlants = useMemo(() => plants.filter(photoDue), [plants]);
+  const tasks = useMemo(() => monthlyTasks(plants, new Date(), heatingOn), [plants, heatingOn]);
+  const thisMonthKey = monthKey(now);
+  const doneKeys = monthlyTasksDone.month === thisMonthKey ? monthlyTasksDone.keys : [];
   const heroPlant = needsAttention[0] ?? comingUp[0] ?? plants[0];
 
   return (
@@ -133,6 +145,15 @@ export default function TodayScreen() {
             <GlassCard style={styles.dayLengthChip}>
               <Ionicons name="sunny" size={13} color={colors.late} />
               <Text style={[styles.dayLength, { color: colors.textSecondary }]}>{formatDayLength(dayLengthHours, t)}</Text>
+            </GlassCard>
+          )}
+
+          {alert && (
+            <GlassCard style={[styles.vacationCard, { borderColor: colors.late }]}>
+              <Ionicons name={alert.kind === 'cold' ? 'snow-outline' : 'thermometer-outline'} size={20} color={colors.late} />
+              <Text style={[styles.vacationText, { color: colors.text }]}>
+                {alert.kind === 'cold' ? t.monthly.alertCold(alert.dayOffset, alert.tempC, alert.plants) : t.monthly.alertHeat(alert.dayOffset, alert.tempC)}
+              </Text>
             </GlassCard>
           )}
 
@@ -167,6 +188,38 @@ export default function TodayScreen() {
             <Stat value={String(streak)} label={t.today.dayStreak} />
             <Stat value={String(thisMonth)} label={t.today.thisMonth} />
           </View>
+
+          {tourDue && (
+            <Pressable onPress={() => router.push('/tour')}>
+              <GlassCard style={styles.actionCard}>
+                <View style={[styles.careIcon, { backgroundColor: colors.track }]}>
+                  <Ionicons name="walk-outline" size={20} color={colors.tintBright} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.plantName, { color: colors.text }]}>{t.today.tourCardTitle}</Text>
+                  <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>{t.today.tourCardSub(plants.length)}</Text>
+                </View>
+                <GradientButton label={t.today.tourStart} />
+              </GlassCard>
+            </Pressable>
+          )}
+
+          {!tourDue && photoPlants.length > 0 && (
+            <Pressable onPress={() => router.push(`/plant/${photoPlants[0].id}`)}>
+              <GlassCard style={styles.actionCard}>
+                <View style={[styles.careIcon, { backgroundColor: colors.track }]}>
+                  <Ionicons name="camera-outline" size={20} color={colors.tintBright} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.plantName, { color: colors.text }]}>{t.today.photoCardTitle}</Text>
+                  <Text style={[styles.plantMeta, { color: colors.textSecondary }]}>
+                    {t.today.photoCardSub(photoPlants[0].name, photoPlants.length - 1)}
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+              </GlassCard>
+            </Pressable>
+          )}
 
           <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.today.needsAttention}</Text>
           <View style={{ gap: Spacing.two }}>
@@ -271,6 +324,35 @@ export default function TodayScreen() {
               </Pressable>
             ))}
           </View>
+
+          {tasks.length > 0 && (
+            <>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.monthly.title(t.calendar.months[now.getMonth()])}</Text>
+              <GlassCard style={styles.tasksCard}>
+                {tasks.map((task, i) => {
+                  const done = doneKeys.includes(task.kind);
+                  return (
+                    <Pressable
+                      key={task.kind}
+                      onPress={() => {
+                        toggleMonthlyTask(thisMonthKey, task.kind);
+                        hapticTap();
+                      }}
+                      style={[styles.taskRow, i > 0 && { borderTopWidth: 1, borderTopColor: colors.glassBorder }]}>
+                      <Ionicons name={done ? 'checkmark-circle' : 'ellipse-outline'} size={22} color={done ? colors.tintBright : colors.textSecondary} />
+                      <Text
+                        style={[
+                          styles.taskText,
+                          { color: done ? colors.textSecondary : colors.text, textDecorationLine: done ? 'line-through' : 'none' },
+                        ]}>
+                        {t.monthly.tasks[task.kind](task.plants)}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </GlassCard>
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -316,6 +398,10 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 16, fontWeight: '700', marginTop: Spacing.one },
   vacationCard: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 16 },
   vacationText: { flex: 1, fontSize: 13, lineHeight: 18 },
+  actionCard: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12, borderRadius: 18 },
+  tasksCard: { paddingHorizontal: 14, paddingVertical: 2 },
+  taskRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, paddingVertical: 12 },
+  taskText: { flex: 1, fontSize: 13, lineHeight: 19 },
   emptyCard: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, padding: Spacing.three },
   emptyText: { fontSize: 13, flex: 1 },
   attentionCard: { flexDirection: 'row', alignItems: 'center', padding: Spacing.two, gap: 12 },

@@ -8,6 +8,7 @@ import ViewShot, { ViewShotRef } from 'react-native-view-shot';
 
 import { FadeToBackground, GlowBackground, GradientFill } from '@/components/glass';
 import { CircularProgress } from '@/components/circular-progress';
+import { GrowthAlbum } from '@/components/growth-album';
 import { PhotoPicker } from '@/components/photo-picker';
 import { PlantPhoto } from '@/components/plant-avatar';
 import { Spacing } from '@/constants/theme';
@@ -40,6 +41,7 @@ const JOURNAL_EMOJI: Record<JournalEntryType, string> = {
   rotated: '🔄',
   misted: '💦',
   pruned: '✂️',
+  photo: '📷',
   note: '📝',
 };
 
@@ -237,6 +239,8 @@ export default function PlantDetailScreen() {
 
           {tab === 'overview' && (
             <>
+              <GrowthAlbum plant={plant} />
+
               {speciesInfo && (
                 <View style={[styles.speciesCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
                   <Text style={[styles.speciesCardTitle, { color: colors.text }]}>{t.plantDetail.speciesGuideTitle}</Text>

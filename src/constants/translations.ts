@@ -11,6 +11,20 @@ function approxAmountTr(ml: number): string {
   return halfGlasses === 1 ? 'yarım su bardağı' : `yaklaşık ${decimalTr(halfGlasses / 2)} su bardağı`;
 }
 
+/** "A, B and C" — at most three names, then a count of the rest. */
+function namesTr(names: string[]): string {
+  const shown = names.slice(0, 3);
+  const rest = names.length - shown.length;
+  if (rest > 0) return `${shown.join(', ')} ve ${rest} bitki daha`;
+  return shown.length <= 1 ? (shown[0] ?? '') : `${shown.slice(0, -1).join(', ')} ve ${shown[shown.length - 1]}`;
+}
+function namesEn(names: string[]): string {
+  const shown = names.slice(0, 3);
+  const rest = names.length - shown.length;
+  if (rest > 0) return `${shown.join(', ')} and ${rest} more`;
+  return shown.length <= 1 ? (shown[0] ?? '') : `${shown.slice(0, -1).join(', ')} and ${shown[shown.length - 1]}`;
+}
+
 /** A cup is about 240 ml. */
 function approxAmountEn(ml: number): string {
   if (ml >= 1000) return `about ${Math.round(ml / 250) / 4} litres`;
@@ -31,6 +45,11 @@ export const translations = {
       dayStreak: 'Days on time',
       thisMonth: 'This month',
       needsAttention: 'Time to water',
+      tourCardTitle: 'Weekly plant tour',
+      tourCardSub: (n: number) => `A two-minute look at your ${n} plants.`,
+      tourStart: 'Start',
+      photoCardTitle: 'Photo time',
+      photoCardSub: (name: string, others: number) => (others > 0 ? `${name} and ${others} more are due a growth photo.` : `${name} is due a growth photo.`),
       vacationOn: (until: string) => `Vacation mode is on: no reminders until ${until}.`,
       vacationBack: (n: number) => `Welcome back. ${n} plants passed their watering day while you were away; your streak is kept.`,
       heroWaiting: (n: number) => (n === 1 ? '1 plant is\nwaiting for you' : `${n} plants are\nwaiting for you`),
@@ -254,7 +273,7 @@ export const translations = {
       journal: {
         addEntry: '+ Add journal entry',
         empty: 'No journal entries yet.',
-        typeNames: { watered: 'Watered', newLeaf: 'New leaf', fertilized: 'Fertilized', repotted: 'Repotted', rotated: 'Rotated', misted: 'Misted', pruned: 'Pruned', note: 'Note' },
+        typeNames: { watered: 'Watered', newLeaf: 'New leaf', fertilized: 'Fertilized', repotted: 'Repotted', rotated: 'Rotated', misted: 'Misted', pruned: 'Pruned', photo: 'Growth photo', note: 'Note' },
         titlePlaceholder: 'Title',
         descriptionPlaceholder: "What's new with this plant?",
         save: 'Save entry',
@@ -771,6 +790,56 @@ export const translations = {
       shareButton: 'Share',
       sharing: 'Preparing…',
     },
+    tour: {
+      title: 'Weekly tour',
+      progress: (i: number, n: number) => `Plant ${i} of ${n}`,
+      question: 'How does it look?',
+      newLeaf: 'It has a new leaf',
+      issue: 'Something is wrong',
+      fine: 'Looks fine',
+      whichIssue: 'What do you see?',
+      back: 'Back',
+      photoDue: 'Take this month\'s growth photo',
+      journalLeaf: 'Noticed on the weekly tour.',
+      journalIssue: 'Noticed on the weekly tour.',
+      summaryTitle: 'Tour done',
+      summaryChecked: (n: number) => `You looked at ${n} plants.`,
+      summaryLeaves: (names: string) => `New leaves: ${names}`,
+      summaryAllFine: 'Everything looks fine. See you next week.',
+      openGuide: 'Open the guide',
+      done: 'Done',
+      close: 'Close',
+      noPlants: 'Add a plant first.',
+    },
+    album: {
+      title: 'Growth album',
+      empty: 'Take a photo about once a month and watch it grow.',
+      last: (when: string) => `Last photo: ${when}`,
+      due: (when: string) => `Last photo: ${when} · time for a new one`,
+      add: 'Add photo',
+      camera: 'Camera',
+      library: 'Gallery',
+      compare: 'Before / after',
+      before: 'Before',
+      after: 'Now',
+      span: (days: number) => `${days} days apart`,
+    },
+    monthly: {
+      title: (month: string) => `${month} tasks`,
+      tasks: {
+        fertilizeStart: (n: string[]) => `Time to start feeding: ${namesEn(n)}.`,
+        fertilizeStop: (n: string[]) => `Stop feeding, they are going to rest: ${namesEn(n)}.`,
+        bringIn: (n: string[]) => `Nights are getting cold; plan to bring in: ${namesEn(n)}.`,
+        takeOut: (n: string[]) => `It is warm enough to move outside: ${namesEn(n)}.`,
+        heating: (n: string[]) => `Heating dries the air; keep away from radiators and add humidity: ${namesEn(n)}.`,
+        repotSeason: (n: string[]) => `Best time of year to repot: ${namesEn(n)}.`,
+        coldWindow: (_: string[]) => 'Keep leaves from touching cold glass; pull window plants in a little.',
+        vacation: (_: string[]) => 'Going away? Turn on vacation mode in Settings and share the care sheet.',
+        dust: (_: string[]) => 'Wipe dust off the leaves with a damp cloth so they get more light.',
+      },
+      alertCold: (offset: number, temp: number, names: string[]) => `${['Tonight', 'Tomorrow night', 'In two nights'][offset] ?? 'Soon'} it drops to ${temp} °C. Bring in: ${namesEn(names)}.`,
+      alertHeat: (offset: number, temp: number) => `${['Today', 'Tomorrow', 'In two days'][offset] ?? 'Soon'} it reaches ${temp} °C. Shade outdoor plants at midday and water early.`,
+    },
     quick: {
       actions: { place: 'Move it', pot: 'Change its pot', photo: 'Change its photo', journal: 'Add a journal entry' },
       save: 'Save',
@@ -856,6 +925,11 @@ export const translations = {
       dayStreak: 'Gecikmesiz gün',
       thisMonth: 'Bu ay',
       needsAttention: 'Sulama zamanı',
+      tourCardTitle: 'Haftalık bitki turu',
+      tourCardSub: (n: number) => `${n} bitkine iki dakikada göz at.`,
+      tourStart: 'Başla',
+      photoCardTitle: 'Fotoğraf zamanı',
+      photoCardSub: (name: string, others: number) => (others > 0 ? `${name} ve ${others} bitkinin büyüme fotoğrafı zamanı geldi.` : `${name} için büyüme fotoğrafı zamanı geldi.`),
       vacationOn: (until: string) => `Tatil modu açık: ${until} tarihine kadar hatırlatma yok.`,
       vacationBack: (n: number) => `Hoş geldin. Sen yokken ${n} bitkinin sulama günü geçti; gecikmesiz gün sayın bozulmadı.`,
       heroWaiting: (n: number) => `${n} bitki\nseni bekliyor`,
@@ -1077,7 +1151,7 @@ export const translations = {
       journal: {
         addEntry: '+ Günlük kaydı ekle',
         empty: 'Henüz günlük kaydı yok.',
-        typeNames: { watered: 'Sulandı', newLeaf: 'Yeni yaprak', fertilized: 'Gübrelendi', repotted: 'Saksı değişti', rotated: 'Çevrildi', misted: 'Nemlendirildi', pruned: 'Budandı', note: 'Not' },
+        typeNames: { watered: 'Sulandı', newLeaf: 'Yeni yaprak', fertilized: 'Gübrelendi', repotted: 'Saksı değişti', rotated: 'Çevrildi', misted: 'Nemlendirildi', pruned: 'Budandı', photo: 'Büyüme fotoğrafı', note: 'Not' },
         titlePlaceholder: 'Başlık',
         descriptionPlaceholder: 'Bu bitkide ne var ne yok?',
         save: 'Kaydı ekle',
@@ -1593,6 +1667,56 @@ export const translations = {
       cancel: 'Vazgeç',
       shareButton: 'Paylaş',
       sharing: 'Hazırlanıyor…',
+    },
+    tour: {
+      title: 'Haftalık tur',
+      progress: (i: number, n: number) => `${n} bitkiden ${i}.`,
+      question: 'Nasıl görünüyor?',
+      newLeaf: 'Yeni yaprak açmış',
+      issue: 'Bir sorun var',
+      fine: 'İyi görünüyor',
+      whichIssue: 'Ne görüyorsun?',
+      back: 'Geri',
+      photoDue: 'Bu ayın büyüme fotoğrafını çek',
+      journalLeaf: 'Haftalık turda fark edildi.',
+      journalIssue: 'Haftalık turda fark edildi.',
+      summaryTitle: 'Tur tamam',
+      summaryChecked: (n: number) => `${n} bitkine göz attın.`,
+      summaryLeaves: (names: string) => `Yeni yaprak: ${names}`,
+      summaryAllFine: 'Her şey yolunda görünüyor. Haftaya görüşürüz.',
+      openGuide: 'Rehberi aç',
+      done: 'Bitti',
+      close: 'Kapat',
+      noPlants: 'Önce bir bitki ekle.',
+    },
+    album: {
+      title: 'Büyüme albümü',
+      empty: 'Ayda bir fotoğraf çek, büyümesini izle.',
+      last: (when: string) => `Son fotoğraf: ${when}`,
+      due: (when: string) => `Son fotoğraf: ${when} · yenisinin zamanı geldi`,
+      add: 'Fotoğraf ekle',
+      camera: 'Kamera',
+      library: 'Galeri',
+      compare: 'Önce / sonra',
+      before: 'Önce',
+      after: 'Şimdi',
+      span: (days: number) => `Arada ${days} gün var`,
+    },
+    monthly: {
+      title: (month: string) => `${month} ayı görevleri`,
+      tasks: {
+        fertilizeStart: (n: string[]) => `Gübrelemeye başlama zamanı: ${namesTr(n)}.`,
+        fertilizeStop: (n: string[]) => `Gübrelemeyi bırak, dinlenmeye geçiyorlar: ${namesTr(n)}.`,
+        bringIn: (n: string[]) => `Geceler soğuyor; içeri almayı planla: ${namesTr(n)}.`,
+        takeOut: (n: string[]) => `Havalar ısındı; dışarı çıkarabilirsin: ${namesTr(n)}.`,
+        heating: (n: string[]) => `Kalorifer havayı kurutuyor; petekten uzaklaştır ve nem ver: ${namesTr(n)}.`,
+        repotSeason: (n: string[]) => `Saksı değiştirmek için yılın en iyi dönemi: ${namesTr(n)}.`,
+        coldWindow: (_: string[]) => 'Yapraklar soğuk cama değmesin; pencere önündekileri biraz içeri çek.',
+        vacation: (_: string[]) => "Tatile çıkıyorsan Ayarlar'dan tatil modunu aç ve bakım kartını paylaş.",
+        dust: (_: string[]) => 'Yaprakların tozunu nemli bir bezle sil; ışığı daha iyi alırlar.',
+      },
+      alertCold: (offset: number, temp: number, names: string[]) => `${['Bu gece', 'Yarın gece', 'İki gün sonra gece'][offset] ?? 'Yakında'} hava ${temp} °C'ye düşecek. İçeri al: ${namesTr(names)}.`,
+      alertHeat: (offset: number, temp: number) => `${['Bugün', 'Yarın', 'İki gün sonra'][offset] ?? 'Yakında'} hava ${temp} °C olacak. Balkondakileri öğle güneşinden koru, sabah erken sula.`,
     },
     quick: {
       actions: { place: 'Yerini değiştir', pot: 'Saksısını değiştir', photo: 'Fotoğrafını değiştir', journal: 'Günlük kaydı ekle' },

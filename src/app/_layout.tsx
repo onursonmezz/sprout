@@ -52,6 +52,7 @@ function Navigation() {
         <Stack.Screen name="plant/[id]" />
         <Stack.Screen name="add-plant" options={{ presentation: 'modal' }} />
         <Stack.Screen name="light-meter" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="tour" options={{ presentation: 'modal' }} />
         <Stack.Screen name="guide/article/[key]" />
         <Stack.Screen name="guide/issue/[key]" />
         <Stack.Screen name="guide/issues" />

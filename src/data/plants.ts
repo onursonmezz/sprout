@@ -11,7 +11,7 @@ export type CareTask = {
   lastDoneDaysAgo: number;
 };
 
-export type JournalEntryType = 'watered' | 'newLeaf' | 'fertilized' | 'repotted' | 'rotated' | 'misted' | 'pruned' | 'note';
+export type JournalEntryType = 'watered' | 'newLeaf' | 'fertilized' | 'repotted' | 'rotated' | 'misted' | 'pruned' | 'photo' | 'note';
 
 /** The journal entry type a completed care task is logged as. */
 export const careJournalType: Record<CareTaskType, JournalEntryType> = {
