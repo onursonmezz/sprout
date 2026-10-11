@@ -86,7 +86,7 @@ export default function TourScreen() {
           )}
 
           {issues.map((o) => (
-            <Pressable key={o.plantId} onPress={() => o.symptom && router.push(`/guide/issue/${o.symptom}`)}>
+            <Pressable key={o.plantId} onPress={() => o.symptom && router.push({ pathname: '/diagnose', params: { plantId: o.plantId, symptom: o.symptom } })}>
               <GlassCard style={[styles.summaryCard, { borderColor: colors.late }]}>
                 <Ionicons name="alert-circle-outline" size={20} color={colors.late} />
                 <View style={{ flex: 1 }}>

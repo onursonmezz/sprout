@@ -330,7 +330,7 @@ export default function PlantDetailScreen() {
                 />
               )}
 
-              <IssueStrip />
+              <IssueStrip plantId={plant.id} />
             </>
           )}
 

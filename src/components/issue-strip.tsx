@@ -11,11 +11,10 @@ import { useTheme } from '@/hooks/use-theme';
 
 /**
  * "Is something wrong?" on a plant's page: one row of photo cards, one per
- * symptom, scrolled sideways. A card opens that symptom's full guide page
- * (why it happens, how to fix it, whether to worry), so the plant page itself
- * stays short instead of repeating the guide as a long list.
+ * symptom, scrolled sideways. With a plant, a card starts the diagnosis for
+ * that plant and symptom; without one it opens the symptom's guide page.
  */
-export function IssueStrip() {
+export function IssueStrip({ plantId }: { plantId?: string }) {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
@@ -33,7 +32,9 @@ export function IssueStrip() {
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row}>
         {symptomKeys.map((key) => (
-          <Pressable key={key} onPress={() => router.push(`/guide/issue/${key}`)}>
+          <Pressable
+            key={key}
+            onPress={() => (plantId ? router.push({ pathname: '/diagnose', params: { plantId, symptom: key } }) : router.push(`/guide/issue/${key}`))}>
             <GlassCard style={styles.card}>
               <GuideImage imageKey={issueImageKeys[key]} emoji="" backgroundColor={colors.track} style={{ width: 132, height: 112 }} />
               <View style={styles.cardText}>
