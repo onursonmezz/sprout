@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { GlassCard, GlowBackground, GradientButton, GradientFill } from '@/components/glass';
+import { GlassCard, GlowBackground, GradientButton } from '@/components/glass';
 import { PlantAvatar } from '@/components/plant-avatar';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
@@ -68,9 +68,9 @@ function taskOn(p: Plant, task: CareTask, offset: number) {
   const dueIn = daysUntilNext(task.intervalDays, task.lastDoneDaysAgo);
   if (offset > 0) return fallsOn(offset, dueIn, task.intervalDays);
   if (offset === 0 && dueIn <= 0) return true;
-  return (
-    task.lastDoneDaysAgo === -offset || p.journalNotes.some((e) => e.type === careJournalType[task.type] && e.daysAgo === -offset)
-  );
+  // Past days show only what was logged. A task's own "last done" date is not
+  // proof it was done: a new plant's tasks start counting from the day it was added.
+  return p.journalNotes.some((e) => e.type === careJournalType[task.type] && e.daysAgo === -offset);
 }
 
 /** Everything on one day: waterings first, then care tasks. */
@@ -170,8 +170,12 @@ export default function CalendarScreen() {
                 const hasCare = items.some((i) => i.kind === 'care');
                 return (
                   <Pressable key={di} onPress={() => selectDay(offset)} style={styles.dayCell}>
-                    <View style={[styles.dayCircle, isToday && !isSelected && { borderWidth: 1.5, borderColor: colors.tintBright }]}>
-                      {isSelected && <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />}
+                    <View
+                      style={[
+                        styles.dayCircle,
+                        isToday && !isSelected && { borderWidth: 1.5, borderColor: colors.tintBright },
+                        isSelected && { backgroundColor: colors.tint },
+                      ]}>
                       <Text
                         style={[
                           styles.dayText,
@@ -222,6 +226,8 @@ export default function CalendarScreen() {
             {agenda.map((item) => {
               const { plant } = item;
               const isWater = item.kind === 'water';
+              // On today's list, something already done today stays visible as done instead of asking again.
+              const doneToday = isWater ? plant.daysUntilWatering > 0 : daysUntilNext(item.task.intervalDays, item.task.lastDoneDaysAgo) > 0;
               return (
                 <Pressable key={`${item.kind}-${plant.id}-${isWater ? '' : item.index}`} onPress={() => router.push(`/plant/${plant.id}`)}>
                   <GlassCard style={styles.agendaRow}>
@@ -244,8 +250,11 @@ export default function CalendarScreen() {
                       </View>
                     </View>
                     {/* Past days show what was done; today offers the action; future days are just a plan. */}
-                    {selectedOffset < 0 && <Ionicons name="checkmark-circle" size={22} color={colors.tintBright} />}
+                    {(selectedOffset < 0 || (selectedOffset === 0 && doneToday)) && (
+                      <Ionicons name="checkmark-circle" size={22} color={colors.tintBright} />
+                    )}
                     {selectedOffset === 0 &&
+                      !doneToday &&
                       (isWater ? (
                         <GradientButton label={t.today.water} onPress={() => waterPlant(plant)} />
                       ) : (

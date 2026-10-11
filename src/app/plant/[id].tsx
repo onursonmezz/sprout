@@ -826,13 +826,17 @@ function PhotoTimeline({ plant, colors, t }: { plant: Plant; colors: ReturnType<
 }
 
 function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typeof useTheme>; t: Translations }) {
-  // Only what actually happened: logged journal entries plus the one "last
-  // done" date each schedule already tracks. Nothing is projected backwards
-  // from the interval.
-  const daysFor = (type: JournalEntryType, lastDoneDaysAgo: number) =>
-    [...new Set([lastDoneDaysAgo, ...plant.journalNotes.filter((e) => e.type === type).map((e) => e.daysAgo)])].sort(
-      (a, b) => a - b
-    );
+  // Only what actually happened: logged journal entries, plus the last
+  // watering date the user gave. A care task's own "last done" date is left
+  // out: a new plant's tasks start counting from the day it was added, which
+  // is not a day they were done. Nothing is projected backwards either.
+  const daysFor = (type: JournalEntryType, lastDoneDaysAgo?: number) =>
+    [
+      ...new Set([
+        ...(lastDoneDaysAgo == null ? [] : [lastDoneDaysAgo]),
+        ...plant.journalNotes.filter((e) => e.type === type).map((e) => e.daysAgo),
+      ]),
+    ].sort((a, b) => a - b);
 
   return (
     <View style={{ gap: Spacing.four }}>
@@ -849,7 +853,7 @@ function HistoryTab({ plant, colors, t }: { plant: Plant; colors: ReturnType<typ
           key={i}
           title={t.plantDetail.history.taskHistoryTitle[task.type]}
           recentLabel={t.plantDetail.history.taskRecentLabel[task.type]}
-          eventDays={daysFor(careJournalType[task.type], task.lastDoneDaysAgo)}
+          eventDays={daysFor(careJournalType[task.type])}
           colors={colors}
           t={t}
         />
