@@ -112,12 +112,8 @@ export default function SettingsScreen() {
     if (plants.length === 0) return;
     setCareInstructionsBusy(true);
     setCareInstructionsError(false);
-    const dateRangeLabel =
-      vacationStart && vacationEnd
-        ? t.settings.careInstructionsDateRange(formatDate(vacationStart), formatDate(vacationEnd))
-        : null;
     try {
-      await shareCareInstructions(plants, t, dateRangeLabel);
+      await shareCareInstructions(plants, t, vacationStart, vacationEnd);
     } catch {
       setCareInstructionsError(true);
     } finally {
