@@ -137,6 +137,9 @@ export default function PropagationScreen() {
               {lang === 'tr' && species && species.propagation.length > 0 && (
                 <Text style={[styles.tipNote, { color: colors.textSecondary }]}>{t.prop.speciesMethod(species.propagation.join(', '))}</Text>
               )}
+              <Text style={[styles.tipNote, { color: colors.tintBright, fontWeight: '700' }]} onPress={() => router.push('/howto/cutting')}>
+                {t.howto.open}
+              </Text>
             </View>
           </GlassCard>
         )}

@@ -21,6 +21,7 @@ import {
 } from '@/data/guide-content';
 import { symptomEmoji, symptomKeys } from '@/data/troubleshooting';
 import { wateringAlgorithm } from '@/data/species-guide';
+import { howToIcons, howToKeys } from '@/data/howto';
 import { useTheme } from '@/hooks/use-theme';
 
 function seasonalCardCopy(t: Translations) {
@@ -157,6 +158,29 @@ export default function GuideScreen() {
                   </Pressable>
                 );
               })}
+            </ScrollView>
+
+            <View style={[styles.sectionHeaderRow, { marginTop: Spacing.four }]}>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.howto.sectionTitle}</Text>
+                <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>{t.howto.sectionSubtitle}</Text>
+              </View>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.howToRow}>
+              {howToKeys.map((key) => (
+                <Pressable
+                  key={key}
+                  onPress={() => router.push(`/howto/${key}`)}
+                  style={[styles.howToCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
+                  <View style={[styles.howToIcon, { backgroundColor: colors.track }]}>
+                    <Ionicons name={howToIcons[key]} size={20} color={colors.tintBright} />
+                  </View>
+                  <Text style={[styles.howToTitle, { color: colors.text }]} numberOfLines={2}>
+                    {t.howto.items[key].title}
+                  </Text>
+                  <Text style={[styles.howToMeta, { color: colors.textSecondary }]}>{t.howto.stepCount(t.howto.items[key].steps.length)}</Text>
+                </Pressable>
+              ))}
             </ScrollView>
 
             <View style={[styles.sectionHeaderRow, { marginTop: Spacing.four }]}>
@@ -310,6 +334,11 @@ const styles = StyleSheet.create({
   categoryPillText: { color: '#fff', fontSize: 10, fontWeight: '700', letterSpacing: 0.5 },
 
   sectionHeaderRow: { flexDirection: 'row', alignItems: 'flex-start' },
+  howToRow: { gap: Spacing.two, marginTop: Spacing.two, paddingRight: Spacing.three },
+  howToCard: { width: 128, borderWidth: 1, borderRadius: 16, padding: 12, gap: 6 },
+  howToIcon: { width: 38, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  howToTitle: { fontSize: 13, fontWeight: '700', lineHeight: 17, minHeight: 34 },
+  howToMeta: { fontSize: 11 },
   seeAllLink: { fontSize: 12, fontWeight: '700' },
 
   listRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, borderRadius: 16, borderWidth: 1, padding: Spacing.two },

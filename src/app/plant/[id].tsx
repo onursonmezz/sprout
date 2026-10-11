@@ -10,6 +10,7 @@ import { FadeToBackground, GlowBackground, GradientFill } from '@/components/gla
 import { CircularProgress } from '@/components/circular-progress';
 import { GrowthAlbum } from '@/components/growth-album';
 import { IssueStrip } from '@/components/issue-strip';
+import { howToForCareTask } from '@/data/howto';
 import { WhyInterval } from '@/components/why-interval';
 import { PLACEHOLDER_LEAF } from '@/components/plant-avatar';
 import { PhotoPicker } from '@/components/photo-picker';
@@ -534,6 +535,7 @@ function CareTab({
   onRemoveTask: (index: number) => void;
   onCompleteTask: (index: number) => void;
 }) {
+  const router = useRouter();
   const [pickerOpen, setPickerOpen] = useState(false);
   const existingTypes = plant.care.map((c) => c.type);
   const availableTypes = CARE_TYPES.filter((ty) => !existingTypes.includes(ty));
@@ -610,6 +612,7 @@ function CareTab({
             t={t}
             onComplete={() => onCompleteTask(i)}
             onRemove={() => onRemoveTask(i)}
+            onHowTo={howToForCareTask[task.type] ? () => router.push(`/howto/${howToForCareTask[task.type]}`) : undefined}
           />
         );
       })}
@@ -627,6 +630,7 @@ function CareRow({
   t,
   onComplete,
   onRemove,
+  onHowTo,
 }: {
   icon: IconName;
   title: string;
@@ -637,6 +641,7 @@ function CareRow({
   t: Translations;
   onComplete?: () => void;
   onRemove?: () => void;
+  onHowTo?: () => void;
 }) {
   return (
     <View style={[styles.careRow, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
@@ -647,6 +652,11 @@ function CareRow({
         <Text style={[styles.careTitle, { color: colors.text }]}>{title}</Text>
         <Text style={[styles.careSubtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
         <Text style={[styles.careSubtitle, { color: colors.textSecondary }]}>{nextText}</Text>
+        {onHowTo && (
+          <Text style={[styles.careSubtitle, { color: colors.tintBright, fontWeight: '700', marginTop: 2 }]} onPress={onHowTo}>
+            {t.howto.open}
+          </Text>
+        )}
       </View>
       {onRemove && (
         <Pressable onPress={onRemove} hitSlop={8} accessibilityLabel={t.plantDetail.care.remove} style={styles.removeButton}>
