@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -127,10 +128,7 @@ export default function TodayScreen() {
       <SafeAreaView style={styles.safe} edges={['top']}>
         <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
           <View style={styles.topRow}>
-            <View style={styles.logo}>
-              <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
-              <Ionicons name="leaf" size={20} color={colors.onTint} />
-            </View>
+            <Image source={require('../../../assets/images/icon.png')} style={[styles.logo, { borderColor: colors.glassBorder }]} contentFit="cover" />
             <View style={{ flex: 1 }}>
               <Text style={[styles.greeting, { color: colors.text }]}>
                 {greeting(t)}, <Text style={{ color: colors.tintBright }}>{t.today.howArePlants}</Text>
@@ -390,7 +388,7 @@ const styles = StyleSheet.create({
   safe: { flex: 1 },
   scroll: { padding: Spacing.three, paddingBottom: FloatingTabBarSpace, gap: Spacing.three },
   topRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  logo: { width: 40, height: 40, borderRadius: 20, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
+  logo: { width: 40, height: 40, borderRadius: 12, borderWidth: 1 },
   greeting: { fontSize: 16, fontWeight: '700' },
   date: { fontSize: 12, marginTop: 1 },
   roundButton: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },

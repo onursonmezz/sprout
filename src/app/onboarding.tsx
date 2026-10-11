@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -10,7 +11,8 @@ import { useLanguage } from '@/context/language-context';
 import { useSettings } from '@/context/settings-context';
 import { useTheme } from '@/hooks/use-theme';
 
-/** One line icon per slide, in the order the slides are written in the translations. */
+/** One line icon per slide, in the order the slides are written in the translations.
+ * The first slide shows the app's own logo instead. */
 const SLIDE_ICONS: (keyof typeof Ionicons.glyphMap)[] = ['leaf-outline', 'notifications-outline', 'flower-outline'];
 
 export default function OnboardingScreen() {
@@ -49,9 +51,13 @@ export default function OnboardingScreen() {
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
       <GlowBackground />
       <View style={styles.content}>
-        <View style={[styles.iconWrap, { backgroundColor: colors.tintMuted }]}>
-          <Ionicons name={SLIDE_ICONS[index] ?? 'leaf-outline'} size={38} color={colors.tintBright} />
-        </View>
+        {index === 0 ? (
+          <Image source={require('../../assets/images/icon.png')} style={[styles.logo, { borderColor: colors.glassBorder }]} contentFit="cover" />
+        ) : (
+          <View style={[styles.iconWrap, { backgroundColor: colors.tintMuted }]}>
+            <Ionicons name={SLIDE_ICONS[index] ?? 'leaf-outline'} size={38} color={colors.tintBright} />
+          </View>
+        )}
         <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{slide.title}</Text>
         <Text style={[styles.body, { color: colors.textSecondary }]}>{slide.body}</Text>
 
@@ -95,6 +101,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1, justifyContent: 'space-between' },
   content: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: Spacing.five, gap: Spacing.three },
+  logo: { width: 96, height: 96, borderRadius: 24, borderWidth: 1 },
   iconWrap: { width: 80, height: 80, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 30, textAlign: 'center' },
   body: { fontSize: 15, textAlign: 'center', lineHeight: 22 },
