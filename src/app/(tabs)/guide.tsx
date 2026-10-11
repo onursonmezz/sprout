@@ -160,6 +160,17 @@ export default function GuideScreen() {
               })}
             </ScrollView>
 
+            <Pressable onPress={() => router.push('/finder')} style={[styles.finderCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
+              <View style={[styles.howToIcon, { backgroundColor: colors.track }]}>
+                <Ionicons name="search-outline" size={20} color={colors.tintBright} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.finderTitle, { color: colors.text }]}>{t.finder.cardTitle}</Text>
+                <Text style={[styles.finderBody, { color: colors.textSecondary }]}>{t.finder.cardBody}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+            </Pressable>
+
             <View style={[styles.sectionHeaderRow, { marginTop: Spacing.four }]}>
               <View style={{ flex: 1 }}>
                 <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.howto.sectionTitle}</Text>
@@ -339,6 +350,9 @@ const styles = StyleSheet.create({
   howToIcon: { width: 38, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   howToTitle: { fontSize: 13, fontWeight: '700', lineHeight: 17, minHeight: 34 },
   howToMeta: { fontSize: 11 },
+  finderCard: { flexDirection: 'row', alignItems: 'center', gap: 12, borderWidth: 1, borderRadius: 16, padding: 12, marginTop: Spacing.four },
+  finderTitle: { fontSize: 14, fontWeight: '700' },
+  finderBody: { fontSize: 12, lineHeight: 17, marginTop: 2 },
   seeAllLink: { fontSize: 12, fontWeight: '700' },
 
   listRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, borderRadius: 16, borderWidth: 1, padding: Spacing.two },

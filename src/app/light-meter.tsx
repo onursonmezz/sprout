@@ -201,6 +201,15 @@ export default function LightMeterScreen() {
                 </GlassCard>
               )}
 
+              {!species && !canUseReading && lux != null && (
+                <Pressable
+                  onPress={() => router.push({ pathname: '/finder', params: { lux: String(Math.round(lux)) } })}
+                  style={[styles.useButton, { boxShadow: `0px 6px 16px ${colors.tintGlow}` }]}>
+                  <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
+                  <Text style={[styles.useButtonText, { color: colors.onTint }]}>{t.finder.fromMeter}</Text>
+                </Pressable>
+              )}
+
               {canUseReading && zoneKey != null && (
                 <Pressable
                   onPress={() => {
