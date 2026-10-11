@@ -1,18 +1,33 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { GlowBackground } from '@/components/glass';
+import { GlassCard, GlowBackground, GradientButton, GradientFill } from '@/components/glass';
+import { PlantAvatar } from '@/components/plant-avatar';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
-import { Translations } from '@/constants/translations';
 import { useLanguage } from '@/context/language-context';
-import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { careJournalType, CareTask, CareTaskType, Plant } from '@/data/plants';
+import { useTheme } from '@/hooks/use-theme';
+import { useWaterPlant } from '@/hooks/use-water-plant';
 import { careTaskInSeason, daysUntilNext, fallsOn } from '@/utils/care';
+import { hapticSuccess, hapticTap } from '@/utils/haptics';
 
-const CARE_EMOJI: Record<CareTaskType, string> = { fertilize: '🌱', rotate: '🔄', mist: '💦', prune: '✂️', repot: '🪴' };
+const CARE_ICON: Record<CareTaskType, keyof typeof Ionicons.glyphMap> = {
+  fertilize: 'flask-outline',
+  rotate: 'sync-outline',
+  mist: 'water-outline',
+  prune: 'cut-outline',
+  repot: 'flower-outline',
+};
+
+/** How far ahead "coming up" looks, and how many days with something it lists. */
+const UPCOMING_HORIZON_DAYS = 28;
+const UPCOMING_MAX_DAYS = 6;
+
+type AgendaItem = { kind: 'water'; plant: Plant } | { kind: 'care'; plant: Plant; task: CareTask; index: number };
 
 function buildGrid(year: number, month: number) {
   const firstOfMonth = new Date(year, month, 1);
@@ -24,12 +39,6 @@ function buildGrid(year: number, month: number) {
   const weeks: (number | null)[][] = [];
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
   return weeks;
-}
-
-function dayLabel(offset: number, date: Date, t: Translations) {
-  if (offset === 0) return t.calendar.today;
-  if (offset === 1) return t.calendar.tomorrow;
-  return `${t.calendar.weekdays[(date.getDay() + 6) % 7]} ${date.getDate()}`;
 }
 
 /** Whole days between today and a given year/month/day, positive for future,
@@ -64,168 +73,232 @@ function taskOn(p: Plant, task: CareTask, offset: number) {
   );
 }
 
+/** Everything on one day: waterings first, then care tasks. */
+function agendaFor(plants: Plant[], offset: number): AgendaItem[] {
+  const items: AgendaItem[] = [];
+  for (const plant of plants) if (wateringOn(plant, offset)) items.push({ kind: 'water', plant });
+  for (const plant of plants) plant.care.forEach((task, index) => taskOn(plant, task, offset) && items.push({ kind: 'care', plant, task, index }));
+  return items;
+}
+
 export default function CalendarScreen() {
   const colors = useTheme();
+  const router = useRouter();
   const { t } = useLanguage();
-  const { plants } = usePlants();
+  const { plants, completeCareTask } = usePlants();
+  const waterPlant = useWaterPlant();
   const today = new Date();
   const [monthOffset, setMonthOffset] = useState(0);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  // The selected day, as days from today. Starts on today.
+  const [selectedOffset, setSelectedOffset] = useState(0);
 
   const viewDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
   const weeks = useMemo(() => buildGrid(year, month), [year, month]);
-  const isCurrentMonth = monthOffset === 0;
 
-  const changeMonth = (delta: number) => {
-    setMonthOffset((m) => m + delta);
-    setSelectedDay(null);
-  };
+  const selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + selectedOffset);
+  const agenda = agendaFor(plants, selectedOffset);
 
-  const dotsForDay = (day: number) => {
-    const offset = dayOffsetFromToday(today, year, month, day);
-    let count = 0;
-    for (const p of plants) {
-      if (wateringOn(p, offset)) count++;
-      for (const task of p.care) if (taskOn(p, task, offset)) count++;
+  // Only days that actually have something, so the list is never rows of "nothing planned".
+  const upcoming = useMemo(() => {
+    const days: { offset: number; date: Date; items: AgendaItem[] }[] = [];
+    for (let offset = 1; offset <= UPCOMING_HORIZON_DAYS && days.length < UPCOMING_MAX_DAYS; offset++) {
+      const items = agendaFor(plants, offset);
+      if (items.length > 0) days.push({ offset, date: new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset), items });
     }
-    return Math.min(count, 3);
+    return days;
+    // `today` is a fresh Date every render; the plants are what changes the result.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plants]);
+
+  const selectDay = (offset: number) => {
+    const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset);
+    setSelectedOffset(offset);
+    setMonthOffset((date.getFullYear() - today.getFullYear()) * 12 + date.getMonth() - today.getMonth());
+    hapticTap();
   };
 
-  const selectedOffset = selectedDay != null ? dayOffsetFromToday(today, year, month, selectedDay) : null;
-
-  const selectedWatering = selectedOffset == null ? [] : plants.filter((p) => wateringOn(p, selectedOffset));
-  const selectedTasks =
-    selectedOffset == null
-      ? []
-      : plants.flatMap((plant) => plant.care.filter((task) => taskOn(plant, task, selectedOffset)).map((task) => ({ plant, task })));
-
-  const weekAhead = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    const scheduled = plants.filter((p) => (i === 0 ? p.daysUntilWatering <= 0 : fallsOn(i, p.daysUntilWatering, p.wateringIntervalDays)));
-    return { offset: i, date, scheduled };
-  });
+  const longDate = (date: Date) => date.toLocaleDateString(t.today.dateLocale, { weekday: 'long', day: 'numeric', month: 'long' });
+  const shortDate = (date: Date) => date.toLocaleDateString(t.today.dateLocale, { weekday: 'short', day: 'numeric', month: 'short' });
+  const relativeLabel = (offset: number) => (offset === 0 ? t.calendar.today : offset === 1 ? t.calendar.tomorrow : null);
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
       <GlowBackground />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.calendar.title}</Text>
-
-        <View style={styles.monthHeader}>
-          <Pressable
-            onPress={() => changeMonth(-1)}
-            style={[styles.navButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
-            <Ionicons name="chevron-back" size={18} color={colors.text} />
-          </Pressable>
-          <Text style={[styles.monthLabel, { color: colors.text }]}>
-            {t.calendar.months[month]} {year}
-          </Text>
-          <Pressable
-            onPress={() => changeMonth(1)}
-            style={[styles.navButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
-            <Ionicons name="chevron-forward" size={18} color={colors.text} />
-          </Pressable>
+        <View style={styles.titleRow}>
+          <Text style={[styles.title, { color: colors.text }]}>{t.calendar.title}</Text>
+          {(selectedOffset !== 0 || monthOffset !== 0) && (
+            <Pressable onPress={() => selectDay(0)} style={[styles.todayButton, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
+              <Ionicons name="today-outline" size={15} color={colors.tintBright} />
+              <Text style={[styles.todayButtonText, { color: colors.text }]}>{t.calendar.today}</Text>
+            </Pressable>
+          )}
         </View>
 
-        <View style={styles.weekdayRow}>
-          {t.calendar.weekdays.map((w) => (
-            <Text key={w} style={[styles.weekdayText, { color: colors.textSecondary }]}>
-              {w}
+        <GlassCard style={styles.monthCard}>
+          <View style={styles.monthHeader}>
+            <Pressable onPress={() => setMonthOffset((m) => m - 1)} hitSlop={8} style={[styles.navButton, { backgroundColor: colors.track }]}>
+              <Ionicons name="chevron-back" size={18} color={colors.text} />
+            </Pressable>
+            <Text style={[styles.monthLabel, { color: colors.text }]}>
+              {t.calendar.months[month]} {year}
             </Text>
+            <Pressable onPress={() => setMonthOffset((m) => m + 1)} hitSlop={8} style={[styles.navButton, { backgroundColor: colors.track }]}>
+              <Ionicons name="chevron-forward" size={18} color={colors.text} />
+            </Pressable>
+          </View>
+
+          <View style={styles.weekdayRow}>
+            {t.calendar.weekdays.map((w) => (
+              <Text key={w} style={[styles.weekdayText, { color: colors.textSecondary }]}>
+                {w}
+              </Text>
+            ))}
+          </View>
+
+          {weeks.map((week, wi) => (
+            <View key={wi} style={styles.weekRow}>
+              {week.map((day, di) => {
+                if (!day) return <View key={di} style={styles.dayCell} />;
+                const offset = dayOffsetFromToday(today, year, month, day);
+                const isToday = offset === 0;
+                const isSelected = offset === selectedOffset;
+                const items = agendaFor(plants, offset);
+                const hasWater = items.some((i) => i.kind === 'water');
+                const hasCare = items.some((i) => i.kind === 'care');
+                return (
+                  <Pressable key={di} onPress={() => selectDay(offset)} style={styles.dayCell}>
+                    <View style={[styles.dayCircle, isToday && !isSelected && { borderWidth: 1.5, borderColor: colors.tintBright }]}>
+                      {isSelected && <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />}
+                      <Text
+                        style={[
+                          styles.dayText,
+                          { color: isSelected ? colors.onTint : offset < 0 ? colors.textSecondary : colors.text },
+                          (isToday || isSelected) && { fontWeight: '700' },
+                        ]}>
+                        {day}
+                      </Text>
+                    </View>
+                    <View style={styles.dotsRow}>
+                      {hasWater && <View style={[styles.dot, { backgroundColor: colors.tintBright }]} />}
+                      {hasCare && <View style={[styles.dot, { backgroundColor: colors.accent }]} />}
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </View>
           ))}
+
+          <View style={styles.legendRow}>
+            <View style={styles.legendItem}>
+              <View style={[styles.dot, { backgroundColor: colors.tintBright }]} />
+              <Text style={[styles.legendText, { color: colors.textSecondary }]}>{t.calendar.watering}</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View style={[styles.dot, { backgroundColor: colors.accent }]} />
+              <Text style={[styles.legendText, { color: colors.textSecondary }]}>{t.calendar.care}</Text>
+            </View>
+          </View>
+        </GlassCard>
+
+        <View style={styles.dayHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{longDate(selectedDate)}</Text>
+          {relativeLabel(selectedOffset) && (
+            <View style={[styles.badge, { backgroundColor: colors.track }]}>
+              <Text style={[styles.badgeText, { color: colors.tintBright }]}>{relativeLabel(selectedOffset)}</Text>
+            </View>
+          )}
         </View>
 
-        {weeks.map((week, wi) => (
-          <View key={wi} style={styles.weekRow}>
-            {week.map((day, di) => {
-              const isToday = isCurrentMonth && day === today.getDate();
-              const isSelected = day != null && selectedDay === day;
-              const dots = day ? dotsForDay(day) : 0;
+        {agenda.length === 0 ? (
+          <GlassCard style={styles.emptyCard}>
+            <Ionicons name="leaf-outline" size={20} color={colors.tintBright} />
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t.calendar.nothingDay}</Text>
+          </GlassCard>
+        ) : (
+          <View style={{ gap: Spacing.two }}>
+            {agenda.map((item) => {
+              const { plant } = item;
+              const isWater = item.kind === 'water';
               return (
-                <View key={di} style={styles.dayCell}>
-                  {day && (
-                    <Pressable onPress={() => setSelectedDay((d) => (d === day ? null : day))}>
-                      <View
-                        style={[
-                          styles.dayCircle,
-                          isToday && { backgroundColor: colors.tintMuted },
-                          isSelected && { borderWidth: 2, borderColor: colors.tint },
-                        ]}>
-                        <Text style={[styles.dayText, { color: isToday ? colors.tint : colors.text }]}>{day}</Text>
-                        <View style={styles.dotsRow}>
-                          {Array.from({ length: dots }).map((_, i) => (
-                            <View key={i} style={[styles.dot, { backgroundColor: colors.tint }]} />
-                          ))}
-                        </View>
+                <Pressable key={`${item.kind}-${plant.id}-${isWater ? '' : item.index}`} onPress={() => router.push(`/plant/${plant.id}`)}>
+                  <GlassCard style={styles.agendaRow}>
+                    <PlantAvatar plant={plant} size={52} radius={12} />
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.plantName, { color: colors.text }]} numberOfLines={1}>
+                        {plant.name}
+                      </Text>
+                      <View style={styles.taskLine}>
+                        <Ionicons
+                          name={isWater ? 'water-outline' : CARE_ICON[item.task.type]}
+                          size={14}
+                          color={isWater ? colors.tintBright : colors.accent}
+                        />
+                        <Text style={[styles.taskText, { color: colors.textSecondary }]} numberOfLines={1}>
+                          {isWater
+                            ? `${t.calendar.watering} · ${t.water.approx(plant.wateringAmountMl)}`
+                            : t.plantDetail.care.taskNames[item.task.type]}
+                        </Text>
                       </View>
-                    </Pressable>
-                  )}
-                </View>
+                    </View>
+                    {/* Past days show what was done; today offers the action; future days are just a plan. */}
+                    {selectedOffset < 0 && <Ionicons name="checkmark-circle" size={22} color={colors.tintBright} />}
+                    {selectedOffset === 0 &&
+                      (isWater ? (
+                        <GradientButton label={t.today.water} onPress={() => waterPlant(plant)} />
+                      ) : (
+                        <GradientButton
+                          label={t.today.careDone}
+                          onPress={() => {
+                            completeCareTask(plant.id, item.index, t.plantDetail.care.taskNames[item.task.type]);
+                            hapticSuccess();
+                          }}
+                        />
+                      ))}
+                  </GlassCard>
+                </Pressable>
               );
             })}
           </View>
-        ))}
-
-        <View style={styles.legendRow}>
-          <View style={styles.legendItem}>
-            <View style={[styles.dot, { backgroundColor: colors.tint }]} />
-            <Text style={[styles.legendText, { color: colors.textSecondary }]}>{t.calendar.legendWatering}</Text>
-          </View>
-        </View>
-
-        {selectedDay != null && selectedOffset != null && (
-          <View style={[styles.selectedCard, { backgroundColor: colors.glass, borderColor: colors.tint }]}>
-            <View style={styles.selectedHeader}>
-              <Text style={[styles.weekDayLabel, { color: colors.text }]}>
-                {dayLabel(selectedOffset, new Date(year, month, selectedDay), t)}
-              </Text>
-              <Pressable onPress={() => setSelectedDay(null)}>
-                <Ionicons name="close" size={18} color={colors.textSecondary} />
-              </Pressable>
-            </View>
-            {selectedWatering.length === 0 && selectedTasks.length === 0 ? (
-              <Text style={[styles.nothingText, { color: colors.textSecondary }]}>{t.calendar.nothingScheduled}</Text>
-            ) : (
-              <View style={styles.chipRow}>
-                {selectedWatering.map((p) => (
-                  <View key={`w-${p.id}`} style={[styles.chip, { backgroundColor: colors.tintMuted }]}>
-                    <Text style={[styles.chipText, { color: colors.tint }]}>💧 {p.name}</Text>
-                  </View>
-                ))}
-                {selectedTasks.map(({ plant, task }, i) => (
-                  <View key={`t-${plant.id}-${i}`} style={[styles.chip, { backgroundColor: colors.tintMuted }]}>
-                    <Text style={[styles.chipText, { color: colors.tint }]}>
-                      {CARE_EMOJI[task.type]} {t.plantDetail.care.taskNames[task.type]} · {plant.name}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            )}
-          </View>
         )}
 
-        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.calendar.thisWeek}</Text>
-        <View style={{ gap: Spacing.two }}>
-          {weekAhead.map(({ offset, date, scheduled }) => (
-            <View key={offset} style={[styles.weekRowCard, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
-              <Text style={[styles.weekDayLabel, { color: colors.text }]}>{dayLabel(offset, date, t)}</Text>
-              {scheduled.length > 0 ? (
-                <View style={styles.chipRow}>
-                  {scheduled.map((p) => (
-                    <View key={p.id} style={[styles.chip, { backgroundColor: colors.tintMuted }]}>
-                      <Text style={[styles.chipText, { color: colors.tint }]}>💧 {p.name}</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text, marginTop: Spacing.two }]}>{t.calendar.upcoming}</Text>
+        {upcoming.length === 0 ? (
+          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>{t.calendar.nothingUpcoming}</Text>
+        ) : (
+          <View style={{ gap: Spacing.two }}>
+            {upcoming.map(({ offset, date, items }) => {
+              // One photo per plant, even if it has several tasks that day.
+              const dayPlants = items.map((i) => i.plant).filter((p, i, all) => all.findIndex((q) => q.id === p.id) === i);
+              const waterCount = items.filter((i) => i.kind === 'water').length;
+              const careCount = items.length - waterCount;
+              return (
+                <Pressable key={offset} onPress={() => selectDay(offset)}>
+                  <GlassCard style={[styles.upcomingRow, offset === selectedOffset && { borderColor: colors.tintBright }]}>
+                    <View style={styles.upcomingDate}>
+                      <Text style={[styles.upcomingDay, { color: colors.text }]}>{relativeLabel(offset) ?? shortDate(date)}</Text>
+                      <Text style={[styles.upcomingSummary, { color: colors.textSecondary }]}>{t.calendar.summary(waterCount, careCount)}</Text>
                     </View>
-                  ))}
-                </View>
-              ) : (
-                <Text style={[styles.nothingText, { color: colors.textSecondary }]}>{t.calendar.nothingScheduled}</Text>
-              )}
-            </View>
-          ))}
-        </View>
+                    <View style={styles.avatars}>
+                      {dayPlants.slice(0, 4).map((p, i) => (
+                        <View key={p.id} style={[styles.avatarWrap, { borderColor: colors.card, marginLeft: i === 0 ? 0 : -10 }]}>
+                          <PlantAvatar plant={p} size={34} />
+                        </View>
+                      ))}
+                      {dayPlants.length > 4 && (
+                        <View style={[styles.avatarWrap, styles.moreAvatar, { borderColor: colors.card, backgroundColor: colors.backgroundSelected }]}>
+                          <Text style={[styles.moreText, { color: colors.text }]}>+{dayPlants.length - 4}</Text>
+                        </View>
+                      )}
+                    </View>
+                  </GlassCard>
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -233,30 +306,42 @@ export default function CalendarScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { padding: Spacing.four, paddingBottom: FloatingTabBarSpace, gap: Spacing.two },
-  title: { fontSize: 28, marginBottom: Spacing.two },
-  monthHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  navButton: { width: 36, height: 36, borderRadius: 18, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  scroll: { padding: Spacing.three, paddingBottom: FloatingTabBarSpace, gap: Spacing.three },
+  titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  title: { fontSize: 24, fontWeight: '700' },
+  todayButton: { flexDirection: 'row', alignItems: 'center', gap: 6, borderWidth: 1, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 7 },
+  todayButtonText: { fontSize: 12, fontWeight: '700' },
+  monthCard: { padding: 12, paddingBottom: 10 },
+  monthHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: Spacing.two },
+  navButton: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center' },
   monthLabel: { fontSize: 16, fontWeight: '700' },
-  weekdayRow: { flexDirection: 'row', marginTop: Spacing.three },
-  weekdayText: { flex: 1, textAlign: 'center', fontSize: 12, fontWeight: '600' },
+  weekdayRow: { flexDirection: 'row', marginBottom: 2 },
+  weekdayText: { flex: 1, textAlign: 'center', fontSize: 11, fontWeight: '600' },
   weekRow: { flexDirection: 'row' },
-  dayCell: { flex: 1, alignItems: 'center', paddingVertical: 4 },
-  dayCircle: { width: 38, height: 44, borderRadius: 19, alignItems: 'center', justifyContent: 'center', gap: 2, paddingTop: 4 },
-  dayText: { fontSize: 13, fontWeight: '600' },
-  dotsRow: { flexDirection: 'row', gap: 2, height: 5 },
-  dot: { width: 4, height: 4, borderRadius: 2 },
-  legendRow: { flexDirection: 'row', gap: Spacing.three, marginTop: Spacing.two, marginBottom: Spacing.two },
+  dayCell: { flex: 1, alignItems: 'center', paddingVertical: 3, minHeight: 46 },
+  dayCircle: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  dayText: { fontSize: 13, fontWeight: '500' },
+  dotsRow: { flexDirection: 'row', gap: 3, height: 6, marginTop: 2 },
+  dot: { width: 5, height: 5, borderRadius: 2.5 },
+  legendRow: { flexDirection: 'row', justifyContent: 'center', gap: Spacing.three, marginTop: 4 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  legendRing: { width: 10, height: 10, borderRadius: 5, borderWidth: 2 },
-  legendText: { fontSize: 12 },
-  sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5, marginTop: Spacing.two, marginBottom: Spacing.one },
-  weekRowCard: { borderRadius: 14, borderWidth: 1, padding: Spacing.two, gap: 6 },
-  selectedCard: { borderRadius: 14, borderWidth: 1.5, padding: Spacing.two, gap: 6, marginTop: Spacing.two },
-  selectedHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  weekDayLabel: { fontSize: 14, fontWeight: '700' },
-  chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  chip: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
-  chipText: { fontSize: 11, fontWeight: '600' },
-  nothingText: { fontSize: 12 },
+  legendText: { fontSize: 11 },
+  dayHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: Spacing.one },
+  sectionTitle: { fontSize: 16, fontWeight: '700' },
+  badge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
+  badgeText: { fontSize: 11, fontWeight: '700' },
+  emptyCard: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: Spacing.three },
+  emptyText: { flex: 1, fontSize: 13 },
+  agendaRow: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: Spacing.two },
+  plantName: { fontSize: 15, fontWeight: '700' },
+  taskLine: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 3 },
+  taskText: { fontSize: 12, flexShrink: 1 },
+  upcomingRow: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 16 },
+  upcomingDate: { flex: 1 },
+  upcomingDay: { fontSize: 14, fontWeight: '700' },
+  upcomingSummary: { fontSize: 12, marginTop: 2 },
+  avatars: { flexDirection: 'row', alignItems: 'center' },
+  avatarWrap: { borderWidth: 2, borderRadius: 19 },
+  moreAvatar: { width: 38, height: 38, alignItems: 'center', justifyContent: 'center', marginLeft: -10 },
+  moreText: { fontSize: 11, fontWeight: '700' },
 });

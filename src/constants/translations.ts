@@ -85,6 +85,12 @@ export const translations = {
       water: 'Water',
     },
     calendar: {
+      watering: 'Watering',
+      care: 'Care',
+      nothingDay: 'Nothing is planned for this day.',
+      upcoming: 'Coming up',
+      nothingUpcoming: 'Nothing is planned for the next four weeks.',
+      summary: (water: number, care: number) => [water > 0 ? `${water} watering${water > 1 ? 's' : ''}` : '', care > 0 ? `${care} care task${care > 1 ? 's' : ''}` : ''].filter(Boolean).join(' · '),
       title: 'Calendar',
       weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       months: [
@@ -1010,6 +1016,12 @@ export const translations = {
       water: 'Sula',
     },
     calendar: {
+      watering: 'Sulama',
+      care: 'Bakım',
+      nothingDay: 'Bu gün için planlanan bir şey yok.',
+      upcoming: 'Önümüzdeki günler',
+      nothingUpcoming: 'Önümüzdeki dört hafta için planlanan bir şey yok.',
+      summary: (water: number, care: number) => [water > 0 ? `${water} sulama` : '', care > 0 ? `${care} bakım` : ''].filter(Boolean).join(' · '),
       title: 'Takvim',
       weekdays: ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'],
       months: [
