@@ -1,0 +1,94 @@
+# Sprout: proje devir notları
+
+Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026). `CLAUDE.md` bunu her oturumda otomatik yükler. Proje sahibi de okuyabilsin diye Türkçe yazıldı.
+
+## 1. Proje sahibiyle çalışma şekli
+
+- **Programcı değil.** Her şeyi sade Türkçe, teknik terim kullanmadan anlat ("hook", "state", "context" gibi kelimeler yok). Değişikliği uygulamada ne göreceği üzerinden anlat: neye basacak, ne değişecek.
+- **Planı sohbette yaz.** Büyük bir değişiklikten önce ne yapacağını düz Türkçe anlat. Plan modunun kendi onay ekranı ona yetmiyor, içeriği görmeden onaylamak zorunda kaldığını söyledi.
+- **Onay sorma.** "Her şeyi otomatik onaylıyorum, devam et" dedi. Bitmiş her özelliği kaydet, GitHub'a gönder ve telefona güncelleme olarak yayınla (bkz. bölüm 3), sonra kısa bir rapor ver.
+- **Raporda dürüst ol.** Neyi denediğini, neyi denemediğini (özellikle telefonda denenemeyenleri) ayrı ayrı söyle.
+- **Uygulamadaki bakım tavsiyeleri emir kipinde olmasın.** Her ev ve bitki farklı olduğu için öneri diliyle yaz: "içeri almayı düşünebilirsin", "nem vermek gerekebilir", "yardımcı olabilir". İngilizcede de aynısı ("you may want to…"). Kullanıcının kendi bastığı düğmeler ("Sula", "Kaydet") olduğu gibi kalır.
+- **Emoji kullanma.** Uygulamayı ucuz gösterdiğini düşünüyor; tüm emojiler çizgi ikonlarla (Ionicons) değiştirildi. "✓" işaretleri bilerek bırakıldı.
+- **Tasarım taslağı isterse:** Önce HTML taslak hazırla (`Documents\SPROUT\taslak\` klasöründe örnekler var), seçtiği seçeneği uygula. Beğendiği bir taslağı sormadan değiştirme.
+- Ekran görüntüsü ya da video gönderip hata bildirebilir; videoyu kare kare inceleyip hatayı bul.
+
+## 2. Proje, hesaplar ve yerler
+
+- **Uygulama:** Sprout, ev bitkisi bakım uygulaması. Android, Expo SDK 57, React Native 0.86 (yeni mimari), TypeScript, Expo Router. Paket adı `com.organizma.sproutapp`, sürüm 1.0.0.
+- **Kod:** `C:\Users\osonm\Documents\SPROUT\sprout-app`. GitHub: https://github.com/onursonmezz/sprout (`main` dalı).
+- **Expo / EAS hesabı:** `organizma`. Güncelleme adresi `https://u.expo.dev/3c8144d1-1573-4fd9-820f-70f8caa71969`. Kanal `preview`, runtimeVersion politikası `appVersion` (1.0.0).
+- **Marka kiti:** `Documents\SPROUT\marka-kiti\`: ikon ve logo, Play Store görselleri, sosyal medya, 15 saniyelik Reels videosu, metinler. Ekran görüntüleri ve Reels, tur, albüm, çoğaltma, takvim ve teşhis eklenmeden önce hazırlandı; güncellenmesi gerekebilir.
+- **Logo:** İki yaprağın S harfi oluşturduğu tasarım, koyu yeşil zemin. Kaynağı `assets/images/icon.png`. Uygulamadaki karşılama ekranında ve ana sayfa başlığında da bu kullanılıyor (tıklanmıyor, öyle kalması istendi).
+- **Tasarım taslakları:** `Documents\SPROUT\taslak\`.
+
+## 3. Telefona gönderme
+
+- **Kod değişikliği (JS):** Yeni kurulum gerekmez, havadan güncelleme yeterli.
+  ```
+  git add -A && git commit -m "..." && git push
+  npx eas-cli update --branch preview --environment preview --message "..." --non-interactive
+  ```
+  Commit mesajının sonuna `Co-Authored-By` satırı eklenir. Kullanıcı güncellemeyi almak için uygulamayı tamamen kapatıp yeniden açar.
+- **Yerel değişiklik (ikon, uygulama adı, yeni yerel modül, widget vb.):** Yeni APK gerekir: `npx eas-cli build --platform android --profile preview`. Kullanıcı APK'yı telefona yeniden kurar.
+- **Kontrol:** `npx tsc --noEmit` temiz olmalı. Önizleme: `Documents\SPROUT\.claude\launch.json` içindeki `sprout-web` (port 8081). Yeni bir sayfa dosyası eklenince sayfa adresi tipleri ancak bu sunucu yeniden başlatılınca güncellenir; o zamana kadar tsc yeni rota için hata verir.
+- **Önizlemede test verisi:** Tarayıcının localStorage'ında durur: `sprout:plants-state-v2`, `sprout:settings`, `sprout:language`, `sprout:theme-mode`, `sprout:propagations`. Sayfalar 10–20 saniyede yüklenir; bir şeyi doğrulamadan önce yazının çıkmasını bekle. Basılı tutma, `pointerdown`/`mousedown` ile 700 ms bekleyip bırakarak taklit edilir.
+
+## 4. Kod haritası (önemli dosyalar)
+
+- `src/app/(tabs)/`: Bugün (`index.tsx`), Bitkilerim (`plants.tsx`), Takvim (`calendar.tsx`), Rehber (`guide.tsx`), Ayarlar (`settings.tsx`). Alt menü özel ve yüzen tasarımda (`components/floating-tab-bar.tsx`).
+- `src/app/plant/[id].tsx`: bitki sayfası (sulama kartı, "Neden N günde bir?", albüm, çoğaltma, tür kartı, sorun şeridi, Bakım/Günlük/Geçmiş sekmeleri, paylaşım kartı).
+- Diğer ekranlar: `add-plant.tsx`, `light-meter.tsx`, `tour.tsx` (haftalık tur), `diagnose.tsx` (teşhis), `finder.tsx` (bitki bulucu ve köşe danışmanı), `howto/[key].tsx` (nasıl yapılır), `propagation/[id].tsx` (çelik takibi), `guide/...`, `onboarding.tsx`.
+- **Tasarım sistemi:** `components/glass.tsx` (cam kartlar, gradyanlar) ve `constants/theme.ts` (koyu zemin `#0F1813`, yeşil vurgu).
+- **Metinler:** `constants/translations.ts` (EN + TR). Yeni metin eklerken iki dili de ekle.
+- **Veriler:**
+  - Bitki ve ayar kayıtları: `context/plants-context.tsx` ve `settings-context.tsx`.
+  - Çoğaltma projeleri: `propagation-context.tsx`.
+- **Tür veritabanı:** `veri/plants.json` (216 tür), `veri/VERITABANI.md`. Toplu tür eklemek için: `node veri/tur-ekle.js veri/turler-ek-1.js [--kontrol]`. Bu komut isim çakışmalarını yakalar.
+- **Sulama hesabı:**
+  - Temel hesap `veri/watering.js`'de. Saksı malzemesi, boyutu, ışık, pencere uzaklığı, mevsim (enleme göre), kalorifer, dış mekân sıcağı ve drenaj hesaba katılır; toplam etki sınırlıdır.
+  - `utils/watering-algorithm.ts` buna toprak geri bildiriminden öğrenmeyi, yağmuru ve hesabın dökümünü ekler.
+- **Teşhis:** `utils/diagnosis.ts`. Belirti × neden puan tablosu, sorular ve bitkinin kendi verisinden gelen ipuçları; puanlar elle belirlendi.
+- **Diğer yardımcılar:** `utils/plant-finder.ts`, `utils/care.ts` (bakım görevleri), `utils/care-instructions.ts` (bakıcı kartı PDF'i), `utils/seasonal-tasks.ts` (aylık işler, don/sıcak uyarıları).
+
+## 5. Verilmiş kararlar
+
+- Kartlara basılı tutunca hızlı menü açılır:
+  - **Bitki kartı:** Yerini değiştir, Saksısını değiştir, Fotoğrafını değiştir, Günlük kaydı ekle, Bitkiyi sil. "Sula" ve "Tüm ayrıntıları düzenle" bilerek yok; üç nokta düğmesi de kullanıcı testinden sonra düşünülecek.
+  - **Çelik kartı:** Tutmadı, Projeyi sil.
+- Hiç çoğaltma projesi yoksa Bitkilerim'de çoğaltma bölümü görünmez.
+- Yağmur sorusu türe göre değil odaya göre sorulur (balkon, teras, bahçe).
+- Takvimde geçmiş günlerde yalnızca gerçekten işaretlenen işler görünür. Görev sayaçlarının başlangıç günü "yapıldı" sayılmaz.
+- Harita veya yakındaki dükkânlar özelliği yapılmayacak (kullanıcı vazgeçti).
+- Paylaşım kartı takvim değil istatistik gösterir: birlikte geçen süre, sulama sayısı, yeni yaprak.
+
+## 6. Yapılacaklar ve açık konular
+
+- **Yayından önce mutlaka (kullanıcı istedi):** Fotoğraftan bitki tanıma, kendi cihaz üstü modelimizle.
+  - Önce kullanıcının bilgisayarında (NVIDIA ekran kartı var) en yaygın ~20 türle deneme eğitimi yapılır: açık lisanslı fotoğraflar (ör. iNaturalist) ve küçük bir model.
+  - Sonuç iyiyse tüm türlere genişletilir; uygulamada fotoğraflı ilk 3 öneri gösterilir, kullanıcı onaylar.
+  - Sonuç kötüyse Pl@ntNet ücretsiz katmanına geçilir; ticari kullanıma izin verdiği kontrol edilmeli.
+  - Yerel modül gerektirir, yeni kurulum ister. Yayın, Play Store ya da "çıkış" konuşulduğunda bunu hatırlat.
+- **Ana ekran widget'ı:** İstendi ama "şimdi değil" dendi. Kendiliğinden başlama; yapılacaklar sorulunca listele. Yeni kurulum gerektirir; fotoğraftan tanımayla aynı kuruluma koymak mantıklı.
+- **Telefonda doğrulanmayı bekleyenler:**
+  - Takvimde bugün seçiliyken gün numarasının görünmesi (iki kez düzeltme gönderildi, sonuç bildirilmedi).
+  - Bakıcı kartı PDF'i.
+  - Işık ölçerdeki "Bu köşeye hangi bitkiler uyar?" düğmesi.
+  - Bildirimler, kamera akışları, gerçek konum ve hava durumu, adaptif ikon görünümü.
+- **Bitkilerim tek sütun sorunu:** Kullanıcı yeni kurulumdan sonra bildirmişti; güncelleme alınınca düzelip düzelmediği teyit edilmedi.
+- **Bitki eklerken tür önerilerinin çıkmaması:** Android'de bildirildi, nedeni bulunamadı. Bir deneme düzeltmesi kullanıcının isteğiyle geri alındı.
+- **Zehirlilik bilgisi:** 216 türün evcil hayvan bilgisi doğrulanmadı (`needsVerification`). Bitki bulucu bu bilgiyi kullanıyor; yayından önce kontrol edilmeli.
+- **Kılavuzlar:** Yazılı adımlar var, fotoğraf ya da çizim yok.
+- **Yedekleme:** Fotoğrafları, ayarları ve çoğaltma projelerini kapsamıyor; Firebase kuralları doğrulanmadı.
+- **Diğer fikirler (sırası gelince):** Alışveriş listesi, rozetler / yıllık özet, arka planda hava uyarısı, kişisel veri politikası metni, Play Store yayın adımları.
+
+## 7. Teknik tuzaklar (Windows ortamı)
+
+- **Uzun düzenlemeler:** Bash heredoc'ları ters tırnak ve tırnak içeren metinlerde bozuluyor. Uzun düzenlemeleri geçici klasöre bir `.js` betiği olarak yazıp `node` ile çalıştırmak daha güvenli.
+- **Betik yazarken dikkat:**
+  - Aynı dosyaya tek betikte iki ayrı yazma yapma; ikincisi birincinin üstüne yazıp onu kaybettirdi.
+  - Değiştirilecek metnin dosyada tam bir kez geçtiğini kontrol et.
+  - CRLF satır sonlarını koru.
+- **Biçimlendirici:** Projede yapılandırması yok; `npx prettier --write` dosyayı yanlış biçime sokuyor, kullanma.
+- **Telefonda yazı kaybolması:** Takvim gün yuvarlağında yaşandı. Bir kapsayıcının kenarlığı ve `overflow: hidden` durumu değişince Android'de içerik çizilmeyebiliyor; kenarlığı sabit tutmak ve kırpmayı kaldırmak çözüm oldu.
+- **`git revert`:** `-q` seçeneğini kabul etmiyor.
