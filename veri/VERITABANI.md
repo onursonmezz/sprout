@@ -47,7 +47,7 @@ Kalorifer sezonu Ekim-Nisan varsayılmıştır. Kullanıcıya "kaloriferin yanı
 
 ## Veri sınırları — okumadan yayına almayın
 
-1. **Toksisite verisi doğrulanmalı.** Kaynak ASPCA zehirli/zehirsiz bitki listesi ve botanik literatürdür. Her kayıt `needsVerification: true` işaretlidir. Bu alanın yanlış olması doğrudan zarara yol açar; `Toksisite Kontrol` sayfasından ikinci bir kaynakla teyit edin. 8 bitki "ciddi" düzeyde, zakkum bunların en tehlikelisi.
+1. **Toksisite verisi doğrulanmalı.** Kaynak ASPCA zehirli/zehirsiz bitki listesi ve botanik literatürdür. İlk 216 kayıt `needsVerification: true` işaretlidir (Fatsia ve Araucaria hariç); ek paket 2'dekiler ASPCA ile doğrulandı. Bu alanın yanlış olması doğrudan zarara yol açar; `Toksisite Kontrol` sayfasından ikinci bir kaynakla teyit edin. 8 bitki "ciddi" düzeyde, zakkum bunların en tehlikelisi.
 2. **Lux değerleri tür bazında ölçülmedi.** Işık kategorisinden türetilen standart bahçecilik aralıklarıdır. Işık ölçer için yeterli, bilimsel iddia değil.
 3. **`survivalMinC` kısa süreli maruziyet içindir**, sürekli yaşam sıcaklığı değil.
 4. **Türkçe isimler bölgeye göre değişir.** "Deve tabanı" bazı yerlerde Monstera, bazı yerlerde başka bir bitki için kullanılıyor. Her bitkide birden fazla isim tutuluyor, arama bunların hepsini taramalı.
@@ -66,6 +66,12 @@ Mevsim davranışı olağandışı olan türler (kışın çiçek açan, yazın 
 
 Ek paket 1 (`turler-ek-1.js`) ile tür sayısı 100'den 216'ya çıktı.
 
-## Sıradaki 50 için aday listesi
+Ek paket 2 (`turler-ek-2.js`, Ekim 2026) ile 267'ye çıktı. Bu paketteki her tür iki kaynakla karşılaştırıldı: zehirlilik için ASPCA'nın kedi ve köpek listeleri, bakım için NC State Extension Plant Toolbox (frenk incirinde RHS). Satırların 23. sütunu doğrulama kaynağıdır; bu sütun verilen türler `needsVerification: false` ve kaynak adıyla yazılır. Kaynakların çeliştiği ya da yalnızca cins düzeyinde genel bilgi veren adaylar alınmadı.
 
-Aeschynanthus (ruj çiçeği), Impatiens (cam güzeli), Fuchsia (küpe çiçeği), Plumbago (mavi yasemin), Laurus nobilis (defne), Camellia japonica (kamelya), Hyacinthus (sümbül), Narcissus (nergis), Tulipa (lale), Dionaea (sinekkapan), Petroselinum (maydanoz), Origanum onites (İzmir kekiği), Salvia officinalis (adaçayı), Aloe aristata, Kalanchoe tomentosa (panda bitkisi), Crassula perforata, Aeonium arboreum, Lithops, Epiphyllum, Hatiora, Dracaena reflexa, Philodendron erubescens, Monstera obliqua, Anthurium clarinervium, Aglaonema 'Red Siam', Ficus microcarpa (bonsai), Chamaerops humilis, Washingtonia filifera, Cycas revoluta (sagu palmiyesi), Zamia furfuracea, Musa acuminata (cüce muz), Punica granatum (nar), Ficus carica (incir), Vitis (asma), Rosa (saksı gülü), Hydrangea (ortanca), Azalea, Primula, Viola (hercai menekşe), Petunia, Surfinia, Verbena, Dianthus (karanfil), Tagetes (kadife çiçeği), Salvia splendens (ateş çiçeği), Coleus (kösemen), Helichrysum, Dichondra, Lobelia, Nemesia.
+Aynı kontrolde mevcut iki kaydın ASPCA ile çeliştiği görüldü ve düzeltildi: Fatsia japonica ve Araucaria heterophylla (ikisi de ASPCA'da kedi ve köpek için zehirsiz).
+
+## Sıradaki adaylar
+
+Kaynak bulunamadığı ya da kaynaklar çeliştiği için ek paket 2'ye alınmayanlar: Tropaeolum majus (latin çiçeği; ASPCA zehirsiz, NC State sorunlu diyor), Begonia × hiemalis (kış begonyası; yalnızca blog kaynakları), Ficus binnendijkii 'Alii', Kalanchoe thyrsiflora, Echeveria agavoides ve pulvinata, Philodendron gloriosum (yalnızca cins sayfası), Passiflora caerulea (çarkıfelek), Myrtus communis (mersin), Aptenia cordifolia ve Delosperma (buz çiçekleri), Gazania, Verbena, Salvia splendens, Lobelia, Calibrachoa, Nephrolepis cordifolia, Ludisia discolor, Paphiopedilum, Vanda (ASPCA listesinde yoklar).
+
+Eski listeden henüz eklenmeyenler: Origanum onites (İzmir kekiği), Monstera obliqua, Anthurium clarinervium, Aglaonema 'Red Siam', Washingtonia filifera, Vitis (asma), Surfinia, Helichrysum, Dichondra, Nemesia.

@@ -174,6 +174,10 @@ const SEASON_PROFILE_OVERRIDES: Record<string, SeasonProfile> = {
   'aeonium-arboreum': 'summerDormant',
   // An air plant: no soil to dry out, soaked on the same rhythm all year.
   'tillandsia-ionantha': 'normal',
+  // Spring bulbs: foliage dies back after flowering and they rest through summer.
+  tulipa: 'summerDormant',
+  'muscari-armeniacum': 'summerDormant',
+  'ranunculus-asiaticus': 'summerDormant',
 };
 
 /** A species' season profile: desert plants and anything that wants its soil

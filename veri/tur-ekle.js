@@ -54,10 +54,13 @@ for (const p of db.plants) for (const n of [p.commonNameEn, ...p.commonNamesTr])
 const records = [];
 let skipped = 0;
 for (const row of rows) {
-  const [sci, tr, en, family, category, difficulty, light, tolerated, waterDays, dry, humidity, temp, soil, repot, fert, tox, toxNote, size, growth, propagation, heating, note] = row;
+  // 23. sütun isteğe bağlıdır: bilgilerin doğrulandığı kaynak. Verilirse
+  // tür "doğrulanmalı" olarak işaretlenmez.
+  const [sci, tr, en, family, category, difficulty, light, tolerated, waterDays, dry, humidity, temp, soil, repot, fert, tox, toxNote, size, growth, propagation, heating, note, verifiedBy] = row;
   const id = idOf(sci);
   const fail = (msg) => errors.push(`${sci}: ${msg}`);
-  if (row.length !== 22) fail(`22 sütun bekleniyordu, ${row.length} var`);
+  if (row.length !== 22 && row.length !== 23) fail(`22 ya da 23 sütun bekleniyordu, ${row.length} var`);
+  if (row.length === 23 && !verifiedBy) fail('doğrulama kaynağı boş');
   if (existingIds.has(id)) {
     skipped++;
     continue;
@@ -116,8 +119,8 @@ for (const row of rows) {
       severity,
       severityTr: L.toxSeverityTr[severity],
       note: toxNote,
-      source: TOX_SOURCE,
-      needsVerification: true,
+      source: verifiedBy ?? TOX_SOURCE,
+      needsVerification: !verifiedBy,
     },
     size: { heightMinCm: hMin, heightMaxCm: hMax, spreadMinCm: sMin, spreadMaxCm: sMax },
     growthRate: growth,
