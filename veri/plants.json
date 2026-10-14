@@ -292,8 +292,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat kristalleri içerir; özsuyu cilt tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -382,8 +382,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Saponin içerir; yenirse kusma ve ishal yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Sansevieria trifasciata adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -471,8 +471,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve boğazda yanma, şişlik.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -558,8 +558,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat kristalleri.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -647,8 +647,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; olgun meyvesi dışında tüm kısımları tahriş edici.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -733,8 +733,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat kristalleri.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox + ASPCA Monstera deliciosa (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -821,8 +821,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız tahrişi ve salya artışı.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -909,8 +909,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve yutakta yanma, şişlik.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -996,8 +996,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat kristalleri.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State (Aglaonema cinsi) + ASPCA Aglaonema modestum (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -1083,8 +1083,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Yüksek oranda kalsiyum oksalat. Ağızda şiddetli yanma, dilde şişme ve geçici konuşma güçlüğü yapabilir. Çocuk ve evcil hayvan erişiminden uzak tutun.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -1169,8 +1169,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat kristalleri.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -1258,8 +1258,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız tahrişi.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox + ASPCA Anthurium scherzerianum (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -1338,8 +1338,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -1418,8 +1418,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA tarafından kediler ve köpekler için zehirsiz listelenmiştir. Kediler yaprağı kemirmeyi sever; aşırısı mideyi bozabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -1502,8 +1502,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız tahrişi ve kusma.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 50,
@@ -1589,8 +1589,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Sütsü özsuyu cilt tahrişi ve yutulursa mide bulantısı yapar.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -1674,8 +1674,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Sütsü özsuyu tahriş edicidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 80,
@@ -1759,8 +1759,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Sütsü özsuyu tahriş edicidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -1845,8 +1845,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Sütsü özsuyu cilt tahrişi yapar.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -1931,8 +1931,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin içerir; kedilerde kusma, iştahsızlık, göz bebeği büyümesi.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -2016,8 +2016,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin; kusma ve salya artışı.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -2099,8 +2099,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin içerir; kedilerde kusma ve halsizlik.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -2270,8 +2270,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin içerir; kusma ve ishal yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -2356,8 +2356,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin; kusma, salya, iştahsızlık.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Cordyline terminalis adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -2439,8 +2439,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -2520,8 +2520,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 80,
@@ -2602,8 +2602,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 80,
@@ -2684,8 +2684,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Rhapis flabelliformis adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -2767,8 +2767,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -2849,8 +2849,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -3093,8 +3093,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -3176,8 +3176,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Fittonia verschaffeltii adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -3258,8 +3258,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 5,
@@ -3344,8 +3344,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Sapogenin içerir; kusma, ishal ve temasla cilt döküntüsü yapabilir. Meyveleri zehirlidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Plumosa Fern adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -3426,8 +3426,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Calathea spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -3508,8 +3508,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Zehirsiz; evcil hayvanlı evler için güvenli.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Calathea spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -3590,8 +3590,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Prayer Plant adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -3673,8 +3673,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -3843,8 +3843,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Yüksek kalsiyum oksalat; ağızda şiddetli yanma ve şişme.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -3927,8 +3927,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Kalsiyum oksalat; ağız ve boğazda şiddetli tahriş.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Caladium hortulanum adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -4015,8 +4015,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Çiğ haldeyken kalsiyum oksalat bakımından çok zengin.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -4182,8 +4182,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Triterpenoid saponin; kusma, ishal, karın ağrısı. Temas dermatiti de yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -4263,8 +4263,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -4348,8 +4348,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Çözünür oksalat tuzları; çok miktarda yenirse böbrek etkilenebilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -4515,8 +4515,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Yaprak kabuğundaki aloin kedilerde ve köpeklerde kusma, ishal ve halsizlik yapar. İnsanlar için jel kısmı yaygın olarak kullanılır.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -4600,8 +4600,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Aloin içerir; evcil hayvanlarda sindirim sorunları.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State (Aloe cinsi) + ASPCA Aloe vera (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -4687,8 +4687,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kedilerde ve köpeklerde kusma, koordinasyon bozukluğu ve halsizlik. Etken madde tam olarak bilinmiyor.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Crassula argentea adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -4768,8 +4768,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 8,
@@ -4852,8 +4852,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Haworthia species adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 8,
@@ -5017,8 +5017,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -5266,8 +5266,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Yutulursa kusma ve ishal, özsuyu cilt tahrişi yapar.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Senecio species adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -5434,8 +5434,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kardiyak glikozit (bufadienolid) içerir; kusma, ishal ve nadiren kalp ritim bozukluğu.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -5606,8 +5606,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Beyaz sütsü özsuyu ciddi cilt yanığı ve göze temasta kalıcı hasar yapabilir. Budarken eldiven ve gözlük kullanın.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -5765,8 +5765,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State (Mammillaria cinsi) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -5840,11 +5840,11 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "mild",
-        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
-        "note": "Glokid denen tüy gibi ince dikenleri cilde saplanır ve çıkarılması zordur. Zehirli değildir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA Opuntia cinsini zehirsiz sayar. Dikenleri ve ince tüyleri (glokid) cilde batıp tahriş yapabilir.",
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -6006,8 +6006,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox + ASPCA Schlumbergera bridgesii (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -6088,8 +6088,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Rhipsalis cassutha adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -6170,8 +6170,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -6252,8 +6252,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Zehirsiz; evcil hayvanlar için güvenli.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -6334,8 +6334,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -6418,8 +6418,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Özsuyu temas dermatiti yapabilir; yutulursa hafif sindirim rahatsızlığı.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -6504,8 +6504,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Özsuyu cilt tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -6589,8 +6589,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -6671,8 +6671,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Saintpaulia adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -6751,8 +6751,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -6838,8 +6838,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Terpenoid saponin içerir; özellikle yumrusu. Kusma, ishal, kalp ritim bozukluğu ve nöbet yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -6925,8 +6925,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Çözünür kalsiyum oksalat; en yoğun kısmı yumrusudur. Ağız tahrişi, kusma.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -7012,8 +7012,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Çözünür kalsiyum oksalat içerir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -7097,8 +7097,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Likorin alkaloidi içerir; kusma, ishal, salya artışı.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -7185,8 +7185,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Çiçek ve tohumları toksik; kusma ve uyuşukluk yapar.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -7271,8 +7271,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Sütsü özsuyu ağız tahrişi ve hafif mide bulantısı yapar. Halk arasındaki 'ölümcül' ünü bilimsel olarak desteklenmiyor.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -7357,8 +7357,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Sütsü özsuyu şiddetli cilt ve göz tahrişi yapar; yutulursa ağır sindirim sorunları. Gövde dikenlidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -7442,8 +7442,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Piretrin ve seskiterpen lakton içerir; kusma, ishal, salya ve temas dermatiti.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -7529,8 +7529,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Geraniol ve linalol içerir; kusma, iştahsızlık ve temas dermatiti yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -7782,8 +7782,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "TÜM KISIMLARI ÖLDÜRÜCÜ DERECEDE ZEHİRLİ. Oleandrin adlı kardiyak glikozit içerir; tek bir yaprak bile çocuk veya evcil hayvan için ölümcül olabilir. Dumanı bile zehirlidir, kesinlikle yakmayın.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -7953,8 +7953,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Gerçek yasemin türleri zehirsiz kabul edilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -8038,8 +8038,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Geniposid içerir; kusma ve ishal yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -8120,8 +8120,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Yenilebilir; evcil hayvanlar için de güvenli kabul edilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -8200,8 +8200,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Yenilebilir; ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Rosmarinus officinalis adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -8286,8 +8286,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Çok miktarda yenirse kusma ve ishal yapabilir. Küçük miktarlar genelde sorunsuz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -8367,8 +8367,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Yenilebilir; zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -8448,8 +8448,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Linalol ve linalil asetat içerir; yenirse kusma ve iştahsızlık yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -8534,8 +8534,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar ve psoralen içerir; yenirse kusma, ishal ve depresyon yapabilir. Meyvesi insanlar için güvenlidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Citrus limonia, Lemon adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -8703,8 +8703,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Philodendron selloum adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 90,
@@ -8792,8 +8792,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -8880,8 +8880,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -8968,8 +8968,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -9054,8 +9054,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -9142,8 +9142,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -9228,8 +9228,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin; kedi ve köpeklerde kusma ve iştahsızlık yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -9315,8 +9315,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Sütlü özsuyu cilt ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -9400,8 +9400,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Sütlü özsuyu cilt ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 90,
@@ -9483,8 +9483,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -9570,8 +9570,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Brassaia actinophylla adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 90,
@@ -9654,8 +9654,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Saponin; cilt ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -9897,8 +9897,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -10064,8 +10064,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Swedish Ivy adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -10146,8 +10146,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -10228,8 +10228,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 5,
@@ -10392,8 +10392,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -10476,8 +10476,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Özsuyu ciltte tahriş yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -10562,8 +10562,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Özsuyu ciltte tahriş yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 5,
@@ -10643,8 +10643,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -10725,8 +10725,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Lipstick Plant adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -10806,8 +10806,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Nematanthus spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -10890,8 +10890,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -10974,8 +10974,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Calathea insignis adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 45,
@@ -11057,8 +11057,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Calathea spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -11140,8 +11140,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Calathea spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 45,
@@ -11223,8 +11223,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Calathea spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 45,
@@ -11306,8 +11306,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -11393,8 +11393,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Yutulursa mide bulantısı yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox + ASPCA Strelitzia reginae (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 150,
@@ -11480,8 +11480,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Özsuyu ve meyvesi mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -11648,8 +11648,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Meyveleri mide tahrişi, özsuyu cilt tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -11807,8 +11807,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 8,
@@ -11896,8 +11896,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Tüm kısımları, özellikle tohumları çok zehirlidir; karaciğer yetmezliğine yol açabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -11980,8 +11980,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -12231,8 +12231,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -12312,8 +12312,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -12394,8 +12394,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -12476,8 +12476,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -12561,8 +12561,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Saponin; yutulursa bulantı yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -12727,8 +12727,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Sedum weinbergii adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -12812,8 +12812,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Crassula türleri kedi ve köpeklerde kusma yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -12982,8 +12982,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalp glikozitleri; kedi ve köpeklerde kusma ve kalp ritmi sorunları yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -13069,8 +13069,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalp glikozitleri; tüm kısımları zehirlidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -13142,8 +13142,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State (Lithops cinsi) + ASPCA Lithops naureeniae (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 2,
@@ -13229,8 +13229,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Yutulursa mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Senecio species adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 5,
@@ -13314,8 +13314,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Sütlü özsuyu göz ve ciltte ciddi tahriş yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -13397,8 +13397,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Kalp glikozitleri; tüm kısımları çok zehirlidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -13646,8 +13646,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 5,
@@ -13890,8 +13890,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State (Astrophytum cinsi) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -14056,8 +14056,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -14142,8 +14142,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Kalsiyum oksalat; ağız ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -14227,8 +14227,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Soğanı en zehirli kısmıdır; kusma ve titreme yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -14309,8 +14309,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -14394,8 +14394,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -14478,8 +14478,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -14562,8 +14562,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 45,
@@ -14881,8 +14881,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, Oncidium türleri (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -15045,8 +15045,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -15124,8 +15124,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -15209,8 +15209,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Grayanotoksin; az miktarı bile kusma, halsizlik ve kalp sorunlarına yol açabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -15295,8 +15295,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Çözünür oksalatlar; en zehirli kısmı köküdür.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -15377,8 +15377,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -15463,8 +15463,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Yaprakları ciltte tahriş, yutulursa mide bulantısı yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Primula vulgaris adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 10,
@@ -15545,8 +15545,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Soğanı en zehirli kısmıdır; ciltte kaşıntı da yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -15626,8 +15626,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Likorin; soğanı çok zehirlidir, kusma ve kalp ritmi sorunları yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -15711,8 +15711,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Kediler için son derece zehirlidir; poleni ya da vazo suyu bile böbrek yetmezliğine yol açabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 45,
@@ -15792,8 +15792,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz; dikenlere dikkat.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -15879,8 +15879,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Siyanojenik glikozitler; kusma ve halsizlik yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "NC State Extension Plant Toolbox + ASPCA Hydrangea arborescens (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -15960,8 +15960,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -16123,8 +16123,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,
@@ -16288,8 +16288,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Olgunlaşmamış meyveleri özellikle zehirlidir; karaciğer hasarı yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -16370,8 +16370,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Kedi ve köpeklerde hafif mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -16538,8 +16538,8 @@
         "severity": "severe",
         "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
         "note": "Vinka alkaloitleri; tüm kısımları zehirlidir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Vinca rosea adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -16703,8 +16703,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -16872,8 +16872,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar ve psoralen; kedi ve köpeklerde mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Citrus mitis, Calamondin adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -16955,8 +16955,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Sütlü özsuyu cilt ve mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -17124,8 +17124,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Alkaloitler; kusma ve ishal yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -17209,8 +17209,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar; kedi ve köpeklerde kusma ve deri tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -17294,8 +17294,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar; kedi ve köpeklerde kusma ve deri tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -17378,8 +17378,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar; bütün yapraklar yutulursa sindirim sorununa yol açabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -17462,8 +17462,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Çok miktarda yenirse evcil hayvanlarda ışığa duyarlılık yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -17543,8 +17543,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -17625,8 +17625,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar; kedi ve köpeklerde mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -17706,8 +17706,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -17789,8 +17789,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -17875,8 +17875,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Soğangiller kedi ve köpeklerde kansızlığa yol açabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -17955,8 +17955,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 20,
@@ -18038,8 +18038,8 @@
         "severity": "mild",
         "severityTr": "Hafif - genellikle ağız/mide tahrişi",
         "note": "Uçucu yağlar; kedi ve köpeklerde mide tahrişi yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Aloysia triphylla adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -18121,8 +18121,8 @@
         "severity": "moderate",
         "severityTr": "Orta - kusma, salya, yutma güçlüğü",
         "note": "Yaprak, gövde ve yeşil meyvesi solanin içerir; kusma ve halsizlik yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA (Lycopersicon spp. adıyla) (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 40,
@@ -18287,8 +18287,8 @@
         "severity": "none",
         "severityTr": "Bilinen toksisitesi yok",
         "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
-        "needsVerification": true
+        "source": "ASPCA, cins düzeyinde (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 15,

@@ -71,7 +71,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
   - Sonuç kötüyse Pl@ntNet ücretsiz katmanına geçilir; ticari kullanıma izin verdiği kontrol edilmeli.
   - Yerel modül gerektirir, yeni kurulum ister. Yayın, Play Store ya da "çıkış" konuşulduğunda bunu hatırlat.
 - **Ana ekran widget'ı:** İstendi ama "şimdi değil" dendi. Kendiliğinden başlama; yapılacaklar sorulunca listele. Yeni kurulum gerektirir; fotoğraftan tanımayla aynı kuruluma koymak mantıklı.
-- **Zehirlilik bilgisi:** İlk 216 türün evcil hayvan bilgisi tek tek doğrulanmadı (`needsVerification`). Ekim 2026'da ASPCA listesiyle hızlı bir karşılaştırma yapıldı: 121 tür eşleşti, yalnızca Fatsia ve Araucaria çelişiyordu (düzeltildi). Kalan 95 tür eşleştirme yönteminin yakalayamadığı adlar yüzünden kontrol edilemedi. Bitki bulucu bu bilgiyi kullanıyor; yayından önce tamamlanmalı. Ek paket 2'deki 51 tür doğrulandı.
+- **Zehirlilik bilgisi:** Ekim 2026'da tüm türler ASPCA ve NC State ile karşılaştırıldı. 267 türün 226'sı doğrulandı (her kaydın `source` alanında kaynağı yazıyor). Kedi/köpek için çelişki yalnızca Fatsia ve Araucaria'da çıktı (düzeltildi). 41 tür iki kaynakta da bulunamadı ve hâlâ `needsVerification: true`; listesi `veri/VERITABANI.md`'de. Bitki bulucu bu bilgiyi kullanıyor; yayından önce bu 41'i başka bir güvenilir kaynakla (ör. Pet Poison Helpline, Cornell) tamamlamak iyi olur.
 - **Kılavuzlar:** Yazılı adımlar var, fotoğraf ya da çizim yok.
 - **Yedekleme:** Fotoğrafları, ayarları ve çoğaltma projelerini kapsamıyor; Firebase kuralları doğrulanmadı.
 - **Diğer fikirler (sırası gelince):** Alışveriş listesi, rozetler / yıllık özet, arka planda hava uyarısı, kişisel veri politikası metni, Play Store yayın adımları.
