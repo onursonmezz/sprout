@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sprout",
     "slug": "sprout-app",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sproutapp",
@@ -39,7 +39,8 @@
         {
           "locationWhenInUsePermission": "Sprout uses your location to check the local temperature and fine-tune watering reminders for the season."
         }
-      ]
+      ],
+      "react-native-fast-tflite"
     ],
     "experiments": {
       "typedRoutes": true,

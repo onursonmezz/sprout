@@ -61,6 +61,7 @@ function Navigation() {
         <Stack.Screen name="guide/article/[key]" />
         <Stack.Screen name="guide/issue/[key]" />
         <Stack.Screen name="guide/issues" />
+        <Stack.Screen name="credits" />
       </Stack>
       <WateringFeedbackPrompt />
       <PlantQuickActions />

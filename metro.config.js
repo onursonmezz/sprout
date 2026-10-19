@@ -7,4 +7,7 @@ const config = getDefaultConfig(__dirname);
 config.resolver.sourceExts.push('cjs');
 config.resolver.unstable_enablePackageExports = false;
 
+// The on-device plant identification model (react-native-fast-tflite).
+config.resolver.assetExts.push('tflite');
+
 module.exports = config;

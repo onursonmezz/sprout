@@ -15,9 +15,9 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 
 ## 2. Proje, hesaplar ve yerler
 
-- **Uygulama:** Sprout, ev bitkisi bakım uygulaması. Android, Expo SDK 57, React Native 0.86 (yeni mimari), TypeScript, Expo Router. Paket adı `com.organizma.sproutapp`, sürüm 1.0.0.
+- **Uygulama:** Sprout, ev bitkisi bakım uygulaması. Android, Expo SDK 57, React Native 0.86 (yeni mimari), TypeScript, Expo Router. Paket adı `com.organizma.sproutapp`, sürüm 1.1.0 (bitki tanıma ile yükseltildi).
 - **Kod:** `C:\Users\osonm\Documents\SPROUT\sprout-app`. GitHub: https://github.com/onursonmezz/sprout (`main` dalı).
-- **Expo / EAS hesabı:** `organizma`. Güncelleme adresi `https://u.expo.dev/3c8144d1-1573-4fd9-820f-70f8caa71969`. Kanal `preview`, runtimeVersion politikası `appVersion` (1.0.0).
+- **Expo / EAS hesabı:** `organizma`. Güncelleme adresi `https://u.expo.dev/3c8144d1-1573-4fd9-820f-70f8caa71969`. Kanal `preview`, runtimeVersion politikası `appVersion` (1.1.0). Yeni bir yerel modül eklenince sürüm de yükseltilmeli; yoksa havadan güncelleme eski APK'ya gidip uygulamayı çökertebilir.
 - **Marka kiti:** `Documents\SPROUT\marka-kiti\`: ikon ve logo, Play Store görselleri, sosyal medya, 15 saniyelik Reels videosu, metinler. Ekran görüntüleri ve Reels, tur, albüm, çoğaltma, takvim ve teşhis eklenmeden önce hazırlandı; güncellenmesi gerekebilir.
 - **Logo:** İki yaprağın S harfi oluşturduğu tasarım, koyu yeşil zemin. Kaynağı `assets/images/icon.png`. Uygulamadaki karşılama ekranında ve ana sayfa başlığında da bu kullanılıyor (tıklanmıyor, öyle kalması istendi).
 - **Tasarım taslakları:** `Documents\SPROUT\taslak\`.
@@ -38,7 +38,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 
 - `src/app/(tabs)/`: Bugün (`index.tsx`), Bitkilerim (`plants.tsx`), Takvim (`calendar.tsx`), Rehber (`guide.tsx`), Ayarlar (`settings.tsx`). Alt menü özel ve yüzen tasarımda (`components/floating-tab-bar.tsx`).
 - `src/app/plant/[id].tsx`: bitki sayfası (sulama kartı, "Neden N günde bir?", albüm, çoğaltma, tür kartı, sorun şeridi, Bakım/Günlük/Geçmiş sekmeleri, paylaşım kartı).
-- Diğer ekranlar: `add-plant.tsx`, `light-meter.tsx`, `tour.tsx` (haftalık tur), `diagnose.tsx` (teşhis), `finder.tsx` (bitki bulucu ve köşe danışmanı), `howto/[key].tsx` (nasıl yapılır), `propagation/[id].tsx` (çelik takibi), `guide/...`, `onboarding.tsx`.
+- Diğer ekranlar: `add-plant.tsx`, `light-meter.tsx`, `tour.tsx` (haftalık tur), `diagnose.tsx` (teşhis), `finder.tsx` (bitki bulucu ve köşe danışmanı), `howto/[key].tsx` (nasıl yapılır), `credits.tsx` (fotoğraf teşekkürleri, Ayarlar > Hakkında), `propagation/[id].tsx` (çelik takibi), `guide/...`, `onboarding.tsx`.
 - **Tasarım sistemi:** `components/glass.tsx` (cam kartlar, gradyanlar) ve `constants/theme.ts` (koyu zemin `#0F1813`, yeşil vurgu).
 - **Metinler:** `constants/translations.ts` (EN + TR). Yeni metin eklerken iki dili de ekle.
 - **Veriler:**
@@ -85,7 +85,13 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
     - Güven %70 üstündeyken (fotoğrafların %80'i) %94 doğru.
     - Kullanıcının 6 fotoğrafının 6'sı doğru.
     - Kalan karışıklıklar benzer çiftler: havortiyalar, streptokarpus/Afrika menekşesi, naneler, ekeveryalar.
-  - **Sıradaki adım:** Uygulamaya ekleme. Modeli telefona uygun biçime çevirmek (ConvNeXt-Tiny ~28M parametre, sıkıştırılınca ~30 MB), kamera ekranı, ilk 3 öneri ve "emin değilim" eşiği. Yeni APK gerekir. Yayında fotoğraf sahiplerine atıf için `veri/kaynaklar.csv` kullanılacak.
+  - **Uygulamaya eklendi (19 Ekim 2026, sürüm 1.1.0, yeni APK):**
+    - **Telefon modeli:** `disa-aktar.py` modelin önüne renk normalleştirmesini, arkasına olasılık hesabını ekleyip ONNX'e aktarır. GELU, tanh yaklaşımıyla değiştirilir; telefondaki TFLite "Erf"i desteklemiyor. Ayrı `.venv-tf` ortamında `onnx2tf -kat foto -tb tf_converter -odrqt` ile 29 MB'lık `assets/models/plant-id.tflite` üretilir. `tflite-sina.py` ile ölçüldü: 800 ev fotoğrafında %82,8 / %91,6 (orijinal %82,9 / %92,0).
+    - **Telefonda çalıştırma:** `react-native-fast-tflite` (Nitro, yeni mimari). `src/utils/plant-id.ts` fotoğrafı expo-image-manipulator ile ortadan kırpar (kısa kenarın 224/255'i), 224'e küçültür, jpeg-js ile piksele çevirir. Web'de `plant-id.web.ts` özelliği gizler.
+    - **Ekran:** Etiket sırası `src/data/plant-id-labels.ts`'de; model değişince bu dosya da birlikte değişmeli. Bitki eklerken fotoğrafın altında `components/plant-id-suggestions.tsx` ilk 3 öneriyi örnek fotoğraflarla gösterir. Güven %70 altındaysa "emin olamadım" der; dokununca tür dolar.
+    - **Örnek fotoğraflar:** `assets/species/`. Bunları ve teşekkür listesini `bitki-tanima/ornek-foto.py` üretir (`src/data/species-photos.ts`). Tam fotoğraf listesi `tanima/fotograf-kaynaklari.csv`; teşekkür sayfası GitHub'daki bu dosyaya bağlanır.
+    - **Telefonda henüz denenmedi.** Önizlemede yalnızca kartın görünümü sahte önerilerle ve teşekkür sayfası denendi.
+    - **Açık konu:** CC BY-SA fotoğrafların modelde kullanılması hukuken tartışmalı. Yayından önce kullanıcıyla konuşulmalı; gerekirse bu fotoğraflar çıkarılıp yeniden eğitilir (~1 saat).
 - **Ana ekran widget'ı:** İstendi ama "şimdi değil" dendi. Kendiliğinden başlama; yapılacaklar sorulunca listele. Yeni kurulum gerektirir; fotoğraftan tanımayla aynı kuruluma koymak mantıklı.
 - **Zehirlilik bilgisi:** Ekim 2026'da tüm türler ASPCA ve NC State ile karşılaştırıldı. 267 türün 226'sı doğrulandı (her kaydın `source` alanında kaynağı yazıyor). Kedi/köpek için çelişki yalnızca Fatsia ve Araucaria'da çıktı (düzeltildi). 41 tür iki kaynakta da bulunamadı ve hâlâ `needsVerification: true`; listesi `veri/VERITABANI.md`'de. Bitki bulucu bu bilgiyi kullanıyor; yayından önce bu 41'i başka bir güvenilir kaynakla (ör. Pet Poison Helpline, Cornell) tamamlamak iyi olur.
 - **Kılavuzlar:** Yazılı adımlar var, fotoğraf ya da çizim yok.

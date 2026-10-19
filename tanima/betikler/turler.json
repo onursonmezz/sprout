@@ -1,0 +1,1604 @@
+{
+ "zamioculcas-zamiifolia": {
+  "ad": "Zamioculcas zamiifolia",
+  "takson": 367277,
+  "rank": "species",
+  "gozlem": 10352
+ },
+ "dracaena-trifasciata": {
+  "ad": "Sansevieria trifasciata",
+  "takson": 67710,
+  "rank": "species",
+  "gozlem": 34037
+ },
+ "epipremnum-aureum": {
+  "ad": "Epipremnum aureum",
+  "takson": 69223,
+  "rank": "species",
+  "gozlem": 39339
+ },
+ "scindapsus-pictus": {
+  "ad": "Scindapsus pictus",
+  "takson": 346616,
+  "rank": "species",
+  "gozlem": 1327
+ },
+ "monstera-deliciosa": {
+  "ad": "Monstera deliciosa",
+  "takson": 122521,
+  "rank": "species",
+  "gozlem": 22067
+ },
+ "monstera-adansonii": {
+  "ad": "Monstera adansonii",
+  "takson": 206267,
+  "rank": "species",
+  "gozlem": 4837
+ },
+ "philodendron-hederaceum": {
+  "ad": "Philodendron hederaceum",
+  "takson": 120490,
+  "rank": "species",
+  "gozlem": 6646
+ },
+ "spathiphyllum-wallisii": {
+  "ad": "Spathiphyllum",
+  "takson": 206271,
+  "rank": "genus",
+  "gozlem": 29724
+ },
+ "aglaonema-commutatum": {
+  "ad": "Aglaonema commutatum",
+  "takson": 158118,
+  "rank": "species",
+  "gozlem": 5584
+ },
+ "dieffenbachia-seguine": {
+  "ad": "Dieffenbachia seguine",
+  "takson": 206266,
+  "rank": "species",
+  "gozlem": 12474
+ },
+ "syngonium-podophyllum": {
+  "ad": "Syngonium podophyllum",
+  "takson": 143208,
+  "rank": "species",
+  "gozlem": 18691
+ },
+ "anthurium-andraeanum": {
+  "ad": "Anthurium andraeanum",
+  "takson": 69235,
+  "rank": "species",
+  "gozlem": 18949
+ },
+ "aspidistra-elatior": {
+  "ad": "Aspidistra elatior",
+  "takson": 125396,
+  "rank": "species",
+  "gozlem": 4618
+ },
+ "chlorophytum-comosum": {
+  "ad": "Chlorophytum comosum",
+  "takson": 322492,
+  "rank": "species",
+  "gozlem": 20285
+ },
+ "schefflera-arboricola": {
+  "ad": "Heptapleurum arboricola",
+  "takson": 1239449,
+  "rank": "species",
+  "gozlem": 26800
+ },
+ "ficus-elastica": {
+  "ad": "Ficus elastica",
+  "takson": 126507,
+  "rank": "species",
+  "gozlem": 17520
+ },
+ "ficus-lyrata": {
+  "ad": "Ficus lyrata",
+  "takson": 201458,
+  "rank": "species",
+  "gozlem": 8168
+ },
+ "ficus-benjamina": {
+  "ad": "Ficus benjamina",
+  "takson": 50996,
+  "rank": "species",
+  "gozlem": 24320
+ },
+ "ficus-pumila": {
+  "ad": "Ficus pumila",
+  "takson": 162972,
+  "rank": "species",
+  "gozlem": 19986
+ },
+ "dracaena-marginata": {
+  "ad": "Dracaena reflexa angustifolia",
+  "takson": 126509,
+  "rank": "variety",
+  "gozlem": 5420
+ },
+ "dracaena-fragrans": {
+  "ad": "Dracaena fragrans",
+  "takson": 126515,
+  "rank": "species",
+  "gozlem": 25276
+ },
+ "dracaena-sanderiana": {
+  "ad": "Dracaena sanderiana",
+  "takson": 800897,
+  "rank": "species",
+  "gozlem": 7743
+ },
+ "codiaeum-variegatum": {
+  "ad": "Codiaeum variegatum",
+  "takson": 127387,
+  "rank": "species",
+  "gozlem": 49492
+ },
+ "yucca-elephantipes": {
+  "ad": "Yucca gigantea",
+  "takson": 201452,
+  "rank": "species",
+  "gozlem": 13412
+ },
+ "cordyline-fruticosa": {
+  "ad": "Cordyline fruticosa",
+  "takson": 123572,
+  "rank": "species",
+  "gozlem": 41573
+ },
+ "chamaedorea-elegans": {
+  "ad": "Chamaedorea elegans",
+  "takson": 283400,
+  "rank": "species",
+  "gozlem": 2938
+ },
+ "howea-forsteriana": {
+  "ad": "Howea forsteriana",
+  "takson": 135400,
+  "rank": "species",
+  "gozlem": 1327
+ },
+ "dypsis-lutescens": {
+  "ad": "Chrysalidocarpus lutescens",
+  "takson": 276548,
+  "rank": "species",
+  "gozlem": 17641
+ },
+ "rhapis-excelsa": {
+  "ad": "Rhapis excelsa",
+  "takson": 283915,
+  "rank": "species",
+  "gozlem": 7767
+ },
+ "beaucarnea-recurvata": {
+  "ad": "Beaucarnea recurvata",
+  "takson": 206192,
+  "rank": "species",
+  "gozlem": 4728
+ },
+ "nephrolepis-exaltata": {
+  "ad": "Nephrolepis exaltata",
+  "takson": 130866,
+  "rank": "species",
+  "gozlem": 11372
+ },
+ "adiantum-raddianum": {
+  "ad": "Adiantum raddianum",
+  "takson": 158023,
+  "rank": "species",
+  "gozlem": 3560
+ },
+ "asplenium-nidus": {
+  "ad": "Asplenium nidus",
+  "takson": 84356,
+  "rank": "species",
+  "gozlem": 10435
+ },
+ "platycerium-bifurcatum": {
+  "ad": "Platycerium bifurcatum",
+  "takson": 133619,
+  "rank": "species",
+  "gozlem": 9786
+ },
+ "fittonia-albivenis": {
+  "ad": "Fittonia albivenis",
+  "takson": 327855,
+  "rank": "species",
+  "gozlem": 2529
+ },
+ "soleirolia-soleirolii": {
+  "ad": "Soleirolia soleirolii",
+  "takson": 79147,
+  "rank": "species",
+  "gozlem": 5220
+ },
+ "asparagus-setaceus": {
+  "ad": "Asparagus setaceus",
+  "takson": 75604,
+  "rank": "species",
+  "gozlem": 9832
+ },
+ "calathea-orbifolia": {
+  "ad": "Goeppertia orbifolia",
+  "takson": 866988,
+  "rank": "species",
+  "gozlem": 275
+ },
+ "calathea-makoyana": {
+  "ad": "Goeppertia makoyana",
+  "takson": 1172810,
+  "rank": "species",
+  "gozlem": 1802
+ },
+ "maranta-leuconeura": {
+  "ad": "Maranta leuconeura",
+  "takson": 366346,
+  "rank": "species",
+  "gozlem": 4066
+ },
+ "stromanthe-sanguinea": {
+  "ad": "Stromanthe thalia",
+  "takson": 426720,
+  "rank": "species",
+  "gozlem": 2096
+ },
+ "ctenanthe-burle-marxii": {
+  "ad": "Ctenanthe burle-marxii",
+  "takson": 480528,
+  "rank": "species",
+  "gozlem": 883
+ },
+ "alocasia-amazonica": {
+  "ad": "Alocasia × mortfontanensis",
+  "takson": 1404267,
+  "rank": "hybrid",
+  "gozlem": 106
+ },
+ "caladium-bicolor": {
+  "ad": "Caladium bicolor",
+  "takson": 283377,
+  "rank": "species",
+  "gozlem": 21353
+ },
+ "colocasia-esculenta": {
+  "ad": "Colocasia esculenta",
+  "takson": 122835,
+  "rank": "species",
+  "gozlem": 26196
+ },
+ "fatsia-japonica": {
+  "ad": "Fatsia japonica",
+  "takson": 126735,
+  "rank": "species",
+  "gozlem": 12034
+ },
+ "hedera-helix": {
+  "ad": "Hedera helix",
+  "takson": 55882,
+  "rank": "species",
+  "gozlem": 185417
+ },
+ "cissus-rhombifolia": {
+  "ad": "Cissus alata",
+  "takson": 577810,
+  "rank": "species",
+  "gozlem": 135
+ },
+ "oxalis-triangularis": {
+  "ad": "Oxalis triangularis",
+  "takson": 327754,
+  "rank": "species",
+  "gozlem": 13423
+ },
+ "selaginella-martensii": {
+  "ad": "Selaginella martensii",
+  "takson": 275565,
+  "rank": "species",
+  "gozlem": 69
+ },
+ "aloe-vera": {
+  "ad": "Aloe vera",
+  "takson": 126882,
+  "rank": "species",
+  "gozlem": 49110
+ },
+ "aloe-arborescens": {
+  "ad": "Aloe arborescens",
+  "takson": 81518,
+  "rank": "species",
+  "gozlem": 21692
+ },
+ "crassula-ovata": {
+  "ad": "Crassula ovata",
+  "takson": 76465,
+  "rank": "species",
+  "gozlem": 28912
+ },
+ "echeveria-elegans": {
+  "ad": "Echeveria elegans",
+  "takson": 206749,
+  "rank": "species",
+  "gozlem": 2459
+ },
+ "haworthiopsis-attenuata": {
+  "ad": "Haworthiopsis attenuata",
+  "takson": 577654,
+  "rank": "species",
+  "gozlem": 4677
+ },
+ "gasteria-bicolor": {
+  "ad": "Gasteria bicolor",
+  "takson": 586144,
+  "rank": "species",
+  "gozlem": 327
+ },
+ "sedum-morganianum": {
+  "ad": "Sedum morganianum",
+  "takson": 276072,
+  "rank": "species",
+  "gozlem": 2541
+ },
+ "sempervivum-tectorum": {
+  "ad": "Sempervivum tectorum",
+  "takson": 51779,
+  "rank": "species",
+  "gozlem": 10558
+ },
+ "portulacaria-afra": {
+  "ad": "Portulacaria afra",
+  "takson": 326086,
+  "rank": "species",
+  "gozlem": 15992
+ },
+ "senecio-rowleyanus": {
+  "ad": "Curio rowleyanus",
+  "takson": 943005,
+  "rank": "species",
+  "gozlem": 1901
+ },
+ "ceropegia-woodii": {
+  "ad": "Ceropegia woodii",
+  "takson": 418734,
+  "rank": "species",
+  "gozlem": 764
+ },
+ "kalanchoe-blossfeldiana": {
+  "ad": "Kalanchoe blossfeldiana",
+  "takson": 164326,
+  "rank": "species",
+  "gozlem": 27538
+ },
+ "agave-americana": {
+  "ad": "Agave americana",
+  "takson": 64103,
+  "rank": "species",
+  "gozlem": 42280
+ },
+ "euphorbia-trigona": {
+  "ad": "Euphorbia trigona",
+  "takson": 322318,
+  "rank": "species",
+  "gozlem": 6330
+ },
+ "echinocactus-grusonii": {
+  "ad": "Kroenleinia grusonii",
+  "takson": 869962,
+  "rank": "species",
+  "gozlem": 12055
+ },
+ "mammillaria-elongata": {
+  "ad": "Mammillaria elongata",
+  "takson": 273594,
+  "rank": "species",
+  "gozlem": 2502
+ },
+ "opuntia-microdasys": {
+  "ad": "Opuntia microdasys",
+  "takson": 78267,
+  "rank": "species",
+  "gozlem": 10279
+ },
+ "cereus-repandus": {
+  "ad": "Cereus repandus",
+  "takson": 320319,
+  "rank": "species",
+  "gozlem": 2631
+ },
+ "schlumbergera-truncata": {
+  "ad": "Schlumbergera",
+  "takson": 51224,
+  "rank": "genus",
+  "gozlem": 12716
+ },
+ "rhipsalis-baccifera": {
+  "ad": "Rhipsalis baccifera",
+  "takson": 119900,
+  "rank": "species",
+  "gozlem": 4448
+ },
+ "peperomia-obtusifolia": {
+  "ad": "Peperomia obtusifolia",
+  "takson": 166493,
+  "rank": "species",
+  "gozlem": 2760
+ },
+ "peperomia-argyreia": {
+  "ad": "Peperomia argyraea",
+  "takson": 1600433,
+  "rank": "species",
+  "gozlem": 743
+ },
+ "pilea-peperomioides": {
+  "ad": "Pilea peperomioides",
+  "takson": 125439,
+  "rank": "species",
+  "gozlem": 3616
+ },
+ "tradescantia-zebrina": {
+  "ad": "Tradescantia zebrina",
+  "takson": 169883,
+  "rank": "species",
+  "gozlem": 20076
+ },
+ "tradescantia-pallida": {
+  "ad": "Tradescantia pallida",
+  "takson": 169872,
+  "rank": "species",
+  "gozlem": 31672
+ },
+ "hoya-carnosa": {
+  "ad": "Hoya carnosa",
+  "takson": 129523,
+  "rank": "species",
+  "gozlem": 6520
+ },
+ "saintpaulia-ionantha": {
+  "ad": "Streptocarpus ionanthus",
+  "takson": 927983,
+  "rank": "species",
+  "gozlem": 2275
+ },
+ "phalaenopsis-hybrid": {
+  "ad": "Phalaenopsis",
+  "takson": 140477,
+  "rank": "genus",
+  "gozlem": 32576
+ },
+ "cyclamen-persicum": {
+  "ad": "Cyclamen persicum",
+  "takson": 341141,
+  "rank": "species",
+  "gozlem": 7402
+ },
+ "begonia-rex": {
+  "ad": "Begonia rex",
+  "takson": 327898,
+  "rank": "species",
+  "gozlem": 112
+ },
+ "begonia-maculata": {
+  "ad": "Begonia maculata",
+  "takson": 284651,
+  "rank": "species",
+  "gozlem": 2319
+ },
+ "clivia-miniata": {
+  "ad": "Clivia miniata",
+  "takson": 210194,
+  "rank": "species",
+  "gozlem": 9800
+ },
+ "strelitzia-reginae": {
+  "ad": "Strelitzia reginae",
+  "takson": 49143,
+  "rank": "species",
+  "gozlem": 19749
+ },
+ "euphorbia-pulcherrima": {
+  "ad": "Euphorbia pulcherrima",
+  "takson": 162845,
+  "rank": "species",
+  "gozlem": 21400
+ },
+ "euphorbia-milii": {
+  "ad": "Euphorbia milii",
+  "takson": 162839,
+  "rank": "species",
+  "gozlem": 45163
+ },
+ "chrysanthemum-morifolium": {
+  "ad": "Chrysanthemum × morifolium",
+  "takson": 53806,
+  "rank": "hybrid",
+  "gozlem": 8414
+ },
+ "pelargonium-hortorum": {
+  "ad": "Pelargonium × hybridum",
+  "takson": 181543,
+  "rank": "hybrid",
+  "gozlem": 27821
+ },
+ "hibiscus-rosa-sinensis": {
+  "ad": "Hibiscus × rosa-sinensis",
+  "takson": 1628098,
+  "rank": "hybrid",
+  "gozlem": 70945
+ },
+ "bougainvillea-glabra": {
+  "ad": "Bougainvillea glabra",
+  "takson": 159346,
+  "rank": "species",
+  "gozlem": 33084
+ },
+ "nerium-oleander": {
+  "ad": "Nerium oleander",
+  "takson": 47563,
+  "rank": "species",
+  "gozlem": 83495
+ },
+ "mandevilla-sanderi": {
+  "ad": "Mandevilla sanderi",
+  "takson": 327733,
+  "rank": "species",
+  "gozlem": 5989
+ },
+ "jasminum-sambac": {
+  "ad": "Jasminum sambac",
+  "takson": 135425,
+  "rank": "species",
+  "gozlem": 6706
+ },
+ "gardenia-jasminoides": {
+  "ad": "Gardenia jasminoides",
+  "takson": 210990,
+  "rank": "species",
+  "gozlem": 15385
+ },
+ "ocimum-basilicum": {
+  "ad": "Ocimum basilicum",
+  "takson": 61398,
+  "rank": "species",
+  "gozlem": 18822
+ },
+ "salvia-rosmarinus": {
+  "ad": "Salvia rosmarinus",
+  "takson": 636795,
+  "rank": "species",
+  "gozlem": 61474
+ },
+ "mentha-spicata": {
+  "ad": "Mentha spicata",
+  "takson": 62652,
+  "rank": "species",
+  "gozlem": 25326
+ },
+ "thymus-vulgaris": {
+  "ad": "Thymus vulgaris",
+  "takson": 85469,
+  "rank": "species",
+  "gozlem": 13491
+ },
+ "lavandula-angustifolia": {
+  "ad": "Lavandula angustifolia",
+  "takson": 133395,
+  "rank": "species",
+  "gozlem": 23791
+ },
+ "citrus-limon": {
+  "ad": "Citrus × limon",
+  "takson": 331124,
+  "rank": "hybrid",
+  "gozlem": 17632
+ },
+ "olea-europaea": {
+  "ad": "Olea europaea",
+  "takson": 57140,
+  "rank": "species",
+  "gozlem": 52939
+ },
+ "thaumatophyllum-bipinnatifidum": {
+  "ad": "Thaumatophyllum bipinnatifidum",
+  "takson": 985710,
+  "rank": "species",
+  "gozlem": 11761
+ },
+ "philodendron-erubescens": {
+  "ad": "Philodendron erubescens",
+  "takson": 327366,
+  "rank": "species",
+  "gozlem": 3302
+ },
+ "rhaphidophora-tetrasperma": {
+  "ad": "Rhaphidophora tetrasperma",
+  "takson": 912388,
+  "rank": "species",
+  "gozlem": 281
+ },
+ "alocasia-zebrina": {
+  "ad": "Alocasia zebrina",
+  "takson": 243722,
+  "rank": "species",
+  "gozlem": 133
+ },
+ "alocasia-macrorrhizos": {
+  "ad": "Alocasia macrorrhizos",
+  "takson": 126165,
+  "rank": "species",
+  "gozlem": 8221
+ },
+ "dracaena-reflexa": {
+  "ad": "Dracaena reflexa",
+  "takson": 126510,
+  "rank": "species",
+  "gozlem": 20839,
+  "haric": [
+   126509
+  ]
+ },
+ "ficus-microcarpa": {
+  "ad": "Ficus microcarpa",
+  "takson": 54982,
+  "rank": "species",
+  "gozlem": 31562
+ },
+ "ficus-benghalensis": {
+  "ad": "Ficus benghalensis",
+  "takson": 54880,
+  "rank": "species",
+  "gozlem": 11246
+ },
+ "pachira-aquatica": {
+  "ad": "Pachira aquatica",
+  "takson": 154852,
+  "rank": "species",
+  "gozlem": 7098
+ },
+ "schefflera-actinophylla": {
+  "ad": "Heptapleurum actinophyllum",
+  "takson": 1268642,
+  "rank": "species",
+  "gozlem": 13506
+ },
+ "polyscias-fruticosa": {
+  "ad": "Polyscias fruticosa",
+  "takson": 284560,
+  "rank": "species",
+  "gozlem": 3164
+ },
+ "radermachera-sinica": {
+  "ad": "Radermachera sinica",
+  "takson": 429214,
+  "rank": "species",
+  "gozlem": 1704
+ },
+ "araucaria-heterophylla": {
+  "ad": "Araucaria heterophylla",
+  "takson": 127890,
+  "rank": "species",
+  "gozlem": 12837
+ },
+ "hypoestes-phyllostachya": {
+  "ad": "Hypoestes phyllostachya",
+  "takson": 164011,
+  "rank": "species",
+  "gozlem": 10051
+ },
+ "coleus-scutellarioides": {
+  "ad": "Coleus scutellarioides",
+  "takson": 291284,
+  "rank": "species",
+  "gozlem": 42335
+ },
+ "plectranthus-verticillatus": {
+  "ad": "Plectranthus verticillatus",
+  "takson": 327780,
+  "rank": "species",
+  "gozlem": 3674
+ },
+ "peperomia-caperata": {
+  "ad": "Peperomia caperata",
+  "takson": 427352,
+  "rank": "species",
+  "gozlem": 741
+ },
+ "peperomia-prostrata": {
+  "ad": "Peperomia prostrata",
+  "takson": 431436,
+  "rank": "species",
+  "gozlem": 118
+ },
+ "peperomia-polybotrya": {
+  "ad": "Peperomia polybotrya",
+  "takson": 431437,
+  "rank": "species",
+  "gozlem": 102
+ },
+ "pilea-cadierei": {
+  "ad": "Pilea cadierei",
+  "takson": 278679,
+  "rank": "species",
+  "gozlem": 4041
+ },
+ "tradescantia-fluminensis": {
+  "ad": "Tradescantia fluminensis",
+  "takson": 79382,
+  "rank": "species",
+  "gozlem": 20302
+ },
+ "callisia-repens": {
+  "ad": "Callisia repens",
+  "takson": 159681,
+  "rank": "species",
+  "gozlem": 5609
+ },
+ "gynura-aurantiaca": {
+  "ad": "Gynura aurantiaca",
+  "takson": 163472,
+  "rank": "species",
+  "gozlem": 625
+ },
+ "aeschynanthus-radicans": {
+  "ad": "Aeschynanthus radicans",
+  "takson": 430622,
+  "rank": "species",
+  "gozlem": 155
+ },
+ "nematanthus-gregarius": {
+  "ad": "Nematanthus gregarius",
+  "takson": 558384,
+  "rank": "species",
+  "gozlem": 343
+ },
+ "hoya-kerrii": {
+  "ad": "Hoya kerrii",
+  "takson": 426893,
+  "rank": "species",
+  "gozlem": 629
+ },
+ "goeppertia-insignis": {
+  "ad": "Goeppertia insignis",
+  "takson": 867364,
+  "rank": "species",
+  "gozlem": 2006
+ },
+ "goeppertia-roseopicta": {
+  "ad": "Goeppertia roseopicta",
+  "takson": 1154562,
+  "rank": "species",
+  "gozlem": 818
+ },
+ "goeppertia-zebrina": {
+  "ad": "Goeppertia zebrina",
+  "takson": 1172861,
+  "rank": "species",
+  "gozlem": 2458
+ },
+ "goeppertia-rufibarba": {
+  "ad": "Goeppertia rufibarba",
+  "takson": 856387,
+  "rank": "species",
+  "gozlem": 232
+ },
+ "musa-acuminata": {
+  "ad": "Musa acuminata",
+  "takson": 140907,
+  "rank": "species",
+  "gozlem": 14625
+ },
+ "strelitzia-nicolai": {
+  "ad": "Strelitzia nicolai",
+  "takson": 135250,
+  "rank": "species",
+  "gozlem": 10650
+ },
+ "clusia-rosea": {
+  "ad": "Clusia rosea",
+  "takson": 160760,
+  "rank": "species",
+  "gozlem": 7838
+ },
+ "saxifraga-stolonifera": {
+  "ad": "Saxifraga stolonifera",
+  "takson": 68217,
+  "rank": "species",
+  "gozlem": 3964
+ },
+ "asparagus-densiflorus": {
+  "ad": "Asparagus densiflorus",
+  "takson": 127598,
+  "rank": "species",
+  "gozlem": 13984
+ },
+ "mimosa-pudica": {
+  "ad": "Mimosa pudica",
+  "takson": 51921,
+  "rank": "species",
+  "gozlem": 35422
+ },
+ "dionaea-muscipula": {
+  "ad": "Dionaea muscipula",
+  "takson": 52666,
+  "rank": "species",
+  "gozlem": 7366
+ },
+ "cycas-revoluta": {
+  "ad": "Cycas revoluta",
+  "takson": 129783,
+  "rank": "species",
+  "gozlem": 23418
+ },
+ "phoenix-roebelenii": {
+  "ad": "Phoenix roebelenii",
+  "takson": 204744,
+  "rank": "species",
+  "gozlem": 11627
+ },
+ "chamaerops-humilis": {
+  "ad": "Chamaerops humilis",
+  "takson": 132759,
+  "rank": "species",
+  "gozlem": 15760
+ },
+ "phlebodium-aureum": {
+  "ad": "Phlebodium aureum",
+  "takson": 127908,
+  "rank": "species",
+  "gozlem": 9733
+ },
+ "davallia-fejeensis": {
+  "ad": "Davallia fejeensis",
+  "takson": 354683,
+  "rank": "species",
+  "gozlem": 694
+ },
+ "pteris-cretica": {
+  "ad": "Pteris cretica",
+  "takson": 78777,
+  "rank": "species",
+  "gozlem": 3931
+ },
+ "cyrtomium-falcatum": {
+  "ad": "Cyrtomium falcatum",
+  "takson": 76595,
+  "rank": "species",
+  "gozlem": 8027
+ },
+ "pellaea-rotundifolia": {
+  "ad": "Pellaea rotundifolia",
+  "takson": 198915,
+  "rank": "species",
+  "gozlem": 1997
+ },
+ "dracaena-angolensis": {
+  "ad": "Sansevieria cylindrica",
+  "takson": 168422,
+  "rank": "species",
+  "gozlem": 2954
+ },
+ "aeonium-arboreum": {
+  "ad": "Aeonium arboreum",
+  "takson": 67717,
+  "rank": "species",
+  "gozlem": 13761
+ },
+ "graptopetalum-paraguayense": {
+  "ad": "Graptopetalum paraguayense",
+  "takson": 273763,
+  "rank": "species",
+  "gozlem": 7882
+ },
+ "crassula-perforata": {
+  "ad": "Crassula perforata",
+  "takson": 524336,
+  "rank": "species",
+  "gozlem": 2759
+ },
+ "sedum-rubrotinctum": {
+  "ad": "Sedum × rubrotinctum",
+  "takson": 276077,
+  "rank": "hybrid",
+  "gozlem": 1454
+ },
+ "kalanchoe-tomentosa": {
+  "ad": "Kalanchoe tomentosa",
+  "takson": 335091,
+  "rank": "species",
+  "gozlem": 2567
+ },
+ "kalanchoe-daigremontiana": {
+  "ad": "Kalanchoe daigremontiana",
+  "takson": 164327,
+  "rank": "species",
+  "gozlem": 1943
+ },
+ "lithops": {
+  "ad": "Lithops",
+  "takson": 186097,
+  "rank": "genus",
+  "gozlem": 2277
+ },
+ "curio-radicans": {
+  "ad": "Curio radicans",
+  "takson": 913212,
+  "rank": "species",
+  "gozlem": 1582
+ },
+ "euphorbia-tirucalli": {
+  "ad": "Euphorbia tirucalli",
+  "takson": 162855,
+  "rank": "species",
+  "gozlem": 13336
+ },
+ "adenium-obesum": {
+  "ad": "Adenium obesum",
+  "takson": 124839,
+  "rank": "species",
+  "gozlem": 19189
+ },
+ "pachypodium-lamerei": {
+  "ad": "Pachypodium lamerei",
+  "takson": 320055,
+  "rank": "species",
+  "gozlem": 3847
+ },
+ "aristaloe-aristata": {
+  "ad": "Aristaloe aristata",
+  "takson": 580226,
+  "rank": "species",
+  "gozlem": 1470
+ },
+ "haworthia-cooperi": {
+  "ad": "Haworthia cooperi",
+  "takson": 333713,
+  "rank": "species",
+  "gozlem": 491
+ },
+ "gymnocalycium-mihanovichii": {
+  "ad": "Gymnocalycium mihanovichii",
+  "takson": 438961,
+  "rank": "species",
+  "gozlem": 2577
+ },
+ "echinopsis-chamaecereus": {
+  "ad": "Lobivia silvestrii",
+  "takson": 869991,
+  "rank": "species",
+  "gozlem": 2159
+ },
+ "astrophytum-myriostigma": {
+  "ad": "Astrophytum myriostigma",
+  "takson": 206444,
+  "rank": "species",
+  "gozlem": 1191
+ },
+ "epiphyllum-oxypetalum": {
+  "ad": "Epiphyllum oxypetalum",
+  "takson": 85410,
+  "rank": "species",
+  "gozlem": 4001
+ },
+ "rhipsalidopsis-gaertneri": {
+  "ad": "Rhipsalidopsis gaertneri",
+  "takson": 1435384,
+  "rank": "species",
+  "gozlem": 568
+ },
+ "zantedeschia-aethiopica": {
+  "ad": "Zantedeschia aethiopica",
+  "takson": 56006,
+  "rank": "species",
+  "gozlem": 39498
+ },
+ "hippeastrum": {
+  "ad": "Hippeastrum",
+  "takson": 51833,
+  "rank": "genus",
+  "gozlem": 29186
+ },
+ "sinningia-speciosa": {
+  "ad": "Sinningia speciosa",
+  "takson": 281612,
+  "rank": "species",
+  "gozlem": 700
+ },
+ "streptocarpus": {
+  "ad": "Streptocarpus",
+  "takson": 343506,
+  "rank": "genus",
+  "gozlem": 13351,
+  "haric": [
+   927983
+  ]
+ },
+ "guzmania-lingulata": {
+  "ad": "Guzmania lingulata",
+  "takson": 276734,
+  "rank": "species",
+  "gozlem": 2773
+ },
+ "aechmea-fasciata": {
+  "ad": "Aechmea fasciata",
+  "takson": 416202,
+  "rank": "species",
+  "gozlem": 3414
+ },
+ "vriesea-splendens": {
+  "ad": "Lutheria splendens",
+  "takson": 511094,
+  "rank": "species",
+  "gozlem": 501
+ },
+ "tillandsia-ionantha": {
+  "ad": "Tillandsia ionantha",
+  "takson": 141279,
+  "rank": "species",
+  "gozlem": 1788
+ },
+ "dendrobium-nobile": {
+  "ad": "Dendrobium nobile",
+  "takson": 67756,
+  "rank": "species",
+  "gozlem": 2266
+ },
+ "oncidium": {
+  "ad": "Oncidium",
+  "takson": 55350,
+  "rank": "genus",
+  "gozlem": 12152
+ },
+ "cymbidium": {
+  "ad": "Cymbidium",
+  "takson": 128976,
+  "rank": "genus",
+  "gozlem": 14735
+ },
+ "jasminum-polyanthum": {
+  "ad": "Jasminum polyanthum",
+  "takson": 342641,
+  "rank": "species",
+  "gozlem": 7881
+ },
+ "stephanotis-floribunda": {
+  "ad": "Stephanotis floribunda",
+  "takson": 339914,
+  "rank": "species",
+  "gozlem": 833
+ },
+ "rhododendron-simsii": {
+  "ad": "Rhododendron simsii",
+  "takson": 410380,
+  "rank": "species",
+  "gozlem": 7926
+ },
+ "begonia-semperflorens": {
+  "ad": "Begonia cucullata",
+  "takson": 159204,
+  "rank": "species",
+  "gozlem": 11473
+ },
+ "impatiens-walleriana": {
+  "ad": "Impatiens walleriana",
+  "takson": 68185,
+  "rank": "species",
+  "gozlem": 22680
+ },
+ "primula-acaulis": {
+  "ad": "Primula vulgaris",
+  "takson": 56136,
+  "rank": "species",
+  "gozlem": 47675
+ },
+ "hyacinthus-orientalis": {
+  "ad": "Hyacinthus orientalis",
+  "takson": 126637,
+  "rank": "species",
+  "gozlem": 21102
+ },
+ "narcissus": {
+  "ad": "Narcissus",
+  "takson": 53597,
+  "rank": "genus",
+  "gozlem": 154944
+ },
+ "lilium": {
+  "ad": "Lilium",
+  "takson": 48928,
+  "rank": "genus",
+  "gozlem": 188377
+ },
+ "rosa-chinensis": {
+  "ad": "Rosa chinensis",
+  "takson": 133614,
+  "rank": "species",
+  "gozlem": 2430
+ },
+ "hydrangea-macrophylla": {
+  "ad": "Hydrangea macrophylla",
+  "takson": 122034,
+  "rank": "species",
+  "gozlem": 50262
+ },
+ "camellia-japonica": {
+  "ad": "Camellia japonica",
+  "takson": 83056,
+  "rank": "species",
+  "gozlem": 21142
+ },
+ "fuchsia-hybrida": {
+  "ad": "Fuchsia",
+  "takson": 54713,
+  "rank": "genus",
+  "gozlem": 65665
+ },
+ "petunia-atkinsiana": {
+  "ad": "Petunia × atkinsiana",
+  "takson": 170914,
+  "rank": "hybrid",
+  "gozlem": 16549
+ },
+ "tagetes-patula": {
+  "ad": "Tagetes patula",
+  "takson": 777243,
+  "rank": "species",
+  "gozlem": 6575
+ },
+ "lantana-camara": {
+  "ad": "Lantana camara",
+  "takson": 50333,
+  "rank": "species",
+  "gozlem": 101340
+ },
+ "dianthus-caryophyllus": {
+  "ad": "Dianthus caryophyllus",
+  "takson": 1249905,
+  "rank": "complex",
+  "gozlem": 8257
+ },
+ "viola-wittrockiana": {
+  "ad": "Viola × wittrockiana",
+  "takson": 171203,
+  "rank": "hybrid",
+  "gozlem": 19549
+ },
+ "catharanthus-roseus": {
+  "ad": "Catharanthus roseus",
+  "takson": 62924,
+  "rank": "species",
+  "gozlem": 74443
+ },
+ "plumbago-auriculata": {
+  "ad": "Plumbago auriculata",
+  "takson": 78631,
+  "rank": "species",
+  "gozlem": 42590
+ },
+ "trachelospermum-jasminoides": {
+  "ad": "Trachelospermum jasminoides",
+  "takson": 169856,
+  "rank": "species",
+  "gozlem": 16385
+ },
+ "punica-granatum": {
+  "ad": "Punica granatum",
+  "takson": 58300,
+  "rank": "species",
+  "gozlem": 34920
+ },
+ "citrus-microcarpa": {
+  "ad": "Citrus × microcarpa",
+  "takson": 708697,
+  "rank": "hybrid",
+  "gozlem": 1794
+ },
+ "ficus-carica": {
+  "ad": "Ficus carica",
+  "takson": 60218,
+  "rank": "species",
+  "gozlem": 55793
+ },
+ "cupressus-macrocarpa": {
+  "ad": "Hesperocyparis macrocarpa",
+  "takson": 77378,
+  "rank": "species",
+  "gozlem": 19674
+ },
+ "buxus-sempervirens": {
+  "ad": "Buxus sempervirens",
+  "takson": 133397,
+  "rank": "species",
+  "gozlem": 28606
+ },
+ "pelargonium-peltatum": {
+  "ad": "Pelargonium peltatum",
+  "takson": 78379,
+  "rank": "species",
+  "gozlem": 6287
+ },
+ "pelargonium-graveolens": {
+  "ad": "Pelargonium graveolens",
+  "takson": 127298,
+  "rank": "species",
+  "gozlem": 4852
+ },
+ "laurus-nobilis": {
+  "ad": "Laurus nobilis",
+  "takson": 54759,
+  "rank": "species",
+  "gozlem": 20560
+ },
+ "petroselinum-crispum": {
+  "ad": "Petroselinum crispum",
+  "takson": 78465,
+  "rank": "species",
+  "gozlem": 11463
+ },
+ "anethum-graveolens": {
+  "ad": "Anethum graveolens",
+  "takson": 75445,
+  "rank": "species",
+  "gozlem": 5530
+ },
+ "origanum-majorana": {
+  "ad": "Origanum majorana",
+  "takson": 165925,
+  "rank": "species",
+  "gozlem": 847
+ },
+ "salvia-officinalis": {
+  "ad": "Salvia officinalis",
+  "takson": 51738,
+  "rank": "species",
+  "gozlem": 14703
+ },
+ "melissa-officinalis": {
+  "ad": "Melissa officinalis",
+  "takson": 59901,
+  "rank": "species",
+  "gozlem": 27743
+ },
+ "allium-schoenoprasum": {
+  "ad": "Allium schoenoprasum",
+  "takson": 59254,
+  "rank": "species",
+  "gozlem": 21130
+ },
+ "coriandrum-sativum": {
+  "ad": "Coriandrum sativum",
+  "takson": 67759,
+  "rank": "species",
+  "gozlem": 7470
+ },
+ "aloysia-citrodora": {
+  "ad": "Aloysia citrodora",
+  "takson": 332455,
+  "rank": "species",
+  "gozlem": 4356
+ },
+ "solanum-lycopersicum": {
+  "ad": "Solanum lycopersicum",
+  "takson": 51737,
+  "rank": "species",
+  "gozlem": 49733
+ },
+ "capsicum-annuum": {
+  "ad": "Capsicum annuum",
+  "takson": 48514,
+  "rank": "species",
+  "gozlem": 28133
+ },
+ "fragaria-ananassa": {
+  "ad": "Fragaria × ananassa",
+  "takson": 55366,
+  "rank": "hybrid",
+  "gozlem": 9360
+ },
+ "goeppertia-crocata": {
+  "ad": "Goeppertia crocata",
+  "takson": 846890,
+  "rank": "species",
+  "gozlem": 108
+ },
+ "peperomia-rotundifolia": {
+  "ad": "Peperomia rotundifolia",
+  "takson": 285872,
+  "rank": "species",
+  "gozlem": 1444
+ },
+ "peperomia-clusiifolia": {
+  "ad": "Peperomia clusiifolia",
+  "takson": 427353,
+  "rank": "species",
+  "gozlem": 30
+ },
+ "pilea-involucrata": {
+  "ad": "Pilea involucrata",
+  "takson": 426421,
+  "rank": "species",
+  "gozlem": 110
+ },
+ "begonia-masoniana": {
+  "ad": "Begonia masoniana",
+  "takson": 428008,
+  "rank": "species",
+  "gozlem": 594
+ },
+ "cryptanthus-bivittatus": {
+  "ad": "Cryptanthus bivittatus",
+  "takson": 276576,
+  "rank": "species",
+  "gozlem": 94
+ },
+ "episcia-cupreata": {
+  "ad": "Episcia cupreata",
+  "takson": 286913,
+  "rank": "species",
+  "gozlem": 4062
+ },
+ "aphelandra-squarrosa": {
+  "ad": "Aphelandra squarrosa",
+  "takson": 322316,
+  "rank": "species",
+  "gozlem": 793
+ },
+ "crossandra-infundibuliformis": {
+  "ad": "Crossandra infundibuliformis",
+  "takson": 344178,
+  "rank": "species",
+  "gozlem": 6368
+ },
+ "exacum-affine": {
+  "ad": "Exacum affine",
+  "takson": 183448,
+  "rank": "species",
+  "gozlem": 163
+ },
+ "gerbera-jamesonii": {
+  "ad": "Gerbera jamesonii",
+  "takson": 349270,
+  "rank": "species",
+  "gozlem": 3769
+ },
+ "impatiens-hawkeri": {
+  "ad": "Impatiens hawkeri",
+  "takson": 349271,
+  "rank": "species",
+  "gozlem": 20029
+ },
+ "cattleya": {
+  "ad": "Cattleya",
+  "takson": 140844,
+  "rank": "genus",
+  "gozlem": 8434
+ },
+ "hoya-pubicalyx": {
+  "ad": "Hoya pubicalyx",
+  "takson": 343822,
+  "rank": "species",
+  "gozlem": 647
+ },
+ "ravenea-rivularis": {
+  "ad": "Ravenea rivularis",
+  "takson": 341902,
+  "rank": "species",
+  "gozlem": 332
+ },
+ "phoenix-canariensis": {
+  "ad": "Phoenix canariensis",
+  "takson": 78554,
+  "rank": "species",
+  "gozlem": 25508
+ },
+ "trachycarpus-fortunei": {
+  "ad": "Trachycarpus fortunei",
+  "takson": 64323,
+  "rank": "species",
+  "gozlem": 10581
+ },
+ "zamia-furfuracea": {
+  "ad": "Zamia furfuracea",
+  "takson": 135559,
+  "rank": "species",
+  "gozlem": 5464
+ },
+ "echeveria-derenbergii": {
+  "ad": "Echeveria derenbergii",
+  "takson": 276103,
+  "rank": "species",
+  "gozlem": 40
+ },
+ "haworthia-retusa": {
+  "ad": "Haworthia retusa",
+  "takson": 466848,
+  "rank": "species",
+  "gozlem": 101
+ },
+ "haworthiopsis-fasciata": {
+  "ad": "Haworthiopsis fasciata",
+  "takson": 577645,
+  "rank": "species",
+  "gozlem": 397
+ },
+ "curio-repens": {
+  "ad": "Curio repens",
+  "takson": 583125,
+  "rank": "species",
+  "gozlem": 193
+ },
+ "opuntia-ficus-indica": {
+  "ad": "Opuntia ficus-indica",
+  "takson": 64119,
+  "rank": "species",
+  "gozlem": 42190
+ },
+ "calendula-officinalis": {
+  "ad": "Calendula officinalis",
+  "takson": 75931,
+  "rank": "species",
+  "gozlem": 26556
+ },
+ "antirrhinum-majus": {
+  "ad": "Antirrhinum majus",
+  "takson": 48969,
+  "rank": "species",
+  "gozlem": 25320
+ },
+ "zinnia-elegans": {
+  "ad": "Zinnia elegans",
+  "takson": 181901,
+  "rank": "species",
+  "gozlem": 37292
+ },
+ "celosia-argentea": {
+  "ad": "Celosia argentea",
+  "takson": 160259,
+  "rank": "species",
+  "gozlem": 23497
+ },
+ "alcea-rosea": {
+  "ad": "Alcea rosea",
+  "takson": 62205,
+  "rank": "species",
+  "gozlem": 31847
+ },
+ "dahlia": {
+  "ad": "Dahlia",
+  "takson": 58465,
+  "rank": "genus",
+  "gozlem": 56948
+ },
+ "gladiolus": {
+  "ad": "Gladiolus",
+  "takson": 59945,
+  "rank": "genus",
+  "gozlem": 81310
+ },
+ "iris-germanica": {
+  "ad": "Iris × germanica",
+  "takson": 709635,
+  "rank": "hybrid",
+  "gozlem": 6754
+ },
+ "ranunculus-asiaticus": {
+  "ad": "Ranunculus asiaticus",
+  "takson": 346778,
+  "rank": "species",
+  "gozlem": 2579
+ },
+ "muscari-armeniacum": {
+  "ad": "Muscari armeniacum",
+  "takson": 57847,
+  "rank": "species",
+  "gozlem": 13253
+ },
+ "tulipa": {
+  "ad": "Tulipa",
+  "takson": 55800,
+  "rank": "genus",
+  "gozlem": 89487
+ },
+ "hemerocallis": {
+  "ad": "Hemerocallis",
+  "takson": 82826,
+  "rank": "genus",
+  "gozlem": 103366
+ },
+ "wisteria-sinensis": {
+  "ad": "Wisteria sinensis",
+  "takson": 127306,
+  "rank": "species",
+  "gozlem": 24340
+ },
+ "jasminum-officinale": {
+  "ad": "Jasminum officinale",
+  "takson": 164233,
+  "rank": "species",
+  "gozlem": 3057
+ },
+ "ipomoea-purpurea": {
+  "ad": "Ipomoea purpurea",
+  "takson": 52344,
+  "rank": "species",
+  "gozlem": 37954
+ },
+ "ipomoea-batatas": {
+  "ad": "Ipomoea batatas",
+  "takson": 62941,
+  "rank": "species",
+  "gozlem": 16293
+ },
+ "melaleuca-citrina": {
+  "ad": "Melaleuca citrina",
+  "takson": 77976,
+  "rank": "species",
+  "gozlem": 20202
+ },
+ "pittosporum-tobira": {
+  "ad": "Pittosporum tobira",
+  "takson": 78592,
+  "rank": "species",
+  "gozlem": 25183
+ },
+ "nandina-domestica": {
+  "ad": "Nandina domestica",
+  "takson": 127010,
+  "rank": "species",
+  "gozlem": 57848
+ },
+ "hibiscus-syriacus": {
+  "ad": "Hibiscus syriacus",
+  "takson": 126585,
+  "rank": "species",
+  "gozlem": 60283
+ },
+ "liriope-muscari": {
+  "ad": "Liriope muscari",
+  "takson": 223938,
+  "rank": "species",
+  "gozlem": 20510
+ },
+ "origanum-vulgare": {
+  "ad": "Origanum vulgare",
+  "takson": 61396,
+  "rank": "species",
+  "gozlem": 54545
+ },
+ "cymbopogon-citratus": {
+  "ad": "Cymbopogon citratus",
+  "takson": 123728,
+  "rank": "species",
+  "gozlem": 9875
+ },
+ "stevia-rebaudiana": {
+  "ad": "Stevia rebaudiana",
+  "takson": 320730,
+  "rank": "species",
+  "gozlem": 267
+ },
+ "mentha-piperita": {
+  "ad": "Mentha × piperita",
+  "takson": 181525,
+  "rank": "hybrid",
+  "gozlem": 4690
+ },
+ "cucumis-sativus": {
+  "ad": "Cucumis sativus",
+  "takson": 54919,
+  "rank": "species",
+  "gozlem": 7501
+ },
+ "artemisia-dracunculus": {
+  "ad": "Artemisia dracunculus",
+  "takson": 57912,
+  "rank": "species",
+  "gozlem": 11002
+ },
+ "solanum-melongena": {
+  "ad": "Solanum melongena",
+  "takson": 63190,
+  "rank": "species",
+  "gozlem": 8699
+ }
+}

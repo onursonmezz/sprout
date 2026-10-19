@@ -513,6 +513,21 @@ export default function SettingsScreen() {
             </>
           )}
         </SectionCard>
+
+        <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.settings.about}</Text>
+        <SectionCard colors={colors}>
+          <Row
+            title={t.settings.photoCredits}
+            subtitle={t.settings.photoCreditsSub}
+            colors={colors}
+            divider={false}
+            right={
+              <Pressable onPress={() => router.push('/credits')} hitSlop={10}>
+                <Text style={{ color: colors.accent, fontSize: 18 }}>›</Text>
+              </Pressable>
+            }
+          />
+        </SectionCard>
       </ScrollView>
     </SafeAreaView>
   );

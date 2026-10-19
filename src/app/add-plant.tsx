@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlowBackground, GradientFill } from '@/components/glass';
 import { DateField } from '@/components/date-field';
 import { PhotoPicker } from '@/components/photo-picker';
+import { PlantIdSuggestions } from '@/components/plant-id-suggestions';
 import { isOutdoorRoom, ROOM_KEYS, RoomKey } from '@/constants/rooms';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
@@ -14,6 +15,7 @@ import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { CareTask, JournalEntry, Plant } from '@/data/plants';
 import {
+  findSpeciesExact,
   findSpeciesMatches,
   HeatingSensitivity,
   LightKey,
@@ -424,6 +426,16 @@ export default function AddPlantScreen() {
           <View style={styles.fieldGroup}>
             <Field label={t.addPlant.photo} colors={colors}>
               <PhotoPicker uri={form.photoUri} onChange={(uri) => set('photoUri', uri)} colors={colors} t={t} />
+              {!isEditing && (
+                <PlantIdSuggestions
+                  photoUri={form.photoUri}
+                  selectedId={speciesPickApplied ? (findSpeciesExact(form.latinName)?.id ?? null) : null}
+                  onPick={applySpeciesGuide}
+                  colors={colors}
+                  t={t}
+                  lang={lang}
+                />
+              )}
             </Field>
             <Field label={t.addPlant.nickname} colors={colors}>
               <TextInput
