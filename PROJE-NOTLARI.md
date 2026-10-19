@@ -110,3 +110,6 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 - **Biçimlendirici:** Projede yapılandırması yok; `npx prettier --write` dosyayı yanlış biçime sokuyor, kullanma.
 - **Telefonda yazı kaybolması:** Takvim gün yuvarlağında yaşandı. Bir kapsayıcının kenarlığı ve `overflow: hidden` durumu değişince Android'de içerik çizilmeyebiliyor; kenarlığı sabit tutmak ve kırpmayı kaldırmak çözüm oldu.
 - **`git revert`:** `-q` seçeneğini kabul etmiyor.
+- **APK içindeki dosyalar:** `react-native-fast-tflite` modeli `java.net.URL` ile okur. Kurulu APK'da `require()` ile gelen dosyanın adresi gerçek bir yol değildir. Önizlemede çalışır ama telefonda yüklenmez. Model önce `expo-asset` ile önbelleğe kopyalanır (`utils/plant-id.ts`).
+- **Paket sürümleri:** Havadan güncellemede yerel parçaların sürümü APK'dakiyle aynı kalmalı. `npm install` başka paketleri de yükseltebilir; kilit dosyasındaki farkı kontrol et.
+- **Önizleme sunucusu açıkken** `npm ci` dosya kilidi yüzünden başarısız olur.
