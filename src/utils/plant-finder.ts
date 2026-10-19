@@ -44,6 +44,8 @@ function score(species: SpeciesRecord, a: FinderAnswers): number | null {
 
   if ((a.pets === 'cat' || a.pets === 'both') && species.toxicity.toxicToCats) return null;
   if ((a.pets === 'dog' || a.pets === 'both') && species.toxicity.toxicToDogs) return null;
+  // Unverified pet safety is not offered to a home with pets.
+  if (a.pets !== 'none' && species.toxicity.severity === 'unknown') return null;
 
   const interval = species.water.baseIntervalDays;
   if (a.attention === 'rarely') {

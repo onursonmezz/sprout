@@ -89,6 +89,7 @@ export default function ScanScreen() {
   const { species, probability } = guesses[chosen];
   const confident = guesses[0].probability >= PLANT_ID_CONFIDENT;
   const toxic = species.toxicity.toxicToCats || species.toxicity.toxicToDogs;
+  const toxicityUnknown = species.toxicity.severity === 'unknown';
   const inWishlist = wishlist.has(species.id);
 
   const addToPlants = () => {
@@ -127,9 +128,15 @@ export default function ScanScreen() {
           <Fact icon="water-outline" text={t.scan.everyDays(species.water.baseIntervalDays)} />
           <Fact icon="sunny-outline" text={t.addPlant.lightLevels[species.light.preferred].label} />
           <Fact
-            icon={toxic ? 'warning-outline' : 'paw-outline'}
-            text={toxic ? t.plantDetail.toxicToPets : t.plantDetail.nonToxicToPets.replace('✓ ', '')}
-            warn={toxic}
+            icon={toxic || toxicityUnknown ? 'warning-outline' : 'paw-outline'}
+            text={
+              toxic
+                ? t.plantDetail.toxicToPets
+                : toxicityUnknown
+                  ? t.plantDetail.toxicityUnknown
+                  : t.plantDetail.nonToxicToPets.replace('✓ ', '')
+            }
+            warn={toxic || toxicityUnknown}
           />
         </View>
 

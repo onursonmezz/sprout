@@ -89,7 +89,8 @@ for (const row of rows) {
   if (!(hMin <= hMax && sMin <= sMax)) fail('boyut aralığı ters');
   const [severity, letters = ''] = tox.split(':');
   if (!SEVERITY.includes(severity)) fail(`geçersiz toksisite ${severity}`);
-  if ((severity === 'none') !== (letters === '')) fail('toksisite düzeyi ile etkilenenler uyuşmuyor');
+  // 'unknown': hiçbir güvenilir kaynak evcil hayvanlar için bir şey söylemiyor; etkilenen yazılmaz.
+  if ((severity === 'none' || severity === 'unknown') !== (letters === '')) fail('toksisite düzeyi ile etkilenenler uyuşmuyor');
   for (const ch of letters) if (!AFFECTS[ch]) fail(`geçersiz etkilenen ${ch}`);
   const fertilize = Array.isArray(fert) ? { months: fert[0], intervalDays: fert[1] } : { months: DEFAULT_FERTILIZE_MONTHS, intervalDays: fert };
   if (!note || !toxNote) fail('not ya da toksisite notu boş');
@@ -120,7 +121,8 @@ for (const row of rows) {
       severityTr: L.toxSeverityTr[severity],
       note: toxNote,
       source: verifiedBy ?? TOX_SOURCE,
-      needsVerification: !verifiedBy,
+      // Zehirliliği bilinmeyen tür, bakım bilgisi doğrulanmış olsa da doğrulanmalı sayılır.
+      needsVerification: !verifiedBy || severity === 'unknown',
     },
     size: { heightMinCm: hMin, heightMaxCm: hMax, spreadMinCm: sMin, spreadMaxCm: sMax },
     growthRate: growth,

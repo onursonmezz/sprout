@@ -269,15 +269,22 @@ export default function PlantDetailScreen() {
                     style={[
                       styles.speciesCardText,
                       {
-                        color: speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs ? colors.accent : colors.textSecondary,
+                        color:
+                          speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs
+                            ? colors.accent
+                            : speciesInfo.toxicity.severity === 'unknown'
+                              ? colors.late
+                              : colors.textSecondary,
                         fontWeight: '700',
                       },
                     ]}>
                     {speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs
                       ? t.plantDetail.toxicToPets
-                      : t.plantDetail.nonToxicToPets}
+                      : speciesInfo.toxicity.severity === 'unknown'
+                        ? t.plantDetail.toxicityUnknown
+                        : t.plantDetail.nonToxicToPets}
                   </Text>
-                  {(speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs) && (
+                  {(speciesInfo.toxicity.toxicToCats || speciesInfo.toxicity.toxicToDogs || speciesInfo.toxicity.severity === 'unknown') && (
                     <Text style={[styles.speciesCardText, { color: colors.textSecondary }]}>
                       {t.plantDetail.toxicitySeverity[speciesInfo.toxicity.severity]}
                     </Text>

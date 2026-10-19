@@ -225,6 +225,7 @@ export const translations = {
       },
       toxicToPets: 'Toxic to pets',
       nonToxicToPets: '✓ Non-toxic to pets',
+      toxicityUnknown: 'Pet safety not verified',
       speciesIdealTemp: (min: number, max: number) => `Ideal ${min}-${max}°C`,
       speciesRecommendedSoil: (soil: string) => `Recommended soil: ${soil}`,
       toxicitySeverity: {
@@ -232,6 +233,7 @@ export const translations = {
         mild: 'Mild — usually mouth/stomach irritation',
         moderate: 'Moderate — vomiting, drooling, trouble swallowing',
         severe: 'Severe — may need urgent vet/medical care',
+        unknown: 'Not verified — no reliable source says whether it is safe for pets',
       },
       humidityLevel: {
         low: 'Low humidity is fine (30-40%)',
@@ -1441,6 +1443,7 @@ export const translations = {
       },
       toxicToPets: 'Evcil hayvanlara zararlı',
       nonToxicToPets: '✓ Evcil hayvanlara zararsız',
+      toxicityUnknown: 'Evcil hayvanlar için güvenliği doğrulanamadı',
       speciesIdealTemp: (min: number, max: number) => `İdeal ${min}-${max}°C`,
       speciesRecommendedSoil: (soil: string) => `Önerilen toprak: ${soil}`,
       toxicitySeverity: {
@@ -1448,6 +1451,7 @@ export const translations = {
         mild: 'Hafif - genellikle ağız/mide tahrişi',
         moderate: 'Orta - kusma, salya, yutma güçlüğü',
         severe: 'Ciddi - acil veteriner/doktor gerektirebilir',
+        unknown: 'Doğrulanamadı - evcil hayvanlar için güvenli olup olmadığını söyleyen güvenilir bir kaynak yok',
       },
       humidityLevel: {
         low: 'Düşük nem yeterli (%30-40)',

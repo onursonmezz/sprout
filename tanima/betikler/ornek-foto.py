@@ -32,7 +32,7 @@ donusum = transforms.Compose([transforms.Resize(255), transforms.CenterCrop(224)
 adaylar = defaultdict(list)
 with open(KLASOR / "veri" / "kaynaklar.csv", encoding="utf-8") as f:
     for s in csv.DictReader(f):
-        if s["kalite"] in ("research", "commons") and (KLASOR / "veri" / s["dosya"]).exists():
+        if s["kalite"] in ("research", "commons") and "-sa" not in s["lisans"].lower().replace(" ", "-") and (KLASOR / "veri" / s["dosya"]).exists():
             adaylar[s["tur"]].append(s)
 
 kayitlar = {}

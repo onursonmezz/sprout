@@ -31,11 +31,19 @@ TOHUM = 7
 EN_AZ_FOTO = 30
 
 
+def lisans_sa(lisans):
+    """CC BY-SA (iNaturalist: "cc-by-sa", Commons: "CC BY-SA 4.0") eğitime alınmaz:
+    "aynı lisansla paylaş" şartının bir model için anlamı hukuken belirsiz."""
+    return "-sa" in lisans.lower().replace(" ", "-")
+
+
 def ayir():
     """Gözlemleri %70 eğitim, %15 doğrulama, %15 sınav olarak böler."""
     gozlem = defaultdict(lambda: defaultdict(list))
     with open(VERI / "kaynaklar.csv", encoding="utf-8") as f:
         for satir in csv.DictReader(f):
+            if lisans_sa(satir["lisans"]):
+                continue
             yol = VERI / satir["dosya"]
             if yol.exists():
                 gozlem[satir["tur"]][satir["gozlem"]].append(yol)

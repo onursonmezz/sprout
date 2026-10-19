@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0.0",
-    "plantCount": 267,
+    "plantCount": 338,
     "language": "tr",
     "units": "metric",
     "referenceConditions": {
@@ -59,7 +59,8 @@
       "none": "Bilinen toksisitesi yok",
       "mild": "Hafif - genellikle ağız/mide tahrişi",
       "moderate": "Orta - kusma, salya, yutma güçlüğü",
-      "severe": "Ciddi - acil veteriner/doktor gerektirebilir"
+      "severe": "Ciddi - acil veteriner/doktor gerektirebilir",
+      "unknown": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor"
     },
     "categoryTr": {
       "foliage": "Yapraklı iç mekan",
@@ -8388,8 +8389,7 @@
       "id": "lavandula-angustifolia",
       "scientificName": "Lavandula angustifolia",
       "commonNamesTr": [
-        "Lavanta",
-        "Karabaş Otu"
+        "Lavanta"
       ],
       "commonNameEn": "English Lavender",
       "family": "Lamiaceae",
@@ -22513,6 +22513,5848 @@
       ],
       "heatingSensitivity": "med",
       "turkeyNote": "Soğuğa çok duyarlıdır; en hızlı 21-29 °C arasında büyür. Yapraklarına çocukların ve evcil hayvanların ulaşamayacağı bir yer daha güvenli olabilir."
+    },
+    {
+      "id": "centaurea-cyanus",
+      "scientificName": "Centaurea cyanus",
+      "commonNamesTr": [
+        "Peygamber Çiçeği",
+        "Mavi Kantaron"
+      ],
+      "commonNameEn": "Cornflower",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 25,
+        "survivalMinC": -20
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA listesinde zehirsiz.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 90,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Serin mevsimi sever; sıcak yazlarda erken bitebilir. Kendiliğinden tohumlar; tohumlamasın isteniyorsa solan çiçekleri almak yeterli olabilir. Uzun ömürlü bir kesme çiçektir."
+    },
+    {
+      "id": "ricinus-communis",
+      "scientificName": "Ricinus communis",
+      "commonNamesTr": [
+        "Hint Yağı Bitkisi",
+        "Keneotu"
+      ],
+      "commonNameEn": "Castor Bean",
+      "family": "Euphorbiaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 32,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Tohumları risin içerir; birkaç tohum bile insan ve hayvan için öldürücü olabilir. Yaprakları ellemek ciltte tahriş yapabilir. Çocuk ve evcil hayvan olan evlerde yetiştirmemek daha güvenli olur.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 150,
+        "heightMaxCm": 300,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 120
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Çok hızlı büyür ve kendiliğinden tohumlar. Tohum kapsüllerini olgunlaşmadan kesmek hem yayılmayı hem zehirlenme riskini azaltabilir."
+    },
+    {
+      "id": "cordyline-australis",
+      "scientificName": "Cordyline australis",
+      "commonNamesTr": [
+        "Kordiline Avustralis"
+      ],
+      "commonNameEn": "Cabbage Tree",
+      "family": "Asparagaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 9,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 28,
+        "survivalMinC": -5
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": false,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Saponin; kedi ve köpekte kusma (bazen kanlı), salya, kedilerde göz bebeği büyümesi yapabilir.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 300,
+        "spreadMinCm": 40,
+        "spreadMaxCm": 120
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Saksıda yavaşça gövdelenir ve yıllar içinde boylanır. Islak ve kurak toprağa dayanır ama en iyi verimli, iyi drene toprakta gelişir."
+    },
+    {
+      "id": "cyclamen-hederifolium",
+      "scientificName": "Cyclamen hederifolium",
+      "commonNamesTr": [
+        "Kandilkökü",
+        "Sonbahar Siklameni"
+      ],
+      "commonNameEn": "Ivy-leaved Cyclamen",
+      "family": "Primulaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "shade"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 20,
+        "survivalMinC": -20
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          9,
+          10,
+          11,
+          2,
+          3
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Terpenoid saponinler, en çok yumruda. Kusma, salya, ishal; çok miktarda yumru yenirse kalp ritim bozukluğu, nöbet ve ölüm görülebilir.",
+        "source": "ASPCA (cins düzeyinde) + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 10,
+        "heightMaxCm": 15,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Akdeniz kökenlidir. Sonbaharda çiçek ve yaprak açar, kışı yapraklı geçirir, yazın dinlenir. Yumrunun üstünü yaklaşık 2-3 cm toprakla örtmek yeterli olabilir."
+    },
+    {
+      "id": "nepeta-cataria",
+      "scientificName": "Nepeta cataria",
+      "commonNamesTr": [
+        "Kedi Nanesi"
+      ],
+      "commonNameEn": "Catnip",
+      "family": "Lamiaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 28,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [
+          "cat"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "mild",
+        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
+        "note": "Kediler için hafif zehirli; çok yenirse kusma ve ishal yapabilir. Kokusu kedileri çeker.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 45,
+        "heightMaxCm": 90,
+        "spreadMinCm": 45,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Kuraklığa dayanıklıdır ama sıcak ve nemli havayı pek sevmez; öğleden sonra gölge yardımcı olabilir. İlk çiçeklenmeden sonra başakları kesmek yeniden çiçek açmasını sağlayabilir."
+    },
+    {
+      "id": "passiflora-caerulea",
+      "scientificName": "Passiflora caerulea",
+      "commonNamesTr": [
+        "Çarkıfelek",
+        "Mavi Çarkıfelek"
+      ],
+      "commonNameEn": "Blue Passionflower",
+      "family": "Passifloraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 30,
+        "survivalMinC": -15
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Siyanojenik glikozitler; yutulursa bulantı, kusma, uyuşukluk ve kalp ritim düzensizliği yapabilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 300,
+        "heightMaxCm": 600,
+        "spreadMinCm": 90,
+        "spreadMaxCm": 180
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Hızlı tırmanır; çiçeklenmeden sonra yılın sürgünlerini yarıya kadar budamak boyunu kontrol altında tutabilir. Solan çiçekleri almak çiçeklenmeyi destekleyebilir."
+    },
+    {
+      "id": "eranthis-hyemalis",
+      "scientificName": "Eranthis hyemalis",
+      "commonNamesTr": [
+        "Kar Çiçeği",
+        "Kovancık"
+      ],
+      "commonNameEn": "Winter Aconite",
+      "family": "Ranunculaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 2,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 2,
+        "idealMaxC": 15,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          2,
+          3
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Kardiyak glikozitler; çok zehirlidir. Yutulursa mide ağrısı, kusma, ishal, görme bozukluğu, nefes darlığı ve kalp durması görülebilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 8,
+        "heightMaxCm": 15,
+        "spreadMinCm": 8,
+        "spreadMaxCm": 15
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Kışın sonunda, kar erirken sarı çiçek açar; ilkbahar sonunda yaprakları çekilip yaz boyu dinlenir. Yumruları dikmeden önce bir gece suda bekletmek yardımcı olabilir."
+    },
+    {
+      "id": "lagerstroemia-indica",
+      "scientificName": "Lagerstroemia indica",
+      "commonNamesTr": [
+        "Oya Ağacı"
+      ],
+      "commonNameEn": "Crape Myrtle",
+      "family": "Lythraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 35,
+        "survivalMinC": -18
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA listesinde zehirsiz.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 150,
+        "heightMaxCm": 600,
+        "spreadMinCm": 150,
+        "spreadMaxCm": 600
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Tam güneşte en bol çiçeği açar. Kışın yaprağını döker; yerleştikten sonra kuraklığa dayanıklıdır. Kış rüzgârından korunaklı bir yer daha uygun olabilir."
+    },
+    {
+      "id": "canna-indica",
+      "scientificName": "Canna indica",
+      "commonNamesTr": [
+        "Kana Çiçeği",
+        "Kanna"
+      ],
+      "commonNameEn": "Indian Shot",
+      "family": "Cannaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 32,
+        "survivalMinC": -8
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA listesinde zehirsiz.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 50,
+        "heightMaxCm": 250,
+        "spreadMinCm": 45,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Solan çiçekleri almak çiçeklenmeyi uzatabilir. Kışı soğuk geçen yerlerde ilk dondan sonra dipten kesip köksapları söküp serin ve kuru bir yerde saklamak gerekebilir."
+    },
+    {
+      "id": "duranta-erecta",
+      "scientificName": "Duranta erecta",
+      "commonNamesTr": [
+        "Duranta"
+      ],
+      "commonNameEn": "Golden Dewdrop",
+      "family": "Verbenaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 32,
+        "survivalMinC": -5
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Turuncu-sarı meyveleri çocuklar ve köpekler için öldürücü olabilir; kuşlara zarar vermez. Meyveleri ulaşılamayacak yerde tutmak ya da oluşmadan kesmek daha güvenli olur.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 300,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 200
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Saksıda yetiştirilip soğukta içeri alınabilir. Çiçeklenmeden sonra budamak daha toplu kalmasına yardımcı olabilir."
+    },
+    {
+      "id": "helleborus-orientalis",
+      "scientificName": "Helleborus orientalis",
+      "commonNamesTr": [
+        "Çöpleme",
+        "Helleborus"
+      ],
+      "commonNameEn": "Lenten Rose",
+      "family": "Ranunculaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "shade",
+        "preferredTr": "Gölge",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 800,
+        "luxIdeal": 2500,
+        "luxMax": 8000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 2,
+        "idealMaxC": 22,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          2,
+          3,
+          9,
+          10
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Yutulursa ağız ve boğazda yanma, salya, kusma, karın krampı ve ishal; özsuyu ciltte tahriş yapabilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 45,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 45
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Anadolu ve Kafkasya kökenlidir. Kışın sonunda çiçek açar; gölge ve nemli, humuslu toprak sever. Eski yaprakları çiçeklenme başlarken kesmek çiçekleri ortaya çıkarabilir."
+    },
+    {
+      "id": "solanum-pseudocapsicum",
+      "scientificName": "Solanum pseudocapsicum",
+      "commonNamesTr": [
+        "Kudüs Kirazı",
+        "Kış Kirazı"
+      ],
+      "commonNameEn": "Jerusalem Cherry",
+      "family": "Solanaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 26,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Solanin ve benzeri alkaloitler; özellikle meyveleri yutulursa kusma, salya, ishal, halsizlik ve nöbet görülebilir. Meyvesi kiraza benzese de yenmez.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 20,
+        "heightMaxCm": 90,
+        "spreadMinCm": 20,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Kışın kırmızı-turuncu meyveleriyle süs bitkisi olarak satılır. Meyveleri çocukların ve evcil hayvanların ulaşamayacağı yerde tutmak iyi olur."
+    },
+    {
+      "id": "jacobaea-maritima",
+      "scientificName": "Jacobaea maritima",
+      "commonNamesTr": [
+        "Gümüş Yaprak",
+        "Sineraria"
+      ],
+      "commonNameEn": "Dusty Miller",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 30,
+        "survivalMinC": -12
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Pirolizidin alkaloitleri; yutulursa ciddi karaciğer hasarı yapabilir. Ciltle temasta kısa süren hafif tahriş görülebilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 45,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Gümüşi, keçemsi yaprakları için yetiştirilir. Sıcağa, kuraklığa ve fakir toprağa dayanıklıdır; çiçek saplarını almak yaprakların gür kalmasına yardımcı olabilir."
+    },
+    {
+      "id": "yucca-gloriosa",
+      "scientificName": "Yucca gloriosa",
+      "commonNamesTr": [
+        "Avize Ağacı"
+      ],
+      "commonNameEn": "Spanish Dagger",
+      "family": "Asparagaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 14,
+        "dryLevel": "full",
+        "dryLevelTr": "Toprak tamamen kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 35,
+        "survivalMinC": -15
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 60
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": false,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Saponinler; kedi ve köpekte kusma ve salya yapabilir. Yaprak uçları sivridir.",
+        "source": "ASPCA (cins düzeyinde) + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 250,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 200
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Sıcağa, kuraklığa ve deniz tuzuna dayanıklıdır. Sivri yaprak uçları yaralayabilir; yol kenarından uzak dikmek iyi olur."
+    },
+    {
+      "id": "tradescantia-spathacea",
+      "scientificName": "Tradescantia spathacea",
+      "commonNamesTr": [
+        "Rhoeo",
+        "Musa'nın Beşiği"
+      ],
+      "commonNameEn": "Oyster Plant",
+      "family": "Commelinaceae",
+      "category": "foliage",
+      "categoryTr": "Yapraklı iç mekan",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 8,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 29,
+        "survivalMinC": 7
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "perlite"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Perlit takviyeli karışım"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "mild",
+        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
+        "note": "Çok miktarda yenirse dudak, ağız ve boğazda tahriş, bulantı ve kusma; özsuyu ciltte tahriş yapabilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 30,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "bölme",
+        "gövde çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Işık yetersizse uzar ve yaprakların mor rengi yeşile döner. Saksıda toprağın üst 2-3 cm'si kuruyunca sulamak uygun olabilir."
+    },
+    {
+      "id": "hydrangea-paniculata",
+      "scientificName": "Hydrangea paniculata",
+      "commonNamesTr": [
+        "Salkım Ortanca"
+      ],
+      "commonNameEn": "Panicle Hydrangea",
+      "family": "Hydrangeaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 28,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Siyanojenik glikozitler; yutulursa kusma, ishal ve halsizlik yapabilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 150,
+        "heightMaxCm": 400,
+        "spreadMinCm": 150,
+        "spreadMaxCm": 400
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Ortanca türleri içinde güneşe en dayanıklısıdır; sabah güneşi ve öğleden sonra gölge daha iyi olabilir. Yeni sürgünlerde çiçek açtığı için kış sonunda sert budanabilir."
+    },
+    {
+      "id": "impatiens-balsamina",
+      "scientificName": "Impatiens balsamina",
+      "commonNamesTr": [
+        "Kına Çiçeği"
+      ],
+      "commonNameEn": "Garden Balsam",
+      "family": "Balsaminaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 3,
+        "dryLevel": "moist",
+        "dryLevelTr": "Toprak sürekli hafif nemli kalsın"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 30,
+        "survivalMinC": 3
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA Impatiens cinsini zehirsiz sayar.",
+        "source": "ASPCA (cins düzeyinde) + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 75,
+        "spreadMinCm": 20,
+        "spreadMaxCm": 45
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Nemli toprak sever, kuraklığa dayanıksızdır. Olgun tohum kapsülleri dokununca patlar; kendiliğinden tohumlayabilir."
+    },
+    {
+      "id": "clematis-viticella",
+      "scientificName": "Clematis viticella",
+      "commonNamesTr": [
+        "Akasma",
+        "Klematis"
+      ],
+      "commonNameEn": "Italian Clematis",
+      "family": "Ranunculaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 28,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Protoanemonin; yutulursa ağızda şiddetli yanma, salya ve kusma; özsuyu ciltte tahriş yapabilir.",
+        "source": "ASPCA (cins düzeyinde) + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 300,
+        "heightMaxCm": 450,
+        "spreadMinCm": 90,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "daldırma",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Gövdesi güneşte, kökleri gölgede olmayı sever; dibine alçak bitkiler dikmek kökleri serin tutabilir. Yeni sürgünlerde çiçek açar; kış sonunda yerden 30 cm kadar budanabilir."
+    },
+    {
+      "id": "acalypha-hispida",
+      "scientificName": "Acalypha hispida",
+      "commonNamesTr": [
+        "Kedi Kuyruğu",
+        "Akalifa"
+      ],
+      "commonNameEn": "Chenille Plant",
+      "family": "Euphorbiaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 3,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 29,
+        "survivalMinC": 10
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": false,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "ASPCA kedi ve köpek için zehirli sayar.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 180,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "med",
+      "propagation": [
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Kadifemsi, sarkan kırmızı çiçek başakları vardır. İç mekânda 16 °C üstü sıcaklık ve yüksek nem ister; büyüme döneminde ayda bir gübre yardımcı olabilir."
+    },
+    {
+      "id": "hosta-plantaginea",
+      "scientificName": "Hosta plantaginea",
+      "commonNamesTr": [
+        "Hosta",
+        "Kokulu Hosta"
+      ],
+      "commonNameEn": "Fragrant Hosta",
+      "family": "Asparagaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "shade",
+        "preferredTr": "Gölge",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 800,
+        "luxIdeal": 2500,
+        "luxMax": 8000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 26,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": false,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Saponinler; kedi ve köpekte kusma ve ishal yapabilir.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 60,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 120
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "bölme"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Gölge ve yarı gölgede, humuslu ve nemli toprakta en iyi gelişir. Hosta türleri içinde en kokulu ve iri çiçekli olanlardandır."
+    },
+    {
+      "id": "brunfelsia-pauciflora",
+      "scientificName": "Brunfelsia pauciflora",
+      "commonNamesTr": [
+        "Dün Bugün Yarın"
+      ],
+      "commonNameEn": "Yesterday Today Tomorrow",
+      "family": "Solanaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 3,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 28,
+        "survivalMinC": -4
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "acidic"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Asidik (ericaceous) toprak"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "severe",
+        "severityTr": "Ciddi - acil veteriner/doktor gerektirebilir",
+        "note": "Brunfelsamidin ve diğer alkaloitler; yutulursa kusma, ishal, titreme, nöbet ve sendeleme görülebilir.",
+        "source": "ASPCA (cins düzeyinde) + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 180,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Çiçekleri mordan lavantaya, sonra beyaza döner. İç mekânda günde birkaç saat güneş ve nemli ama ıslak olmayan toprak isteyebilir."
+    },
+    {
+      "id": "thaumatophyllum-xanadu",
+      "scientificName": "Thaumatophyllum xanadu",
+      "commonNamesTr": [
+        "Xanadu Filodendron"
+      ],
+      "commonNameEn": "Philodendron Xanadu",
+      "family": "Araceae",
+      "category": "foliage",
+      "categoryTr": "Yapraklı iç mekan",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 8,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 27,
+        "survivalMinC": 7
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal",
+          "perlite"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı",
+          "Perlit takviyeli karışım"
+        ]
+      },
+      "repotEveryMonths": 18,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Kalsiyum oksalat; yaprak ya da sap çiğnenirse dudak, dil ve ağızda şişme, ağrı ve salya; özsuyu ciltte tahriş yapabilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 150,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Tırmanmayan, toplu kalan bir filodendrondur. Fazla sulanınca yaprakları sararabilir; 1-2 yılda bir saksı değişimi yeterli olabilir."
+    },
+    {
+      "id": "phlox-subulata",
+      "scientificName": "Phlox subulata",
+      "commonNamesTr": [
+        "Yosun Floksu",
+        "Dağ Floksu"
+      ],
+      "commonNameEn": "Moss Phlox",
+      "family": "Polemoniaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 28,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA listesinde zehirsiz.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 10,
+        "heightMaxCm": 15,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "İlkbaharda halı gibi çiçek açar. Çiçeklenme bitince sapları yarıya kadar kesmek toplu kalmasına yardımcı olabilir."
+    },
+    {
+      "id": "ixora-coccinea",
+      "scientificName": "Ixora coccinea",
+      "commonNamesTr": [
+        "İksora"
+      ],
+      "commonNameEn": "Jungle Flame",
+      "family": "Rubiaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 3,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 30,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "acidic",
+          "rich"
+        ],
+        "typesTr": [
+          "Asidik (ericaceous) toprak",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA listesinde zehirsiz.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 150,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 120
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Asidik ve nemli toprak sever; kireçli suyla sulanınca yaprakları sararabilir. Yaz boyunca kırmızı çiçek kümeleri açar."
+    },
+    {
+      "id": "borago-officinalis",
+      "scientificName": "Borago officinalis",
+      "commonNamesTr": [
+        "Hodan"
+      ],
+      "commonNameEn": "Borage",
+      "family": "Boraginaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 28,
+        "survivalMinC": -5
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "mild",
+        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
+        "note": "Pirolizidin alkaloitleri; uzun süre ya da çok miktarda yenirse karaciğere zarar verebilir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 50,
+        "heightMaxCm": 90,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 40
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Akdeniz kökenlidir; fakir toprakta da yetişir ve kendiliğinden tohumlar. Yaz ortasında yarıya kadar budamak sonbaharda yeni sürgün vermesini sağlayabilir."
+    },
+    {
+      "id": "selenicereus-undatus",
+      "scientificName": "Selenicereus undatus",
+      "commonNamesTr": [
+        "Ejder Meyvesi",
+        "Pitaya"
+      ],
+      "commonNameEn": "Dragon Fruit",
+      "family": "Cactaceae",
+      "category": "cactus",
+      "categoryTr": "Kaktüs",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 10,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 32,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "cactus",
+          "universal"
+        ],
+        "typesTr": [
+          "Kaktüs & sukulent harcı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA listesinde zehirsiz (eski adı Hylocereus undatus ile).",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 100,
+        "heightMaxCm": 300,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Tırmanan bir orman kaktüsüdür; tutunacağı bir destek ister. Toprak neredeyse tamamen kuruyunca sulamak uygun olabilir. Çiçekleri gece açar."
+    },
+    {
+      "id": "coleus-amboinicus",
+      "scientificName": "Coleus amboinicus",
+      "commonNamesTr": [
+        "Meksika Kekiği",
+        "Küba Kekiği"
+      ],
+      "commonNameEn": "Cuban Oregano",
+      "family": "Lamiaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 32,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": false,
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "ASPCA kedi ve köpek için zehirli sayar (uçucu yağlar); kusma ve ishal yapabilir.",
+        "source": "ASPCA + NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 90,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik",
+        "bölme"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Ezildiğinde güçlü kekik kokusu verir. Öğle güneşi yapraklarını yakabilir; hafif gölgeli sıcak bir yer daha uygun olabilir. Çelikle çok kolay köklenir."
+    },
+    {
+      "id": "tropaeolum-majus",
+      "scientificName": "Tropaeolum majus",
+      "commonNamesTr": [
+        "Latin Çiçeği"
+      ],
+      "commonNameEn": "Garden Nasturtium",
+      "family": "Tropaeolaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 28,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Kaynaklar çelişiyor: ASPCA zehirsiz, NC State kedi ve köpek için sorunlu sayıyor.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 20,
+        "heightMaxCm": 300,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Fakir, iyi drene toprakta en bol çiçeği açar; fazla gübre çiçeği azaltıp yaprağı çoğaltabilir. Yaprak, çiçek ve tohumları acımsı tadıyla yenir."
+    },
+    {
+      "id": "pentas-lanceolata",
+      "scientificName": "Pentas lanceolata",
+      "commonNamesTr": [
+        "Pentas",
+        "Mısır Yıldızı"
+      ],
+      "commonNameEn": "Egyptian Star Cluster",
+      "family": "Rubiaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 30,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 60,
+        "spreadMinCm": 25,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Yıldız biçimli çiçek kümeleri ilkbahardan sonbahara açar. Bol güneş çiçeklenmeyi artırır; solan kümeleri almak yeni çiçek açmasına yardımcı olabilir. Soğukta içeri alınabilir."
+    },
+    {
+      "id": "gazania-rigens",
+      "scientificName": "Gazania rigens",
+      "commonNamesTr": [
+        "Gazanya"
+      ],
+      "commonNameEn": "Treasure Flower",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 32,
+        "survivalMinC": -5
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 30,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Çiçekleri gece ve bulutlu havada kapanır. Sulamalar arasında toprağın kurumasına izin vermek ve solan çiçekleri almak bol çiçeklenmeye yardımcı olabilir."
+    },
+    {
+      "id": "portulaca-grandiflora",
+      "scientificName": "Portulaca grandiflora",
+      "commonNamesTr": [
+        "İpek Çiçeği",
+        "Ipek Otu"
+      ],
+      "commonNameEn": "Moss Rose",
+      "family": "Portulacaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 35,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "cactus"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Kaktüs & sukulent harcı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok. ASPCA aynı cinsten semizotunu (P. oleracea) zehirli sayar; temkinli olmak iyi olur.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 8,
+        "heightMaxCm": 20,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Sıcağa ve kuraklığa çok dayanıklıdır; kumlu, iyi drene toprak ister. Çiçekleri bulutlu havada ve akşamları kapanır. Asma saksıdan sarkıtmaya uygundur."
+    },
+    {
+      "id": "lobularia-maritima",
+      "scientificName": "Lobularia maritima",
+      "commonNamesTr": [
+        "Kraliyet Halısı",
+        "Alisum"
+      ],
+      "commonNameEn": "Sweet Alyssum",
+      "family": "Brassicaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 26,
+        "survivalMinC": -15
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 8,
+        "heightMaxCm": 25,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Bal kokulu beyaz çiçekleri serin havada bol açar, sıcak yazda azalabilir. Çiçeklenme azalınca kesmek yeniden çiçek açmasını sağlayabilir."
+    },
+    {
+      "id": "salvia-splendens",
+      "scientificName": "Salvia splendens",
+      "commonNamesTr": [
+        "Ateş Çiçeği"
+      ],
+      "commonNameEn": "Scarlet Sage",
+      "family": "Lamiaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 30,
+        "survivalMinC": 3
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten adaçayını zehirsiz sayar.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 90,
+        "spreadMinCm": 20,
+        "spreadMaxCm": 25
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Kuraklığa dayanıksızdır, sıcağı sever. Yazdan dona kadar çiçek açar. Tohumlar ışıkta çimlenir; ekerken üstünü örtmemek gerekir."
+    },
+    {
+      "id": "cosmos-bipinnatus",
+      "scientificName": "Cosmos bipinnatus",
+      "commonNamesTr": [
+        "Kozmos",
+        "Kozmos Çiçeği"
+      ],
+      "commonNameEn": "Garden Cosmos",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 30,
+        "survivalMinC": 3
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 120,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Toprak 18 °C'yi geçince tohumu doğrudan ekilebilir; tohumu derine gömmemek gerekir. Uzun çeşitler rüzgârda destek isteyebilir. Kendiliğinden tohumlar."
+    },
+    {
+      "id": "lavandula-stoechas",
+      "scientificName": "Lavandula stoechas",
+      "commonNamesTr": [
+        "Karabaş Otu",
+        "Karabaş Lavanta"
+      ],
+      "commonNameEn": "Spanish Lavender",
+      "family": "Lamiaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 9,
+        "dryLevel": "full",
+        "dryLevelTr": "Toprak tamamen kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 32,
+        "survivalMinC": -8
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 60
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok. ASPCA aynı cinsten lavantayı (L. angustifolia) kedi ve köpek için zehirli sayar; temkinli olmak iyi olur.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 90,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "med",
+      "propagation": [
+        "gövde çelik",
+        "tohum",
+        "bölme"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Akdeniz kökenlidir; kumlu, taşlı ve iyi drene toprak ister. Kuraklığa dayanır, fazla sudan çabuk etkilenebilir. Çiçek başlarının tepesinde tavşan kulağına benzeyen mor yapraklar vardır."
+    },
+    {
+      "id": "bellis-perennis",
+      "scientificName": "Bellis perennis",
+      "commonNamesTr": [
+        "Koyungözü",
+        "Çayır Papatyası"
+      ],
+      "commonNameEn": "English Daisy",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun",
+          "shade"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 22,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State yenirse insanlarda kusma ve ishal yapabileceğini, ciltte tahriş edebileceğini belirtir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 8,
+        "heightMaxCm": 15,
+        "spreadMinCm": 8,
+        "spreadMaxCm": 20
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "bölme"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Serin havayı ve nemli, verimli toprağı sever; yaz sıcağında zayıflar. İlkbaharda bol çiçek açar."
+    },
+    {
+      "id": "coffea-arabica",
+      "scientificName": "Coffea arabica",
+      "commonNamesTr": [
+        "Kahve Bitkisi",
+        "Arabica Kahvesi"
+      ],
+      "commonNameEn": "Coffee Plant",
+      "family": "Rubiaceae",
+      "category": "foliage",
+      "categoryTr": "Yapraklı iç mekan",
+      "difficulty": 3,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "shade"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 27,
+        "survivalMinC": 10
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "acidic"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Asidik (ericaceous) toprak"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Yaprak ve meyvelerinde kafein bulunur; temkinli olmak iyi olur.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 180,
+        "spreadMinCm": 40,
+        "spreadMaxCm": 100
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Parlak dolaylı ışık ve yüksek nem ister; toprağın sürekli hafif nemli kalması iyi olur. 13 °C altında yaprak dökebilir."
+    },
+    {
+      "id": "persea-americana",
+      "scientificName": "Persea americana",
+      "commonNamesTr": [
+        "Avokado"
+      ],
+      "commonNameEn": "Avocado",
+      "family": "Lauraceae",
+      "category": "foliage",
+      "categoryTr": "Yapraklı iç mekan",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 30,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA bitki listesinde yok. NC State yalnızca atlar için zararlı sayar; kediler ve köpekler için güvenilir bilgi bulunamadı.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 200,
+        "spreadMinCm": 40,
+        "spreadMaxCm": 100
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "aşı"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Çekirdekten kolayca filizlenir ve saksıda ev bitkisi olarak yetiştirilir. Dona dayanıksızdır; bol ışık ve iyi drene, nemli toprak ister."
+    },
+    {
+      "id": "cyperus-alternifolius",
+      "scientificName": "Cyperus alternifolius",
+      "commonNamesTr": [
+        "Japon Şemsiyesi"
+      ],
+      "commonNameEn": "Umbrella Plant",
+      "family": "Cyperaceae",
+      "category": "foliage",
+      "categoryTr": "Yapraklı iç mekan",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 2,
+        "dryLevel": "moist",
+        "dryLevelTr": "Toprak sürekli hafif nemli kalsın"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 28,
+        "survivalMinC": -5
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 45,
+        "heightMaxCm": 120,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "bölme",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Bataklık bitkisidir; toprağının hiç kurumaması gerekir, saksısını su dolu bir tabakta tutmak yardımcı olabilir. Şemsiye biçimli tepesini ters çevirip suya koyunca köklenir."
+    },
+    {
+      "id": "nephrolepis-cordifolia",
+      "scientificName": "Nephrolepis cordifolia",
+      "commonNamesTr": [
+        "Nefrolepis Kordifolia"
+      ],
+      "commonNameEn": "Tuberous Sword Fern",
+      "family": "Nephrolepidaceae",
+      "category": "fern",
+      "categoryTr": "Eğrelti",
+      "difficulty": 2,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "shade"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 26,
+        "survivalMinC": -8
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "coco_peat"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Hindistan cevizi lifi veya torf"
+        ]
+      },
+      "repotEveryMonths": 18,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten Boston eğreltisini zehirsiz sayar.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 90,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Dik duran yaprakları vardır; diğer eğreltilere göre kuru havaya ve fakir toprağa biraz daha dayanır. İç mekânda parlak dolaylı ışık uygun olabilir."
+    },
+    {
+      "id": "delosperma-cooperi",
+      "scientificName": "Delosperma cooperi",
+      "commonNamesTr": [
+        "Buz Çiçeği"
+      ],
+      "commonNameEn": "Hardy Ice Plant",
+      "family": "Aizoaceae",
+      "category": "succulent",
+      "categoryTr": "Sukulent",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 14,
+        "dryLevel": "full",
+        "dryLevelTr": "Toprak tamamen kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 35,
+        "survivalMinC": -20
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "cactus"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Kaktüs & sukulent harcı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 60
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 8,
+        "heightMaxCm": 15,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Kumlu, kuru toprakta halı gibi yayılır ve uzun süre pembe-mor çiçek açar. Islak kış ve ağır toprak köklerini çürütebilir."
+    },
+    {
+      "id": "ageratum-houstonianum",
+      "scientificName": "Ageratum houstonianum",
+      "commonNamesTr": [
+        "Vapur Dumanı"
+      ],
+      "commonNameEn": "Floss Flower",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 15,
+        "idealMaxC": 28,
+        "survivalMinC": 3
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 30,
+        "spreadMinCm": 25,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Pamuk gibi mavi, pembe ya da beyaz çiçekleri mayıstan ekime açar. Verimli, nemli ama iyi drene toprak sever. Dona dayanıksızdır."
+    },
+    {
+      "id": "torenia-fournieri",
+      "scientificName": "Torenia fournieri",
+      "commonNamesTr": [
+        "Torenya"
+      ],
+      "commonNameEn": "Wishbone Flower",
+      "family": "Linderniaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "shade"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 28,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 45,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 20
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Gölge ve yarı gölgeyi sever; sıcak yazlarda öğle güneşinden korumak iyi olur. Uçlarını almak gür kalmasına yardımcı olabilir. Asma saksıya uygundur."
+    },
+    {
+      "id": "ananas-comosus",
+      "scientificName": "Ananas comosus",
+      "commonNamesTr": [
+        "Ananas"
+      ],
+      "commonNameEn": "Pineapple",
+      "family": "Bromeliaceae",
+      "category": "foliage",
+      "categoryTr": "Yapraklı iç mekan",
+      "difficulty": 2,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 10,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 30,
+        "survivalMinC": 10
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "rich",
+          "acidic"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Humusça zengin, organik",
+          "Asidik (ericaceous) toprak"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State sivri yapraklarının ve meyve suyunun ağızda ve ciltte tahriş yapabileceğini belirtir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 120,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 120
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Meyvenin tepesindeki yaprak demeti kurutulup toprağa dikilerek yetiştirilebilir. Sulamalar arasında toprağın kurumasına izin vermek iyi olur. Yaprak kenarları sivridir."
+    },
+    {
+      "id": "allamanda-cathartica",
+      "scientificName": "Allamanda cathartica",
+      "commonNamesTr": [
+        "Allamanda"
+      ],
+      "commonNameEn": "Golden Trumpet",
+      "family": "Apocynaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 3,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 32,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State çok miktarda yenirse insanlar için zararlı olduğunu, özsuyunun ciltte ve gözde tahriş yaptığını belirtir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 100,
+        "heightMaxCm": 300,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Parlak sarı boru biçimli çiçekleri vardır. Sarılarak büyür, bir destek ister. Bol ışık ve nem ister; soğukta içeri almak gerekir."
+    },
+    {
+      "id": "camellia-sinensis",
+      "scientificName": "Camellia sinensis",
+      "commonNamesTr": [
+        "Çay Bitkisi"
+      ],
+      "commonNameEn": "Tea Plant",
+      "family": "Theaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 3,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 28,
+        "survivalMinC": -18
+      },
+      "soil": {
+        "types": [
+          "acidic",
+          "rich"
+        ],
+        "typesTr": [
+          "Asidik (ericaceous) toprak",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok. ASPCA aynı cinsten kamelyayı zehirsiz sayar; yapraklarında kafein bulunur, temkinli olmak iyi olur.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 100,
+        "heightMaxCm": 300,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 200
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "tohum",
+        "kök çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Asidik, nemli ve iyi drene toprak ister; kireçli toprakta yaprakları sararabilir. Genç yaprak ve tomurcuklar ilkbaharda toplanır."
+    },
+    {
+      "id": "feijoa-sellowiana",
+      "scientificName": "Feijoa sellowiana",
+      "commonNamesTr": [
+        "Kaymak Ağacı",
+        "Feyjoa"
+      ],
+      "commonNameEn": "Pineapple Guava",
+      "family": "Myrtaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 30,
+        "survivalMinC": -10
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 150,
+        "heightMaxCm": 300,
+        "spreadMinCm": 150,
+        "spreadMaxCm": 200
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Meyve kalitesi için toprağın düzenli nemli kalması önemlidir; derin sulamak ve malç sermek yardımcı olabilir. Budama daha sık dallanmasını sağlar."
+    },
+    {
+      "id": "actinidia-chinensis",
+      "scientificName": "Actinidia chinensis",
+      "commonNamesTr": [
+        "Kivi"
+      ],
+      "commonNameEn": "Kiwifruit",
+      "family": "Actinidiaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 3,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 28,
+        "survivalMinC": -20
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 300,
+        "heightMaxCm": 900,
+        "spreadMinCm": 300,
+        "spreadMaxCm": 600
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Erkek ve dişi çiçekler ayrı bitkilerdedir; meyve için ikisini birlikte dikmek gerekir. Çiçek tomurcukları geçen yılın dallarında oluştuğundan sonbahar-kış budaması dikkatli yapılmalıdır. Sağlam bir çardak ister."
+    },
+    {
+      "id": "pisum-sativum",
+      "scientificName": "Pisum sativum",
+      "commonNamesTr": [
+        "Bezelye"
+      ],
+      "commonNameEn": "Garden Pea",
+      "family": "Fabaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 3,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 24,
+        "survivalMinC": -3
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          3,
+          4,
+          5
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 45,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Serin mevsim sebzesidir; 30 °C üstünde büyümesi durur. Toprak çözülünce tohum doğrudan ekilir. Saksıda yetiştirmek için en az 8 litrelik saksı gerekir."
+    },
+    {
+      "id": "phaseolus-vulgaris",
+      "scientificName": "Phaseolus vulgaris",
+      "commonNamesTr": [
+        "Fasulye"
+      ],
+      "commonNameEn": "Common Bean",
+      "family": "Fabaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 3,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 18,
+        "idealMaxC": 30,
+        "survivalMinC": 5
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State çiğ ya da az pişmiş taneler yenirse şiddetli bulantı, kusma ve ishal yapabileceğini belirtir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 45,
+        "heightMaxCm": 250,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Sıcak mevsim sebzesidir. Sırık çeşitleri tırmanacak bir destek ister, bodur çeşitler istemez. Taze fasulyeyi genç ve körpe toplamak verimi artırır."
+    },
+    {
+      "id": "lactuca-sativa",
+      "scientificName": "Lactuca sativa",
+      "commonNamesTr": [
+        "Marul"
+      ],
+      "commonNameEn": "Lettuce",
+      "family": "Asteraceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 2,
+        "dryLevel": "moist",
+        "dryLevelTr": "Toprak sürekli hafif nemli kalsın"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 22,
+        "survivalMinC": -3
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          3,
+          4,
+          5,
+          9,
+          10
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 30,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Serin ilkbahar ve sonbaharı sever. Kökleri yüzeyseldir, toprağın sürekli nemli kalması gerekir. Sıcak ve kuru havada çiçeğe kalkıp acılaşabilir; yazın öğleden sonra gölge yardımcı olabilir."
+    },
+    {
+      "id": "abelmoschus-esculentus",
+      "scientificName": "Abelmoschus esculentus",
+      "commonNamesTr": [
+        "Bamya"
+      ],
+      "commonNameEn": "Okra",
+      "family": "Malvaceae",
+      "category": "herb",
+      "categoryTr": "Mutfak / kokulu",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 3,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 20,
+        "idealMaxC": 32,
+        "survivalMinC": 10
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          5,
+          6,
+          7,
+          8
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Kapsüllerdeki tüyler ciltte tahriş yapabilir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 90,
+        "heightMaxCm": 150,
+        "spreadMinCm": 90,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Sıcak sever; 13 °C altında büyümez. Kapsüller 7-8 cm olunca toplamak gerekir; büyüdükçe sertleşir. Toplarken eldiven kullanmak iyi olur."
+    },
+    {
+      "id": "eriobotrya-japonica",
+      "scientificName": "Eriobotrya japonica",
+      "commonNamesTr": [
+        "Yenidünya",
+        "Malta Eriği"
+      ],
+      "commonNameEn": "Loquat",
+      "family": "Rosaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 30,
+        "survivalMinC": -12
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State çekirdeklerinin siyanojenik glikozit içerdiğini, çok sayıda kırılıp yenirse zehirleyebileceğini belirtir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 300,
+        "heightMaxCm": 750,
+        "spreadMinCm": 300,
+        "spreadMaxCm": 750
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "gövde çelik",
+        "tohum",
+        "aşı"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Herdem yeşil bir meyve ağacıdır; kışın çiçek açar. Sıcaklık -2 °C altına inerse çiçek ve meyveler zarar görebilir. Ateş yanıklığı hastalığına yatkındır."
+    },
+    {
+      "id": "fritillaria-imperialis",
+      "scientificName": "Fritillaria imperialis",
+      "commonNamesTr": [
+        "Ters Lale",
+        "Ağlayan Gelin"
+      ],
+      "commonNameEn": "Crown Imperial",
+      "family": "Liliaceae",
+      "category": "flowering",
+      "categoryTr": "Çiçekli",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 22,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          3,
+          4
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State taze soğanlarının steroidal alkaloitler içerdiğini belirtir.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 90,
+        "heightMaxCm": 120,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 45
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "bölme"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Batı Asya ve Anadolu kökenlidir. Soğanları sonbaharda 15 cm derine dikilir ve yerinden oynatılmaması iyi olur. Çiçeklenmeden sonra yazın dinlenmeye girer."
+    },
+    {
+      "id": "papaver-orientale",
+      "scientificName": "Papaver orientale",
+      "commonNamesTr": [
+        "Türk Gelinciği",
+        "Doğu Gelinciği"
+      ],
+      "commonNameEn": "Oriental Poppy",
+      "family": "Papaveraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 25,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "sandy"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "mild",
+        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
+        "note": "NC State, gelincik türlerinde hayvanlarda (genellikle hafif) zehirlenme görüldüğünü, bu türün de zehirli kabul edilmesini önerir.",
+        "source": "NC State Extension Plant Toolbox (bakım ve zehirlilik, Ekim 2026)",
+        "needsVerification": false
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 90,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "med",
+      "propagation": [
+        "kök çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Haziran-temmuzda iri çiçek açar, sonra yaprakları çekilir ve sonbaharda yeniden çıkar. Kazık kökü fazla sudan çürüyebilir. Sıcak ve nemli bölgelerde zorlanabilir."
+    },
+    {
+      "id": "eschscholzia-californica",
+      "scientificName": "Eschscholzia californica",
+      "commonNamesTr": [
+        "Kaliforniya Gelinciği"
+      ],
+      "commonNameEn": "California Poppy",
+      "family": "Papaveraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 10,
+        "idealMaxC": 28,
+        "survivalMinC": -15
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 60
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 60,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 60
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Fakir, kuru ve sıcak yerlerde parlak turuncu çiçek açar. Çiçekleri bulutlu havada ve geceleri kapanır. Solan çiçekleri almak çiçeklenmeyi uzatabilir."
+    },
+    {
+      "id": "kerria-japonica",
+      "scientificName": "Kerria japonica",
+      "commonNamesTr": [
+        "Kanarya Gülü"
+      ],
+      "commonNameEn": "Japanese Kerria",
+      "family": "Rosaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "shade"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 28,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 90,
+        "heightMaxCm": 200,
+        "spreadMinCm": 180,
+        "spreadMaxCm": 270
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme",
+        "gövde çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "İlkbaharda sarı çiçek açan, yaprak döken bir çalıdır. Tam güneşte çiçekleri solar; gölge ya da yarı gölge daha uygun olabilir. Fazla gübre yayılmasını artırabilir."
+    },
+    {
+      "id": "chaenomeles-speciosa",
+      "scientificName": "Chaenomeles speciosa",
+      "commonNamesTr": [
+        "Japon Ayvası",
+        "Süs Ayvası"
+      ],
+      "commonNameEn": "Flowering Quince",
+      "family": "Rosaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 28,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 150,
+        "heightMaxCm": 300,
+        "spreadMinCm": 150,
+        "spreadMaxCm": 300
+      },
+      "growthRate": "med",
+      "propagation": [
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Mart-nisanda yapraklanmadan önce kırmızı çiçek açar. Kireçli toprağı sevmez. Meyveleri sert ve ekşidir, reçel ya da jöle yapılabilir."
+    },
+    {
+      "id": "ajuga-reptans",
+      "scientificName": "Ajuga reptans",
+      "commonNamesTr": [
+        "Dağ Mayasıl Otu",
+        "Ajuga"
+      ],
+      "commonNameEn": "Bugleweed",
+      "family": "Lamiaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "shade",
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 5,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 26,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 30,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Avrupa ve Güneybatı Asya kökenli bir yer örtücüdür. Çimin yetişmediği serin, gölgeli yerlerde sık bir halı oluşturur. Kalabalıklaşınca ilkbahar ya da sonbaharda bölünebilir."
+    },
+    {
+      "id": "stachys-byzantina",
+      "scientificName": "Stachys byzantina",
+      "commonNamesTr": [
+        "Kuzu Kulağı"
+      ],
+      "commonNameEn": "Lamb's Ear",
+      "family": "Lamiaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 8,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 30,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 60
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 45,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 45
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Anadolu, Kafkasya ve İran kökenlidir. Kadife gibi gümüşi yaprakları vardır. Yaprakların ıslanması hastalığa yol açabilir; dibinden sulamak ve 2-4 yılda bir bölmek iyi olur."
+    },
+    {
+      "id": "acanthus-mollis",
+      "scientificName": "Acanthus mollis",
+      "commonNamesTr": [
+        "Akantus",
+        "Ayı Pençesi"
+      ],
+      "commonNameEn": "Bear's Breeches",
+      "family": "Acanthaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun",
+          "shade"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 28,
+        "survivalMinC": -15
+      },
+      "soil": {
+        "types": [
+          "universal",
+          "rich"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı",
+          "Humusça zengin, organik"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 90,
+        "heightMaxCm": 180,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 90
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "bölme",
+        "kök çelik",
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Korint sütun başlıklarındaki yaprak süslemesi bu bitkiden esinlenmiştir. Köksaplarıyla yayılır; sınırlamak için saksıda ya da kök engeliyle dikmek iyi olabilir."
+    },
+    {
+      "id": "phormium-tenax",
+      "scientificName": "Phormium tenax",
+      "commonNamesTr": [
+        "Yeni Zelanda Keteni",
+        "Formiyum"
+      ],
+      "commonNameEn": "New Zealand Flax",
+      "family": "Asphodelaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 8,
+        "idealMaxC": 28,
+        "survivalMinC": -7
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 240,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 150
+      },
+      "growthRate": "med",
+      "propagation": [
+        "bölme"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Kılıç biçimli, renkli yaprakları için yetiştirilir. Aşırı yaz sıcağını sevmez; alacalı çeşitler yarı gölgede daha canlı renk verebilir."
+    },
+    {
+      "id": "tecoma-stans",
+      "scientificName": "Tecoma stans",
+      "commonNamesTr": [
+        "Tekoma",
+        "Sarı Boru Çiçeği"
+      ],
+      "commonNameEn": "Yellow Bells",
+      "family": "Bignoniaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 7,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 35,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 100,
+        "heightMaxCm": 400,
+        "spreadMinCm": 100,
+        "spreadMaxCm": 300
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Parlak sarı boru çiçekleri açar. Sulamalar arasında toprağın kurumasına izin vermek iyi olur. Çiçeklenmeden sonra budamak boyunu ve biçimini korur."
+    },
+    {
+      "id": "erica-carnea",
+      "scientificName": "Erica carnea",
+      "commonNamesTr": [
+        "Funda",
+        "Kış Fundası"
+      ],
+      "commonNameEn": "Winter Heath",
+      "family": "Ericaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 3,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 3,
+        "idealMaxC": 22,
+        "survivalMinC": -15
+      },
+      "soil": {
+        "types": [
+          "acidic",
+          "sandy"
+        ],
+        "typesTr": [
+          "Asidik (ericaceous) toprak",
+          "Kumlu, iyi drenajlı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          3,
+          4
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 15,
+        "heightMaxCm": 30,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 45
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "bölme",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Kış sonunda pembe-mor çiçek açar. Asidik, kumlu ve iyi drene toprak ister; killi ve kireçli toprakta zorlanır. Serin yazları sever, sıcakta öğleden sonra gölge iyi gelebilir."
+    },
+    {
+      "id": "platycodon-grandiflorus",
+      "scientificName": "Platycodon grandiflorus",
+      "commonNamesTr": [
+        "Balon Çiçeği"
+      ],
+      "commonNameEn": "Balloon Flower",
+      "family": "Campanulaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 28,
+        "survivalMinC": -30
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 60,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 45
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum",
+        "bölme"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Açılmamış tomurcukları balona benzer, sıkınca patlar. Etli kökleri kırılgan olduğundan yerinden oynatılmayı sevmez. Solan çiçekleri almak çiçeklenmeyi uzatabilir."
+    },
+    {
+      "id": "cotoneaster-horizontalis",
+      "scientificName": "Cotoneaster horizontalis",
+      "commonNamesTr": [
+        "Dağ Muşmulası",
+        "Yatık Kotoneaster"
+      ],
+      "commonNameEn": "Rockspray Cotoneaster",
+      "family": "Rosaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 8,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 28,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 36,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 60
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 60,
+        "heightMaxCm": 90,
+        "spreadMinCm": 180,
+        "spreadMaxCm": 240
+      },
+      "growthRate": "slow",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Balık kılçığı biçimli dalları yatay yayılır; sonbaharda kırmızı meyve ve yaprak rengi verir. Serin yazları sever; yerleştikten sonra kuraklığa dayanır."
+    },
+    {
+      "id": "ulmus-parvifolia",
+      "scientificName": "Ulmus parvifolia",
+      "commonNamesTr": [
+        "Çin Karaağacı"
+      ],
+      "commonNameEn": "Chinese Elm",
+      "family": "Ulmaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 5,
+        "idealMaxC": 30,
+        "survivalMinC": -25
+      },
+      "soil": {
+        "types": [
+          "universal"
+        ],
+        "typesTr": [
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 24,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 1500,
+        "spreadMinCm": 30,
+        "spreadMaxCm": 1500
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Bahçede büyük bir gölge ağacı olur; küçük yaprakları ve pullu kabuğu yüzünden bonsai olarak da çok yetiştirilir. Bonsai olarak saksıda toprağın tamamen kurumaması gerekir."
+    },
+    {
+      "id": "cyperus-papyrus",
+      "scientificName": "Cyperus papyrus",
+      "commonNamesTr": [
+        "Papirüs"
+      ],
+      "commonNameEn": "Papyrus",
+      "family": "Cyperaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 2,
+        "dryLevel": "moist",
+        "dryLevelTr": "Toprak sürekli hafif nemli kalsın"
+      },
+      "humidity": {
+        "level": "high",
+        "levelTr": "Yüksek nem ister (%55+)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 32,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 30
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 150,
+        "heightMaxCm": 240,
+        "spreadMinCm": 60,
+        "spreadMaxCm": 120
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "bölme",
+        "tohum"
+      ],
+      "heatingSensitivity": "high",
+      "turkeyNote": "Eski Mısır'da kâğıt yapımında kullanılan bataklık bitkisidir. Toprağının sürekli ıslak kalması gerekir; su bahçesinde ya da su dolu tabakta yetiştirilebilir."
+    },
+    {
+      "id": "thunbergia-alata",
+      "scientificName": "Thunbergia alata",
+      "commonNamesTr": [
+        "Siyah Gözlü Suzan",
+        "Tunbergia"
+      ],
+      "commonNameEn": "Black-eyed Susan Vine",
+      "family": "Acanthaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 4,
+        "dryLevel": "top",
+        "dryLevelTr": "Üst 2-3 cm kurusun"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 16,
+        "idealMaxC": 30,
+        "survivalMinC": 3
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 90,
+        "heightMaxCm": 240,
+        "spreadMinCm": 90,
+        "spreadMaxCm": 180
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum",
+        "gövde çelik"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Ortası koyu renkli turuncu-sarı çiçekler açan, sarılıcı bir tırmanıcıdır. Tel ya da çit gibi bir destek ister; asma saksıdan sarkıtılabilir. Sıcak öğleden sonra hafif gölge iyi gelebilir."
+    },
+    {
+      "id": "gaillardia-pulchella",
+      "scientificName": "Gaillardia pulchella",
+      "commonNamesTr": [
+        "Gayardya"
+      ],
+      "commonNameEn": "Blanket Flower",
+      "family": "Asteraceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 1,
+      "light": {
+        "preferred": "full_sun",
+        "preferredTr": "Tam güneş",
+        "tolerated": [
+          "part_sun"
+        ],
+        "luxMin": 10000,
+        "luxIdeal": 25000,
+        "luxMax": 100000
+      },
+      "water": {
+        "baseIntervalDays": 6,
+        "dryLevel": "half",
+        "dryLevelTr": "Toprağın yarısı kurusun"
+      },
+      "humidity": {
+        "level": "low",
+        "levelTr": "Düşük nem yeterli (%30-40)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 32,
+        "survivalMinC": -20
+      },
+      "soil": {
+        "types": [
+          "sandy",
+          "universal"
+        ],
+        "typesTr": [
+          "Kumlu, iyi drenajlı",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 45
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 30,
+        "heightMaxCm": 60,
+        "spreadMinCm": 25,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "fast",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "low",
+      "turkeyNote": "Kırmızı-sarı iki renkli çiçekleri kumlu kıyı topraklarında bile açar. İyi drene oldukça çoğu toprağa uyum sağlar. Tohumu sonbaharda doğrudan ekilebilir."
+    },
+    {
+      "id": "lobelia-erinus",
+      "scientificName": "Lobelia erinus",
+      "commonNamesTr": [
+        "Lobelya"
+      ],
+      "commonNameEn": "Edging Lobelia",
+      "family": "Campanulaceae",
+      "category": "outdoor",
+      "categoryTr": "Balkon / teras",
+      "difficulty": 2,
+      "light": {
+        "preferred": "part_sun",
+        "preferredTr": "Yarı gölge / parlak dolaylı",
+        "tolerated": [
+          "full_sun"
+        ],
+        "luxMin": 2500,
+        "luxIdeal": 8000,
+        "luxMax": 20000
+      },
+      "water": {
+        "baseIntervalDays": 3,
+        "dryLevel": "moist",
+        "dryLevelTr": "Toprak sürekli hafif nemli kalsın"
+      },
+      "humidity": {
+        "level": "med",
+        "levelTr": "Orta nem (%40-55)"
+      },
+      "temperature": {
+        "idealMinC": 12,
+        "idealMaxC": 26,
+        "survivalMinC": 2
+      },
+      "soil": {
+        "types": [
+          "rich",
+          "universal"
+        ],
+        "typesTr": [
+          "Humusça zengin, organik",
+          "Genel amaçlı saksı toprağı"
+        ]
+      },
+      "repotEveryMonths": 12,
+      "fertilize": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intervalDays": 21
+      },
+      "toxicity": {
+        "affects": [],
+        "toxicToCats": false,
+        "toxicToDogs": false,
+        "toxicToHumans": false,
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Evcil hayvanlar için bilgi yok. NC State çok miktarda yenirse insanlarda bulantı, kusma, nöbet yapabileceğini belirtir (lobelin alkaloidi).",
+        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
+        "needsVerification": true
+      },
+      "size": {
+        "heightMinCm": 10,
+        "heightMaxCm": 25,
+        "spreadMinCm": 15,
+        "spreadMaxCm": 30
+      },
+      "growthRate": "med",
+      "propagation": [
+        "tohum"
+      ],
+      "heatingSensitivity": "med",
+      "turkeyNote": "Serin ilkbaharı sever, sıcak ve nemli yazda zayıflayabilir. Sarkan çeşitleri asma saksıya, dik çeşitleri bordürlere uygundur. Toprağın kurumaması gerekir."
     }
   ]
 }

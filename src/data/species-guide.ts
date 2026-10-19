@@ -36,7 +36,9 @@ export const POT_MATERIAL_KEYS: PotMaterialKey[] = [
   'no_pot',
 ];
 
-export type ToxicitySeverity = 'none' | 'mild' | 'moderate' | 'severe';
+/** 'unknown': no reliable source (ASPCA, NC State, …) says whether it is
+ * harmful to pets. Treated as not safe — never shown as pet-friendly. */
+export type ToxicitySeverity = 'none' | 'mild' | 'moderate' | 'severe' | 'unknown';
 export type HumidityLevel = 'low' | 'med' | 'high';
 export type HeatingSensitivity = 'low' | 'med' | 'high';
 export type SoilTypeKey = 'cactus' | 'coco_peat' | 'universal' | 'orchid_bark' | 'perlite' | 'acidic' | 'sandy' | 'rich';
@@ -178,6 +180,12 @@ const SEASON_PROFILE_OVERRIDES: Record<string, SeasonProfile> = {
   tulipa: 'summerDormant',
   'muscari-armeniacum': 'summerDormant',
   'ranunculus-asiaticus': 'summerDormant',
+  'cyclamen-hederifolium': 'summerDormant',
+  'eranthis-hyemalis': 'summerDormant',
+  'fritillaria-imperialis': 'summerDormant',
+  'papaver-orientale': 'summerDormant',
+  // Evergreen and in flower through late winter.
+  'helleborus-orientalis': 'winterActive',
 };
 
 /** A species' season profile: desert plants and anything that wants its soil

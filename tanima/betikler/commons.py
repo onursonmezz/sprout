@@ -2,7 +2,7 @@
 
 Fotoğrafı az olan türler için (varsayılan: 300'den az) türün Commons
 kategorisindeki ve bir alt düzeydeki fotoğraflar alınır. Yalnızca ticari
-kullanıma izin veren lisanslar (CC0, kamu malı, CC BY, CC BY-SA); çizimler,
+kullanıma izin veren lisanslar (CC0, kamu malı, CC BY); çizimler,
 herbaryum örnekleri ve haritalar atlanır. Kaynak veri/kaynaklar.csv'ye
 "commons" kalitesiyle yazılır (gözlem sütunu: dosya adı).
 
@@ -23,7 +23,7 @@ API = "https://commons.wikimedia.org/w/api.php"
 OTURUM = requests.Session()
 OTURUM.headers["User-Agent"] = "Sprout-bitki-tanima/0.2 (egitim verisi)"
 DB = KLASOR.parent / "sprout-app" / "veri" / "plants.json"
-UYGUN = re.compile(r"^(cc0|public domain|pd|cc by(-sa)? ?\d|cc-by(-sa)?-\d)", re.I)
+UYGUN = re.compile(r"^(cc0|public domain|pd|cc by ?\d|cc-by-\d)", re.I)  # CC BY-SA yok (bkz. indir.py)
 ATLA = re.compile(r"herbari|illustrat|drawing|botanical|plate|map|distribution|\.svg|\.tif|\.pdf|seed|pollen|microscop|stamp", re.I)
 
 

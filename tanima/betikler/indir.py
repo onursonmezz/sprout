@@ -1,7 +1,7 @@
 """iNaturalist'ten eğitim fotoğrafları indirir.
 
 Tür listesi turler.json'dan gelir (esle.py üretir). Yalnızca ticari kullanıma
-izin veren lisanslar (CC0, CC BY, CC BY-SA) alınır; her fotoğrafın sahibi ve
+izin veren lisanslar (CC0, CC BY) alınır; her fotoğrafın sahibi ve
 lisansı veri/kaynaklar.csv dosyasına yazılır. Yarıda kalırsa yeniden
 çalıştırmak güvenlidir; inmiş dosyalar atlanır.
 
@@ -20,7 +20,9 @@ from pathlib import Path
 
 import requests
 
-LISANSLAR = {"cc0", "cc-by", "cc-by-sa"}
+# CC BY-SA bilerek yok: "aynı lisansla paylaş" şartının bir model için ne
+# anlama geldiği hukuken belirsiz; kullanıcı temkinli yolu seçti (Ekim 2026).
+LISANSLAR = {"cc0", "cc-by"}
 API = "https://api.inaturalist.org/v1"
 KLASOR = Path(__file__).parent / "veri"
 OTURUM = requests.Session()

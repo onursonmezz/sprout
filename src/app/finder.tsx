@@ -139,7 +139,7 @@ export default function FinderScreen() {
         <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.finder.resultCount(results.length)}</Text>
         {results.length === 0 && <Text style={[styles.note, { color: colors.textSecondary }]}>{t.finder.empty}</Text>}
         {results.slice(0, SHOWN).map((species) => {
-          const safe = !species.toxicity.toxicToCats && !species.toxicity.toxicToDogs;
+          const safe = !species.toxicity.toxicToCats && !species.toxicity.toxicToDogs && species.toxicity.severity !== 'unknown';
           return (
             <Pressable
               key={species.id}
