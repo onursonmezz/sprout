@@ -15,7 +15,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { deletePhoto } from '@/utils/photos';
 import { identifyPlant, PLANT_ID_CONFIDENT, PlantIdGuess } from '@/utils/plant-id';
 
-type State = { status: 'working' } | { status: 'failed' } | { status: 'done'; guesses: PlantIdGuess[] };
+type State = { status: 'working' } | { status: 'failed'; detail?: string } | { status: 'done'; guesses: PlantIdGuess[] };
 
 /** What the middle tab-bar button leads to: the photo, the most likely species
  * with its basic care, and ways to keep it — add it as a plant or save it to
@@ -36,7 +36,7 @@ export default function ScanScreen() {
     let current = true;
     identifyPlant(String(uri))
       .then((guesses) => current && setState(guesses.length ? { status: 'done', guesses } : { status: 'failed' }))
-      .catch(() => current && setState({ status: 'failed' }));
+      .catch((e: unknown) => current && setState({ status: 'failed', detail: e instanceof Error ? e.message : String(e) }));
     return () => {
       current = false;
       if (!keepPhoto.current) deletePhoto(String(uri));
@@ -70,6 +70,11 @@ export default function ScanScreen() {
           ) : (
             <>
               <Text style={[styles.text, { color: colors.textSecondary, textAlign: 'center' }]}>{t.scan.failed}</Text>
+              {state.detail && (
+                <Text selectable style={[styles.detail, { color: colors.textSecondary }]}>
+                  {state.detail}
+                </Text>
+              )}
               <Pressable onPress={() => router.back()} style={[styles.button, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
                 <Text style={[styles.buttonText, { color: colors.text }]}>{t.scan.tryAgain}</Text>
               </Pressable>
@@ -209,4 +214,5 @@ const styles = StyleSheet.create({
   altName: { fontSize: 13, fontWeight: '700' },
   text: { fontSize: 14, lineHeight: 20 },
   small: { fontSize: 12.5 },
+  detail: { fontSize: 11, opacity: 0.7, textAlign: 'center' },
 });

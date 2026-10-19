@@ -1,3 +1,4 @@
+import { Asset } from 'expo-asset';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import jpeg from 'jpeg-js';
 import { loadTensorflowModel, type TfliteModel } from 'react-native-fast-tflite';
@@ -18,10 +19,20 @@ export type PlantIdGuess = { species: SpeciesRecord; probability: number };
 
 export const plantIdAvailable = true;
 
+/** fast-tflite reads the model with java.net.URL, which only understands real
+ * file:// or http:// addresses — not the resource name an installed APK
+ * gives for a bundled asset. expo-asset first copies the model out of the
+ * APK into the app's cache folder and returns that file's address. */
+async function loadModel(): Promise<TfliteModel> {
+  const asset = await Asset.fromModule(require('../../assets/models/plant-id.tflite')).downloadAsync();
+  const uri = asset.localUri ?? asset.uri;
+  return loadTensorflowModel({ url: uri }, []);
+}
+
 let modelPromise: Promise<TfliteModel> | null = null;
 function getModel() {
   if (!modelPromise) {
-    modelPromise = loadTensorflowModel(require('../../assets/models/plant-id.tflite'), []);
+    modelPromise = loadModel();
     // A failed load shouldn't stick forever — let the next photo try again.
     modelPromise.catch(() => {
       modelPromise = null;
@@ -58,9 +69,18 @@ async function photoToPixels(uri: string): Promise<Float32Array> {
 
 /** The three most likely species for a photo, most likely first. */
 export async function identifyPlant(uri: string): Promise<PlantIdGuess[]> {
-  const [model, pixels] = await Promise.all([getModel(), photoToPixels(uri)]);
-  const [output] = await model.run([pixels.buffer as ArrayBuffer]);
+  // Each stage labels its own failure, so a screenshot of the error line on
+  // the screen is enough to tell where it went wrong.
+  const stage = <T,>(name: string, work: Promise<T>) =>
+    work.catch((e: unknown) => {
+      throw new Error(`${name}: ${e instanceof Error ? e.message : String(e)}`);
+    });
+  const [model, pixels] = await Promise.all([stage('model', getModel()), stage('photo', photoToPixels(uri))]);
+  const [output] = await stage('run', model.run([pixels.buffer as ArrayBuffer]));
   const probabilities = new Float32Array(output);
+  if (probabilities.length !== PLANT_ID_LABELS.length) {
+    throw new Error(`run: ${probabilities.length} outputs for ${PLANT_ID_LABELS.length} labels`);
+  }
   const byId = new Map(speciesGuide.map((s) => [s.id, s]));
   return Array.from(probabilities, (probability, index) => ({ probability, id: PLANT_ID_LABELS[index] }))
     .sort((a, b) => b.probability - a.probability)

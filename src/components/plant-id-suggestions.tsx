@@ -9,7 +9,7 @@ import { SPECIES_PHOTOS } from '@/data/species-photos';
 import { useTheme } from '@/hooks/use-theme';
 import { identifyPlant, PLANT_ID_CONFIDENT, plantIdAvailable, PlantIdGuess } from '@/utils/plant-id';
 
-type State = { status: 'idle' } | { status: 'working' } | { status: 'failed' } | { status: 'done'; guesses: PlantIdGuess[] };
+type State = { status: 'idle' } | { status: 'working' } | { status: 'failed'; detail?: string } | { status: 'done'; guesses: PlantIdGuess[] };
 
 /** Under the photo on the add-plant screen: the model's three best guesses for
  * the photo, each with a reference picture. Tapping one fills in the species. */
@@ -39,7 +39,7 @@ export function PlantIdSuggestions({
     setState({ status: 'working' });
     identifyPlant(photoUri)
       .then((guesses) => current && setState(guesses.length ? { status: 'done', guesses } : { status: 'failed' }))
-      .catch(() => current && setState({ status: 'failed' }));
+      .catch((e: unknown) => current && setState({ status: 'failed', detail: e instanceof Error ? e.message : String(e) }));
     return () => {
       current = false;
     };
@@ -60,6 +60,11 @@ export function PlantIdSuggestions({
     return (
       <View style={[styles.box, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Text style={[styles.hint, { color: colors.textSecondary }]}>{t.addPlant.idFailed}</Text>
+        {state.detail && (
+          <Text selectable style={[styles.detail, { color: colors.textSecondary }]}>
+            {state.detail}
+          </Text>
+        )}
       </View>
     );
   }
@@ -118,4 +123,5 @@ const styles = StyleSheet.create({
   latin: { fontSize: 12, fontStyle: 'italic' },
   percent: { fontSize: 12, fontWeight: '600' },
   hint: { fontSize: 12, flexShrink: 1 },
+  detail: { fontSize: 11, opacity: 0.7 },
 });
