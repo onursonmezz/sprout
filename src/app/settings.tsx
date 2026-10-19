@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
@@ -5,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GlowBackground } from '@/components/glass';
 import { DateField } from '@/components/date-field';
-import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeMode } from '@/context/theme-context';
 import { useLanguage } from '@/context/language-context';
@@ -189,7 +190,15 @@ export default function SettingsScreen() {
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]} edges={['top']}>
       <GlowBackground />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.settings.title}</Text>
+        <View style={styles.titleRow}>
+          <Pressable
+            onPress={() => router.back()}
+            hitSlop={10}
+            style={[styles.back, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
+            <Ionicons name="chevron-back" size={20} color={colors.text} />
+          </Pressable>
+          <Text style={[styles.title, { color: colors.text, fontWeight: '700' }]}>{t.settings.title}</Text>
+        </View>
 
         <Text style={[styles.sectionLabel, { color: colors.textSecondary }]}>{t.settings.notifications}</Text>
         <SectionCard colors={colors}>
@@ -535,8 +544,10 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  scroll: { padding: Spacing.four, paddingBottom: FloatingTabBarSpace, gap: Spacing.one },
-  title: { fontSize: 28, marginBottom: Spacing.two },
+  scroll: { padding: Spacing.four, paddingBottom: Spacing.five * 2, gap: Spacing.one },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: Spacing.two },
+  back: { width: 38, height: 38, borderRadius: 19, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  title: { fontSize: 28 },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 0.5, marginTop: Spacing.three, marginBottom: Spacing.one },
   card: { borderRadius: 18, borderWidth: 1, paddingHorizontal: Spacing.three },
   row: { flexDirection: 'row', alignItems: 'center', paddingVertical: Spacing.three },

@@ -140,6 +140,11 @@ export default function TodayScreen() {
                 <Ionicons name="sunny-outline" size={19} color={colors.text} />
               </GlassCard>
             </Pressable>
+            <Pressable onPress={() => router.push('/settings')} accessibilityLabel={t.settings.title}>
+              <GlassCard style={styles.roundButton}>
+                <Ionicons name="settings-outline" size={19} color={colors.text} />
+              </GlassCard>
+            </Pressable>
           </View>
 
           {dayLengthHours != null && (

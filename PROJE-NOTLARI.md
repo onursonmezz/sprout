@@ -36,9 +36,9 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 
 ## 4. Kod haritası (önemli dosyalar)
 
-- `src/app/(tabs)/`: Bugün (`index.tsx`), Bitkilerim (`plants.tsx`), Takvim (`calendar.tsx`), Rehber (`guide.tsx`), Ayarlar (`settings.tsx`). Alt menü özel ve yüzen tasarımda (`components/floating-tab-bar.tsx`).
+- `src/app/(tabs)/`: Bugün (`index.tsx`), Bitkilerim (`plants.tsx`), Takvim (`calendar.tsx`), Rehber (`guide.tsx`). Alt menü özel ve yüzen tasarımda (`components/floating-tab-bar.tsx`); ortasında büyük tarama düğmesi var, basınca `components/scan-sheet.tsx` paneli açılır (Kamera, Galeri, Hastalık teşhisi "Yakında"). Ayarlar artık sekme değil: `src/app/settings.tsx`, Bugün ekranının sağ üstündeki dişliyle açılır.
 - `src/app/plant/[id].tsx`: bitki sayfası (sulama kartı, "Neden N günde bir?", albüm, çoğaltma, tür kartı, sorun şeridi, Bakım/Günlük/Geçmiş sekmeleri, paylaşım kartı).
-- Diğer ekranlar: `add-plant.tsx`, `light-meter.tsx`, `tour.tsx` (haftalık tur), `diagnose.tsx` (teşhis), `finder.tsx` (bitki bulucu ve köşe danışmanı), `howto/[key].tsx` (nasıl yapılır), `credits.tsx` (fotoğraf teşekkürleri, Ayarlar > Hakkında), `propagation/[id].tsx` (çelik takibi), `guide/...`, `onboarding.tsx`.
+- Diğer ekranlar: `add-plant.tsx`, `light-meter.tsx`, `tour.tsx` (haftalık tur), `diagnose.tsx` (teşhis), `finder.tsx` (bitki bulucu ve köşe danışmanı), `howto/[key].tsx` (nasıl yapılır), `credits.tsx` (fotoğraf teşekkürleri, Ayarlar > Hakkında), `scan.tsx` (tarama sonucu: tür, bakım özeti, Bitkilerime ekle, İstek listesine ekle), `propagation/[id].tsx` (çelik takibi), `guide/...`, `onboarding.tsx`.
 - **Tasarım sistemi:** `components/glass.tsx` (cam kartlar, gradyanlar) ve `constants/theme.ts` (koyu zemin `#0F1813`, yeşil vurgu).
 - **Metinler:** `constants/translations.ts` (EN + TR). Yeni metin eklerken iki dili de ekle.
 - **Veriler:**
@@ -62,6 +62,8 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 - Takvimde geçmiş günlerde yalnızca gerçekten işaretlenen işler görünür. Görev sayaçlarının başlangıç günü "yapıldı" sayılmaz.
 - Harita veya yakındaki dükkânlar özelliği yapılmayacak (kullanıcı vazgeçti).
 - Paylaşım kartı takvim değil istatistik gösterir: birlikte geçen süre, sulama sayısı, yeni yaprak.
+- Alt menü: ortada tarama düğmesi, iki yanında ikişer sekme (taslak `taslak/tarama.html`, kullanıcı B seçeneğini seçti). Hastalık teşhisi ileride aynı panele eklenecek; şimdilik soluk "Yakında" olarak görünüyor (kullanıcı istedi).
+- İstek listesi (`context/wishlist-context.tsx`, `sprout:wishlist`): taramadan eklenir, Bitkilerim'de boşsa gizlenen bir bölümdür (`components/wishlist-strip.tsx`). "Aldım" bitki ekleme ekranını tür dolu açar; türü listede olan bir bitki kaydedilince listeden kendiliğinden düşer.
 
 ## 6. Yapılacaklar ve açık konular
 

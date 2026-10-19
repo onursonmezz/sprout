@@ -13,6 +13,7 @@ import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
+import { useWishlist } from '@/context/wishlist-context';
 import { CareTask, JournalEntry, Plant } from '@/data/plants';
 import {
   findSpeciesExact,
@@ -147,13 +148,16 @@ export default function AddPlantScreen() {
   const router = useRouter();
   const { t, lang } = useLanguage();
   const { seasonalAdjustment, heatingOn, latitude } = useSettings();
-  // prefill* come from a finished propagation project being added as a plant.
-  const { id, prefillName, prefillSpecies, prefillLatin } = useLocalSearchParams<{
+  // prefill* come from a finished propagation project being added as a plant,
+  // or from a scan result (which also hands over its photo).
+  const { id, prefillName, prefillSpecies, prefillLatin, prefillPhoto } = useLocalSearchParams<{
     id?: string;
     prefillName?: string;
     prefillSpecies?: string;
     prefillLatin?: string;
+    prefillPhoto?: string;
   }>();
+  const wishlist = useWishlist();
   const { plants, addPlant, updatePlant, deletePlant, getPlant } = usePlants();
   const editingPlant = id ? getPlant(String(id)) : undefined;
   const isEditing = Boolean(id);
@@ -162,7 +166,13 @@ export default function AddPlantScreen() {
   const [form, setForm] = useState<FormState>(() =>
     editingPlant
       ? plantToForm(editingPlant)
-      : { ...initialForm, nickname: prefillName ?? '', species: prefillSpecies ?? '', latinName: prefillLatin ?? '' }
+      : {
+          ...initialForm,
+          nickname: prefillName ?? '',
+          species: prefillSpecies ?? '',
+          latinName: prefillLatin ?? '',
+          photoUri: prefillPhoto ?? null,
+        }
   );
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [speciesPickApplied, setSpeciesPickApplied] = useState(false);
@@ -389,6 +399,9 @@ export default function AddPlantScreen() {
       createdDaysAgo: 0,
     };
     addPlant(newPlant);
+    // A wished-for plant that has now been bought leaves the wishlist.
+    const bought = speciesOf({ species: form.species, latinName: form.latinName });
+    if (bought) wishlist.remove(bought.id);
     router.replace(`/plant/${id}`);
   };
 

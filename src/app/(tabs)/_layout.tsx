@@ -12,7 +12,6 @@ export default function TabLayout() {
       <Tabs.Screen name="plants" options={{ title: t.tabs.plants }} />
       <Tabs.Screen name="calendar" options={{ title: t.tabs.calendar }} />
       <Tabs.Screen name="guide" options={{ title: t.tabs.guide }} />
-      <Tabs.Screen name="settings" options={{ title: t.tabs.settings }} />
     </Tabs>
   );
 }

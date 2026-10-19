@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlassCard, GlowBackground, GradientButton, GradientFill, ProgressBar } from '@/components/glass';
 import { PlantAvatar, PlantPhoto } from '@/components/plant-avatar';
 import { PropagationStrip } from '@/components/propagation-section';
+import { WishlistStrip } from '@/components/wishlist-strip';
 import { ROOM_KEYS, roomDisplayName } from '@/constants/rooms';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
@@ -147,6 +148,7 @@ export default function PlantsScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        {query.trim() === '' && <WishlistStrip />}
         {query.trim() === '' && <PropagationStrip />}
         {view === 'grid' ? (
           <View style={styles.grid}>

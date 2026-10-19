@@ -10,6 +10,7 @@ import { PlantsProvider, usePlants } from '@/context/plants-context';
 import { PropagationProvider } from '@/context/propagation-context';
 import { SettingsProvider, useSettings } from '@/context/settings-context';
 import { ThemeModeProvider, useThemeMode } from '@/context/theme-context';
+import { WishlistProvider } from '@/context/wishlist-context';
 import { useAutoBackup } from '@/hooks/use-auto-backup';
 import { useHeatingSeasonPrompt } from '@/hooks/use-heating-season-prompt';
 import { useNotificationScheduler } from '@/hooks/use-notification-scheduler';
@@ -62,6 +63,8 @@ function Navigation() {
         <Stack.Screen name="guide/issue/[key]" />
         <Stack.Screen name="guide/issues" />
         <Stack.Screen name="credits" />
+        <Stack.Screen name="settings" />
+        <Stack.Screen name="scan" />
       </Stack>
       <WateringFeedbackPrompt />
       <PlantQuickActions />
@@ -77,7 +80,9 @@ export default function RootLayout() {
         <PlantsProvider>
           <SettingsProvider>
             <PropagationProvider>
-              <Navigation />
+              <WishlistProvider>
+                <Navigation />
+              </WishlistProvider>
             </PropagationProvider>
           </SettingsProvider>
         </PlantsProvider>
