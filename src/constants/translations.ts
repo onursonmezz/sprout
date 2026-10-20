@@ -165,8 +165,8 @@ export const translations = {
       photoCreditsSub: 'The people whose photos taught Sprout to recognise plants',
       creditsTitle: 'Photo credits',
       creditsIntro:
-        'Sprout recognises plants from photos with a model that runs entirely on your phone. It learned from about 84,000 photos shared under open licences by people on iNaturalist and Wikimedia Commons. Thank you to every one of them.',
-      creditsLicenses: 'Only photos whose licence allows this use were included: CC0, public domain, CC BY and CC BY-SA.',
+        'Sprout recognises plants from photos with a model that runs entirely on your phone. It learned from about 94,000 photos shared under open licences by people on iNaturalist and Wikimedia Commons. Thank you to every one of them.',
+      creditsLicenses: 'Only photos whose licence allows this use were included: CC0, public domain and CC BY.',
       creditsFullList: 'Full list of photos and their authors',
       creditsExamplesTitle: 'Example photos shown in suggestions',
       cloudBackupNotConfigured: 'Cloud backup is not set up yet.',
@@ -1385,8 +1385,8 @@ export const translations = {
       photoCreditsSub: "Sprout'a bitkileri tanımayı öğreten fotoğrafların sahipleri",
       creditsTitle: 'Fotoğraf teşekkürleri',
       creditsIntro:
-        "Sprout, bitkileri tamamen telefonunda çalışan bir modelle fotoğraftan tanır. Bu model, iNaturalist ve Wikimedia Commons'ta açık lisansla paylaşılmış yaklaşık 84.000 fotoğraftan öğrendi. Fotoğraflarını paylaşan herkese teşekkürler.",
-      creditsLicenses: 'Yalnızca lisansı bu kullanıma izin veren fotoğraflar alındı: CC0, kamu malı, CC BY ve CC BY-SA.',
+        "Sprout, bitkileri tamamen telefonunda çalışan bir modelle fotoğraftan tanır. Bu model, iNaturalist ve Wikimedia Commons'ta açık lisansla paylaşılmış yaklaşık 94.000 fotoğraftan öğrendi. Fotoğraflarını paylaşan herkese teşekkürler.",
+      creditsLicenses: 'Yalnızca lisansı bu kullanıma izin veren fotoğraflar alındı: CC0, kamu malı ve CC BY.',
       creditsFullList: 'Tüm fotoğrafların ve sahiplerinin listesi',
       creditsExamplesTitle: 'Önerilerde gösterilen örnek fotoğraflar',
       cloudBackupNotConfigured: 'Bulut yedekleme henüz ayarlanmadı.',

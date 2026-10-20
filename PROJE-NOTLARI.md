@@ -93,7 +93,17 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
     - **Ekran:** Etiket sırası `src/data/plant-id-labels.ts`'de; model değişince bu dosya da birlikte değişmeli. Bitki eklerken fotoğrafın altında `components/plant-id-suggestions.tsx` ilk 3 öneriyi örnek fotoğraflarla gösterir. Güven %70 altındaysa "emin olamadım" der; dokununca tür dolar.
     - **Örnek fotoğraflar:** `assets/species/`. Bunları ve teşekkür listesini `bitki-tanima/ornek-foto.py` üretir (`src/data/species-photos.ts`). Tam fotoğraf listesi `tanima/fotograf-kaynaklari.csv`; teşekkür sayfası GitHub'daki bu dosyaya bağlanır.
     - **Telefonda henüz denenmedi.** Önizlemede yalnızca kartın görünümü sahte önerilerle ve teşekkür sayfası denendi.
-    - **Açık konu:** CC BY-SA fotoğrafların modelde kullanılması hukuken tartışmalı. Yayından önce kullanıcıyla konuşulmalı; gerekirse bu fotoğraflar çıkarılıp yeniden eğitilir (~1 saat).
+  - **338 türe genişletme (20 Ekim 2026, `sonuc-338/`):**
+    - **Lisans kararı:** Kullanıcı CC BY-SA fotoğrafların eğitimde kullanılmamasını seçti (`egit.py` bunları atlıyor).
+    - **Kapsam:** Model 313 tür tanıyor, ~94.000 fotoğrafla eğitildi.
+    - **Dışarıda kalan 24 tür:** SA çıkınca fotoğrafları 30'un altına düştü. Bunlar eski 7 + Birkin, kral begonya, karpuz peperomya, Cissus, ruj çiçeği, Ctenanthe, Selaginella, Gasteria, kadife kalatea ve ek paket 2'den 9 tür. Liste `egit-338.log`'un başında. Bu türler için ticari lisanslı yeni fotoğraf bulunursa yeniden eğitilebilir.
+    - **İnternet sınavı:** %89,8 / %95,4.
+    - **Ev sınavı:**
+      - Genel: %84,1 / %91,9. Telefon modeli 800 fotoğrafta %87,9 / %95,5.
+      - Eski 242 türde %84,5'ten %82,9'a düştü. Benzer yeni türler karışıyor: lale/ters lale, zambak/gün zambağı, nefrolepisler.
+      - Yeni 71 türde %88.
+    - **Gönderim:** Model değişikliği yalnızca dosya olduğu için havadan güncellemeyle gönderildi; 1.1.0 APK'sı yeterli.
+    - **Kaynak listesi:** Fotoğraf listesini `kaynak-listesi.py` yazıyor.
 - **Ana ekran widget'ı:** İstendi ama "şimdi değil" dendi. Kendiliğinden başlama; yapılacaklar sorulunca listele. Yeni kurulum gerektirir; fotoğraftan tanımayla aynı kuruluma koymak mantıklı.
 - **Zehirlilik bilgisi:** Ekim 2026'da tüm türler ASPCA ve NC State ile karşılaştırıldı. 267 türün 226'sı doğrulandı (her kaydın `source` alanında kaynağı yazıyor). Kedi/köpek için çelişki yalnızca Fatsia ve Araucaria'da çıktı (düzeltildi). 41 tür iki kaynakta da bulunamadı ve hâlâ `needsVerification: true`; listesi `veri/VERITABANI.md`'de. Bitki bulucu bu bilgiyi kullanıyor; yayından önce bu 41'i başka bir güvenilir kaynakla (ör. Pet Poison Helpline, Cornell) tamamlamak iyi olur.
 - **Kılavuzlar:** Yazılı adımlar var, fotoğraf ya da çizim yok.

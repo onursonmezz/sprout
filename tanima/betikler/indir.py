@@ -29,6 +29,8 @@ OTURUM = requests.Session()
 OTURUM.headers["User-Agent"] = "Sprout-bitki-tanima/0.2 (egitim verisi)"
 OTURUM.mount("https://", requests.adapters.HTTPAdapter(pool_maxsize=16))
 SANIYEDE_FOTO = 8
+# Tür kimliği -> o tür için hedef fotoğraf sayısı; saksı fotoğrafları önce alınır.
+SAKSI_ONCE = {"ficus-microcarpa": 750}
 
 
 def iste(yol, **parametre):
@@ -113,10 +115,16 @@ def main():
 
     with ThreadPoolExecutor(6) as havuz:
         for sira, (tur, takson) in enumerate(turler.items(), 1):
+            # Saksıda görünüşü doğadakinden çok farklı türlerde (ör. bonsai) saksı
+            # fotoğrafları önce ve daha fazla alınır.
+            hedef_t = SAKSI_ONCE.get(tur, hedef)
+            gecisler = ({"quality_grade": "research"}, {"quality_grade": "casual", "captive": "true"})
+            if tur in SAKSI_ONCE:
+                gecisler = gecisler[::-1]
             klasor = KLASOR / "foto" / tur
             klasor.mkdir(parents=True, exist_ok=True)
             sayi = len(list(klasor.glob("*.jpg")))
-            if ozet.get(tur, -1) == sayi and (sayi >= hedef or ozet.get(tur + ":bitti")):
+            if ozet.get(tur, -1) == sayi and (sayi >= hedef_t or ozet.get(tur + ":bitti")):
                 continue  # önceki çalıştırmada tamamlanmış
             print(f"[{sira}/{len(turler)}] {tur}: '{takson['ad']}', {sayi} fotoğraf zaten var", flush=True)
             # Önce uzmanlarca onaylanmış (araştırma düzeyi) gözlemler; yetmezse
@@ -129,13 +137,13 @@ def main():
                 isler.clear()
                 kaynak.flush()
 
-            for ek in ({"quality_grade": "research"}, {"quality_grade": "casual", "captive": "true"}):
-                if sayi >= hedef:
+            for ek in gecisler:
+                if sayi >= hedef_t:
                     break
                 for g in gozlemler(takson, **ek):
-                    if sayi + len(isler) >= hedef:
+                    if sayi + len(isler) >= hedef_t:
                         bosalt()  # bazıları inemediyse eksik kalanı sonraki gözlemler tamamlar
-                        if sayi >= hedef:
+                        if sayi >= hedef_t:
                             break
                     # Araştırma düzeyi zaten onaylı. Saksıdaki bitkilerde kimsenin
                     # itiraz etmemesi yeterli (ev bitkilerinde yükleyenin verdiği ad
@@ -143,7 +151,7 @@ def main():
                     if g.get("num_identification_disagreements", 0) > 0 or str(g["id"]) in sinavda:
                         continue
                     for foto in g["photos"][:2]:  # aynı gözlemden en fazla 2 fotoğraf
-                        if sayi + len(isler) >= hedef or foto.get("license_code") not in LISANSLAR:
+                        if sayi + len(isler) >= hedef_t or foto.get("license_code") not in LISANSLAR:
                             continue
                         dosya = klasor / f"{foto['id']}.jpg"
                         if dosya.exists():
