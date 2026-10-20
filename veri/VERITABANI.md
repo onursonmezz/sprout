@@ -53,6 +53,39 @@ Kalorifer sezonu Ekim-Nisan varsayılmıştır. Kullanıcıya "kaloriferin yanı
 4. **Türkçe isimler bölgeye göre değişir.** "Deve tabanı" bazı yerlerde Monstera, bazı yerlerde başka bir bitki için kullanılıyor. Her bitkide birden fazla isim tutuluyor, arama bunların hepsini taramalı.
 5. **`baseIntervalDays` değerleri kalibrasyon ister.** Yayından sonra "toprağı hâlâ ıslak" / "çok kurumuş" gibi kullanıcı geri bildirimleri toplanırsa bu sayılar gerçek veriyle düzeltilebilir. Asıl rekabet avantajı burada birikir.
 
+## Zehirliliği bilinmeyen türler: üçüncü kaynak denetimi (21 Ekim 2026)
+
+`severity: "unknown"` olan 71 tür için ASPCA ve NC State dışında üçüncü bir güvenilir kaynak arandı. Taranan kaynaklar:
+
+- Pet Poison Helpline zehir listesi (bitki kategorisi, 328 kayıt) ve tek tek sayfaları.
+- Cornell Üniversitesi hayvanlar için zehirli bitkiler veritabanı.
+- Merck Veteriner El Kitabı, "Houseplants and Ornamentals Toxic to Animals" bölümü.
+- Purdue Extension, "Indiana Plants Poisonous to Livestock and Pets".
+- VIN Veterinary Partner, "Poisonous Plants for Dogs and Cats".
+- UC ANR "Plant Safely" sitesi.
+- ASPCA listelerinin ham hâli; yazım hatalı Latin adlar da tarandı.
+
+Blog, mağaza ve yapay zekâ özet siteleri kaynak sayılmadı.
+
+| Tür | Yeni durum | Kaynak | Not |
+|---|---|---|---|
+| Nephrolepis cordifolia | zehirsiz | ASPCA + NC State | ASPCA türün 'Duffii' ve 'Plumosa' çeşitlerini zehirsiz sayar (Latin adı ASPCA'da "Nephrolepsis" diye yanlış yazılı, ilk taramada bu yüzden kaçmış). NC State de kedi ve köpek için zehirsiz der. |
+| Persea americana (avokado) | zehirsiz | Pet Poison Helpline | Kedi ve köpek için zehirsiz; çekirdek bağırsak tıkanması yapabilir. Persin kuş, tavşan, at ve geviş getirenler için zehirli (NC State ve Merck ile tutarlı). |
+| Allamanda cathartica | hafif zehirli (kedi, köpek, insan) | Merck Veterinary Manual + NC State | Merck'in evcil hayvanlar için zehirli ev/süs bitkileri tablosunda yer alır (plumerisin, mide-bağırsak tahrişi). |
+| Coffea arabica (kahve) | orta zehirli (kedi, köpek) | Pet Poison Helpline (kafein) | Bitkinin ayrı kaydı yok; PPH kahve çekirdeğinin kedi ve köpekte ciddi kafein zehirlenmesi yapabileceğini söyler. |
+| Camellia sinensis (çay) | orta zehirli (kedi, köpek) | Pet Poison Helpline (kafein) | Bitkinin ayrı kaydı yok; PPH çay poşetinin (çay yaprağı) kedi ve köpekte ciddi kafein zehirlenmesi yapabileceğini söyler. |
+
+Bakılıp kanıt sayılmayanlar:
+
+- **Tropaeolum majus:** ASPCA zehirsiz, NC State kedi ve köpek için sorunlu diyor. Kaynaklar çeliştiği için "bilinmiyor" kaldı.
+- **UC ANR "Plant Safely":** Bougainvillea, Cotoneaster, Eschscholzia, Lobelia ve Viola için genel bir uyarı veriyor ("çocukları ve evcil hayvanları gözetin"). Kedi ve köpek için ayrı bilgi yok. Ayrıca Sedum'u zehirli sayıyor, ASPCA ise zehirsiz; kaynak alınmadı.
+- **Cornell:** Lobelia spp. için yalnızca insan ve keçiden söz ediyor. Bougainvillea için "bilinen vaka yok, ama kesin söylenemez" diyor.
+- **Pet Poison Helpline'ın "Ferns", "Poppy" ve "Flax" sayfaları:** Sırasıyla eğreltilerin geneli, Papaver ve Linum içindir; bizim türlerimiz için kanıt değildir.
+
+Hâlâ "bilinmiyor" olan 66 tür: Adiantum raddianum, Asplenium nidus, Ctenanthe burle-marxii, Selaginella martensii, Gasteria bicolor, Sempervivum tectorum, Portulacaria afra, Ceropegia woodii, Echinocactus grusonii, Cereus repandus, Bougainvillea glabra, Olea europaea, Radermachera sinica, Peperomia polybotrya, Saxifraga stolonifera, Chamaerops humilis, Phlebodium aureum, Aeonium arboreum, Gymnocalycium mihanovichii, Echinopsis chamaecereus, Epiphyllum oxypetalum, Vriesea splendens, Tillandsia ionantha, Dendrobium nobile, Cymbidium, Fuchsia hybrida, Viola wittrockiana, Punica granatum, Tropaeolum majus, Pentas lanceolata, Gazania rigens, Portulaca grandiflora, Lobularia maritima, Salvia splendens, Cosmos bipinnatus, Lavandula stoechas, Bellis perennis, Cyperus alternifolius, Delosperma cooperi, Ageratum houstonianum, Torenia fournieri, Ananas comosus, Feijoa sellowiana, Actinidia chinensis, Pisum sativum, Phaseolus vulgaris, Lactuca sativa, Abelmoschus esculentus, Eriobotrya japonica, Fritillaria imperialis, Eschscholzia californica, Kerria japonica, Chaenomeles speciosa, Ajuga reptans, Stachys byzantina, Acanthus mollis, Phormium tenax, Tecoma stans, Erica carnea, Platycodon grandiflorus, Cotoneaster horizontalis, Ulmus parvifolia, Cyperus papyrus, Thunbergia alata, Gaillardia pulchella, Lobelia erinus.
+
+Bu türlerin çoğu için güvenilir kaynaklarda yalnızca mağaza ve blog bilgisi var. ASPCA'nın sitesi listede olmayan bitki adlarında "sonuç bulunamadı" sayfası döndürüyor. ASPCA Animal Poison Control'e doğrudan yazılı soru sormak bir sonraki adım olabilir.
+
 ## Yeni bitki eklemek
 
 Yeni türler `veri/turler-ek-N.js` biçiminde bir dosyaya, tür başına tek satır olarak yazılır (sütunların açıklaması `turler-ek-1.js` dosyasının başında). Ardından:

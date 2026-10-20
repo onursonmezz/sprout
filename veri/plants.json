@@ -25585,15 +25585,18 @@
         "intervalDays": 30
       },
       "toxicity": {
-        "affects": [],
-        "toxicToCats": false,
-        "toxicToDogs": false,
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
         "toxicToHumans": false,
-        "severity": "unknown",
-        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
-        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Yaprak ve meyvelerinde kafein bulunur; temkinli olmak iyi olur.",
-        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
-        "needsVerification": true
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Kafein içerir. Pet Poison Helpline köpek ve kedilerin kafeine insanlardan daha duyarlı olduğunu, kahve çekirdeği yemenin ciddi zehirlenme yapabileceğini belirtir: huzursuzluk, kusma, kalp ritminde değişiklik, titreme. Bitkinin kendisi için ayrı kayıt yok; bilgi çekirdekteki kafeine dayanıyor.",
+        "source": "Pet Poison Helpline, kafein sayfası (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -25670,11 +25673,11 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "unknown",
-        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
-        "note": "ASPCA bitki listesinde yok. NC State yalnızca atlar için zararlı sayar; kediler ve köpekler için güvenilir bilgi bulunamadı.",
-        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
-        "needsVerification": true
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "Pet Poison Helpline avokadoyu kedi ve köpek için zehirsiz sayar; ancak çekirdeği yutulursa bağırsak tıkanmasına yol açabilir. Kuşlar, tavşanlar ve atlar için zehirlidir (persin); bu hayvanlar varsa uzak tutmayı düşünebilirsin.",
+        "source": "Pet Poison Helpline (Ekim 2026); NC State yalnızca atlar için sorunlu sayar",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 60,
@@ -25834,11 +25837,11 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "unknown",
-        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
-        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten Boston eğreltisini zehirsiz sayar.",
-        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
-        "needsVerification": true
+        "severity": "none",
+        "severityTr": "Bilinen toksisitesi yok",
+        "note": "ASPCA bu türün 'Duffii' (limon düğmesi eğreltisi) ve 'Plumosa' çeşitlerini kedi ve köpek için zehirsiz sayar; NC State de türü kedi ve köpek için zehirsiz olarak işaretler.",
+        "source": "ASPCA (çeşit düzeyinde) ve NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 30,
@@ -26234,15 +26237,19 @@
         "intervalDays": 21
       },
       "toxicity": {
-        "affects": [],
-        "toxicToCats": false,
-        "toxicToDogs": false,
-        "toxicToHumans": false,
-        "severity": "unknown",
-        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
-        "note": "Evcil hayvanlar için bilgi yok. NC State çok miktarda yenirse insanlar için zararlı olduğunu, özsuyunun ciltte ve gözde tahriş yaptığını belirtir.",
-        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
-        "needsVerification": true
+        "affects": [
+          "cat",
+          "dog",
+          "human"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
+        "toxicToHumans": true,
+        "severity": "mild",
+        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
+        "note": "Merck Veteriner El Kitabı evcil hayvanlar için zehirli ev ve süs bitkileri arasında sayar: kabuk, yaprak, meyve, tohum ve özsuyundaki plumerisin mide-bağırsak tahrişi (karın ağrısı, ishal) yapabilir. NC State insanlarda da ancak çok miktarda yenirse zararlı olduğunu, özsuyunun ciltte ve gözde tahriş yaptığını belirtir.",
+        "source": "Merck Veterinary Manual ve NC State Extension Plant Toolbox (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
@@ -26315,15 +26322,18 @@
         "intervalDays": 45
       },
       "toxicity": {
-        "affects": [],
-        "toxicToCats": false,
-        "toxicToDogs": false,
+        "affects": [
+          "cat",
+          "dog"
+        ],
+        "toxicToCats": true,
+        "toxicToDogs": true,
         "toxicToHumans": false,
-        "severity": "unknown",
-        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
-        "note": "Türün kendisi için bilgi yok. ASPCA aynı cinsten kamelyayı zehirsiz sayar; yapraklarında kafein bulunur, temkinli olmak iyi olur.",
-        "source": "NC State Extension Plant Toolbox (bakım; evcil hayvan zehirliliği doğrulanamadı, Ekim 2026)",
-        "needsVerification": true
+        "severity": "moderate",
+        "severityTr": "Orta - kusma, salya, yutma güçlüğü",
+        "note": "Yapraklarında kafein bulunur. Pet Poison Helpline köpek ve kedilerin kafeine insanlardan daha duyarlı olduğunu, çay poşeti yemenin ciddi zehirlenme yapabileceğini belirtir: huzursuzluk, kusma, kalp ritminde değişiklik, titreme. Bitkinin kendisi için ayrı kayıt yok; bilgi çay yaprağındaki kafeine dayanıyor.",
+        "source": "Pet Poison Helpline, kafein sayfası (Ekim 2026)",
+        "needsVerification": false
       },
       "size": {
         "heightMinCm": 100,
