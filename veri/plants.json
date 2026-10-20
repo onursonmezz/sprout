@@ -2928,10 +2928,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -3010,10 +3010,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten Asplenium bulbiferum'u zehirsiz sayar.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -3753,10 +3753,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -4426,10 +4426,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten Selaginella kraussiana'yı zehirsiz sayar.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -4932,10 +4932,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -5096,10 +5096,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -5178,10 +5178,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz; bazı bölgelerde yenilebilir olarak kullanılır.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Bazı bölgelerde yaprakları yenir.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -5346,10 +5346,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -5682,10 +5682,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Zehirli değil ama dikenleri yaralayıcıdır.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Dikenleri yaralayabilir.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -5921,10 +5921,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Zehirsiz; meyvesi yenebilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Dikenleri yaralayabilir; meyvesi yenir.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -7695,10 +7695,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "mild",
-        "severityTr": "Hafif - genellikle ağız/mide tahrişi",
-        "note": "Bilinen ciddi toksisitesi yok ama dikenleri yaralayıcı ve temas dermatiti yapabilir.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Dikenleri yaralayabilir, özsuyu ciltte tahriş yapabilir.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -8611,10 +8611,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -9730,10 +9730,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -10307,10 +10307,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA birçok Peperomia türünü zehirsiz sayar.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -11560,10 +11560,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -12060,10 +12060,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -12144,10 +12144,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -12642,10 +12642,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "Bilinen toksisitesi yok.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -13725,10 +13725,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz; dikenlere dikkat.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Dikenleri yaralayabilir.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -13806,10 +13806,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz; dikenlere dikkat.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok. Dikenleri yaralayabilir.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -13970,10 +13970,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -14642,10 +14642,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -14720,10 +14720,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -14799,10 +14799,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten Dendrobium gracilicaule'yi zehirsiz sayar.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -14960,10 +14960,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -16039,10 +16039,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "Türün kendisi için bilgi yok; ASPCA aynı cinsten Fuchsia triphylla'yı zehirsiz sayar.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -16449,10 +16449,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {
@@ -16781,10 +16781,10 @@
         "toxicToCats": false,
         "toxicToDogs": false,
         "toxicToHumans": false,
-        "severity": "none",
-        "severityTr": "Bilinen toksisitesi yok",
-        "note": "ASPCA listesinde zehirsiz.",
-        "source": "ASPCA zehirli/zehirsiz bitki listesi ve yayınlanmış botanik kaynaklar",
+        "severity": "unknown",
+        "severityTr": "Doğrulanamadı - evcil hayvanlar için güvenli olduğu bilinmiyor",
+        "note": "ASPCA ve NC State'te evcil hayvan zehirliliği bilgisi yok.",
+        "source": "ASPCA kedi/köpek listeleri ve NC State ile karşılaştırıldı, kayıt bulunamadı (Ekim 2026)",
         "needsVerification": true
       },
       "size": {

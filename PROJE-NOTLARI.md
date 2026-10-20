@@ -44,7 +44,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 - **Veriler:**
   - Bitki ve ayar kayıtları: `context/plants-context.tsx` ve `settings-context.tsx`.
   - Çoğaltma projeleri: `propagation-context.tsx`.
-- **Tür veritabanı:** `veri/plants.json` (267 tür), `veri/VERITABANI.md`. Toplu tür eklemek için: `node veri/tur-ekle.js veri/turler-ek-2.js [--kontrol]`. Bu komut isim çakışmalarını yakalar.
+- **Tür veritabanı:** `veri/plants.json` (338 tür), `veri/VERITABANI.md`. Toplu tür eklemek için: `node veri/tur-ekle.js veri/turler-ek-3.js [--kontrol]`. Bu komut isim çakışmalarını yakalar.
   - Kullanıcı doğruluğa çok önem veriyor. Yeni türler iki kaynakla doğrulanarak eklenir: zehirlilik için ASPCA listesi (sayfası indirilip ayrıştırılabiliyor), bakım için NC State Extension Plant Toolbox (`plants.ces.ncsu.edu/plants/<cins-tür>/`). Kaynakların çeliştiği türler alınmaz. Ayrıntı `veri/VERITABANI.md`'de.
 - **Sulama hesabı:**
   - Temel hesap `veri/watering.js`'de. Saksı malzemesi, boyutu, ışık, pencere uzaklığı, mevsim (enleme göre), kalorifer, dış mekân sıcağı ve drenaj hesaba katılır; toplam etki sınırlıdır.
@@ -105,6 +105,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
     - **Gönderim:** Model değişikliği yalnızca dosya olduğu için havadan güncellemeyle gönderildi; 1.1.0 APK'sı yeterli.
     - **Kaynak listesi:** Fotoğraf listesini `kaynak-listesi.py` yazıyor.
 - **Ana ekran widget'ı:** İstendi ama "şimdi değil" dendi. Kendiliğinden başlama; yapılacaklar sorulunca listele. Yeni kurulum gerektirir; fotoğraftan tanımayla aynı kuruluma koymak mantıklı.
+- **Zehirlilik kuralı (20 Ekim 2026, kullanıcı kararı):** Kaynağı olmayan türler `severity: "unknown"` olur. Uygulama bunları "Evcil hayvanlar için güvenliği doğrulanamadı" diye gösterir, bitki bulucu evcil hayvanlı evlere önermez. Genel denetimde notunda yanlışlıkla "ASPCA listesinde zehirsiz" yazan ama ASPCA'da olmayan 27 eski tür ve begonvil de "unknown" yapıldı. Şu an 71 tür "unknown".
 - **Zehirlilik bilgisi:** Ekim 2026'da tüm türler ASPCA ve NC State ile karşılaştırıldı. 267 türün 226'sı doğrulandı (her kaydın `source` alanında kaynağı yazıyor). Kedi/köpek için çelişki yalnızca Fatsia ve Araucaria'da çıktı (düzeltildi). 41 tür iki kaynakta da bulunamadı ve hâlâ `needsVerification: true`; listesi `veri/VERITABANI.md`'de. Bitki bulucu bu bilgiyi kullanıyor; yayından önce bu 41'i başka bir güvenilir kaynakla (ör. Pet Poison Helpline, Cornell) tamamlamak iyi olur.
 - **Kılavuzlar:** Yazılı adımlar var, fotoğraf ya da çizim yok.
 - **Yedekleme:** Fotoğrafları, ayarları ve çoğaltma projelerini kapsamıyor; Firebase kuralları doğrulanmadı.
@@ -123,3 +124,5 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 - **APK içindeki dosyalar:** `react-native-fast-tflite` modeli `java.net.URL` ile okur. Kurulu APK'da `require()` ile gelen dosyanın adresi gerçek bir yol değildir. Önizlemede çalışır ama telefonda yüklenmez. Model önce `expo-asset` ile önbelleğe kopyalanır (`utils/plant-id.ts`).
 - **Paket sürümleri:** Havadan güncellemede yerel parçaların sürümü APK'dakiyle aynı kalmalı. `npm install` başka paketleri de yükseltebilir; kilit dosyasındaki farkı kontrol et.
 - **Önizleme sunucusu açıkken** `npm ci` dosya kilidi yüzünden başarısız olur.
+- **`npx expo lint` çalıştırma:** ESLint kurulu değil; komut onu kendiliğinden kurarken kilit dosyasındaki pek çok paketi de yükseltiyor (APK ile uyuşmazlık). Kod kontrolü için `npx tsc --noEmit` yeterli; lint gerekiyorsa yeni APK'dan hemen önce yapılmalı.
+- **İngilizce sayılar:** `translations.ts`'de `countEn(n, 'plant')` kullan; "1 plants" hatası bu yüzden düzeltildi.
