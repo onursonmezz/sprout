@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useLanguage } from '@/context/language-context';
 import { useTheme } from '@/hooks/use-theme';
-import { pickFromCamera, pickFromLibrary } from '@/utils/photos';
+import { pickForScanFromCamera, pickForScanFromLibrary } from '@/utils/photos';
 
 /** The panel that slides up from the middle button of the tab bar: take or
  * choose a photo to identify. Diagnosis will join it later; for now it is
@@ -37,8 +37,8 @@ export function ScanSheet({ visible, onClose }: { visible: boolean; onClose: () 
         <View style={[styles.grab, { backgroundColor: colors.border }]} />
         <Text style={[styles.title, { color: colors.text }]}>{t.scan.sheetTitle}</Text>
         <Text style={[styles.sub, { color: colors.textSecondary }]}>{t.scan.sheetSub}</Text>
-        <Option icon="camera-outline" title={t.scan.camera} sub={t.scan.cameraSub} onPress={() => pick(pickFromCamera)} />
-        <Option icon="images-outline" title={t.scan.library} sub={t.scan.librarySub} onPress={() => pick(pickFromLibrary)} />
+        <Option icon="camera-outline" title={t.scan.camera} sub={t.scan.cameraSub} onPress={() => pick(pickForScanFromCamera)} />
+        <Option icon="images-outline" title={t.scan.library} sub={t.scan.librarySub} onPress={() => pick(pickForScanFromLibrary)} />
         <Option icon="medkit-outline" title={t.scan.diagnose} sub={t.scan.diagnoseSub} soon={t.scan.soon} />
       </View>
     </Modal>

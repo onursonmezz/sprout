@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
-import { pickFromCamera } from '@/utils/photos';
+import { pickForScanFromCamera } from '@/utils/photos';
 
 /** Opened by the "Identify" shortcut widget: goes straight to the camera, then
  * on to the scan result. Cancelling returns to wherever the app was. */
@@ -15,7 +15,7 @@ export default function QuickScanScreen() {
     (async () => {
       let uri: string | null = null;
       try {
-        uri = await pickFromCamera();
+        uri = await pickForScanFromCamera();
       } catch {
         // A refused permission or a failed camera simply leads back.
       }
