@@ -11,6 +11,7 @@ import { useLanguage } from '@/context/language-context';
 import { useWishlist } from '@/context/wishlist-context';
 import { speciesDisplayName } from '@/data/species-guide';
 import { SPECIES_PHOTOS } from '@/data/species-photos';
+import { useGoBack } from '@/hooks/use-go-back';
 import { useTheme } from '@/hooks/use-theme';
 import { deletePhoto } from '@/utils/photos';
 import { identifyPlant, PLANT_ID_CONFIDENT, PlantIdGuess } from '@/utils/plant-id';
@@ -23,6 +24,7 @@ type State = { status: 'working' } | { status: 'failed'; detail?: string } | { s
 export default function ScanScreen() {
   const { uri } = useLocalSearchParams<{ uri: string }>();
   const router = useRouter();
+  const goBack = useGoBack();
   const colors = useTheme();
   const { t, lang } = useLanguage();
   const wishlist = useWishlist();
@@ -46,7 +48,7 @@ export default function ScanScreen() {
   const header = (
     <View style={styles.header}>
       <Pressable
-        onPress={() => router.back()}
+        onPress={goBack}
         hitSlop={10}
         style={[styles.round, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
         <Ionicons name="close" size={20} color={colors.text} />
@@ -75,7 +77,7 @@ export default function ScanScreen() {
                   {state.detail}
                 </Text>
               )}
-              <Pressable onPress={() => router.back()} style={[styles.button, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
+              <Pressable onPress={goBack} style={[styles.button, { backgroundColor: colors.glass, borderColor: colors.glassBorder }]}>
                 <Text style={[styles.buttonText, { color: colors.text }]}>{t.scan.tryAgain}</Text>
               </Pressable>
             </>

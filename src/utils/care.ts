@@ -1,5 +1,5 @@
 import { Translations } from '@/constants/translations';
-import { CareTask } from '@/data/plants';
+import { CareTask, Plant } from '@/data/plants';
 import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
 
 /** Used when a plant's species is not in the database. */
@@ -64,6 +64,28 @@ export function fallsOn(offset: number, daysUntil: number, intervalDays: number)
   if (offset < 0) return false;
   const first = Math.max(0, daysUntil);
   return offset >= first && (offset - first) % Math.max(1, intervalDays) === 0;
+}
+
+/** Whether a plant is (or was) watered on the day `offset` days from today:
+ * future days are projected from its interval, past days come only from what
+ * actually happened. */
+export function wateringOn(p: Plant, offset: number) {
+  if (offset > 0) return fallsOn(offset, p.daysUntilWatering, p.wateringIntervalDays);
+  if (offset === 0 && p.daysUntilWatering <= 0) return true;
+  return p.lastWateredDaysAgo === -offset || p.journalNotes.some((e) => e.type === 'watered' && e.daysAgo === -offset);
+}
+
+/** Days since the plant came home: from its acquired date when that is a
+ * full date, otherwise from when it was added to Sprout. */
+export function daysSinceAcquired(plant: Plant): number | null {
+  const match = plant.acquiredDate.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  if (match) {
+    const then = Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+    const now = new Date();
+    const days = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - then) / 86400000);
+    if (days >= 0) return days;
+  }
+  return plant.createdDaysAgo < 3650 ? plant.createdDaysAgo : null;
 }
 
 export function formatDateFromDaysOffset(daysFromToday: number, t: Translations) {

@@ -10,6 +10,7 @@ import { PlantIdSuggestions } from '@/components/plant-id-suggestions';
 import { isOutdoorRoom, ROOM_KEYS, RoomKey } from '@/constants/rooms';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
+import { useGoBack } from '@/hooks/use-go-back';
 import { useTheme } from '@/hooks/use-theme';
 import { usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
@@ -146,6 +147,7 @@ function plantToForm(plant: Plant): FormState {
 export default function AddPlantScreen() {
   const colors = useTheme();
   const router = useRouter();
+  const goBack = useGoBack();
   const { t, lang } = useLanguage();
   const { seasonalAdjustment, heatingOn, latitude } = useSettings();
   // prefill* come from a finished propagation project being added as a plant,
@@ -295,7 +297,7 @@ export default function AddPlantScreen() {
   }, []);
 
   const handleBack = () => {
-    if (step === 1) router.back();
+    if (step === 1) goBack();
     else setStep((s) => s - 1);
   };
 

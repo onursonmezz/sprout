@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -24,10 +24,15 @@ export default function OnboardingScreen() {
   const [index, setIndex] = useState(0);
   const slide = slides[index];
 
-  useEffect(() => {
-    if (onboarded) router.replace('/(tabs)');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Only while this screen is the one showing: when a widget opens a page
+  // straight away, this screen sits underneath it and must not replace it.
+  // Going back from that page lands here and moves on to the tabs.
+  useFocusEffect(
+    useCallback(() => {
+      if (onboarded) router.replace('/(tabs)');
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   const finish = () => {
     setOnboarded(true);

@@ -1,6 +1,6 @@
 # Sprout: proje devir notları
 
-Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026). `CLAUDE.md` bunu her oturumda otomatik yükler. Proje sahibi de okuyabilsin diye Türkçe yazıldı.
+Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 21 Ekim 2026). `CLAUDE.md` bunu her oturumda otomatik yükler. Proje sahibi de okuyabilsin diye Türkçe yazıldı.
 
 ## 1. Proje sahibiyle çalışma şekli
 
@@ -15,7 +15,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 
 ## 2. Proje, hesaplar ve yerler
 
-- **Uygulama:** Sprout, ev bitkisi bakım uygulaması. Android, Expo SDK 57, React Native 0.86 (yeni mimari), TypeScript, Expo Router. Paket adı `com.organizma.sproutapp`, sürüm 1.1.0 (bitki tanıma ile yükseltildi).
+- **Uygulama:** Sprout, ev bitkisi bakım uygulaması. Android, Expo SDK 57, React Native 0.86 (yeni mimari), TypeScript, Expo Router. Paket adı `com.organizma.sproutapp`, sürüm 1.2.0 (bitki tanıma ile 1.1.0, ana ekran widget'larıyla 1.2.0 oldu).
 - **Kod:** `C:\Users\osonm\Documents\SPROUT\sprout-app`. GitHub: https://github.com/onursonmezz/sprout (`main` dalı).
 - **Expo / EAS hesabı:** `organizma`. Güncelleme adresi `https://u.expo.dev/3c8144d1-1573-4fd9-820f-70f8caa71969`. Kanal `preview`, runtimeVersion politikası `appVersion` (1.1.0). Yeni bir yerel modül eklenince sürüm de yükseltilmeli; yoksa havadan güncelleme eski APK'ya gidip uygulamayı çökertebilir.
 - **Marka kiti:** `Documents\SPROUT\marka-kiti\`: ikon ve logo, Play Store görselleri, sosyal medya, 15 saniyelik Reels videosu, metinler. Ekran görüntüleri ve Reels, tur, albüm, çoğaltma, takvim ve teşhis eklenmeden önce hazırlandı; güncellenmesi gerekebilir.
@@ -50,6 +50,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
   - Temel hesap `veri/watering.js`'de. Saksı malzemesi, boyutu, ışık, pencere uzaklığı, mevsim (enleme göre), kalorifer, dış mekân sıcağı ve drenaj hesaba katılır; toplam etki sınırlıdır.
   - `utils/watering-algorithm.ts` buna toprak geri bildiriminden öğrenmeyi, yağmuru ve hesabın dökümünü ekler.
 - **Teşhis:** `utils/diagnosis.ts`. Belirti × neden puan tablosu, sorular ve bitkinin kendi verisinden gelen ipuçları; puanlar elle belirlendi.
+- **Ana ekran widget'ları (Android):** `src/widgets/`. Kütüphane `react-native-android-widget` (0.23.0); tanımlar `app.json` eklentisinde, simgeler `assets/fonts/Ionicons.ttf` ile çiziliyor. Giriş dosyası artık `index.ts` (widget kayıtları için). `widgets.tsx` beş widget'ı çizer (Bugün küçük/orta, Tek bitki, Bu hafta, Kısayollar), `render.tsx` hepsini yeniler, `data.ts` uygulama kapalıyken kayıtları okur, `config-screen.tsx` tek bitki widget'ında bitki seçtirir. Uygulama içinde bitkiler değişince `use-widget-refresh.ts` widget'ları yeniler. Dokununca `sproutapp://...` adresleriyle ilgili sayfa açılır; "Bitki tanı" kısayolu `quick-scan.tsx` ile kamerayı doğrudan açar. Widget dosyalarının başındaki `"use no memo"` kalmalı (React Compiler bozuyor).
 - **Diğer yardımcılar:** `utils/plant-finder.ts`, `utils/care.ts` (bakım görevleri), `utils/care-instructions.ts` (bakıcı kartı PDF'i), `utils/seasonal-tasks.ts` (aylık işler, don/sıcak uyarıları).
 
 ## 5. Verilmiş kararlar
@@ -104,7 +105,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
       - Yeni 71 türde %88.
     - **Gönderim:** Model değişikliği yalnızca dosya olduğu için havadan güncellemeyle gönderildi; 1.1.0 APK'sı yeterli.
     - **Kaynak listesi:** Fotoğraf listesini `kaynak-listesi.py` yazıyor.
-- **Ana ekran widget'ı:** İstendi ama "şimdi değil" dendi. Kendiliğinden başlama; yapılacaklar sorulunca listele. Yeni kurulum gerektirir; fotoğraftan tanımayla aynı kuruluma koymak mantıklı.
+- **Ana ekran widget'ları (21 Ekim 2026, sürüm 1.2.0, yeni APK):** Kullanıcı taslak `taslak/widget2.html`'i onayladı; "Sula" düğmesi istemedi. Beş widget var: Bugün (2×2 ve 4×2), Tek bitki (2×2, eklerken bitki seçilir), Bu hafta (4×2), Kısayollar (4×1: Bitki tanı, Işık ölçer, Bitki ekle). Telefonun widget listesindeki adları İngilizce ("Sprout: Today" vb.); bu yazılar uygulama diline göre değişmiyor. Önizleme görseli yok, listede uygulama ikonu görünür. Bilgisayarda yalnızca geçici bir deneme sayfasında görünümleri ve hesapları denendi; **telefonda henüz denenmedi**.
 - **Zehirlilik kuralı (20 Ekim 2026, kullanıcı kararı):** Kaynağı olmayan türler `severity: "unknown"` olur. Uygulama bunları "Evcil hayvanlar için güvenliği doğrulanamadı" diye gösterir, bitki bulucu evcil hayvanlı evlere önermez. Genel denetimde notunda yanlışlıkla "ASPCA listesinde zehirsiz" yazan ama ASPCA'da olmayan 27 eski tür ve begonvil de "unknown" yapıldı. 21 Ekim 2026'da üçüncü kaynak denetimi yapıldı; kaynaklar Pet Poison Helpline, Merck, Cornell, Purdue ve VIN. 5 tür doğrulandı, 66 tür hâlâ "unknown". Tablo `veri/VERITABANI.md`'de.
 - **Zehirlilik bilgisi:** Ekim 2026'da tüm türler ASPCA ve NC State ile karşılaştırıldı. 267 türün 226'sı doğrulandı (her kaydın `source` alanında kaynağı yazıyor). Kedi/köpek için çelişki yalnızca Fatsia ve Araucaria'da çıktı (düzeltildi). 41 tür iki kaynakta da bulunamadı ve hâlâ `needsVerification: true`; listesi `veri/VERITABANI.md`'de. Bitki bulucu bu bilgiyi kullanıyor; yayından önce bu 41'i başka bir güvenilir kaynakla (ör. Pet Poison Helpline, Cornell) tamamlamak iyi olur.
 - **Kılavuzlar:** Yazılı adımlar var, fotoğraf ya da çizim yok.
@@ -125,4 +126,5 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 14 Ekim 2026
 - **Paket sürümleri:** Havadan güncellemede yerel parçaların sürümü APK'dakiyle aynı kalmalı. `npm install` başka paketleri de yükseltebilir; kilit dosyasındaki farkı kontrol et.
 - **Önizleme sunucusu açıkken** `npm ci` dosya kilidi yüzünden başarısız olur.
 - **`npx expo lint` çalıştırma:** ESLint kurulu değil; komut onu kendiliğinden kurarken kilit dosyasındaki pek çok paketi de yükseltiyor (APK ile uyuşmazlık). Kod kontrolü için `npx tsc --noEmit` yeterli; lint gerekiyorsa yeni APK'dan hemen önce yapılmalı.
+- **Widget'tan açılan sayfalar:** Uygulama bir adresle doğrudan bir sayfada açılınca altında başka sayfa olmuyor; `router.back()` hiçbir şey yapmıyor. Bu sayfalarda `hooks/use-go-back.ts` kullanılıyor (geri gidecek yer yoksa Bugün'e döner). Widget'ın açtığı yeni bir sayfa eklenirse ona da uygulanmalı.
 - **İngilizce sayılar:** `translations.ts`'de `countEn(n, 'plant')` kullan; "1 plants" hatası bu yüzden düzeltildi.

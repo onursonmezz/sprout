@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlassCard, GlowBackground, GradientFill } from '@/components/glass';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
+import { useGoBack } from '@/hooks/use-go-back';
 import { useTheme } from '@/hooks/use-theme';
 import { LIGHT_KEYS, LightKey, lookups, speciesDisplayName, speciesGuide } from '@/data/species-guide';
 import { hasPendingLightMeterListener, lightKeyForLux, logMeterPosition, resolveLightMeterResult } from '@/utils/light-meter';
@@ -38,6 +39,7 @@ function columnY(lux: number) {
 export default function LightMeterScreen() {
   const colors = useTheme();
   const router = useRouter();
+  const goBack = useGoBack();
   const { t, lang } = useLanguage();
   const { species: speciesId } = useLocalSearchParams<{ species?: string }>();
 
@@ -94,7 +96,7 @@ export default function LightMeterScreen() {
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background }]}>
       <GlowBackground />
       <View style={styles.topRow}>
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={goBack}>
           <GlassCard style={styles.backButton}>
             <Ionicons name="arrow-back" size={20} color={colors.text} />
           </GlassCard>
@@ -214,7 +216,7 @@ export default function LightMeterScreen() {
                 <Pressable
                   onPress={() => {
                     resolveLightMeterResult(zoneKey);
-                    router.back();
+                    goBack();
                   }}
                   style={[styles.useButton, { boxShadow: `0px 6px 16px ${colors.tintGlow}` }]}>
                   <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />

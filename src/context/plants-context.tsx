@@ -23,14 +23,14 @@ import {
 // species-guide's plain display strings) — a fresh key means every existing
 // install starts over with zero plants rather than trying to migrate
 // incompatible data, per the switch to the new plant database.
-const STATE_KEY = 'sprout:plants-state-v2';
+export const STATE_KEY = 'sprout:plants-state-v2';
 // Read-only peek at settings-context's own storage key for the seasonal
 // watering factor. Plants-context sits outside SettingsProvider in the tree
 // (see _layout.tsx) so it can't use useSettings(); reading the same
 // AsyncStorage key directly avoids reordering the providers for this alone.
 const SETTINGS_KEY = 'sprout:settings';
 
-type PersistedState = { plants: Plant[]; savedAt: string };
+export type PersistedState = { plants: Plant[]; savedAt: string };
 
 /**
  * Defensive against plants saved before this schema existed — most notably a
@@ -43,7 +43,7 @@ function seasonProfileOf(p: { species: string; latinName: string }): SeasonProfi
   return species ? seasonProfileFor(species) : 'normal';
 }
 
-function migratePlant(p: Plant): Plant {
+export function migratePlant(p: Plant): Plant {
   const legacy = p as unknown as {
     wateringIntervalDays?: number;
     createdDaysAgo?: number;
@@ -174,7 +174,7 @@ const PlantsContext = createContext<PlantsContextValue | null>(null);
  * 23:00 and reopening at 08:00 the next morning is one day, not zero. Counting
  * elapsed 24h blocks instead would drop the remainder every time the state is
  * re-saved, so plants would age slower than the calendar. */
-function daysBetween(a: Date, b: Date) {
+export function daysBetween(a: Date, b: Date) {
   const day = (d: Date) => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
   return Math.round((day(b) - day(a)) / 86400000);
 }
@@ -187,7 +187,7 @@ function daysBetween(a: Date, b: Date) {
  * this is what makes the watering algorithm's season/heating factors live
  * rather than frozen at whatever month the plant was added in.
  */
-function fastForward(plants: Plant[], daysPassed: number, options: SeasonalOptions, today: Date): Plant[] {
+export function fastForward(plants: Plant[], daysPassed: number, options: SeasonalOptions, today: Date): Plant[] {
   if (daysPassed <= 0) return plants;
   return plants.map((p) => {
     const lastWateredDaysAgo = p.lastWateredDaysAgo + daysPassed;
@@ -208,7 +208,7 @@ function fastForward(plants: Plant[], daysPassed: number, options: SeasonalOptio
  * the soil-feedback question) that cannot wait for storage. */
 let latestOptions: SeasonalOptions = { applySeasonalFactors: true, heatingOn: true };
 
-async function loadSeasonalOptions(): Promise<SeasonalOptions> {
+export async function loadSeasonalOptions(): Promise<SeasonalOptions> {
   const settings = await loadJSON<{
     seasonalAdjustment?: boolean;
     heatingOn?: boolean;

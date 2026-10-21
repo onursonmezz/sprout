@@ -1,7 +1,7 @@
 {
   "name": "sprout-app",
-  "main": "expo-router/entry",
-  "version": "1.1.0",
+  "main": "index.ts",
+  "version": "1.2.0",
   "dependencies": {
     "@expo/ui": "~57.0.17",
     "@expo/vector-icons": "^15.0.2",
@@ -37,6 +37,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
+    "react-native-android-widget": "0.23.0",
     "react-native-fast-tflite": "^3.0.1",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-nitro-modules": "^0.37.1",

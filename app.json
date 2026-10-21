@@ -2,7 +2,7 @@
   "expo": {
     "name": "Sprout",
     "slug": "sprout-app",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "sproutapp",
@@ -40,7 +40,73 @@
           "locationWhenInUsePermission": "Sprout uses your location to check the local temperature and fine-tune watering reminders for the season."
         }
       ],
-      "react-native-fast-tflite"
+      "react-native-fast-tflite",
+      [
+        "react-native-android-widget",
+        {
+          "fonts": [
+            "./assets/fonts/Ionicons.ttf"
+          ],
+          "widgets": [
+            {
+              "name": "TodaySmall",
+              "label": "Sprout: Today",
+              "description": "How many plants need water today",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "TodayMedium",
+              "label": "Sprout: Today list",
+              "description": "The plants waiting for water today",
+              "minWidth": "250dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "Plant",
+              "label": "Sprout: One plant",
+              "description": "One plant of your choice",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000,
+              "widgetFeatures": "reconfigurable"
+            },
+            {
+              "name": "Week",
+              "label": "Sprout: This week",
+              "description": "Waterings for the next seven days",
+              "minWidth": "250dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 2,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "Shortcuts",
+              "label": "Sprout: Shortcuts",
+              "description": "Identify a plant, light meter, add a plant",
+              "minWidth": "250dp",
+              "minHeight": "40dp",
+              "targetCellWidth": 4,
+              "targetCellHeight": 1,
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 1800000
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

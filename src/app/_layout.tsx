@@ -15,6 +15,7 @@ import { useAutoBackup } from '@/hooks/use-auto-backup';
 import { useHeatingSeasonPrompt } from '@/hooks/use-heating-season-prompt';
 import { useNotificationScheduler } from '@/hooks/use-notification-scheduler';
 import { useSeasonalWeather } from '@/hooks/use-seasonal-weather';
+import { useWidgetRefresh } from '@/widgets/use-widget-refresh';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,6 +30,7 @@ function Navigation() {
   useSeasonalWeather();
   useHeatingSeasonPrompt();
   useAutoBackup();
+  useWidgetRefresh();
 
   useEffect(() => {
     if (ready) SplashScreen.hideAsync();
@@ -65,6 +67,7 @@ function Navigation() {
         <Stack.Screen name="credits" />
         <Stack.Screen name="settings" />
         <Stack.Screen name="scan" />
+        <Stack.Screen name="quick-scan" options={{ animation: 'none' }} />
       </Stack>
       <WateringFeedbackPrompt />
       <PlantQuickActions />

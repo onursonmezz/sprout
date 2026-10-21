@@ -18,6 +18,7 @@ import { PropagationSection } from '@/components/propagation-section';
 import { PlantPhoto } from '@/components/plant-avatar';
 import { Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
+import { useGoBack } from '@/hooks/use-go-back';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
@@ -25,7 +26,7 @@ import { useLanguage } from '@/context/language-context';
 import { roomDisplayName } from '@/constants/rooms';
 import { careJournalType, CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
 import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
-import { careTaskInSeason, daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
+import { careTaskInSeason, daysSinceAcquired, daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 import { useSettings } from '@/context/settings-context';
 import { rainDaysAgo } from '@/utils/watering-algorithm';
@@ -60,17 +61,6 @@ const JOURNAL_ICON: Record<JournalEntryType, IconName> = {
  * it, or — if that is missing or unreadable — from when it was added here.
  * Plants migrated from very old saves have no real added-date, so those
  * return null rather than a made-up number. */
-function daysSinceAcquired(plant: Plant): number | null {
-  const match = plant.acquiredDate.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
-  if (match) {
-    const then = Date.UTC(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
-    const now = new Date();
-    const days = Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - then) / 86400000);
-    if (days >= 0) return days;
-  }
-  return plant.createdDaysAgo < 3650 ? plant.createdDaysAgo : null;
-}
-
 function watchingText(status: string, days: number, t: Translations) {
   if (status === 'overdue') return t.plantDetail.daysOverdue(Math.abs(days));
   if (status === 'dueToday') return t.plantDetail.dueToday;
@@ -80,6 +70,7 @@ function watchingText(status: string, days: number, t: Translations) {
 export default function PlantDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const goBack = useGoBack();
   const colors = useTheme();
   const { t, lang } = useLanguage();
   const { getPlant, addCareTask, removeCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust, clearCustomInterval } = usePlants();
@@ -156,7 +147,7 @@ export default function PlantDetailScreen() {
           {!plant.photoUri && <Ionicons name="leaf" size={92} color={PLACEHOLDER_LEAF} style={styles.heroLeaf} />}
           <FadeToBackground />
           <View style={styles.heroTopRow}>
-            <Pressable onPress={() => router.back()} style={styles.heroButton}>
+            <Pressable onPress={goBack} style={styles.heroButton}>
               <Ionicons name="arrow-back" size={20} color="#fff" />
             </Pressable>
             <View style={{ flexDirection: 'row', gap: 8 }}>

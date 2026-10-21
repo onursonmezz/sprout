@@ -12,7 +12,7 @@ import { usePlants } from '@/context/plants-context';
 import { careJournalType, CareTask, CareTaskType, Plant } from '@/data/plants';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
-import { careTaskInSeason, daysUntilNext, fallsOn } from '@/utils/care';
+import { careTaskInSeason, daysUntilNext, fallsOn, wateringOn } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 
 const CARE_ICON: Record<CareTaskType, keyof typeof Ionicons.glyphMap> = {
@@ -47,15 +47,6 @@ function dayOffsetFromToday(today: Date, year: number, month: number, day: numbe
   const target = new Date(year, month, day).getTime();
   const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
   return Math.round((target - todayMidnight) / 86400000);
-}
-
-/** Whether a plant is (or was) watered on the day `offset` days from today:
- * future days are projected from its interval, past days come only from what
- * actually happened. */
-function wateringOn(p: Plant, offset: number) {
-  if (offset > 0) return fallsOn(offset, p.daysUntilWatering, p.wateringIntervalDays);
-  if (offset === 0 && p.daysUntilWatering <= 0) return true;
-  return p.lastWateredDaysAgo === -offset || p.journalNotes.some((e) => e.type === 'watered' && e.daysAgo === -offset);
 }
 
 function taskOn(p: Plant, task: CareTask, offset: number) {
