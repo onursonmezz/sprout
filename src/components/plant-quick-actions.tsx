@@ -7,7 +7,7 @@ import { GradientFill } from '@/components/glass';
 import { PhotoPicker } from '@/components/photo-picker';
 import { isOutdoorRoom, ROOM_KEYS, RoomKey } from '@/constants/rooms';
 import { useLanguage } from '@/context/language-context';
-import { usePlants } from '@/context/plants-context';
+import { QuickActionsView, usePlants } from '@/context/plants-context';
 import { useSettings } from '@/context/settings-context';
 import { JournalEntryType, Plant } from '@/data/plants';
 import { LIGHT_KEYS, LightKey, POT_MATERIAL_KEYS, PotMaterialKey } from '@/data/species-guide';
@@ -15,7 +15,13 @@ import { useTheme } from '@/hooks/use-theme';
 import { hapticSuccess } from '@/utils/haptics';
 import { effectiveWateringInterval, softenIntervalAdjust, WINDOW_DISTANCE_OPTIONS } from '@/utils/watering-algorithm';
 
-type View_ = 'menu' | 'place' | 'pot' | 'photo' | 'journal' | 'delete';
+type View_ = QuickActionsView;
+
+const FERTILIZER_KINDS = ['liquid', 'granular', 'slow', 'organic'] as const;
+type FertilizerKind = (typeof FERTILIZER_KINDS)[number];
+
+/** Later-reminder choices after slow-release fertilizer, in months. */
+const SLOW_RELEASE_MONTHS = [2, 3] as const;
 
 const POT_SIZES = [
   { key: 'small', cm: 10 },
@@ -28,7 +34,7 @@ const POT_SIZES = [
  * actions that actually do them, so they are not typed in by hand. */
 const JOURNAL_TYPES: JournalEntryType[] = ['newLeaf', 'fertilized', 'pruned', 'note'];
 
-const MENU: { view: Exclude<View_, 'menu' | 'delete'>; icon: keyof typeof Ionicons.glyphMap }[] = [
+const MENU: { view: Exclude<View_, 'menu' | 'delete' | 'fertilize'>; icon: keyof typeof Ionicons.glyphMap }[] = [
   { view: 'place', icon: 'location-outline' },
   { view: 'pot', icon: 'flower-outline' },
   { view: 'photo', icon: 'camera-outline' },
@@ -75,7 +81,8 @@ export function PlantQuickActions() {
   const colors = useTheme();
   const insets = useSafeAreaInsets();
   const { t } = useLanguage();
-  const { quickActionsPlantId, closeQuickActions, getPlant, changePlantConditions, updatePlant, addJournalEntry, deletePlant } = usePlants();
+  const { quickActionsPlantId, quickActionsStart, closeQuickActions, getPlant, changePlantConditions, updatePlant, addJournalEntry, deletePlant, completeCareTask } =
+    usePlants();
   const { seasonalAdjustment, heatingOn, latitude } = useSettings();
   const plant = quickActionsPlantId ? getPlant(quickActionsPlantId) : undefined;
 
@@ -96,11 +103,16 @@ export function PlantQuickActions() {
   const [journalTitle, setJournalTitle] = useState('');
   const [journalText, setJournalText] = useState('');
   const [journalPhoto, setJournalPhoto] = useState<string | null>(null);
+  // Fertilizing
+  const [fertKind, setFertKind] = useState<FertilizerKind | null>(null);
+  const [fertProduct, setFertProduct] = useState('');
+  const [fertNote, setFertNote] = useState('');
+  const [fertNextMonths, setFertNextMonths] = useState<number | null>(null);
 
   // Every time the sheet opens for a plant, start from the menu with that plant's current values.
   useEffect(() => {
     if (!plant) return;
-    setView('menu');
+    setView(quickActionsStart?.view ?? 'menu');
     setRoomKey(plant.roomKey);
     setCustomRoom(plant.customRoom ?? '');
     setLightKey(plant.environment.lightKey);
@@ -114,9 +126,13 @@ export function PlantQuickActions() {
     setJournalTitle('');
     setJournalText('');
     setJournalPhoto(null);
+    setFertKind(null);
+    setFertProduct('');
+    setFertNote('');
+    setFertNextMonths(null);
     // Only when a different plant's sheet opens, not on every change to the plant.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quickActionsPlantId]);
+  }, [quickActionsPlantId, quickActionsStart]);
 
   if (!plant) return null;
 
@@ -162,6 +178,25 @@ export function PlantQuickActions() {
       soil: soil.trim(),
       journalTitle: t.plantDetail.journal.typeNames.repotted,
     });
+    done();
+  };
+
+  const fertTaskIndex = quickActionsStart?.taskIndex ?? plant.care.findIndex((c) => c.type === 'fertilize');
+  const fertTask = plant.care[fertTaskIndex];
+
+  const saveFertilize = () => {
+    const taskName = t.plantDetail.care.taskNames.fertilize;
+    const title = fertKind ? `${taskName} · ${t.quick.fertKinds[fertKind]}` : taskName;
+    const description = [fertProduct.trim(), fertNote.trim()].filter(Boolean).join(' · ');
+    // With a fertilizing task this also restarts its countdown; without one it is just logged.
+    if (fertTask) {
+      completeCareTask(plant.id, fertTaskIndex, title, {
+        description,
+        nextInDays: fertKind === 'slow' && fertNextMonths ? fertNextMonths * 30 : undefined,
+      });
+    } else {
+      addJournalEntry(plant.id, { id: `entry-${Date.now()}`, type: 'fertilized', title, description, daysAgo: 0 });
+    }
     done();
   };
 
@@ -323,10 +358,59 @@ export function PlantQuickActions() {
                     style={inputStyle}
                   />
                 </Section>
+                {quickActionsStart?.view === 'pot' && <Text style={[styles.note, { color: colors.textSecondary }]}>{t.quick.repotFromTask}</Text>}
                 <Text style={[styles.note, { color: colors.textSecondary }]}>
                   {intervalNote(previewInterval({ pot: { ...plant.pot, diameterCm, materialKey, hasDrainage } }))} {t.quick.repotLogged}
                 </Text>
                 <SaveButton label={t.quick.save} onPress={savePot} />
+              </>
+            )}
+
+            {view === 'fertilize' && (
+              <>
+                <Section label={t.quick.fertKind}>
+                  <View style={styles.chips}>
+                    {FERTILIZER_KINDS.map((kind) => (
+                      <Chip
+                        key={kind}
+                        label={t.quick.fertKinds[kind]}
+                        selected={fertKind === kind}
+                        onPress={() => setFertKind(fertKind === kind ? null : kind)}
+                      />
+                    ))}
+                  </View>
+                </Section>
+                <Section label={t.quick.fertProduct}>
+                  <TextInput
+                    value={fertProduct}
+                    onChangeText={setFertProduct}
+                    placeholder={t.quick.fertProductPlaceholder}
+                    placeholderTextColor={colors.textSecondary}
+                    style={inputStyle}
+                  />
+                </Section>
+                <Section label={t.quick.fertNote}>
+                  <TextInput
+                    value={fertNote}
+                    onChangeText={setFertNote}
+                    placeholder={t.quick.fertNotePlaceholder}
+                    placeholderTextColor={colors.textSecondary}
+                    style={inputStyle}
+                  />
+                </Section>
+                {fertKind === 'slow' && fertTask && (
+                  <Section label={t.quick.fertNext}>
+                    <Text style={[styles.note, { color: colors.textSecondary }]}>{t.quick.fertSlowHint}</Text>
+                    <View style={styles.chips}>
+                      <Chip label={t.quick.fertNextUsual(fertTask.intervalDays)} selected={fertNextMonths == null} onPress={() => setFertNextMonths(null)} />
+                      {SLOW_RELEASE_MONTHS.map((m) => (
+                        <Chip key={m} label={t.quick.fertNextMonths(m)} selected={fertNextMonths === m} onPress={() => setFertNextMonths(m)} />
+                      ))}
+                    </View>
+                  </Section>
+                )}
+                <Text style={[styles.note, { color: colors.textSecondary }]}>{t.quick.fertLogged}</Text>
+                <SaveButton label={t.quick.markDone} onPress={saveFertilize} />
               </>
             )}
 
@@ -346,7 +430,13 @@ export function PlantQuickActions() {
               <>
                 <View style={styles.chips}>
                   {JOURNAL_TYPES.map((type) => (
-                    <Chip key={type} label={t.plantDetail.journal.typeNames[type]} selected={journalType === type} onPress={() => setJournalType(type)} />
+                    // Fertilizing has its own questions (which fertilizer) and restarts the reminder.
+                    <Chip
+                      key={type}
+                      label={t.plantDetail.journal.typeNames[type]}
+                      selected={journalType === type}
+                      onPress={() => (type === 'fertilized' ? setView('fertilize') : setJournalType(type))}
+                    />
                   ))}
                 </View>
                 <TextInput

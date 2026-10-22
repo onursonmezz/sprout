@@ -18,6 +18,7 @@ import { PropagationSection } from '@/components/propagation-section';
 import { PlantPhoto } from '@/components/plant-avatar';
 import { Spacing } from '@/constants/theme';
 import { Translations } from '@/constants/translations';
+import { useCompleteCare } from '@/hooks/use-complete-care';
 import { useGoBack } from '@/hooks/use-go-back';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
@@ -27,7 +28,7 @@ import { roomDisplayName } from '@/constants/rooms';
 import { careJournalType, CareTask, CareTaskType, JournalEntry, JournalEntryType, Plant } from '@/data/plants';
 import { findSpeciesLoose, SpeciesRecord } from '@/data/species-guide';
 import { careTaskInSeason, daysSinceAcquired, daysUntilNext, formatDateFromDaysOffset, relativeTime } from '@/utils/care';
-import { hapticSuccess, hapticTap } from '@/utils/haptics';
+import { hapticTap } from '@/utils/haptics';
 import { useSettings } from '@/context/settings-context';
 import { rainDaysAgo } from '@/utils/watering-algorithm';
 
@@ -73,7 +74,8 @@ export default function PlantDetailScreen() {
   const goBack = useGoBack();
   const colors = useTheme();
   const { t, lang } = useLanguage();
-  const { getPlant, addCareTask, removeCareTask, completeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust, clearCustomInterval } = usePlants();
+  const completeCare = useCompleteCare();
+  const { getPlant, addCareTask, removeCareTask, addJournalEntry, snoozePlant, resetIntervalAdjust, clearCustomInterval } = usePlants();
   const plant = getPlant(String(id));
   const { lastRainDate } = useSettings();
   const [tab, setTab] = useState<(typeof TAB_KEYS)[number]>('overview');
@@ -341,10 +343,7 @@ export default function PlantDetailScreen() {
               speciesInfo={speciesInfo}
               onAddTask={(task) => addCareTask(plant.id, task)}
               onRemoveTask={(index) => removeCareTask(plant.id, index)}
-              onCompleteTask={(index) => {
-                completeCareTask(plant.id, index, t.plantDetail.care.taskNames[plant.care[index].type]);
-                hapticSuccess();
-              }}
+              onCompleteTask={(index) => completeCare(plant, index)}
             />
           )}
 
@@ -689,6 +688,7 @@ function JournalTab({
   t: Translations;
   onAddEntry: (entry: JournalEntry) => void;
 }) {
+  const { openQuickActions } = usePlants();
   const [formOpen, setFormOpen] = useState(false);
   const [type, setType] = useState<JournalEntryType>('note');
   const [title, setTitle] = useState('');
@@ -728,7 +728,14 @@ function JournalTab({
             {JOURNAL_TYPES.map((ty) => (
               <Pressable
                 key={ty}
-                onPress={() => setType(ty)}
+                onPress={() => {
+                  // Fertilizing and repotting ask their own questions (which
+                  // fertilizer, the new pot) and update the plant accordingly.
+                  if (ty === 'fertilized' || ty === 'repotted') {
+                    setFormOpen(false);
+                    openQuickActions(plant.id, { view: ty === 'fertilized' ? 'fertilize' : 'pot' });
+                  } else setType(ty);
+                }}
                 style={[
                   styles.journalTypeChip,
                   { borderColor: colors.border, backgroundColor: type === ty ? colors.tintMuted : colors.background },

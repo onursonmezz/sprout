@@ -10,10 +10,11 @@ import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
 import { careJournalType, CareTask, CareTaskType, Plant } from '@/data/plants';
+import { useCompleteCare } from '@/hooks/use-complete-care';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
 import { careTaskInSeason, daysUntilNext, fallsOn, wateringOn } from '@/utils/care';
-import { hapticSuccess, hapticTap } from '@/utils/haptics';
+import { hapticTap } from '@/utils/haptics';
 
 const CARE_ICON: Record<CareTaskType, keyof typeof Ionicons.glyphMap> = {
   fertilize: 'flask-outline',
@@ -76,7 +77,8 @@ export default function CalendarScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, completeCareTask } = usePlants();
+  const { plants } = usePlants();
+  const completeCare = useCompleteCare();
   const waterPlant = useWaterPlant();
   const today = new Date();
   const [monthOffset, setMonthOffset] = useState(0);
@@ -256,10 +258,7 @@ export default function CalendarScreen() {
                       ) : (
                         <GradientButton
                           label={t.today.careDone}
-                          onPress={() => {
-                            completeCareTask(plant.id, item.index, t.plantDetail.care.taskNames[item.task.type]);
-                            hapticSuccess();
-                          }}
+                          onPress={() => completeCare(plant, item.index)}
                         />
                       ))}
                   </GlassCard>

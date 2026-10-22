@@ -124,6 +124,13 @@ type PendingWatering = {
   before: Plant;
 };
 
+/** Which panel of the quick-actions sheet to show. */
+export type QuickActionsView = 'menu' | 'place' | 'pot' | 'photo' | 'journal' | 'delete' | 'fertilize';
+
+/** Where the quick-actions sheet opens: a care task's "done" can open it
+ * straight on the questions that task needs (new pot, which fertilizer). */
+export type QuickActionsStart = { view: QuickActionsView; taskIndex?: number };
+
 /** One quick change to where a plant lives or what it lives in. */
 export type PlantConditionsChange =
   | { kind: 'place'; roomKey: RoomKey; customRoom: string | null; lightKey: LightKey; windowDistanceCm: number; rainExposed: boolean }
@@ -137,7 +144,9 @@ type PlantsContextValue = {
   getPlant: (id: string) => Plant | undefined;
   addCareTask: (plantId: string, task: CareTask) => void;
   removeCareTask: (plantId: string, taskIndex: number) => void;
-  completeCareTask: (plantId: string, taskIndex: number, journalTitle: string) => void;
+  /** Marks a care task done and logs it. `nextInDays` moves the next reminder
+   * (e.g. slow-release fertilizer); otherwise it is one interval from today. */
+  completeCareTask: (plantId: string, taskIndex: number, journalTitle: string, details?: { description?: string; nextInDays?: number }) => void;
   addJournalEntry: (plantId: string, entry: JournalEntry) => void;
   waterPlant: (plantId: string) => void;
   snoozePlant: (plantId: string) => void;
@@ -152,7 +161,8 @@ type PlantsContextValue = {
   changePlantConditions: (plantId: string, change: PlantConditionsChange) => void;
   /** The plant whose quick-actions sheet is open, if any. */
   quickActionsPlantId: string | null;
-  openQuickActions: (plantId: string) => void;
+  quickActionsStart: QuickActionsStart | null;
+  openQuickActions: (plantId: string, start?: QuickActionsStart) => void;
   closeQuickActions: () => void;
   /** Drops the user's own interval so the algorithm (and what it has learned) takes over again. */
   clearCustomInterval: (plantId: string) => void;
@@ -298,7 +308,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
 
   // Completing a task also logs it, so History shows what was actually done
   // rather than what the schedule implies.
-  const completeCareTask = (plantId: string, taskIndex: number, journalTitle: string) =>
+  const completeCareTask = (plantId: string, taskIndex: number, journalTitle: string, details?: { description?: string; nextInDays?: number }) =>
     setPlants((prev) =>
       prev.map((p) => {
         if (p.id !== plantId || !p.care[taskIndex]) return p;
@@ -306,12 +316,16 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
           id: `care-${Date.now()}`,
           type: careJournalType[p.care[taskIndex].type],
           title: journalTitle,
-          description: '',
+          description: details?.description ?? '',
           daysAgo: 0,
         };
         return {
           ...p,
-          care: p.care.map((c, i) => (i === taskIndex ? { ...c, lastDoneDaysAgo: 0 } : c)),
+          // A later next reminder is kept as a "last done" in the future, so the
+          // usual countdown (interval - last done) lands on the chosen day.
+          care: p.care.map((c, i) =>
+            i === taskIndex ? { ...c, lastDoneDaysAgo: details?.nextInDays != null ? c.intervalDays - details.nextInDays : 0 } : c
+          ),
           journalNotes: [entry, ...p.journalNotes],
         };
       })
@@ -384,6 +398,7 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
   const resetIntervalAdjust = (plantId: string) => applyIntervalAdjust(plantId, () => 1);
 
   const [quickActionsPlantId, setQuickActionsPlantId] = useState<string | null>(null);
+  const [quickActionsStart, setQuickActionsStart] = useState<QuickActionsStart | null>(null);
 
   const changePlantConditions = (plantId: string, change: PlantConditionsChange) => {
     (async () => {
@@ -498,7 +513,11 @@ export function PlantsProvider({ children }: { children: ReactNode }) {
         clearCustomInterval,
         changePlantConditions,
         quickActionsPlantId,
-        openQuickActions: setQuickActionsPlantId,
+        quickActionsStart,
+        openQuickActions: (plantId: string, start?: QuickActionsStart) => {
+          setQuickActionsStart(start ?? null);
+          setQuickActionsPlantId(plantId);
+        },
         closeQuickActions: () => setQuickActionsPlantId(null),
         recomputeIntervals,
         resetPlants,

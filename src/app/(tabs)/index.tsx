@@ -10,6 +10,7 @@ import { PlantAvatar, PlantPhoto } from '@/components/plant-avatar';
 import { roomDisplayName } from '@/constants/rooms';
 import { FloatingTabBarSpace, Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
+import { useCompleteCare } from '@/hooks/use-complete-care';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
@@ -17,7 +18,7 @@ import { daysSince, usePropagation, waterChangeDue } from '@/context/propagation
 import { useSettings } from '@/context/settings-context';
 import { CareTaskType, Plant } from '@/data/plants';
 import { careTaskDue } from '@/utils/care';
-import { hapticSuccess, hapticTap } from '@/utils/haptics';
+import { hapticTap } from '@/utils/haptics';
 import { monthKey, monthlyTasks, photoDue, temperatureAlerts } from '@/utils/seasonal-tasks';
 import { computeCareStats } from '@/utils/stats';
 
@@ -52,7 +53,8 @@ export default function TodayScreen() {
   const colors = useTheme();
   const router = useRouter();
   const { t } = useLanguage();
-  const { plants, snoozePlant, completeCareTask, openQuickActions } = usePlants();
+  const { plants, snoozePlant, openQuickActions } = usePlants();
+  const completeCare = useCompleteCare();
   const handleWater = useWaterPlant();
   const { dayLengthHours, vacationMode, vacationStart, vacationEnd, heatingOn, forecast, lastTourDate, monthlyTasksDone, toggleMonthlyTask } =
     useSettings();
@@ -299,10 +301,7 @@ export default function TodayScreen() {
                       </View>
                       <GradientButton
                         label={t.today.careDone}
-                        onPress={() => {
-                          completeCareTask(plant.id, index, t.plantDetail.care.taskNames[task.type]);
-                          hapticSuccess();
-                        }}
+                        onPress={() => completeCare(plant, index)}
                       />
                     </GlassCard>
                   </Pressable>
