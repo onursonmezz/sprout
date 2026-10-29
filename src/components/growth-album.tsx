@@ -11,7 +11,7 @@ import { Plant } from '@/data/plants';
 import { useTheme } from '@/hooks/use-theme';
 import { formatDateFromDaysOffset, relativeTime } from '@/utils/care';
 import { hapticSuccess } from '@/utils/haptics';
-import { pickFromCamera, pickFromLibrary } from '@/utils/photos';
+import { deletePhoto, pickFromCamera, pickFromLibrary } from '@/utils/photos';
 import { photoDue } from '@/utils/seasonal-tasks';
 
 /** Adds a dated growth photo to a plant's journal. Shared with the weekly tour. */
@@ -47,8 +47,11 @@ export function GrowthAlbum({ plant }: { plant: Plant }) {
   const colors = useTheme();
   const { t } = useLanguage();
   const addGrowthPhoto = useAddGrowthPhoto();
+  const { updatePlant } = usePlants();
   const [adding, setAdding] = useState(false);
-  const [viewing, setViewing] = useState<string | null>(null);
+  /** The journal entry whose photo is open full-screen. */
+  const [viewing, setViewing] = useState<{ id: string; uri: string } | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [comparing, setComparing] = useState(false);
 
   // Oldest first.
@@ -56,13 +59,30 @@ export function GrowthAlbum({ plant }: { plant: Plant }) {
     () =>
       plant.journalNotes
         .filter((e) => !!e.photoUri)
-        .map((e) => ({ uri: e.photoUri as string, daysAgo: e.daysAgo }))
+        .map((e) => ({ id: e.id, uri: e.photoUri as string, daysAgo: e.daysAgo }))
         .sort((a, b) => b.daysAgo - a.daysAgo),
     [plant.journalNotes]
   );
   const first = photos[0];
   const latest = photos[photos.length - 1];
   const due = photoDue(plant);
+
+  const closeViewer = () => {
+    setViewing(null);
+    setConfirmingDelete(false);
+  };
+
+  /** A plain growth photo goes entirely; a photo attached to another journal
+   * entry (a note, a new leaf) only loses its picture, the entry stays. */
+  const removePhoto = (entryId: string, uri: string) => {
+    updatePlant(plant.id, {
+      journalNotes: plant.journalNotes.flatMap((e) =>
+        e.id !== entryId ? [e] : e.type === 'photo' ? [] : [{ ...e, photoUri: null }]
+      ),
+    });
+    if (plant.photoUri !== uri) deletePhoto(uri);
+    closeViewer();
+  };
 
   const add = async (source: 'camera' | 'library') => {
     setAdding(false);
@@ -94,7 +114,7 @@ export function GrowthAlbum({ plant }: { plant: Plant }) {
           </GlassCard>
         </Pressable>
         {[...photos].reverse().map((p, i) => (
-          <Pressable key={`${p.uri}-${i}`} onPress={() => setViewing(p.uri)} style={{ gap: 4 }}>
+          <Pressable key={`${p.uri}-${i}`} onPress={() => setViewing({ id: p.id, uri: p.uri })} style={{ gap: 4 }}>
             <Image source={{ uri: p.uri }} style={[styles.thumb, { borderColor: colors.glassBorder }]} contentFit="cover" />
             <Text style={[styles.thumbLabel, { color: colors.textSecondary }]}>{formatDateFromDaysOffset(-p.daysAgo, t)}</Text>
           </Pressable>
@@ -114,9 +134,28 @@ export function GrowthAlbum({ plant }: { plant: Plant }) {
         </View>
       )}
 
-      <Modal visible={!!viewing} transparent animationType="fade" onRequestClose={() => setViewing(null)}>
-        <Pressable style={styles.backdrop} onPress={() => setViewing(null)}>
-          {!!viewing && <Image source={{ uri: viewing }} style={styles.fullImage} contentFit="contain" />}
+      <Modal visible={!!viewing} transparent animationType="fade" onRequestClose={closeViewer}>
+        <Pressable style={styles.backdrop} onPress={closeViewer}>
+          {!!viewing && <Image source={{ uri: viewing.uri }} style={styles.fullImage} contentFit="contain" />}
+          {!!viewing &&
+            (confirmingDelete ? (
+              <View style={styles.deleteBox}>
+                <Text style={styles.deleteQuestion}>{t.album.deleteConfirm}</Text>
+                <View style={styles.deleteRow}>
+                  <Pressable onPress={() => setConfirmingDelete(false)} style={[styles.deleteButton, { borderColor: '#A9BDB0' }]}>
+                    <Text style={styles.deleteButtonText}>{t.album.cancel}</Text>
+                  </Pressable>
+                  <Pressable onPress={() => removePhoto(viewing.id, viewing.uri)} style={[styles.deleteButton, { borderColor: colors.late }]}>
+                    <Text style={[styles.deleteButtonText, { color: colors.late }]}>{t.album.deleteYes}</Text>
+                  </Pressable>
+                </View>
+              </View>
+            ) : (
+              <Pressable onPress={() => setConfirmingDelete(true)} style={styles.deleteLink} hitSlop={10}>
+                <Ionicons name="trash-outline" size={18} color={colors.late} />
+                <Text style={[styles.deleteButtonText, { color: colors.late }]}>{t.album.deletePhoto}</Text>
+              </Pressable>
+            ))}
         </Pressable>
       </Modal>
 
@@ -158,6 +197,12 @@ const styles = StyleSheet.create({
   sourceText: { fontSize: 13, fontWeight: '600' },
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.9)', alignItems: 'center', justifyContent: 'center', padding: Spacing.three },
   fullImage: { width: '100%', height: '80%' },
+  deleteLink: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: Spacing.three, paddingVertical: 8, paddingHorizontal: 14 },
+  deleteBox: { width: '100%', gap: 10, marginTop: Spacing.three },
+  deleteQuestion: { color: '#fff', fontSize: 14, textAlign: 'center' },
+  deleteRow: { flexDirection: 'row', gap: 10 },
+  deleteButton: { flex: 1, borderWidth: 1, borderRadius: 14, paddingVertical: 12, alignItems: 'center' },
+  deleteButtonText: { color: '#fff', fontSize: 14, fontWeight: '700' },
   compareWrap: { width: '100%', gap: Spacing.three },
   compareTitle: { color: '#fff', fontSize: 22, fontWeight: '700', textAlign: 'center' },
   compareRow: { flexDirection: 'row', gap: Spacing.two },

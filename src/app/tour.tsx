@@ -39,12 +39,17 @@ export default function TourScreen() {
   const [outcomes, setOutcomes] = useState<Outcome[]>([]);
   const [pickingIssue, setPickingIssue] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
+  // What the last answer did, shown on the next plant so a tap never looks like nothing happened.
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
 
   const plant = plants.find((p) => p.id === order[index]);
   const finished = index >= order.length;
 
   const next = (outcome: Outcome) => {
     setOutcomes((prev) => [...prev, outcome]);
+    setLastSaved(
+      outcome.kind === 'newLeaf' ? t.tour.savedLeaf(outcome.name) : outcome.kind === 'issue' ? t.tour.savedIssue(outcome.name) : t.tour.savedFine(outcome.name)
+    );
     setPickingIssue(false);
     setPhotoTaken(false);
     if (index + 1 >= order.length) setLastTourDate(new Date());
@@ -131,6 +136,16 @@ export default function TourScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.body} showsVerticalScrollIndicator={false}>
+        {index === 0 ? (
+          <Text style={[styles.intro, { color: colors.textSecondary }]}>{t.tour.intro}</Text>
+        ) : (
+          lastSaved && (
+            <View style={[styles.savedRow, { backgroundColor: colors.tintMuted }]}>
+              <Ionicons name="checkmark-circle" size={18} color={colors.tintBright} />
+              <Text style={[styles.savedText, { color: colors.text }]}>{lastSaved}</Text>
+            </View>
+          )
+        )}
         <GlassCard style={styles.plantCard}>
           <PlantPhoto plant={plant} height={250} iconSize={90} />
           <View style={styles.plantInfo}>
@@ -153,6 +168,12 @@ export default function TourScreen() {
               <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
             </GlassCard>
           </Pressable>
+        )}
+        {photoTaken && (
+          <View style={[styles.savedRow, { backgroundColor: colors.tintMuted }]}>
+            <Ionicons name="checkmark-circle" size={18} color={colors.tintBright} />
+            <Text style={[styles.savedText, { color: colors.text }]}>{t.tour.photoAdded}</Text>
+          </View>
         )}
 
         <Text style={[styles.question, { color: colors.text }]}>{pickingIssue ? t.tour.whichIssue : t.tour.question}</Text>
@@ -247,6 +268,9 @@ const styles = StyleSheet.create({
   progressTrack: { height: 4, borderRadius: 2, marginHorizontal: Spacing.three, marginTop: Spacing.two, overflow: 'hidden' },
   progressFill: { height: '100%', borderRadius: 2 },
   body: { padding: Spacing.three, gap: Spacing.three },
+  intro: { fontSize: 13, lineHeight: 19 },
+  savedRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 12 },
+  savedText: { flex: 1, fontSize: 13, fontWeight: '600' },
   plantCard: { overflow: 'hidden' },
   plantInfo: { padding: Spacing.three, paddingTop: 12 },
   plantName: { fontSize: 22, fontWeight: '700' },
