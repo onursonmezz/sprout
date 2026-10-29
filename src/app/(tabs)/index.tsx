@@ -14,7 +14,7 @@ import { useCompleteCare } from '@/hooks/use-complete-care';
 import { useTheme } from '@/hooks/use-theme';
 import { useWaterPlant } from '@/hooks/use-water-plant';
 import { usePlants } from '@/context/plants-context';
-import { daysSince, usePropagation, waterChangeDue } from '@/context/propagation-context';
+import { daysSince, seedCheckDue, usePropagation, waterChangeDue } from '@/context/propagation-context';
 import { useSettings } from '@/context/settings-context';
 import { CareTaskType, Plant } from '@/data/plants';
 import { careTaskDue } from '@/utils/care';
@@ -118,8 +118,9 @@ export default function TodayScreen() {
   const tourDue = plants.length > 0 && (!lastTourDate || dayDiff(lastTourDate) >= 7);
   const photoPlants = useMemo(() => plants.filter(photoDue), [plants]);
   const tasks = useMemo(() => monthlyTasks(plants, new Date(), heatingOn), [plants, heatingOn]);
-  const { projects } = usePropagation();
+  const { projects, markSeedsChecked } = usePropagation();
   const thirstyCutting = projects.find(waterChangeDue);
+  const sowingsToCheck = projects.filter(seedCheckDue);
   const thisMonthKey = monthKey(now);
   const doneKeys = monthlyTasksDone.month === thisMonthKey ? monthlyTasksDone.keys : [];
   const heroPlant = needsAttention[0] ?? comingUp[0] ?? plants[0];
@@ -222,6 +223,29 @@ export default function TodayScreen() {
                   {t.today.propWater(thirstyCutting.name, daysSince(thirstyCutting.waterChangedAt))}
                 </Text>
                 <Ionicons name="chevron-forward" size={18} color={colors.textSecondary} />
+              </GlassCard>
+            </Pressable>
+          )}
+
+          {sowingsToCheck.length > 0 && (
+            <Pressable onPress={() => router.push(`/propagation/${sowingsToCheck[0].id}`)}>
+              <GlassCard style={styles.actionCard}>
+                <View style={[styles.careIcon, { backgroundColor: colors.track }]}>
+                  <Ionicons name="water-outline" size={20} color={colors.tintBright} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.plantName, { color: colors.text }]}>{t.seed.checkTitle}</Text>
+                  <Text style={[styles.plantMeta, { color: colors.textSecondary }]} numberOfLines={1}>
+                    {sowingsToCheck.map((p) => p.name).join(', ')}
+                  </Text>
+                </View>
+                <GradientButton
+                  label={t.seed.checked}
+                  onPress={() => {
+                    markSeedsChecked(sowingsToCheck.map((p) => p.id));
+                    hapticTap();
+                  }}
+                />
               </GlassCard>
             </Pressable>
           )}

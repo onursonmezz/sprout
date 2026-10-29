@@ -17,7 +17,19 @@ import { hapticSuccess, hapticTap } from '@/utils/haptics';
 function useStatusLine() {
   const { t } = useLanguage();
   return (p: Propagation) =>
-    p.status === 'failed'
+    p.method === 'seed'
+      ? p.status === 'failed'
+        ? t.seed.markFailed
+        : p.status === 'done'
+          ? t.prop.stages.potted
+          : `${t.prop.dayCount(daysSince(p.startedAt))} · ${
+              p.stage === 'started'
+                ? t.seed.statusWaiting
+                : p.stage === 'sprouted'
+                  ? t.seed.statusSprouted(p.sproutedCount ?? 0, p.seedCount ?? 0)
+                  : t.seed.statusTrueLeaves
+            }`
+      : p.status === 'failed'
       ? t.prop.statusFailed
       : p.status === 'done'
         ? t.prop.stages.potted
@@ -105,7 +117,7 @@ function ProjectTile({ project }: { project: Propagation }) {
             {project.photoUri ? (
               <Image source={{ uri: project.photoUri }} style={StyleSheet.absoluteFill} contentFit="cover" />
             ) : (
-              <Ionicons name="cut-outline" size={26} color={colors.tintBright} />
+              <Ionicons name={project.method === 'seed' ? 'leaf-outline' : 'cut-outline'} size={26} color={colors.tintBright} />
             )}
           </View>
           <View style={styles.tileInfo}>
@@ -192,6 +204,17 @@ export function PropagationStrip() {
             <Ionicons name="add-circle-outline" size={26} color={colors.tintBright} />
             <Text style={[styles.tileName, { color: colors.text, textAlign: 'center' }]}>{t.prop.newCutting}</Text>
             <Text style={[styles.tileMeta, { color: colors.textSecondary, textAlign: 'center' }]}>{t.prop.startHint}</Text>
+          </GlassCard>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            hapticTap();
+            router.push('/seed');
+          }}>
+          <GlassCard style={[styles.tile, styles.newTile]}>
+            <Ionicons name="leaf-outline" size={26} color={colors.tintBright} />
+            <Text style={[styles.tileName, { color: colors.text, textAlign: 'center' }]}>{t.seed.sowed}</Text>
+            <Text style={[styles.tileMeta, { color: colors.textSecondary, textAlign: 'center' }]}>{t.seed.startHint}</Text>
           </GlassCard>
         </Pressable>
         {projects.map((p) => (

@@ -118,6 +118,11 @@ export default function PlantsScreen() {
           <Text style={[styles.title, { color: colors.text }]}>{t.plants.title}</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{t.plants.subtitle(plants.length, dueCount)}</Text>
         </View>
+        <Pressable onPress={() => router.push('/seed')} accessibilityLabel={t.seed.sowed}>
+          <GlassCard style={styles.seedButton}>
+            <Ionicons name="leaf-outline" size={20} color={colors.tintBright} />
+          </GlassCard>
+        </Pressable>
         <Pressable onPress={() => router.push('/add-plant')}>
           <View style={[styles.addButton, { boxShadow: `0px 6px 18px ${colors.tintGlow}` }]}>
             <GradientFill stops={[colors.gradientFrom, colors.gradientTo]} />
@@ -220,6 +225,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Spacing.three, paddingTop: Spacing.two },
   title: { fontSize: 24, fontWeight: '700' },
   subtitle: { fontSize: 12, marginTop: 2 },
+  seedButton: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center', marginRight: 8 },
   addButton: { width: 42, height: 42, borderRadius: 21, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' },
   searchRow: { flexDirection: 'row', gap: Spacing.two, paddingHorizontal: Spacing.three, marginTop: Spacing.three },
   searchBox: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, borderRadius: 14, paddingHorizontal: 14, height: 44 },

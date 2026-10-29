@@ -4,9 +4,13 @@ import { loadJSON, saveJSON } from '@/utils/storage';
 
 const STORAGE_KEY = 'sprout:propagations';
 
-/** How the cutting is being rooted. Dividing a plant has no rooting stage. */
-export type PropagationMethod = 'water' | 'soil' | 'division';
-export type PropagationStage = 'started' | 'rooted' | 'potted';
+/** How the cutting is being rooted. Dividing a plant has no rooting stage;
+ * a sowing goes through sprouting and first true leaves instead. */
+export type PropagationMethod = 'water' | 'soil' | 'division' | 'seed';
+export type PropagationStage = 'started' | 'rooted' | 'sprouted' | 'trueLeaves' | 'potted';
+
+/** What the seeds were sown in. */
+export type SeedContainer = 'tray' | 'pot' | 'paper' | 'peat';
 
 /**
  * One propagation project: a cutting (or division) followed from the day it
@@ -29,6 +33,15 @@ export type Propagation = {
   waterChangedAt: string;
   photoUri: string | null;
   status: 'active' | 'done' | 'failed';
+  /** Seed sowings only (older projects have none of these). */
+  seedCount?: number;
+  /** How many of the seeds have come up, counted by the user. */
+  sproutedCount?: number;
+  container?: SeedContainer;
+  sproutedAt?: string | null;
+  trueLeavesAt?: string | null;
+  /** The last day the soil's moisture was checked. */
+  checkedAt?: string | null;
 };
 
 /** Rooting water is usually refreshed about this often. */
@@ -42,7 +55,14 @@ export function daysSince(iso: string, today: Date = new Date()): number {
 
 /** The stages a project goes through, in order, for its method. */
 export function stagesFor(method: PropagationMethod): PropagationStage[] {
+  if (method === 'seed') return ['started', 'sprouted', 'trueLeaves', 'potted'];
   return method === 'division' ? ['started', 'potted'] : ['started', 'rooted', 'potted'];
+}
+
+/** Seed trays dry out fast and want a look every day until the seedlings
+ * are potted up: due when the soil has not been checked yet today. */
+export function seedCheckDue(p: Propagation): boolean {
+  return p.status === 'active' && p.method === 'seed' && (!p.checkedAt || daysSince(p.checkedAt) >= 1);
 }
 
 /** Whether a rooting-in-water cutting is likely due fresh water. */
@@ -54,7 +74,13 @@ type PropagationContextValue = {
   loaded: boolean;
   projects: Propagation[];
   getProject: (id: string) => Propagation | undefined;
-  startProject: (input: { parentPlantId: string | null; name: string; species: string; latinName: string }) => string;
+  startProject: (
+    input: { parentPlantId: string | null; name: string; species: string; latinName: string } & Partial<
+      Pick<Propagation, 'method' | 'startedAt' | 'photoUri' | 'seedCount' | 'container'>
+    >
+  ) => string;
+  /** Marks today's moisture check done for these sowings. */
+  markSeedsChecked: (ids: string[]) => void;
   updateProject: (id: string, updates: Partial<Propagation>) => void;
   /** Moves a project to its next stage; the last stage completes it. */
   advanceProject: (id: string) => void;
@@ -82,7 +108,19 @@ export function PropagationProvider({ children }: { children: ReactNode }) {
     const now = new Date().toISOString();
     const id = `prop-${Date.now().toString(36)}`;
     setProjects((prev) => [
-      { id, ...input, method: 'water', stage: 'started', startedAt: now, rootedAt: null, pottedAt: null, waterChangedAt: now, photoUri: null, status: 'active' },
+      {
+        id,
+        method: 'water',
+        stage: 'started',
+        startedAt: now,
+        rootedAt: null,
+        pottedAt: null,
+        waterChangedAt: now,
+        photoUri: null,
+        status: 'active',
+        ...input,
+        ...(input.method === 'seed' ? { sproutedCount: 0, sproutedAt: null, trueLeavesAt: null, checkedAt: now } : {}),
+      },
       ...prev,
     ]);
     return id;
@@ -99,15 +137,33 @@ export function PropagationProvider({ children }: { children: ReactNode }) {
         const next = stages[stages.indexOf(p.stage) + 1];
         if (!next) return p;
         const now = new Date().toISOString();
-        return next === 'rooted' ? { ...p, stage: next, rootedAt: now } : { ...p, stage: next, pottedAt: now, status: 'done' };
+        if (next === 'rooted') return { ...p, stage: next, rootedAt: now };
+        // Coming up at all means at least one seed sprouted.
+        if (next === 'sprouted') return { ...p, stage: next, sproutedAt: now, sproutedCount: Math.max(1, p.sproutedCount ?? 0) };
+        if (next === 'trueLeaves') return { ...p, stage: next, trueLeavesAt: now };
+        return { ...p, stage: next, pottedAt: now, status: 'done' };
       })
     );
 
   const deleteProject = (id: string) => setProjects((prev) => prev.filter((p) => p.id !== id));
 
+  const markSeedsChecked = (ids: string[]) => {
+    const now = new Date().toISOString();
+    setProjects((prev) => prev.map((p) => (ids.includes(p.id) ? { ...p, checkedAt: now } : p)));
+  };
+
   return (
     <PropagationContext.Provider
-      value={{ loaded, projects, getProject: (id) => projects.find((p) => p.id === id), startProject, updateProject, advanceProject, deleteProject }}>
+      value={{
+        loaded,
+        projects,
+        getProject: (id) => projects.find((p) => p.id === id),
+        startProject,
+        updateProject,
+        advanceProject,
+        deleteProject,
+        markSeedsChecked,
+      }}>
       {children}
     </PropagationContext.Provider>
   );

@@ -61,6 +61,7 @@ function Navigation() {
         <Stack.Screen name="finder" />
         <Stack.Screen name="howto/[key]" />
         <Stack.Screen name="propagation/[id]" />
+        <Stack.Screen name="seed" options={{ presentation: 'modal' }} />
         <Stack.Screen name="guide/article/[key]" />
         <Stack.Screen name="guide/issue/[key]" />
         <Stack.Screen name="guide/issues" />

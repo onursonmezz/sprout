@@ -6,15 +6,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { GlassCard, GlowBackground, GradientButton } from '@/components/glass';
 import { PhotoPicker } from '@/components/photo-picker';
+import { SeedProjectScreen } from '@/components/seed-project';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { usePlants } from '@/context/plants-context';
-import { daysSince, PropagationMethod, stagesFor, usePropagation, WATER_CHANGE_DAYS } from '@/context/propagation-context';
+import { daysSince, PropagationMethod, PropagationStage, stagesFor, usePropagation, WATER_CHANGE_DAYS } from '@/context/propagation-context';
 import { useTheme } from '@/hooks/use-theme';
 import { speciesOf } from '@/utils/care';
 import { hapticSuccess, hapticTap } from '@/utils/haptics';
 
-const METHODS: PropagationMethod[] = ['water', 'soil', 'division'];
+/** Ways to root a cutting; a seed sowing is started from its own screen. */
+const METHODS: Exclude<PropagationMethod, 'seed'>[] = ['water', 'soil', 'division'];
 
 function formatDay(iso: string, locale: string) {
   return new Date(iso).toLocaleDateString(locale, { day: 'numeric', month: 'long' });
@@ -44,13 +46,16 @@ export default function PropagationScreen() {
     );
   }
 
+  if (project.method === 'seed') return <SeedProjectScreen project={project} />;
+
+  const method = project.method;
   const parent = project.parentPlantId ? getPlant(project.parentPlantId) : undefined;
   const species = speciesOf(project);
   const stages = stagesFor(project.method);
   const stageIndex = stages.indexOf(project.stage);
   const active = project.status === 'active';
   const nextStage = stages[stageIndex + 1];
-  const stageDate = { started: project.startedAt, rooted: project.rootedAt, potted: project.pottedAt };
+  const stageDate: Partial<Record<PropagationStage, string | null>> = { started: project.startedAt, rooted: project.rootedAt, potted: project.pottedAt };
   const waterDays = daysSince(project.waterChangedAt);
 
   const finish = () => {
@@ -133,7 +138,7 @@ export default function PropagationScreen() {
           <GlassCard style={styles.tip}>
             <Ionicons name="bulb-outline" size={20} color={colors.tintBright} />
             <View style={{ flex: 1, gap: 4 }}>
-              <Text style={[styles.tipText, { color: colors.text }]}>{t.prop.tips[project.method][project.stage === 'rooted' ? 'rooted' : 'started']}</Text>
+              <Text style={[styles.tipText, { color: colors.text }]}>{t.prop.tips[method][project.stage === 'rooted' ? 'rooted' : 'started']}</Text>
               {lang === 'tr' && species && species.propagation.length > 0 && (
                 <Text style={[styles.tipNote, { color: colors.textSecondary }]}>{t.prop.speciesMethod(species.propagation.join(', '))}</Text>
               )}
