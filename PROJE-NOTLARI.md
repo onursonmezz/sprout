@@ -64,6 +64,7 @@ Bu dosya, projeyi devralan Claude için yazıldı (son güncelleme: 21 Ekim 2026
 - Harita veya yakındaki dükkânlar özelliği yapılmayacak (kullanıcı vazgeçti).
 - Paylaşım kartı takvim değil istatistik gösterir: birlikte geçen süre, sulama sayısı, yeni yaprak.
 - Alt menü: ortada tarama düğmesi, iki yanında ikişer sekme (taslak `taslak/tarama.html`, kullanıcı B seçeneğini seçti). Hastalık teşhisi ileride aynı panele eklenecek; şimdilik soluk "Yakında" olarak görünüyor (kullanıcı istedi).
+- Bakıcı kartı (PDF, Ayarlar > Tatil modu): kullanıcı taslak `taslak/bakici-karti.html`ın C seçeneğini seçti. Kısa gün özeti, her bitki için kesilebilir kart (fotoğraf, yer, miktar, o bitkinin sulama günleri), ipuçları. Fotoğraflar `utils/pdf-photo.ts` ile küçültülüp PDF'e gömülür (bitkinin kendi fotoğrafı, yoksa tür örneği). "Sorun olursa ara" ve "Not" alanları ayarlarda saklanır, yedeğe girmez.
 - İstek listesi (`context/wishlist-context.tsx`, `sprout:wishlist`): taramadan eklenir, Bitkilerim'de boşsa gizlenen bir bölümdür (`components/wishlist-strip.tsx`). "Aldım" bitki ekleme ekranını tür dolu açar; türü listede olan bir bitki kaydedilince listeden kendiliğinden düşer.
 
 ## 6. Yapılacaklar ve açık konular

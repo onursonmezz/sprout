@@ -33,6 +33,9 @@ type PersistedSettings = {
   vacationEnd: string | null;
   backupCode: string | null;
   lastBackupAt: string | null;
+  /** Printed on the sitter card; kept on this phone only. */
+  sitterContact: string;
+  sitterNote: string;
 };
 
 function timeAt(hours: number, minutes: number) {
@@ -59,6 +62,8 @@ const defaults: PersistedSettings = {
   vacationEnd: null,
   backupCode: null,
   lastBackupAt: null,
+  sitterContact: '',
+  sitterNote: '',
 };
 
 type SettingsContextValue = {
@@ -96,6 +101,10 @@ type SettingsContextValue = {
   setBackupCode: (code: string) => void;
   lastBackupAt: Date | null;
   setLastBackupAt: (d: Date) => void;
+  sitterContact: string;
+  setSitterContact: (v: string) => void;
+  sitterNote: string;
+  setSitterNote: (v: string) => void;
   resetSettings: () => void;
 };
 
@@ -181,6 +190,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         setBackupCode: (code) => update('backupCode', code),
         lastBackupAt: settings.lastBackupAt ? new Date(settings.lastBackupAt) : null,
         setLastBackupAt: (d) => update('lastBackupAt', d.toISOString()),
+        sitterContact: settings.sitterContact,
+        setSitterContact: (v) => update('sitterContact', v),
+        sitterNote: settings.sitterNote,
+        setSitterNote: (v) => update('sitterNote', v),
         resetSettings: () => setSettings(defaults),
       }}>
       {children}

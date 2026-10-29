@@ -81,6 +81,10 @@ export default function SettingsScreen() {
     setBackupCode,
     lastBackupAt,
     setLastBackupAt,
+    sitterContact,
+    setSitterContact,
+    sitterNote,
+    setSitterNote,
     resetSettings,
   } = useSettings();
   const { plants, resetPlants, restorePlants } = usePlants();
@@ -114,7 +118,7 @@ export default function SettingsScreen() {
     setCareInstructionsBusy(true);
     setCareInstructionsError(false);
     try {
-      await shareCareInstructions(plants, t, vacationStart, vacationEnd);
+      await shareCareInstructions(plants, t, vacationStart, vacationEnd, { contact: sitterContact, note: sitterNote });
     } catch {
       setCareInstructionsError(true);
     } finally {
@@ -317,6 +321,26 @@ export default function SettingsScreen() {
                   )}
                 </>
               )}
+              <View style={{ gap: 4 }}>
+                <Text style={[styles.vacationLabel, { color: colors.text }]}>{t.settings.sitterContact}</Text>
+                <TextInput
+                  value={sitterContact}
+                  onChangeText={setSitterContact}
+                  placeholder={t.settings.sitterContactPlaceholder}
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.restoreInput, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                />
+              </View>
+              <View style={{ gap: 4 }}>
+                <Text style={[styles.vacationLabel, { color: colors.text }]}>{t.settings.sitterNote}</Text>
+                <TextInput
+                  value={sitterNote}
+                  onChangeText={setSitterNote}
+                  placeholder={t.settings.sitterNotePlaceholder}
+                  placeholderTextColor={colors.textSecondary}
+                  style={[styles.restoreInput, { color: colors.text, backgroundColor: colors.background, borderColor: colors.border }]}
+                />
+              </View>
               <Pressable
                 onPress={handleShareCareInstructions}
                 disabled={plants.length === 0 || careInstructionsBusy}
