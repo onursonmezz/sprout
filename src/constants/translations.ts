@@ -976,8 +976,10 @@ export const translations = {
       date: 'Sowing date',
       photo: 'Photo (optional)',
       start: 'Start',
-      speciesInfo: (min: number, max: number, tMin: number, tMax: number) =>
-        `Usually sprouts in ${min}–${max} days. It tends to be quicker when the soil is around ${tMin}–${tMax} °C.`,
+      speciesDays: (min: number, max: number) => `Usually sprouts in ${min}–${max} days.`,
+      soilTemp: (tMin: number, tMax: number) => `It tends to be quicker when the soil is around ${tMin}–${tMax} °C.`,
+      generalTemp: (tMin: number, tMax: number) => `Most seeds sprout well when the soil is around ${tMin}–${tMax} °C.`,
+      depth: 'Seeds are usually covered to about twice their own size; very fine seeds may need light and stay uncovered. The seed packet may say more.',
       surface: 'These seeds need light to sprout: pressing them onto the soil without covering may help. The seed packet may say more.',
       cover: 'Covering the seeds with a thin layer of soil, about twice their own size, usually works. The seed packet may say more.',
       noInfo: (tMin: number, tMax: number) =>
@@ -2312,8 +2314,10 @@ export const translations = {
       date: 'Ekim tarihi',
       photo: 'Fotoğraf (isteğe bağlı)',
       start: 'Başlat',
-      speciesInfo: (min: number, max: number, tMin: number, tMax: number) =>
-        `Genellikle ${min}–${max} günde çimlenir. Toprak sıcaklığı ${tMin}–${tMax} °C civarındayken daha hızlı olabilir.`,
+      speciesDays: (min: number, max: number) => `Genellikle ${min}–${max} günde çimlenir.`,
+      soilTemp: (tMin: number, tMax: number) => `Toprak sıcaklığı ${tMin}–${tMax} °C civarındayken daha hızlı olabilir.`,
+      generalTemp: (tMin: number, tMax: number) => `Çoğu tohum toprak ${tMin}–${tMax} °C civarındayken iyi çimlenir.`,
+      depth: 'Tohumlar genellikle kendi boylarının iki katı derinliğe ekilir; çok ince tohumlar ışık isteyebilir ve örtülmez. Tohum paketine bakabilirsin.',
       surface: 'Bu tohumlar çimlenmek için ışık ister: üstünü örtmeden toprağa hafifçe bastırmak yardımcı olabilir. Tohum paketine de bakabilirsin.',
       cover: 'Tohumun üstünü kendi boyunun iki katı kadar ince bir toprakla örtmek genellikle işe yarar. Tohum paketine de bakabilirsin.',
       noInfo: (tMin: number, tMax: number) =>

@@ -10,6 +10,7 @@ import { PhotoPicker } from '@/components/photo-picker';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { SeedContainer, usePropagation } from '@/context/propagation-context';
+import { coverText, germinationText } from '@/components/seed-project';
 import { GENERAL_SOIL_TEMP_C, GERMINATION } from '@/data/germination';
 import { findSpeciesMatches, SpeciesRecord, speciesDisplayName } from '@/data/species-guide';
 import { useGoBack } from '@/hooks/use-go-back';
@@ -103,7 +104,7 @@ export default function SeedScreen() {
             <Ionicons name="information-circle-outline" size={18} color={colors.tintBright} />
             <Text style={[styles.infoText, { color: colors.text }]}>
               {germination
-                ? `${t.seed.speciesInfo(germination.days[0], germination.days[1], germination.soilTempC[0], germination.soilTempC[1])} ${germination.surface ? t.seed.surface : t.seed.cover}`
+                ? `${germinationText(germination, t)} ${coverText(germination, t)}`
                 : t.seed.noInfo(GENERAL_SOIL_TEMP_C[0], GENERAL_SOIL_TEMP_C[1])}
             </Text>
           </GlassCard>

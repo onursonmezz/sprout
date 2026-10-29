@@ -9,7 +9,8 @@ import { PhotoPicker } from '@/components/photo-picker';
 import { Spacing } from '@/constants/theme';
 import { useLanguage } from '@/context/language-context';
 import { daysSince, Propagation, PropagationStage, stagesFor, usePropagation } from '@/context/propagation-context';
-import { GERMINATION } from '@/data/germination';
+import { GENERAL_SOIL_TEMP_C, Germination, GERMINATION } from '@/data/germination';
+import { Translations } from '@/constants/translations';
 import { findSpeciesExact } from '@/data/species-guide';
 import { useGoBack } from '@/hooks/use-go-back';
 import { useTheme } from '@/hooks/use-theme';
@@ -23,6 +24,18 @@ function formatDay(iso: string, locale: string) {
 export function germinationFor(project: Propagation) {
   const species = project.latinName ? findSpeciesExact(project.latinName) : undefined;
   return species ? GERMINATION[species.id] : undefined;
+}
+
+/** "Usually sprouts in 6–14 days." plus the soil temperature, the species'
+ * own when the sources give one, otherwise the general range. */
+export function germinationText(g: Germination, t: Translations) {
+  const temp = g.soilTempC ?? GENERAL_SOIL_TEMP_C;
+  return `${t.seed.speciesDays(g.days[0], g.days[1])} ${g.soilTempC ? t.seed.soilTemp(temp[0], temp[1]) : t.seed.generalTemp(temp[0], temp[1])}`;
+}
+
+/** Whether to cover the seeds: species-specific only where two sources agree. */
+export function coverText(g: Germination | undefined, t: Translations) {
+  return g?.surface === true ? t.seed.surface : g?.surface === false ? t.seed.cover : t.seed.depth;
 }
 
 /** Still waiting for the first sprout well past the usual time. */
@@ -117,7 +130,7 @@ export function SeedProjectScreen({ project }: { project: Propagation }) {
               ))}
             </View>
             <Text style={[styles.note, { color: colors.textSecondary }]}>
-              {t.seed.speciesInfo(germination.days[0], germination.days[1], germination.soilTempC[0], germination.soilTempC[1])}
+              {germinationText(germination, t)}
             </Text>
           </GlassCard>
         )}
@@ -139,8 +152,8 @@ export function SeedProjectScreen({ project }: { project: Propagation }) {
               <Text style={[styles.tipTitle, { color: colors.late }]}>{t.seed.today}</Text>
             </View>
             <Text style={[styles.tipText, { color: colors.text }]}>{t.seed.tips[tipKey]}</Text>
-            {project.stage === 'started' && germination && (
-              <Text style={[styles.note, { color: colors.textSecondary }]}>{germination.surface ? t.seed.surface : t.seed.cover}</Text>
+            {project.stage === 'started' && (
+              <Text style={[styles.note, { color: colors.textSecondary }]}>{coverText(germination, t)}</Text>
             )}
           </GlassCard>
         )}
